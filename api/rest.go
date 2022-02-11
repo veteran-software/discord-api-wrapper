@@ -39,23 +39,23 @@ var (
 	Rest *RateLimiter
 )
 
-func (r *RateLimiter) Request(method, route string, data interface{}) (*http.Response, error) {
-	return r.requestWithBucketID(method, route, data, strings.SplitN(route, "?", 2)[0])
+func (r *RateLimiter) Request(method, route string, data interface{}, reason *string) (*http.Response, error) {
+	return r.requestWithBucketID(method, route, data, strings.SplitN(route, "?", 2)[0], reason)
 }
 
-func (r *RateLimiter) requestWithBucketID(method, route string, data interface{}, bucketID string) (*http.Response, error) {
-	return r.request(method, route, "application/json", data, bucketID, 0)
+func (r *RateLimiter) requestWithBucketID(method, route string, data interface{}, bucketID string, reason *string) (*http.Response, error) {
+	return r.request(method, route, "application/json", data, bucketID, 0, reason)
 }
 
-func (r *RateLimiter) request(method, route, contentType string, b interface{}, bucketID string, sequence int) (*http.Response, error) {
+func (r *RateLimiter) request(method, route, contentType string, b interface{}, bucketID string, sequence int, reason *string) (*http.Response, error) {
 	if bucketID == "" {
 		bucketID = strings.SplitN(route, "?", 2)[0]
 	}
 
-	return r.requestWithLockedBucket(method, route, contentType, b, r.lockBucket(bucketID), sequence)
+	return r.requestWithLockedBucket(method, route, contentType, b, r.lockBucket(bucketID), sequence, reason)
 }
 
-func (r *RateLimiter) requestWithLockedBucket(method, route, contentType string, b interface{}, bucket *bucket, sequence int) (*http.Response, error) {
+func (r *RateLimiter) requestWithLockedBucket(method, route, contentType string, b interface{}, bucket *bucket, sequence int, reason *string) (*http.Response, error) {
 	var buffer bytes.Buffer
 	if b != nil {
 		encoder := json.NewEncoder(&buffer)
@@ -134,7 +134,7 @@ func (r *RateLimiter) requestWithLockedBucket(method, route, contentType string,
 
 		time.Sleep(rlr.RetryAfter)
 
-		resp, err = r.requestWithLockedBucket(method, route, contentType, b, r.lockBucketObject(bucket), sequence)
+		resp, err = r.requestWithLockedBucket(method, route, contentType, b, r.lockBucketObject(bucket), sequence, reason)
 	}
 
 	return resp, nil

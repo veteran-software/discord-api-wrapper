@@ -1,0 +1,82 @@
+package api
+
+import (
+	"fmt"
+	"net/http"
+	"time"
+
+	"gitlab.com/veteran-software/discord-api-wrapper/utilities"
+)
+
+/*
+Invite Object
+
+Represents a code that when used, adds a user to a guild or group DM channel.
+*/
+
+type Invite struct {
+	Code                     string              `json:"code"`
+	Guild                    Guild               `json:"guild,omitempty"`
+	Channel                  *Channel            `json:"channel"`
+	Inviter                  User                `json:"inviter,omitempty"`
+	TargetType               InviteTargetType    `json:"target_type,omitempty"`
+	TargetUser               User                `json:"target_user,omitempty"`
+	TargetApplication        Application         `json:"target_application,omitempty"`
+	ApproximatePresenceCount uint64              `json:"approximate_presence_count,omitempty"`
+	ApproximateMemberCount   uint64              `json:"approximate_member_count,omitempty"`
+	ExpiresAt                time.Time           `json:"expires_at,omitempty"`
+	StageInstance            InviteStageInstance `json:"stage_instance,omitempty"`
+	GuildScheduledEvent      GuildScheduledEvent `json:"guild_scheduled_event,omitempty"`
+}
+
+type InviteTargetType int
+
+const (
+	TargetTypeStream InviteTargetType = iota + 1
+	TargetTypeEmbeddedApplication
+)
+
+/* INVITE METADATA OBJECT */
+
+type InviteMetadata struct {
+	Uses      uint64    `json:"uses"`
+	MaxUses   uint64    `json:"max_uses"`
+	MaxAge    uint64    `json:"max_age"`
+	Temporary bool      `json:"temporary"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
+/* INVITE STAGE INSTANCE OBJECT */
+
+type InviteStageInstance struct {
+	Members          []GuildMember `json:"members"`
+	ParticipantCount uint64        `json:"participant_count"`
+	SpeakerCount     uint64        `json:"speaker_count"`
+	Topic            string        `json:"topic"`
+}
+
+/* ENDPOINTS */
+
+/*
+GetInvite
+
+Returns an Invite object for the given code.
+*/
+func (i *Invite) GetInvite(opts *map[string]interface{}) (method, route string) {
+	return http.MethodGet, fmt.Sprintf("%s/invites/%s%s", api, i.Code, *utilities.ParseQueryString(opts))
+}
+
+/*
+DeleteInvite
+
+Delete an Invite.
+
+Requires the MANAGE_CHANNELS permission on the channel this invite belongs to, or MANAGE_GUILD to remove any invite across the guild.
+
+Returns an Invite object on success.
+
+Fires an Invite Delete Gateway event.
+*/
+func (i *Invite) DeleteInvite() (method, route string) {
+	return http.MethodDelete, fmt.Sprintf("%s/invites/%s", api, i.Code)
+}

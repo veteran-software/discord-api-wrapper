@@ -597,7 +597,9 @@ func TestComponent_GetURL(t *testing.T) {
 		want   string
 	}{
 		{
-			name: "URL",
+			name:   "URL",
+			fields: fields{URL: "https://google.com"},
+			want:   "https://google.com",
 		},
 	}
 	for _, tt := range tests {
@@ -614,22 +616,7 @@ func TestComponent_GetURL(t *testing.T) {
 
 func TestComponent_SetURL(t *testing.T) {
 	type fields struct {
-		Type        ComponentType
-		CustomID    string
-		Disabled    bool
-		Style       interface{}
-		Label       string
-		Emoji       *Emoji
-		URL         string
-		Options     []SelectOption
-		MinValues   int
-		MaxValues   int
-		Placeholder string
-		Components  []Component
-		MinLength   int
-		MaxLength   int
-		Required    bool
-		Value       string
+		URL string
 	}
 	type args struct {
 		u string
@@ -640,27 +627,19 @@ func TestComponent_SetURL(t *testing.T) {
 		args   args
 		want   *Component
 	}{
-		// TODO: Add test cases.
+		{
+			name:   "URL",
+			fields: fields{URL: "https://google.com"},
+			args:   args{u: "https://google.com"},
+			want: &Component{
+				URL: "https://google.com",
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			c := &Component{
-				Type:        tt.fields.Type,
-				CustomID:    tt.fields.CustomID,
-				Disabled:    tt.fields.Disabled,
-				Style:       tt.fields.Style,
-				Label:       tt.fields.Label,
-				Emoji:       tt.fields.Emoji,
-				URL:         tt.fields.URL,
-				Options:     tt.fields.Options,
-				MinValues:   tt.fields.MinValues,
-				MaxValues:   tt.fields.MaxValues,
-				Placeholder: tt.fields.Placeholder,
-				Components:  tt.fields.Components,
-				MinLength:   tt.fields.MinLength,
-				MaxLength:   tt.fields.MaxLength,
-				Required:    tt.fields.Required,
-				Value:       tt.fields.Value,
+				URL: tt.fields.URL,
 			}
 			if got := c.SetURL(tt.args.u); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("SetURL() = %v, want %v", got, tt.want)
