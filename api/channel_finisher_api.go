@@ -124,7 +124,7 @@ func (e *Embed) GetAuthor() *Author {
 	return e.Author
 }
 
-func (e *Embed) AddField(name, value string, inline *bool) *Embed {
+func (e *Embed) AddField(name, value string, inline bool) *Embed {
 	e.Fields = append(e.Fields, newField().SetName(name).SetValue(value).SetInline(inline))
 
 	return e
@@ -287,8 +287,8 @@ func (f *Field) GetValue() string {
 	return f.Value
 }
 
-func (f *Field) SetInline(inline *bool) *Field {
-	f.Inline = *inline
+func (f *Field) SetInline(inline bool) *Field {
+	f.Inline = inline
 
 	return f
 }
