@@ -1,7 +1,7 @@
 package main
 
 import (
-	_ "discord-api-wrapper/api"
-	_ "discord-api-wrapper/logging"
-	_ "discord-api-wrapper/utilities"
+	_ "gitlab.com/veteran-software/discord-api-wrapper/api"
+	_ "gitlab.com/veteran-software/discord-api-wrapper/logging"
+	_ "gitlab.com/veteran-software/discord-api-wrapper/utilities"
 )

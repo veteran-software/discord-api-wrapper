@@ -10,8 +10,8 @@ import (
 	"strings"
 	"time"
 
-	"discord-api-wrapper/logging"
-	"discord-api-wrapper/utilities"
+	"gitlab.com/veteran-software/discord-api-wrapper/logging"
+	"gitlab.com/veteran-software/discord-api-wrapper/utilities"
 
 	"github.com/gojek/heimdall/v7"
 	"github.com/gojek/heimdall/v7/httpclient"
