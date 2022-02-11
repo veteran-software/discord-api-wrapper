@@ -1,4 +1,4 @@
-module DiscordAPIWrapper
+module discord-api-wrapper
 
 go 1.17
 

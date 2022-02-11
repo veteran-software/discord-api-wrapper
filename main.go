@@ -1,8 +1,7 @@
 package main
 
 import (
-	_ "DiscordAPIWrapper/api"
-	_ "DiscordAPIWrapper/api/interactions"
-	_ "DiscordAPIWrapper/logging"
-	_ "DiscordAPIWrapper/utilities"
+	_ "discord-api-wrapper/api"
+	_ "discord-api-wrapper/logging"
+	_ "discord-api-wrapper/utilities"
 )
