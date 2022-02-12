@@ -1,4 +1,4 @@
-module gitlab.com/veteran-software/discord-api-wrapper
+module github.com/veteran-software/discord-api-wrapper
 
 go 1.17
 

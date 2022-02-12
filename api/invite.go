@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"gitlab.com/veteran-software/discord-api-wrapper/utilities"
+	"github.com/veteran-software/discord-api-wrapper/utilities"
 )
 
 /*

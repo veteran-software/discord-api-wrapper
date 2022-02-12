@@ -10,8 +10,8 @@ import (
 	"strconv"
 	"time"
 
-	"gitlab.com/veteran-software/discord-api-wrapper/logging"
-	"gitlab.com/veteran-software/discord-api-wrapper/utilities"
+	"github.com/veteran-software/discord-api-wrapper/logging"
+	"github.com/veteran-software/discord-api-wrapper/utilities"
 )
 
 /* CHANNEL OBJECT */
