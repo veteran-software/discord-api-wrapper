@@ -21,7 +21,7 @@ import (
 	"testing"
 )
 
-func TestComponent_GetType(t *testing.T) {
+func TestComponentGetType(t *testing.T) {
 	type fields struct {
 		Type ComponentType
 	}
@@ -63,7 +63,7 @@ func TestComponent_GetType(t *testing.T) {
 	}
 }
 
-func TestComponent_SetType(t *testing.T) {
+func TestComponentSetType(t *testing.T) {
 	type fields struct {
 		Type ComponentType
 	}
@@ -121,7 +121,7 @@ func TestComponent_SetType(t *testing.T) {
 	}
 }
 
-func TestComponent_GetCustomID(t *testing.T) {
+func TestComponentGetCustomID(t *testing.T) {
 	type fields struct {
 		CustomID string
 	}
@@ -158,7 +158,7 @@ func TestComponent_GetCustomID(t *testing.T) {
 	}
 }
 
-func TestComponent_SetCustomID(t *testing.T) {
+func TestComponentSetCustomID(t *testing.T) {
 	type fields struct {
 		CustomID string
 	}
@@ -208,7 +208,7 @@ func TestComponent_SetCustomID(t *testing.T) {
 	}
 }
 
-func TestComponent_IsDisabled(t *testing.T) {
+func TestComponentIsDisabled(t *testing.T) {
 	type fields struct {
 		Disabled bool
 	}
@@ -240,7 +240,7 @@ func TestComponent_IsDisabled(t *testing.T) {
 	}
 }
 
-func TestComponent_SetDisabled(t *testing.T) {
+func TestComponentSetDisabled(t *testing.T) {
 	type fields struct {
 		Disabled bool
 	}
@@ -283,7 +283,7 @@ func TestComponent_SetDisabled(t *testing.T) {
 	}
 }
 
-func TestComponent_GetButtonStyle(t *testing.T) {
+func TestComponentGetButtonStyle(t *testing.T) {
 	type fields struct {
 		Style interface{}
 	}
@@ -330,7 +330,7 @@ func TestComponent_GetButtonStyle(t *testing.T) {
 	}
 }
 
-func TestComponent_SetButtonStyle(t *testing.T) {
+func TestComponentSetButtonStyle(t *testing.T) {
 	type fields struct {
 		Style interface{}
 	}
@@ -396,7 +396,7 @@ func TestComponent_SetButtonStyle(t *testing.T) {
 	}
 }
 
-func TestComponent_GetTextInputStyle(t *testing.T) {
+func TestComponentGetTextInputStyle(t *testing.T) {
 	type fields struct {
 		Style interface{}
 	}
@@ -428,7 +428,7 @@ func TestComponent_GetTextInputStyle(t *testing.T) {
 	}
 }
 
-func TestComponent_SetTextInputStyle(t *testing.T) {
+func TestComponentSetTextInputStyle(t *testing.T) {
 	type fields struct {
 		Style interface{}
 	}
@@ -489,7 +489,7 @@ func TestNewComponent(t *testing.T) {
 	}
 }
 
-func TestComponent_GetEmoji(t *testing.T) {
+func TestComponentGetEmoji(t *testing.T) {
 	type fields struct {
 		Emoji *Emoji
 	}
@@ -537,7 +537,7 @@ func TestComponent_GetEmoji(t *testing.T) {
 	}
 }
 
-func TestComponent_SetEmoji(t *testing.T) {
+func TestComponentSetEmoji(t *testing.T) {
 	type fields struct {
 		Emoji *Emoji
 	}
@@ -603,7 +603,7 @@ func TestComponent_SetEmoji(t *testing.T) {
 	}
 }
 
-func TestComponent_GetURL(t *testing.T) {
+func TestComponentGetURL(t *testing.T) {
 	type fields struct {
 		URL string
 	}
@@ -630,7 +630,7 @@ func TestComponent_GetURL(t *testing.T) {
 	}
 }
 
-func TestComponent_SetURL(t *testing.T) {
+func TestComponentSetURL(t *testing.T) {
 	type fields struct {
 		URL string
 	}

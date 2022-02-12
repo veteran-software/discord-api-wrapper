@@ -143,16 +143,7 @@ func (b *bucket) release(headers http.Header) error {
 	defer b.Unlock()
 
 	if rl := b.customRateLimit; rl != nil {
-		if time.Now().Sub(b.lastReset) >= rl.reset {
-			b.Remaining = rl.requests - 1
-			b.lastReset = time.Now()
-		}
-
-		if b.Remaining < 1 {
-			b.reset = time.Now().Add(rl.reset)
-		}
-
-		return nil
+		return b.checkCustomLimit(rl)
 	}
 
 	if headers == nil {
@@ -167,39 +158,17 @@ func (b *bucket) release(headers http.Header) error {
 	// Update global and per bucket reset time if the proper headers are available
 	// If global is set, then it will block all buckets until after X-RateLimit-Reset-After
 	// If Retry-After without global is provided it will use that for the new reset time since it's more accurate than X-RateLimit-Reset.
-	// If Retry-After after is not proided, it will update the reset time from X-RateLimit-Reset
+	// If Retry-After after is not provided, it will update the reset time from X-RateLimit-Reset
 	if resetAfter != "" {
-		parsedAfter, err := strconv.ParseFloat(resetAfter, 64)
+		err := b.checkResetAfter(resetAfter, global)
 		if err != nil {
 			return err
-		}
-
-		whole, frac := math.Modf(parsedAfter)
-		resetAt := time.Now().Add(time.Duration(whole) * time.Second).Add(time.Duration(frac*1000) * time.Millisecond)
-
-		if global != "" {
-			atomic.StoreInt64(b.global, resetAt.UnixNano())
-
-		} else {
-			b.reset = resetAt
 		}
 	} else if reset != "" {
-		// Calculate the reset time by using the date header returned from discord
-		discordTime, err := http.ParseTime(headers.Get("Date"))
+		err := b.checkReset(headers, reset)
 		if err != nil {
 			return err
 		}
-
-		unix, err := strconv.ParseFloat(reset, 64)
-		if err != nil {
-			return err
-		}
-
-		// Calculate the time until reset and add it to the current local time
-		// The added amount is the lowest amount that gave no 429's in 1k requests
-		whole, frac := math.Modf(unix)
-		delta := time.Unix(int64(whole), 0).Add(time.Duration(frac*1000)*time.Millisecond).Sub(discordTime) + (250 * time.Millisecond)
-		b.reset = time.Now().Add(delta)
 	}
 
 	// Update remaining if header is present
@@ -212,5 +181,53 @@ func (b *bucket) release(headers http.Header) error {
 		b.Remaining = int(parsedRemaining)
 	}
 
+	return nil
+}
+
+func (b *bucket) checkCustomLimit(rl *customRateLimit) error {
+	if time.Now().Sub(b.lastReset) >= rl.reset {
+		b.Remaining = rl.requests - 1
+		b.lastReset = time.Now()
+	}
+
+	if b.Remaining < 1 {
+		b.reset = time.Now().Add(rl.reset)
+	}
+
+	return nil
+}
+
+func (b *bucket) checkReset(headers http.Header, reset string) error {
+	discordTime, err := http.ParseTime(headers.Get("Date"))
+	if err != nil {
+		return err
+	}
+
+	unix, err := strconv.ParseFloat(reset, 64)
+	if err != nil {
+		return err
+	}
+
+	whole, frac := math.Modf(unix)
+	delta := time.Unix(int64(whole), 0).Add(time.Duration(frac*1000)*time.Millisecond).Sub(discordTime) + (250 * time.Millisecond)
+	b.reset = time.Now().Add(delta)
+	return nil
+}
+
+func (b *bucket) checkResetAfter(resetAfter string, global string) error {
+	parsedAfter, err := strconv.ParseFloat(resetAfter, 64)
+	if err != nil {
+		return err
+	}
+
+	whole, frac := math.Modf(parsedAfter)
+	resetAt := time.Now().Add(time.Duration(whole) * time.Second).Add(time.Duration(frac*1000) * time.Millisecond)
+
+	if global != "" {
+		atomic.StoreInt64(b.global, resetAt.UnixNano())
+
+	} else {
+		b.reset = resetAt
+	}
 	return nil
 }

@@ -33,6 +33,7 @@ import (
 	"github.com/gojek/heimdall/v7/httpclient"
 )
 
+//goland:noinspection SpellCheckingInspection
 var (
 	initialTimeout        = 500 * time.Millisecond
 	maxTimeout            = 25 * time.Second
