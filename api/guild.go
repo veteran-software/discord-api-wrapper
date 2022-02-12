@@ -20,6 +20,8 @@ import (
 	"fmt"
 	"net/http"
 	"time"
+
+	"github.com/veteran-software/discord-api-wrapper/routes"
 )
 
 /* GUILD OBJECT */
@@ -293,7 +295,7 @@ func (g *Guild) String() string {
 //
 // If with_counts is set to true, this endpoint will also return approximate_member_count and approximate_presence_count for the guild.
 func (g *Guild) GetGuild() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf("%s/guilds/%s?with_counts=true", api, g.ID.String())
+	return http.MethodGet, fmt.Sprintf(routes.Guilds_QSP, api, g.ID.String())
 }
 
 // ListGuildMembers
@@ -309,7 +311,7 @@ func (g *Guild) ListGuildMembers(after ...*Snowflake) (method string, route stri
 		afterSnowflake = ""
 	}
 
-	return http.MethodGet, fmt.Sprintf("%s/guilds/%s/members?limit=1000%s", api, g.ID.String(), afterSnowflake)
+	return http.MethodGet, fmt.Sprintf(routes.Guilds_MembersQsp, api, g.ID.String(), afterSnowflake)
 }
 
 // AddGuildMemberRole
@@ -324,7 +326,7 @@ func (g *Guild) ListGuildMembers(after ...*Snowflake) (method string, route stri
 //
 // This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) AddGuildMemberRole(user *User, role *Snowflake) (method string, route string) {
-	return http.MethodPut, fmt.Sprintf("%s/guilds/%s/members/%s/roles/%s", api, g.ID.String(), user.ID.String(), role.String())
+	return http.MethodPut, fmt.Sprintf(routes.Guilds_Members_Roles_, api, g.ID.String(), user.ID.String(), role.String())
 }
 
 // RemoveGuildMemberRole

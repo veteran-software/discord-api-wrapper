@@ -142,7 +142,6 @@ func (r *RateLimiter) lockBucket(bucketID string) *bucket {
 func (b *bucket) release(headers http.Header) error {
 	defer b.Unlock()
 
-	// Check if we're using a custom ratelimiter
 	if rl := b.customRateLimit; rl != nil {
 		if time.Now().Sub(b.lastReset) >= rl.reset {
 			b.Remaining = rl.requests - 1

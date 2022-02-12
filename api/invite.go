@@ -21,6 +21,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/veteran-software/discord-api-wrapper/routes"
 	"github.com/veteran-software/discord-api-wrapper/utilities"
 )
 
@@ -79,7 +80,7 @@ GetInvite
 Returns an Invite object for the given code.
 */
 func (i *Invite) GetInvite(opts *map[string]interface{}) (method, route string) {
-	return http.MethodGet, fmt.Sprintf("%s/invites/%s%s", api, i.Code, *utilities.ParseQueryString(opts))
+	return http.MethodGet, fmt.Sprintf(routes.Invites_Qsp, api, i.Code, *utilities.ParseQueryString(opts))
 }
 
 /*
@@ -94,5 +95,5 @@ Returns an Invite object on success.
 Fires an Invite Delete Gateway event.
 */
 func (i *Invite) DeleteInvite() (method, route string) {
-	return http.MethodDelete, fmt.Sprintf("%s/invites/%s", api, i.Code)
+	return http.MethodDelete, fmt.Sprintf(routes.Invites_, api, i.Code)
 }

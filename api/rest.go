@@ -117,7 +117,6 @@ func (r *RateLimiter) requestWithLockedBucket(method, route, contentType string,
 	}(ctx)
 
 	resp, err := httpClient.Do(req.WithContext(ctx))
-	logging.Infoln(resp.Status)
 
 	if err != nil {
 		_ = bucket.release(nil)

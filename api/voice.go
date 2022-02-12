@@ -20,6 +20,8 @@ import (
 	"fmt"
 	"net/http"
 	"time"
+
+	"github.com/veteran-software/discord-api-wrapper/routes"
 )
 
 /* VOICE STATE OBJECT */
@@ -53,5 +55,5 @@ type VoiceRegion struct {
 /* ENDPOINTS */
 
 func ListVoiceRegions() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf("%s/voice/regions", api)
+	return http.MethodGet, fmt.Sprintf(routes.VoiceRegions, api)
 }

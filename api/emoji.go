@@ -19,6 +19,8 @@ package api
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/veteran-software/discord-api-wrapper/routes"
 )
 
 /*
@@ -54,15 +56,15 @@ type Emoji struct {
 // ListGuildEmojis
 // Returns a list of emoji objects for the given guild.
 func (g *Guild) ListGuildEmojis() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf("%s/guilds/%s/emojis", api, g.ID.String())
+	return http.MethodGet, fmt.Sprintf(routes.Guilds_Emojis, api, g.ID.String())
 }
 
 // GetGuildEmoji
 // Returns an emoji object for the given guild and emoji IDs.
 func (g *Guild) GetGuildEmoji(emoji Emoji) (method string, route string) {
-	return http.MethodGet, fmt.Sprintf("%s/guilds/%s/emojis/%s", api, g.ID.String(), emoji.ID.String())
+	return http.MethodGet, fmt.Sprintf(routes.Guilds_Emojis_, api, g.ID.String(), emoji.ID.String())
 }
 
 func (g *Guild) CreateGuildEmoji() (method string, route string) {
-	return http.MethodPost, fmt.Sprintf("%s/guilds/%s/emojis", api, g.ID.String())
+	return http.MethodPost, fmt.Sprintf(routes.Guilds_Emojis, api, g.ID.String())
 }

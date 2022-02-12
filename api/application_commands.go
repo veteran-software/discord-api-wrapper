@@ -19,6 +19,8 @@ package api
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/veteran-software/discord-api-wrapper/routes"
 )
 
 /* APPLICATION COMMAND OBJECT */
@@ -213,11 +215,11 @@ Interaction endpoints
 // GLOBAL COMMANDS
 
 func GetGlobalApplicationCommands(applicationID string) (method string, route string) {
-	return http.MethodGet, fmt.Sprintf("%s/applications/%s/commands", api, applicationID)
+	return http.MethodGet, fmt.Sprintf(routes.Applications_Commands, api, applicationID)
 }
 
 func CreateGlobalApplicationCommand(applicationID string) (method string, route string) {
-	return http.MethodPost, fmt.Sprintf("%s/applications/%s/commands", api, applicationID)
+	return http.MethodPost, fmt.Sprintf(routes.Applications_Commands, api, applicationID)
 }
 
 type CreateApplicationCommandJSON struct {
@@ -230,11 +232,11 @@ type CreateApplicationCommandJSON struct {
 // GetGlobalApplicationCommand
 // Fetch a global command for your application. Returns an application command object.
 func (i *Interaction) GetGlobalApplicationCommand() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf("%s/applications/%s/commands/%s", api, i.ApplicationID, i.Data.ID)
+	return http.MethodGet, fmt.Sprintf(routes.Applications_Commands_, api, i.ApplicationID, i.Data.ID)
 }
 
 func (i *Interaction) EditGlobalApplicationCommand() (method string, route string) {
-	return http.MethodPatch, fmt.Sprintf("%s/applications/%s/commands/%s", api, i.ApplicationID, i.Data.ID)
+	return http.MethodPatch, fmt.Sprintf(routes.Applications_Commands_, api, i.ApplicationID, i.Data.ID)
 }
 
 type EditApplicationCommandJSON struct {
@@ -242,25 +244,25 @@ type EditApplicationCommandJSON struct {
 }
 
 func (i *Interaction) BulkOverwriteGlobalApplicationCommands() (method string, route string) {
-	return http.MethodPut, fmt.Sprintf("%s/applications/%s/commands", api, i.ApplicationID)
+	return http.MethodPut, fmt.Sprintf(routes.Applications_Commands, api, i.ApplicationID)
 }
 
 func DeleteGlobalApplicationCommand(applicationID string, commandID string) (method string, route string) {
-	return http.MethodDelete, fmt.Sprintf("%s/applications/%s/commands/%s", api, applicationID, commandID)
+	return http.MethodDelete, fmt.Sprintf(routes.Applications_Commands_, api, applicationID, commandID)
 }
 
 // GUILD COMMANDS
 
 func (i *Interaction) GetGuildApplicationCommands() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf("%s/applications/%s/guilds/%s/commands", api, i.ApplicationID, i.GuildID)
+	return http.MethodGet, fmt.Sprintf(routes.Applications_Guilds_Commands, api, i.ApplicationID, i.GuildID)
 }
 
 func GetGuildApplicationCommands(applicationID string, guildID string) (method string, route string) {
-	return http.MethodGet, fmt.Sprintf("%s/applications/%s/guilds/%s/commands", api, applicationID, guildID)
+	return http.MethodGet, fmt.Sprintf(routes.Applications_Guilds_Commands, api, applicationID, guildID)
 }
 
 func CreateGuildApplicationCommand(applicationID string, guildID string) (method string, route string) {
-	return http.MethodPost, fmt.Sprintf("%s/applications/%s/guilds/%s/commands", api, applicationID, guildID)
+	return http.MethodPost, fmt.Sprintf(routes.Applications_Guilds_Commands, api, applicationID, guildID)
 }
 
 type CreateGuildApplicationCommandJSON struct {
@@ -268,11 +270,11 @@ type CreateGuildApplicationCommandJSON struct {
 }
 
 func (i *Interaction) GetGuildApplicationCommand() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf("%s/applications/%s/guilds/%s/commands/%s", api, i.ApplicationID, i.GuildID, i.Data.ID)
+	return http.MethodGet, fmt.Sprintf(routes.Applications_Guilds_Commands_, api, i.ApplicationID, i.GuildID, i.Data.ID)
 }
 
 func (i *Interaction) EditGuildApplicationCommand() (method string, route string) {
-	return http.MethodPatch, fmt.Sprintf("%s/applications/%s/guilds/%s/commands/%s", api, i.ApplicationID, i.GuildID, i.Data.ID)
+	return http.MethodPatch, fmt.Sprintf(routes.Applications_Guilds_Commands_, api, i.ApplicationID, i.GuildID, i.Data.ID)
 }
 
 type EditGuildApplicationCommandJSON struct {
@@ -280,59 +282,59 @@ type EditGuildApplicationCommandJSON struct {
 }
 
 func DeleteGuildApplicationCommand(applicationID string, guildID string, commandID string) (method string, route string) {
-	return http.MethodDelete, fmt.Sprintf("%s/applications/%s/guilds/%s/commands/%s", api, applicationID, guildID, commandID)
+	return http.MethodDelete, fmt.Sprintf(routes.Applications_Guilds_Commands_, api, applicationID, guildID, commandID)
 }
 
 func (i *Interaction) BulkOverwriteGuildApplicationCommands() (method string, route string) {
-	return http.MethodPut, fmt.Sprintf("%s/applications/%s/guilds/%s/commands", api, i.ApplicationID, i.GuildID)
+	return http.MethodPut, fmt.Sprintf(routes.Applications_Guilds_Commands, api, i.ApplicationID, i.GuildID.String())
 }
 
 // INTERACTION ENDPOINTS
 
 // CreateInteractionResponse Create a response to an Interaction from the gateway.
 func (i *Interaction) CreateInteractionResponse() (method string, route string) {
-	return http.MethodPost, fmt.Sprintf("%s/interactions/%s/%s/callback", api, i.ID.String(), i.Token)
+	return http.MethodPost, fmt.Sprintf(routes.Interaction__Callback, api, i.ID.String(), i.Token)
 }
 
 // GetOriginalInteractionResponse Returns the initial Interaction response.
 func (i *Interaction) GetOriginalInteractionResponse() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf("%s/webhooks/%s/%s/messages/@original", api, i.ApplicationID, i.Token)
+	return http.MethodGet, fmt.Sprintf(routes.Webhooks__MessagesOriginal, api, i.ApplicationID, i.Token)
 }
 
 // EditOriginalInteractionResponse Edits the initial Interaction response.
 func (i *Interaction) EditOriginalInteractionResponse() (method string, route string) {
-	return http.MethodPatch, fmt.Sprintf("%s/webhooks/%s/%s/messages/@original", api, i.ApplicationID, i.Token)
+	return http.MethodPatch, fmt.Sprintf(routes.Webhooks__MessagesOriginal, api, i.ApplicationID, i.Token)
 }
 
 // DeleteOriginalInteractionResponse Deletes the initial Interaction response. Returns 204 on success.
 func (i *Interaction) DeleteOriginalInteractionResponse() (method string, route string) {
-	return http.MethodDelete, fmt.Sprintf("%s/webhooks/%s/%s/messages/@original", api, i.ApplicationID, i.Token)
+	return http.MethodDelete, fmt.Sprintf(routes.Webhooks__MessagesOriginal, api, i.ApplicationID, i.Token)
 }
 
 func (i *Interaction) CreateFollowupMessage() (method string, route string) {
-	return http.MethodPost, fmt.Sprintf("%s/webhooks/%s/%s", api, i.ApplicationID, i.Token)
+	return http.MethodPost, fmt.Sprintf(routes.Webhooks__, api, i.ApplicationID, i.Token)
 }
 
 func (i *Interaction) EditFollowupMessage() (method string, route string) {
-	return http.MethodPatch, fmt.Sprintf("%s/webhooks/%s/%s/messages/%s", api, i.ApplicationID, i.Token, i.Message.ID)
+	return http.MethodPatch, fmt.Sprintf(routes.Webhooks__Messages_, api, i.ApplicationID, i.Token, i.Message.ID)
 }
 
 func (i *Interaction) DeleteFollowupMessage() (method string, route string) {
-	return http.MethodDelete, fmt.Sprintf("%s/webhooks/%s/%s/messages/%s", api, i.ApplicationID, i.Token, i.Message.ID)
+	return http.MethodDelete, fmt.Sprintf(routes.Webhooks__Messages_, api, i.ApplicationID, i.Token, i.Message.ID)
 }
 
 func (i *Interaction) GetGuildApplicationCommandPermissions() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf("%s/applications/%s/guilds/%s/command/permissions", api, i.ApplicationID, i.GuildID)
+	return http.MethodGet, fmt.Sprintf(routes.Applications_Guilds_CommandPermissions, api, i.ApplicationID, i.GuildID)
 }
 
 func (i *Interaction) GetApplicationCommandPermissions() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf("%s/applications/%s/guilds/%s/command/%s/permissions", api, i.ApplicationID, i.GuildID, i.Data.ID)
+	return http.MethodGet, fmt.Sprintf(routes.Applications_Guilds_Command_Permissions, api, i.ApplicationID, i.GuildID, i.Data.ID)
 }
 
 func (i *Interaction) EditApplicationCommandPermissions() (method string, route string) {
-	return http.MethodPut, fmt.Sprintf("%s/applications/%s/guilds/%s/command/%s/permissions", api, i.ApplicationID, i.GuildID, i.Data.ID)
+	return http.MethodPut, fmt.Sprintf(routes.Applications_Guilds_Command_Permissions, api, i.ApplicationID, i.GuildID, i.Data.ID)
 }
 
 func (i *Interaction) BatchEditApplicationCommandPermissions() (method string, route string) {
-	return http.MethodPut, fmt.Sprintf("%s/applications/%s/guilds/%s/command/permissions", api, i.ApplicationID, i.GuildID)
+	return http.MethodPut, fmt.Sprintf(routes.Applications_Guilds_CommandPermissions, api, i.ApplicationID, i.GuildID)
 }
