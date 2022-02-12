@@ -67,6 +67,7 @@ const (
 
 type VideoQualityMode int
 
+//goland:noinspection GoUnusedConst
 const (
 	Auto VideoQualityMode = iota + 1
 	Full
@@ -106,6 +107,7 @@ type Message struct {
 
 type MessageType int
 
+//goland:noinspection GoUnusedConst,SpellCheckingInspection
 const (
 	Default MessageType = iota
 	RecipientAdd
@@ -126,9 +128,9 @@ const (
 	GuildDiscoveryGracePeriodInitialWarning
 	GuildDiscoveryGracePeriodFinalWarning
 	ThreadCreated
-	Reply                // only in API v8+
-	ChatInputCommand     // only in API v8+
-	ThreadStarterMessage // only in API v9+
+	Reply
+	ChatInputCommand
+	ThreadStarterMessage
 	GuildInviteReminder
 	ContextMenuCommand
 )
@@ -388,25 +390,18 @@ func (c *Channel) String() string {
 	switch c.Type {
 	case GuildText:
 		chanType = "GTC:"
-		break
 	case DM:
 		chanType = "DM:"
-		break
 	case GroupDM:
 		chanType = "GDM:"
-		break
 	case GuildNews:
 		chanType = "GNC:"
-		break
 	case GuildNewsThread:
 		chanType = "GNT:"
-		break
 	case GuildPublicThread:
 		chanType = "GPuT:"
-		break
 	case GuildPrivateThread:
 		chanType = "GPrT:"
-		break
 	}
 
 	return chanType + c.Name + "(" + c.ID.String() + ")"
@@ -463,7 +458,6 @@ func (c *Channel) ModifyChannel(dm *map[string]interface{}, guildChannel *map[st
 			Name: fmt.Sprintf("%v", (*dm)["name"]),
 			Icon: fmt.Sprintf("%v", (*dm)["icon"]),
 		}
-		break
 	case GuildPublicThread:
 		fallthrough
 	case GuildPrivateThread:
@@ -482,8 +476,6 @@ func (c *Channel) ModifyChannel(dm *map[string]interface{}, guildChannel *map[st
 			Name:     fmt.Sprintf("%v", (*dm)["name"]),
 			Archived: archived,
 		}
-		break
-
 	}
 
 	if c.Type == GroupDM {

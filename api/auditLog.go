@@ -5,13 +5,18 @@ import (
 	"net/http"
 )
 
+/* Whenever an admin action is performed on the API, an entry is added to the respective guild's audit log.
+You can specify the reason by attaching the X-Audit-Log-Reason request header.
+This header supports url encoded utf8 characters.
+*/
+
 type AuditLog struct {
-	AuditLogEntries []AuditLogEntry `json:"audit_log_entries"`
-	// GuildScheduledEvents []GuildScheduledEvent `json:"guild_scheduled_events"`
-	Integrations []Integration `json:"integrations"`
-	Threads      []Channel     `json:"threads"`
-	Users        []User        `json:"users"`
-	// Webhooks []Webhook `json:"webhooks"`
+	AuditLogEntries      []AuditLogEntry       `json:"audit_log_entries"`
+	GuildScheduledEvents []GuildScheduledEvent `json:"guild_scheduled_events"`
+	Integrations         []Integration         `json:"integrations"`
+	Threads              []Channel             `json:"threads"`
+	Users                []User                `json:"users"`
+	// TODO: Webhooks []Webhook `json:"webhooks"`
 }
 
 type AuditLogEntry struct {
@@ -20,8 +25,8 @@ type AuditLogEntry struct {
 	UserID     *Snowflake         `json:"user_id"`
 	ID         Snowflake          `json:"id"`
 	ActionType AuditLogEvent      `json:"action_type"`
-	Options    OptionalAuditEntry `json:"options"`
-	Reason     string             `json:"reason"`
+	Options    OptionalAuditEntry `json:"options,omitempty"`
+	Reason     string             `json:"reason,omitempty"`
 }
 
 type AuditLogEvent int

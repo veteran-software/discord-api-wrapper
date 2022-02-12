@@ -1,7 +1,5 @@
 package api
 
-// Based upon DiscordGo <https://github.com/bwmarrin/discordgo>
-
 import (
 	"math"
 	"net/http"

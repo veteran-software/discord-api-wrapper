@@ -93,9 +93,9 @@ func (r *RateLimiter) requestWithLockedBucket(method, route, contentType string,
 		case <-ctx.Done():
 			switch ctx.Err() {
 			case context.DeadlineExceeded:
-				logging.Debugln(logging.LogPrefixDiscord, "context timeout exceeded")
+				logging.Traceln(logging.LogPrefixDiscord, "context timeout exceeded")
 			case context.Canceled:
-				logging.Debugln(logging.LogPrefixDiscord, "context cancelled; process complete")
+				logging.Traceln(logging.LogPrefixDiscord, "context cancelled; process complete")
 			}
 		}
 	}(ctx)
