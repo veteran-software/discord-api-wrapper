@@ -21,6 +21,11 @@ import (
 	"testing"
 )
 
+const (
+	whIdTokenMessagesId         = "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/messages/148336120936005632"
+	whIdTokenMessagesIdThreadId = "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/messages/148336120936005632?thread_id=934478965031174194"
+)
+
 func TestChannelCreateWebhook(t *testing.T) {
 	type fields struct {
 		ID Snowflake
@@ -162,6 +167,7 @@ func TestWebhookDeleteWebhookMessage(t *testing.T) {
 		msgID    Snowflake
 		threadID *Snowflake
 	}
+
 	tests := []struct {
 		name   string
 		fields fields
@@ -174,14 +180,14 @@ func TestWebhookDeleteWebhookMessage(t *testing.T) {
 			fields: fields{ID: Snowflake("905130195520983061"), Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
 			args:   args{msgID: Snowflake("148336120936005632"), threadID: nil},
 			want:   http.MethodDelete,
-			want1:  "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/messages/148336120936005632",
+			want1:  whIdTokenMessagesId,
 		},
 		{
 			name:   "Delete Webhook Message : Non-Nil Thread ID",
 			fields: fields{ID: Snowflake("905130195520983061"), Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
 			args:   args{msgID: Snowflake("148336120936005632"), threadID: StringToSnowflake("934478965031174194")},
 			want:   http.MethodDelete,
-			want1:  "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/messages/148336120936005632?thread_id=934478965031174194",
+			want1:  whIdTokenMessagesIdThreadId,
 		},
 	}
 	for _, tt := range tests {
@@ -257,14 +263,14 @@ func TestWebhookEditWebhookMessage(t *testing.T) {
 			fields: fields{ID: Snowflake("905130195520983061"), Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
 			args:   args{msgID: Snowflake("148336120936005632"), threadID: nil},
 			want:   http.MethodPatch,
-			want1:  "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/messages/148336120936005632",
+			want1:  whIdTokenMessagesId,
 		},
 		{
 			name:   "Edit Webhook Message : Non-Nil Thread ID",
 			fields: fields{ID: Snowflake("905130195520983061"), Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
 			args:   args{msgID: Snowflake("148336120936005632"), threadID: StringToSnowflake("934478965031174194")},
 			want:   http.MethodPatch,
-			want1:  "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/messages/148336120936005632?thread_id=934478965031174194",
+			want1:  whIdTokenMessagesIdThreadId,
 		},
 	}
 	for _, tt := range tests {
@@ -348,7 +354,7 @@ func TestWebhookExecuteGitHubCompatibleWebhook(t *testing.T) {
 	}
 }
 
-func TestWebhook_ExecuteSlackCompatibleWebhook(t *testing.T) {
+func TestWebhookExecuteSlackCompatibleWebhook(t *testing.T) {
 	type fields struct {
 		ID    Snowflake
 		Token string
@@ -367,28 +373,28 @@ func TestWebhook_ExecuteSlackCompatibleWebhook(t *testing.T) {
 		want1  string
 	}{
 		{
-			name:   "Execute GitHub Webhook : Wait : nil; Thread ID : nil",
+			name:   "Execute Slack Webhook : Wait : nil; Thread ID : nil",
 			fields: fields{ID: Snowflake("905130195520983061"), Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
 			args:   args{wait: nil, threadID: nil},
 			want:   http.MethodPost,
 			want1:  "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/slack",
 		},
 		{
-			name:   "Execute GitHub Webhook : Wait : non-nil; Thread ID : nil",
+			name:   "Execute Slack Webhook : Wait : non-nil; Thread ID : nil",
 			fields: fields{ID: Snowflake("905130195520983061"), Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
 			args:   args{wait: &w, threadID: nil},
 			want:   http.MethodPost,
 			want1:  "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/slack?wait=true",
 		},
 		{
-			name:   "Execute GitHub Webhook : Wait : nil; Thread ID : non-nil",
+			name:   "Execute Slack Webhook : Wait : nil; Thread ID : non-nil",
 			fields: fields{ID: Snowflake("905130195520983061"), Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
 			args:   args{wait: nil, threadID: StringToSnowflake("934478965031174194")},
 			want:   http.MethodPost,
 			want1:  "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/slack?thread_id=934478965031174194",
 		},
 		{
-			name:   "Execute GitHub Webhook : Wait : non-nil; Thread ID : non-nil",
+			name:   "Execute Slack Webhook : Wait : non-nil; Thread ID : non-nil",
 			fields: fields{ID: Snowflake("905130195520983061"), Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
 			args:   args{wait: &w, threadID: StringToSnowflake("934478965031174194")},
 			want:   http.MethodPost,
@@ -412,7 +418,7 @@ func TestWebhook_ExecuteSlackCompatibleWebhook(t *testing.T) {
 	}
 }
 
-func TestWebhook_ExecuteWebhook(t *testing.T) {
+func TestWebhookExecuteWebhook(t *testing.T) {
 	type fields struct {
 		ID    Snowflake
 		Token string
@@ -476,7 +482,7 @@ func TestWebhook_ExecuteWebhook(t *testing.T) {
 	}
 }
 
-func TestWebhook_GetWebhook(t *testing.T) {
+func TestWebhookGetWebhook(t *testing.T) {
 	type fields struct {
 		ID Snowflake
 	}
@@ -509,7 +515,7 @@ func TestWebhook_GetWebhook(t *testing.T) {
 	}
 }
 
-func TestWebhook_GetWebhookMessage(t *testing.T) {
+func TestWebhookGetWebhookMessage(t *testing.T) {
 	type fields struct {
 		ID    Snowflake
 		Token string
@@ -530,14 +536,14 @@ func TestWebhook_GetWebhookMessage(t *testing.T) {
 			fields: fields{ID: Snowflake("905130195520983061"), Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
 			args:   args{msgID: Snowflake("148336120936005632"), threadID: nil},
 			want:   http.MethodGet,
-			want1:  "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/messages/148336120936005632",
+			want1:  whIdTokenMessagesId,
 		},
 		{
 			name:   "Get Webhook Message : Non-Nil Thread ID",
 			fields: fields{ID: Snowflake("905130195520983061"), Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
 			args:   args{msgID: Snowflake("148336120936005632"), threadID: StringToSnowflake("934478965031174194")},
 			want:   http.MethodGet,
-			want1:  "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/messages/148336120936005632?thread_id=934478965031174194",
+			want1:  whIdTokenMessagesIdThreadId,
 		},
 	}
 	for _, tt := range tests {
@@ -557,7 +563,7 @@ func TestWebhook_GetWebhookMessage(t *testing.T) {
 	}
 }
 
-func TestWebhook_GetWebhookWithToken(t *testing.T) {
+func TestWebhookGetWebhookWithToken(t *testing.T) {
 	type fields struct {
 		ID    Snowflake
 		Token string
@@ -592,7 +598,7 @@ func TestWebhook_GetWebhookWithToken(t *testing.T) {
 	}
 }
 
-func TestWebhook_ModifyWebhook(t *testing.T) {
+func TestWebhookModifyWebhook(t *testing.T) {
 	type fields struct {
 		ID Snowflake
 	}
@@ -625,7 +631,7 @@ func TestWebhook_ModifyWebhook(t *testing.T) {
 	}
 }
 
-func TestWebhook_ModifyWebhookWithToken(t *testing.T) {
+func TestWebhookModifyWebhookWithToken(t *testing.T) {
 	type fields struct {
 		ID    Snowflake
 		Token string

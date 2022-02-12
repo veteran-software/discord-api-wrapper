@@ -21,3 +21,7 @@ import (
 	_ "github.com/veteran-software/discord-api-wrapper/logging"
 	_ "github.com/veteran-software/discord-api-wrapper/utilities"
 )
+
+func main() {
+	// Unneeded until we add websockets
+}
