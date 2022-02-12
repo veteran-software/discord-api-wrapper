@@ -22,6 +22,8 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/veteran-software/discord-api-wrapper/routes"
 )
 
 /*
@@ -29,6 +31,8 @@ Webhooks are a low-effort way to post messages to channels in Discord.
 
 They do not require a bot user or authentication to use.
 */
+
+const thrID = "thread_id="
 
 // Webhook - Used to represent a webhook.
 type Webhook struct {
@@ -68,7 +72,7 @@ const (
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
 func (c *Channel) CreateWebhook() (string, string) {
-	return http.MethodPost, fmt.Sprintf("%s/channels/%s/webhooks", api, c.ID.String())
+	return http.MethodPost, fmt.Sprintf(routes.Channels_Webhooks, api, c.ID.String())
 }
 
 type CreateWebhookJSON struct {
@@ -78,17 +82,17 @@ type CreateWebhookJSON struct {
 
 // GetChannelWebhooks - Returns a list of channel webhook objects. Requires the ManageWebhooks permission.
 func (c *Channel) GetChannelWebhooks() (string, string) {
-	return http.MethodGet, fmt.Sprintf("%s/channels/%s/webhooks", api, c.ID.String())
+	return http.MethodGet, fmt.Sprintf(routes.Channels_Webhooks, api, c.ID.String())
 }
 
 // GetGuildWebhooks - Returns a list of guild webhook objects. Requires the ManageWebhooks permission.
 func (g *Guild) GetGuildWebhooks() (string, string) {
-	return http.MethodGet, fmt.Sprintf("%s/guilds/%s/webhooks", api, g.ID.String())
+	return http.MethodGet, fmt.Sprintf(routes.Guilds_Webhooks, api, g.ID.String())
 }
 
 // GetWebhook - Returns the new webhook object for the given id.
 func (w *Webhook) GetWebhook() (string, string) {
-	return http.MethodGet, fmt.Sprintf("%s/webhooks/%s", api, w.ID.String())
+	return http.MethodGet, fmt.Sprintf(routes.Webhooks_, api, w.ID.String())
 }
 
 // GetWebhookWithToken - Same as above, except this call does not require authentication and returns no user in the webhook object.
@@ -102,7 +106,7 @@ func (w *Webhook) GetWebhookWithToken() (string, string) {
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
 func (w *Webhook) ModifyWebhook() (string, string) {
-	return http.MethodPatch, fmt.Sprintf("%s/webhooks/%s", api, w.ID.String())
+	return http.MethodPatch, fmt.Sprintf(routes.Webhooks_, api, w.ID.String())
 }
 
 type ModifyWebhookJSON struct {
@@ -113,19 +117,19 @@ type ModifyWebhookJSON struct {
 
 // ModifyWebhookWithToken - Same as above, except this call does not require authentication, does not accept a channel_id parameter in the body, and does not return a user in the webhook object.
 func (w *Webhook) ModifyWebhookWithToken() (string, string) {
-	return http.MethodPatch, fmt.Sprintf("%s/webhooks/%s/%s", api, w.ID.String(), w.Token)
+	return http.MethodPatch, fmt.Sprintf(routes.Webhooks__, api, w.ID.String(), w.Token)
 }
 
 // DeleteWebhook - Delete a webhook permanently. Requires the ManageWebhooks permission. Returns a 204 No Content response on success.
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
 func (w *Webhook) DeleteWebhook() (string, string) {
-	return http.MethodDelete, fmt.Sprintf("%s/webhooks/%s", api, w.ID.String())
+	return http.MethodDelete, fmt.Sprintf(routes.Webhooks_, api, w.ID.String())
 }
 
 // DeleteWebhookWithToken - Same as above, except this call does not require authentication.
 func (w *Webhook) DeleteWebhookWithToken() (string, string) {
-	return http.MethodDelete, fmt.Sprintf("%s/webhooks/%s/%s", api, w.ID.String(), w.Token)
+	return http.MethodDelete, fmt.Sprintf(routes.Webhooks__, api, w.ID.String(), w.Token)
 }
 
 // ExecuteWebhook - Refer to Uploading Files for details on attachments and multipart/form-data requests.
@@ -139,14 +143,14 @@ func (w *Webhook) ExecuteWebhook(wait *bool, threadID *Snowflake) (string, strin
 		qsp = append(qsp, "wait="+strconv.FormatBool(*wait))
 	}
 	if threadID != nil {
-		qsp = append(qsp, "thread_id="+threadID.String())
+		qsp = append(qsp, thrID+threadID.String())
 	}
 	var query string
 	if len(qsp) > 0 {
 		query = "?" + strings.Join(qsp, "&")
 	}
 
-	return http.MethodPost, fmt.Sprintf("%s/webhooks/%s/%s%s", api, w.ID.String(), w.Token, query)
+	return http.MethodPost, fmt.Sprintf(routes.Webhooks__Qsp, api, w.ID.String(), w.Token, query)
 }
 
 type ExecuteWebhookJSON struct {
@@ -171,14 +175,14 @@ func (w *Webhook) ExecuteSlackCompatibleWebhook(wait *bool, threadID *Snowflake)
 		qsp = append(qsp, "wait="+strconv.FormatBool(*wait))
 	}
 	if threadID != nil {
-		qsp = append(qsp, "thread_id="+threadID.String())
+		qsp = append(qsp, thrID+threadID.String())
 	}
 	var query string
 	if len(qsp) > 0 {
 		query = "?" + strings.Join(qsp, "&")
 	}
 
-	return http.MethodPost, fmt.Sprintf("%s/webhooks/%s/%s/slack%s", api, w.ID.String(), w.Token, query)
+	return http.MethodPost, fmt.Sprintf(routes.Webhooks__SlackQsp, api, w.ID.String(), w.Token, query)
 }
 
 // ExecuteGitHubCompatibleWebhook
@@ -194,14 +198,14 @@ func (w *Webhook) ExecuteGitHubCompatibleWebhook(wait *bool, threadID *Snowflake
 		qsp = append(qsp, "wait="+strconv.FormatBool(*wait))
 	}
 	if threadID != nil {
-		qsp = append(qsp, "thread_id="+threadID.String())
+		qsp = append(qsp, thrID+threadID.String())
 	}
 	var query string
 	if len(qsp) > 0 {
 		query = "?" + strings.Join(qsp, "&")
 	}
 
-	return http.MethodPost, fmt.Sprintf("%s/webhooks/%s/%s/github%s", api, w.ID.String(), w.Token, query)
+	return http.MethodPost, fmt.Sprintf(routes.Webhooks__GitHubQsp, api, w.ID.String(), w.Token, query)
 }
 
 // GetWebhookMessage - Returns a previously-sent webhook message from the same token. Returns a message object on success.
@@ -210,10 +214,10 @@ func (w *Webhook) ExecuteGitHubCompatibleWebhook(wait *bool, threadID *Snowflake
 func (w *Webhook) GetWebhookMessage(msgID Snowflake, threadID *Snowflake) (string, string) {
 	var query string
 	if threadID != nil {
-		query = "?" + "thread_id=" + threadID.String()
+		query = "?" + thrID + threadID.String()
 	}
 
-	return http.MethodGet, fmt.Sprintf("%s/webhooks/%s/%s/messages/%s%s", api, w.ID.String(), w.Token, msgID.String(), query)
+	return http.MethodGet, fmt.Sprintf(routes.Webhooks__Messages_Qsp, api, w.ID.String(), w.Token, msgID.String(), query)
 }
 
 // EditWebhookMessage
@@ -236,10 +240,10 @@ func (w *Webhook) GetWebhookMessage(msgID Snowflake, threadID *Snowflake) (strin
 func (w *Webhook) EditWebhookMessage(msgID Snowflake, threadID *Snowflake) (string, string) {
 	var query string
 	if threadID != nil {
-		query = "?" + "thread_id=" + threadID.String()
+		query = "?" + thrID + threadID.String()
 	}
 
-	return http.MethodPatch, fmt.Sprintf("%s/webhooks/%s/%s/messages/%s%s", api, w.ID.String(), w.Token, msgID.String(), query)
+	return http.MethodPatch, fmt.Sprintf(routes.Webhooks__Messages_Qsp, api, w.ID.String(), w.Token, msgID.String(), query)
 }
 
 // EditWebhookMessageJSON - All parameters to this endpoint are optional and nullable.
@@ -258,8 +262,8 @@ type EditWebhookMessageJSON struct {
 func (w *Webhook) DeleteWebhookMessage(msgID Snowflake, threadID *Snowflake) (string, string) {
 	var query string
 	if threadID != nil {
-		query = "?" + "thread_id=" + threadID.String()
+		query = "?" + thrID + threadID.String()
 	}
 
-	return http.MethodDelete, fmt.Sprintf("%s/webhooks/%s/%s/messages/%s%s", api, w.ID.String(), w.Token, msgID.String(), query)
+	return http.MethodDelete, fmt.Sprintf(routes.Webhooks__Messages_Qsp, api, w.ID.String(), w.Token, msgID.String(), query)
 }

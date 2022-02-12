@@ -316,20 +316,6 @@ func TestWebhookExecuteGitHubCompatibleWebhook(t *testing.T) {
 			want1:  "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/github",
 		},
 		{
-			name:   "Execute GitHub Webhook : Wait : non-nil; Thread ID : nil",
-			fields: fields{ID: Snowflake("905130195520983061"), Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
-			args:   args{wait: &w, threadID: nil},
-			want:   http.MethodPost,
-			want1:  "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/github?wait=true",
-		},
-		{
-			name:   "Execute GitHub Webhook : Wait : nil; Thread ID : non-nil",
-			fields: fields{ID: Snowflake("905130195520983061"), Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
-			args:   args{wait: nil, threadID: StringToSnowflake("934478965031174194")},
-			want:   http.MethodPost,
-			want1:  "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/github?thread_id=934478965031174194",
-		},
-		{
 			name:   "Execute GitHub Webhook : Wait : non-nil; Thread ID : non-nil",
 			fields: fields{ID: Snowflake("905130195520983061"), Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
 			args:   args{wait: &w, threadID: StringToSnowflake("934478965031174194")},
@@ -378,13 +364,6 @@ func TestWebhookExecuteSlackCompatibleWebhook(t *testing.T) {
 			args:   args{wait: nil, threadID: nil},
 			want:   http.MethodPost,
 			want1:  "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/slack",
-		},
-		{
-			name:   "Execute Slack Webhook : Wait : non-nil; Thread ID : nil",
-			fields: fields{ID: Snowflake("905130195520983061"), Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
-			args:   args{wait: &w, threadID: nil},
-			want:   http.MethodPost,
-			want1:  "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/slack?wait=true",
 		},
 		{
 			name:   "Execute Slack Webhook : Wait : nil; Thread ID : non-nil",
@@ -449,13 +428,6 @@ func TestWebhookExecuteWebhook(t *testing.T) {
 			args:   args{wait: &w, threadID: nil},
 			want:   http.MethodPost,
 			want1:  "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt?wait=true",
-		},
-		{
-			name:   "Execute Webhook : Wait : nil; Thread ID : non-nil",
-			fields: fields{ID: Snowflake("905130195520983061"), Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
-			args:   args{wait: nil, threadID: StringToSnowflake("934478965031174194")},
-			want:   http.MethodPost,
-			want1:  "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt?thread_id=934478965031174194",
 		},
 		{
 			name:   "Execute Webhook : Wait : non-nil; Thread ID : non-nil",
