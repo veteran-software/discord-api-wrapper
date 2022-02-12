@@ -19,6 +19,8 @@ package api
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/veteran-software/discord-api-wrapper/routes"
 )
 
 /* Whenever an admin action is performed on the API, an entry is added to the respective guild's audit log.
@@ -153,5 +155,5 @@ type AuditLogChange struct {
 // GetGuildAuditLog
 // Returns an audit log object for the guild. Requires the 'VIEW_AUDIT_LOG' permission.
 func (g *Guild) GetGuildAuditLog() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf("%s/guilds/%s/audit-logs", api, g.ID.String())
+	return http.MethodGet, fmt.Sprintf(routes.Guilds_AuditLogs, api, g.ID.String())
 }
