@@ -26,6 +26,8 @@ const (
 	whIdTokenMessagesIdThreadId = "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/messages/148336120936005632?thread_id=934478965031174194"
 )
 
+var w = true
+
 func TestChannelCreateWebhook(t *testing.T) {
 	type fields struct {
 		ID Snowflake
@@ -291,38 +293,8 @@ func TestWebhookEditWebhookMessage(t *testing.T) {
 }
 
 func TestWebhookExecuteGitHubCompatibleWebhook(t *testing.T) {
-	type fields struct {
-		ID    Snowflake
-		Token string
-	}
-	type args struct {
-		wait     *bool
-		threadID *Snowflake
-	}
-	w := true
+	tests := setupExecute("github")
 
-	tests := []struct {
-		name   string
-		fields fields
-		args   args
-		want   string
-		want1  string
-	}{
-		{
-			name:   "Execute GitHub Webhook : Wait : nil; Thread ID : nil",
-			fields: fields{ID: Snowflake("905130195520983061"), Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
-			args:   args{wait: nil, threadID: nil},
-			want:   http.MethodPost,
-			want1:  "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/github",
-		},
-		{
-			name:   "Execute GitHub Webhook : Wait : non-nil; Thread ID : non-nil",
-			fields: fields{ID: Snowflake("905130195520983061"), Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
-			args:   args{wait: &w, threadID: StringToSnowflake("934478965031174194")},
-			want:   http.MethodPost,
-			want1:  "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/github?wait=true&thread_id=934478965031174194",
-		},
-	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			w := &Webhook{
@@ -340,46 +312,75 @@ func TestWebhookExecuteGitHubCompatibleWebhook(t *testing.T) {
 	}
 }
 
-func TestWebhookExecuteSlackCompatibleWebhook(t *testing.T) {
-	type fields struct {
+func setupExecute(t string) []struct {
+	name   string
+	fields struct {
 		ID    Snowflake
 		Token string
 	}
-	type args struct {
+	args struct {
 		wait     *bool
 		threadID *Snowflake
 	}
-	w := true
+	want  string
+	want1 string
+} {
 
-	tests := []struct {
+	var which string
+	switch t {
+	case "github":
+		fallthrough
+	case "slack":
+		which = "/" + t
+	default:
+		which = ""
+	}
+
+	return []struct {
 		name   string
-		fields fields
-		args   args
-		want   string
-		want1  string
+		fields struct {
+			ID    Snowflake
+			Token string
+		}
+		args struct {
+			wait     *bool
+			threadID *Snowflake
+		}
+		want  string
+		want1 string
 	}{
 		{
-			name:   "Execute Slack Webhook : Wait : nil; Thread ID : nil",
-			fields: fields{ID: Snowflake("905130195520983061"), Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
-			args:   args{wait: nil, threadID: nil},
-			want:   http.MethodPost,
-			want1:  "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/slack",
+			name: "Execute " + t + " Webhook : Wait : nil; Thread ID : nil",
+			fields: struct {
+				ID    Snowflake
+				Token string
+			}{ID: "905130195520983061", Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
+			args: struct {
+				wait     *bool
+				threadID *Snowflake
+			}{wait: nil, threadID: nil},
+			want:  http.MethodPost,
+			want1: "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt" + which,
 		},
 		{
-			name:   "Execute Slack Webhook : Wait : nil; Thread ID : non-nil",
-			fields: fields{ID: Snowflake("905130195520983061"), Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
-			args:   args{wait: nil, threadID: StringToSnowflake("934478965031174194")},
-			want:   http.MethodPost,
-			want1:  "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/slack?thread_id=934478965031174194",
-		},
-		{
-			name:   "Execute Slack Webhook : Wait : non-nil; Thread ID : non-nil",
-			fields: fields{ID: Snowflake("905130195520983061"), Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
-			args:   args{wait: &w, threadID: StringToSnowflake("934478965031174194")},
-			want:   http.MethodPost,
-			want1:  "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/slack?wait=true&thread_id=934478965031174194",
+			name: "Execute " + t + " Webhook : Wait : non-nil; Thread ID : non-nil",
+			fields: struct {
+				ID    Snowflake
+				Token string
+			}{ID: "905130195520983061", Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
+			args: struct {
+				wait     *bool
+				threadID *Snowflake
+			}{wait: &w, threadID: StringToSnowflake("934478965031174194")},
+			want:  http.MethodPost,
+			want1: "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt" + which + "?wait=true&thread_id=934478965031174194",
 		},
 	}
+}
+
+func TestWebhookExecuteSlackCompatibleWebhook(t *testing.T) {
+	tests := setupExecute("slack")
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			w := &Webhook{
@@ -398,45 +399,8 @@ func TestWebhookExecuteSlackCompatibleWebhook(t *testing.T) {
 }
 
 func TestWebhookExecuteWebhook(t *testing.T) {
-	type fields struct {
-		ID    Snowflake
-		Token string
-	}
-	type args struct {
-		wait     *bool
-		threadID *Snowflake
-	}
-	w := true
+	tests := setupExecute("")
 
-	tests := []struct {
-		name   string
-		fields fields
-		args   args
-		want   string
-		want1  string
-	}{
-		{
-			name:   "Execute Webhook : Wait : nil; Thread ID : nil",
-			fields: fields{ID: Snowflake("905130195520983061"), Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
-			args:   args{wait: nil, threadID: nil},
-			want:   http.MethodPost,
-			want1:  "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt",
-		},
-		{
-			name:   "Execute Webhook : Wait : non-nil; Thread ID : nil",
-			fields: fields{ID: Snowflake("905130195520983061"), Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
-			args:   args{wait: &w, threadID: nil},
-			want:   http.MethodPost,
-			want1:  "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt?wait=true",
-		},
-		{
-			name:   "Execute Webhook : Wait : non-nil; Thread ID : non-nil",
-			fields: fields{ID: Snowflake("905130195520983061"), Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
-			args:   args{wait: &w, threadID: StringToSnowflake("934478965031174194")},
-			want:   http.MethodPost,
-			want1:  "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt?wait=true&thread_id=934478965031174194",
-		},
-	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			w := &Webhook{
