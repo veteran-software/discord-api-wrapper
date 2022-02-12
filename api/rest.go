@@ -39,6 +39,10 @@ var (
 	Rest *RateLimiter
 )
 
+func init() {
+	Rest = NewRatelimiter()
+}
+
 func (r *RateLimiter) Request(method, route string, data interface{}, reason *string) (*http.Response, error) {
 	return r.requestWithBucketID(method, route, data, strings.SplitN(route, "?", 2)[0], reason)
 }
