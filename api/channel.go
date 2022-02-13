@@ -31,7 +31,12 @@ import (
 	"github.com/veteran-software/discord-api-wrapper/routes"
 )
 
-/* CHANNEL OBJECT */
+const (
+	afterQsp  = "after="
+	aroundQsp = "around="
+	beforeQsp = "before="
+	limitQsp  = "limit="
+)
 
 // Channel - Represents a guild or DM channel within Discord.
 type Channel struct {
@@ -544,16 +549,16 @@ SUPPORTS: "around : Snowflake"; "before : Snowflake"; "after : Snowflake"; "limi
 func (c *Channel) GetChannelMessages(around *Snowflake, before *Snowflake, after *Snowflake, limit *int) (method, route string) {
 	var qsp []string
 	if around != nil {
-		qsp = append(qsp, "around="+around.String())
+		qsp = append(qsp, aroundQsp+around.String())
 	}
 	if before != nil {
-		qsp = append(qsp, "before="+before.String())
+		qsp = append(qsp, beforeQsp+before.String())
 	}
 	if after != nil {
-		qsp = append(qsp, "after="+after.String())
+		qsp = append(qsp, afterQsp+after.String())
 	}
 	if limit != nil {
-		qsp = append(qsp, "limit="+strconv.Itoa(*limit))
+		qsp = append(qsp, limitQsp+strconv.Itoa(*limit))
 	}
 	var q string
 	if len(qsp) > 0 {
@@ -710,10 +715,10 @@ OPTS SUPPORTS: "after : Snowflake"; "limit : int", nil
 func (c *Channel) GetReactions(messageID Snowflake, emoji string, after *Snowflake, limit *int) (method, route string) {
 	var qsp []string
 	if after != nil {
-		qsp = append(qsp, "after="+after.String())
+		qsp = append(qsp, afterQsp+after.String())
 	}
 	if limit != nil {
-		qsp = append(qsp, "limit="+strconv.Itoa(*limit))
+		qsp = append(qsp, limitQsp+strconv.Itoa(*limit))
 	}
 	var q string
 	if len(qsp) > 0 {
@@ -1181,10 +1186,10 @@ Requires the READ_MESSAGE_HISTORY permission.
 func (c *Channel) ListPublicArchivedThreads(before *time.Time, limit *int) (method, route string) {
 	var qsp []string
 	if before != nil {
-		qsp = append(qsp, "before="+before.Format(time.RFC3339))
+		qsp = append(qsp, beforeQsp+before.Format(time.RFC3339))
 	}
 	if limit != nil {
-		qsp = append(qsp, "limit="+strconv.Itoa(*limit))
+		qsp = append(qsp, limitQsp+strconv.Itoa(*limit))
 	}
 	var q string
 	if len(qsp) > 0 {
@@ -1205,10 +1210,10 @@ Requires both the READ_MESSAGE_HISTORY and MANAGE_THREADS permissions.
 func (c *Channel) ListPrivateArchivedThreads(before *time.Time, limit *int) (method, route string) {
 	var qsp []string
 	if before != nil {
-		qsp = append(qsp, "before="+before.Format(time.RFC3339))
+		qsp = append(qsp, beforeQsp+before.Format(time.RFC3339))
 	}
 	if limit != nil {
-		qsp = append(qsp, "limit="+strconv.Itoa(*limit))
+		qsp = append(qsp, limitQsp+strconv.Itoa(*limit))
 	}
 	var q string
 	if len(qsp) > 0 {
@@ -1229,10 +1234,10 @@ Requires the READ_MESSAGE_HISTORY permission.
 func (c *Channel) ListJoinedPrivateArchivedThreads(before *Snowflake, limit *int) (method, route string) {
 	var qsp []string
 	if before != nil {
-		qsp = append(qsp, "before="+before.String())
+		qsp = append(qsp, beforeQsp+before.String())
 	}
 	if limit != nil {
-		qsp = append(qsp, "limit="+strconv.Itoa(*limit))
+		qsp = append(qsp, limitQsp+strconv.Itoa(*limit))
 	}
 	var q string
 	if len(qsp) > 0 {
