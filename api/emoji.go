@@ -17,54 +17,91 @@
 package api
 
 import (
+	"encoding/base64"
 	"fmt"
 	"net/http"
 
 	"github.com/veteran-software/discord-api-wrapper/routes"
 )
 
-/*
-Emoji
-
-ID: emoji id
-
-Name: emoji name
-
-Roles: roles allowed to use this emoji
-
-User: user that created this emoji
-
-RequireColons: whether this emoji must be wrapped in colons
-
-Managed: whether this emoji is managed
-
-Animated: whether this emoji is animated
-
-Available: whether this emoji can be used, may be false due to loss of Server Boosts
-*/
+// Emoji - Routes for controlling emojis do not follow the normal rate limit conventions.
+//
+// These routes are specifically limited on a per-guild basis to prevent abuse.
+//
+// This means that the quota returned by our APIs may be inaccurate, and you may encounter 429s.
 type Emoji struct {
-	ID            *Snowflake `json:"id"`
-	Name          string     `json:"name"`
-	Roles         []Role     `json:"roles,omitempty"`
-	User          *User      `json:"user,omitempty"`
-	RequireColons bool       `json:"require_colons,omitempty"`
-	Managed       bool       `json:"managed,omitempty"`
-	Animated      bool       `json:"animated,omitempty"`
-	Available     bool       `json:"available,omitempty"`
+	ID            *Snowflake `json:"id"`                       // ID - emoji id
+	Name          string     `json:"name"`                     // Name - emoji name
+	Roles         []Role     `json:"roles,omitempty"`          // Roles - roles allowed to use this emoji
+	User          *User      `json:"user,omitempty"`           // User - user that created this emoji
+	RequireColons bool       `json:"require_colons,omitempty"` // RequireColons - whether this emoji must be wrapped in colons
+	Managed       bool       `json:"managed,omitempty"`        // Managed - whether this emoji is managed
+	Animated      bool       `json:"animated,omitempty"`       // Animated - whether this emoji is animated
+	Available     bool       `json:"available,omitempty"`      // Available - whether this emoji can be used, may be false due to loss of Server Boosts
 }
 
-// ListGuildEmojis
-// Returns a list of emoji objects for the given guild.
+// ListGuildEmojis - Returns a list of emoji objects for the given guild.
 func (g *Guild) ListGuildEmojis() (method string, route string) {
 	return http.MethodGet, fmt.Sprintf(routes.Guilds_Emojis, api, g.ID.String())
 }
 
-// GetGuildEmoji
-// Returns an emoji object for the given guild and emoji IDs.
+// GetGuildEmoji - Returns an emoji object for the given guild and emoji IDs.
 func (g *Guild) GetGuildEmoji(emoji Emoji) (method string, route string) {
 	return http.MethodGet, fmt.Sprintf(routes.Guilds_Emojis_, api, g.ID.String(), emoji.ID.String())
 }
 
+// CreateGuildEmoji - Create a new emoji for the guild.
+//
+// Requires the ManageEmojisAndStickers permission.
+//
+// Returns the new Emoji object on success.
+//
+// Fires a Guild Emojis Update Gateway event.
+//
+// Emojis and animated emojis have a maximum file size of 256kb.
+//
+// Attempting to upload an emoji larger than this limit will fail and return "400 Bad Request" and an error message, but not a JSON status code.
+//
+// This endpoint supports the "X-Audit-Log-Reason" header.
 func (g *Guild) CreateGuildEmoji() (method string, route string) {
 	return http.MethodPost, fmt.Sprintf(routes.Guilds_Emojis, api, g.ID.String())
+}
+
+type CreateEmojiJSON struct {
+	Name  string          `json:"name"`  // Name - name of the emoji
+	Image base64.Encoding `json:"image"` // Image - the 128x128 emoji image
+	Roles []Snowflake     `json:"roles"` // Roles - roles allowed to use this emoji
+}
+
+// ModifyGuildEmoji - Modify the given emoji.
+//
+// Requires the ManageEmojisAndStickers permission.
+//
+// Returns the updated emoji object on success.
+//
+// Fires a Guild Emojis Update Gateway event.
+//
+// All JSON parameters to this endpoint are optional.
+//
+// This endpoint supports the X-Audit-Log-Reason header.
+func (g *Guild) ModifyGuildEmoji(emoji Emoji) (method string, route string) {
+	return http.MethodPatch, fmt.Sprintf(routes.Guilds_Emojis_, api, g.ID.String(), emoji.ID.String())
+}
+
+type ModifyGuildEmojiJSON struct {
+	Name  string       `json:"name,omitempty"`  //Name - name of the emoji
+	Roles *[]Snowflake `json:"roles,omitempty"` // Roles - roles allowed to use this emoji
+}
+
+// DeleteGuildEmoji - Delete the given emoji.
+//
+// Requires the ManageEmojisAndStickers permission.
+//
+// Returns "204 No Content" on success.
+//
+// Fires a Guild Emojis Update Gateway event.
+//
+// This endpoint supports the "X-Audit-Log-Reason" header.
+func (g *Guild) DeleteGuildEmoji(emoji Emoji) (method string, route string) {
+	return http.MethodDelete, fmt.Sprintf(routes.Guilds_Emojis_, api, g.ID.String(), emoji.ID.String())
 }
