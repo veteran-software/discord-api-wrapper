@@ -16,24 +16,31 @@
 
 package api
 
+// Team - Teams are groups of developers on Discord who want to collaborate on apps.
+//
+// On other platforms, these may be referred to as "organizations", "companies", or "teams".
 type Team struct {
-	Icon        *string      `json:"icon"`
-	ID          Snowflake    `json:"id"`
-	Members     []TeamMember `json:"members"`
-	Name        string       `json:"name"`
-	OwnerUserID Snowflake    `json:"owner_user_id"`
+	Icon        *string      `json:"icon"`          // a hash of the image of the team's icon
+	ID          Snowflake    `json:"id"`            // the unique id of the team
+	Members     []TeamMember `json:"members"`       // the members of the team
+	Name        string       `json:"name"`          // the name of the team
+	OwnerUserID Snowflake    `json:"owner_user_id"` // the user id of the current team owner
 }
 
+// TeamMember - representation of a team member
+//goland:noinspection GrazieInspection
 type TeamMember struct {
-	MembershipState MembershipState `json:"membership_state"`
-	Permissions     []string        `json:"permissions"`
-	TeamID          Snowflake       `json:"team_id"`
-	User            User            `json:"user"`
+	MembershipState MembershipState `json:"membership_state"` // the user's membership state on the team
+	Permissions     []string        `json:"permissions"`      // will always be ["*"]
+	TeamID          Snowflake       `json:"team_id"`          // the id of the parent team of which they are a member
+	User            User            `json:"user"`             // the avatar, discriminator, id, and username of the user
 }
 
+// MembershipState - Current state of a team member
 type MembershipState int
 
+//goland:noinspection GoUnusedConst
 const (
-	Invited MembershipState = iota + 1
-	Accepted
+	Invited  MembershipState = iota + 1 // INVITED
+	Accepted                            // ACCEPTED
 )

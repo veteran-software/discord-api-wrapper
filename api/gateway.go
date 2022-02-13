@@ -16,6 +16,7 @@
 
 package api
 
+//goland:noinspection GoUnusedConst
 const (
 	gatewayVersion        = 9
 	gatewayURLQueryString = "?v=" + string(rune(gatewayVersion)) + "&encoding=json"
@@ -23,61 +24,61 @@ const (
 
 // GatewayPayload - S and T are null when Op is not 0 (Gateway Dispatch Opcode).
 type GatewayPayload struct {
-	Op int          `json:"op"` // Op - opcode for the payload
-	D  *interface{} `json:"d"`  // D - event data
-	S  *int         `json:"s"`  // S - sequence number, used for resuming sessions and heartbeats
-	T  *string      `json:"t"`  // T - the event name for this payload
+	Op int          `json:"op"` // opcode for the payload
+	D  *interface{} `json:"d"`  // event data
+	S  *int         `json:"s"`  // sequence number, used for resuming sessions and heartbeats
+	T  *string      `json:"t"`  // the event name for this payload
 }
 
 type GatewayIntents int64
 
-//goland:noinspection GoSnakeCaseUsage
+//goland:noinspection GoUnusedConst
 const (
-	GUILDS                    GatewayIntents = 1 << 0
-	GUILD_MEMBERS             GatewayIntents = 1 << 1
-	GUILD_BANS                GatewayIntents = 1 << 2
-	GUILD_EMOJIS_AND_STICKERS GatewayIntents = 1 << 3
-	GUILD_INTEGRATIONS        GatewayIntents = 1 << 4
-	GUILD_WEBHOOKS            GatewayIntents = 1 << 5
-	GUILD_INVITES             GatewayIntents = 1 << 6
-	GUILD_VOICE_STATES        GatewayIntents = 1 << 7
-	GUILD_PRESENCES           GatewayIntents = 1 << 8
-	GUILD_MESSAGES            GatewayIntents = 1 << 9
-	GUILD_MESSAGE_REACTIONS   GatewayIntents = 1 << 10
-	GUILD_MESSAGE_TYPING      GatewayIntents = 1 << 11
-	DIRECT_MESSAGES           GatewayIntents = 1 << 12
-	DIRECT_MESSAGE_REACTIONS  GatewayIntents = 1 << 13
-	DIRECT_MESSAGE_TYPING     GatewayIntents = 1 << 14
-	GUILD_SCHEDULE_EVENTS     GatewayIntents = 1 << 16
+	Guilds                 GatewayIntents = 1 << 0
+	GuildMembers           GatewayIntents = 1 << 1
+	GuildBans              GatewayIntents = 1 << 2
+	GuildEmojisAndStickers GatewayIntents = 1 << 3
+	GuildIntegrations      GatewayIntents = 1 << 4
+	GuildWebhooks          GatewayIntents = 1 << 5
+	GuildInvites           GatewayIntents = 1 << 6
+	GuildVoiceStates       GatewayIntents = 1 << 7
+	GuildPresences         GatewayIntents = 1 << 8
+	GuildMessages          GatewayIntents = 1 << 9
+	GuildMessageReactions  GatewayIntents = 1 << 10
+	GuildMessageTyping     GatewayIntents = 1 << 11
+	DirectMessages         GatewayIntents = 1 << 12
+	DirectMessageReactions GatewayIntents = 1 << 13
+	DirectMessageTyping    GatewayIntents = 1 << 14
+	GuildScheduleEvents    GatewayIntents = 1 << 16
 )
 
 // Identify - Used to trigger the initial handshake with the gateway.
 type Identify struct {
-	Token          string                `json:"token"`                     // Token - authentication token
-	Properties     string                `json:"properties"`                // Properties - IdentifyConnection properties
-	Compress       bool                  `json:"compress,omitempty"`        // Compress - whether this connection supports compression of packets
-	LargeThreshold int                   `json:"large_threshold,omitempty"` // LargeThreshold - value between 50 and 250, total number of members where the gateway will stop sending offline members in the guild member list
-	Shard          [2]int                `json:"shard,omitempty"`           // Shard - used for Guild Sharding
-	Presence       GatewayPresenceUpdate `json:"presence,omitempty"`        // Presence - presence structure for initial presence information
-	Intents        GatewayIntents        `json:"intents"`                   // Intents - the Gateway Intents you wish to receive
+	Token          string                `json:"token"`                     // authentication token
+	Properties     string                `json:"properties"`                // IdentifyConnection properties
+	Compress       bool                  `json:"compress,omitempty"`        // whether this connection supports compression of packets
+	LargeThreshold int                   `json:"large_threshold,omitempty"` // value between 50 and 250, total number of members where the gateway will stop sending offline members in the guild member list
+	Shard          [2]int                `json:"shard,omitempty"`           // used for Guild Sharding
+	Presence       GatewayPresenceUpdate `json:"presence,omitempty"`        // presence structure for initial presence information
+	Intents        GatewayIntents        `json:"intents"`                   // the Gateway Intents you wish to receive
 }
 
 type IdentifyConnection struct {
-	OS      string `json:"$os"`      // OS - your operating system
-	Browser string `json:"$browser"` // Browser - your library name
-	Device  string `json:"$device"`  // Device - your library name
+	OS      string `json:"$os"`      // your operating system
+	Browser string `json:"$browser"` // your library name
+	Device  string `json:"$device"`  // your library name
 }
 
 // Resume - Used to replay missed events when a disconnected client resumes.
 type Resume struct {
-	Token     string `json:"token"`      // Token - session token
-	SessionID string `json:"session_id"` // SessionID - session id
-	Seq       int    `json:"seq"`        // Seq - last sequence number received
+	Token     string `json:"token"`      // session token
+	SessionID string `json:"session_id"` // session id
+	Seq       int    `json:"seq"`        // last sequence number received
 }
 
 // GuildRequestMembers - Used to request all members for a guild or a list of guilds.
 //
-// When initially connecting, if you don't have the GUILD_PRESENCES Gateway Intent, or if the guild is over 75k members, it will only send members who are in voice, plus the member for you (the connecting user).
+// When initially connecting, if you don't have the GuildPresences Gateway Intent, or if the guild is over 75k members, it will only send members who are in voice, plus the member for you (the connecting user).
 //
 // Otherwise, if a guild has over large_threshold members (value in the Gateway Identify), it will only send members who are online, have a role, have a nickname, or are in a voice channel, and if it has under large_threshold members, it will send all members.
 //
@@ -87,39 +88,39 @@ type Resume struct {
 //
 // Due to our privacy and infrastructural concerns with this feature, there are some limitations that apply:
 //
-//    GUILD_PRESENCES intent is required to set presences = true. Otherwise, it will always be false
-//    GUILD_MEMBERS intent is required to request the entire member list—(query=‘’, limit=0<=n)
+//    GuildPresences intent is required to set presences = true. Otherwise, it will always be false
+//    GuildMembers intent is required to request the entire member list—(query=‘’, limit=0<=n)
 //    You will be limited to requesting 1 guild_id per request
 //    Requesting a prefix (query parameter) will return a maximum of 100 members
 //    Requesting user_ids will continue to be limited to returning 100 members
 type GuildRequestMembers struct {
-	GuildID   Snowflake   `json:"guild_id"`            // GuildID - id of the guild to get members for
-	Query     string      `json:"query,omitempty"`     // Query - string that username starts with, or an empty string to return all members
-	Limit     int         `json:"limit"`               // Limit - maximum number of members to send matching the query; a limit of 0 can be used with an empty string query to return all members
-	Presences bool        `json:"presences,omitempty"` // Presences - used to specify if we want the presences of the matched members
-	UserIDs   []Snowflake `json:"user_ids,omitempty"`  // UserIDs - used to specify which users you wish to fetch
-	Nonce     string      `json:"nonce,omitempty"`     // Nonce - nonce to identify the Guild Members Chunk response
+	GuildID   Snowflake   `json:"guild_id"`            // id of the guild to get members for
+	Query     string      `json:"query,omitempty"`     // string that username starts with, or an empty string to return all members
+	Limit     int         `json:"limit"`               // maximum number of members to send matching the query; a limit of 0 can be used with an empty string query to return all members
+	Presences bool        `json:"presences,omitempty"` // used to specify if we want the presences of the matched members
+	UserIDs   []Snowflake `json:"user_ids,omitempty"`  // used to specify which users you wish to fetch
+	Nonce     string      `json:"nonce,omitempty"`     // nonce to identify the Guild Members Chunk response
 }
 
 // GatewayVoiceStateUpdate - Sent when a client wants to join, move, or disconnect from a voice channel.
 type GatewayVoiceStateUpdate struct {
-	GuildID   Snowflake  `json:"guild_id"`   // GuildID - id of the Guild
-	ChannelID *Snowflake `json:"channel_id"` // ChannelID - id of the voice channel client wants to join (null if disconnecting)
-	SelfMute  bool       `json:"self_mute"`  // SelfMute - is the client muted
-	SelfDeaf  bool       `json:"self_deaf"`  // SelfDeaf - is the client deafened
+	GuildID   Snowflake  `json:"guild_id"`   // id of the Guild
+	ChannelID *Snowflake `json:"channel_id"` // id of the voice channel client wants to join (null if disconnecting)
+	SelfMute  bool       `json:"self_mute"`  // is the client muted
+	SelfDeaf  bool       `json:"self_deaf"`  // is the client deafened
 }
 
 // GatewayPresenceUpdate - Sent by the client to indicate a presence or status update.
 type GatewayPresenceUpdate struct {
-	Since      *int       `json:"since"`      // Since - unix time (in milliseconds) of when the client went idle, or null if the client is not idle
-	Activities []Activity `json:"activities"` // Activities - the user's activities
-	Status     StatusType `json:"status"`     // Status - the user's new StatusType
-	Afk        bool       `json:"afk"`        // Afk - whether the client is afk
+	Since      *int       `json:"since"`      // unix time (in milliseconds) of when the client went idle, or null if the client is not idle
+	Activities []Activity `json:"activities"` // the user's activities
+	Status     StatusType `json:"status"`     // the user's new StatusType
+	Afk        bool       `json:"afk"`        // whether the client is afk
 }
 
 // Hello - Sent on connection to the websocket. Defines the heartbeat interval that the client should heartbeat to.
 type Hello struct {
-	HeartbeatInterval int `json:"heartbeat_interval"` // HeartbeatInterval - the interval (in milliseconds) the client should heartbeat with
+	HeartbeatInterval int `json:"heartbeat_interval"` // the interval (in milliseconds) the client should heartbeat with
 }
 
 // Ready - The ready event is dispatched when a client has completed the initial handshake with the gateway (for new sessions).
@@ -132,111 +133,149 @@ type Hello struct {
 //
 // As they become available, your bot will be notified via Guild Create events.
 type Ready struct {
-	V           int                `json:"v"`
-	User        User               `json:"user"`
-	Guilds      []UnavailableGuild `json:"guilds"`
-	SessionID   string             `json:"session_id"`
-	Shard       [2]int             `json:"shard,omitempty"`
-	Application Application        `json:"application"`
+	V           int                `json:"v"`               // gateway version
+	User        User               `json:"user"`            // information about the user including email
+	Guilds      []UnavailableGuild `json:"guilds"`          // the guilds the user is in
+	SessionID   string             `json:"session_id"`      // used for resuming connections
+	Shard       [2]int             `json:"shard,omitempty"` // the shard information associated with this session, if sent when identifying
+	Application Application        `json:"application"`     // contains id and flags
 }
 
+// StatusType - a user's current activity status
 type StatusType string
 
+//goland:noinspection GoUnusedConst
 const (
-	StatusTypeOnline       StatusType = "online"
-	StatusTypeDoNotDisturb StatusType = "dnd"
-	StatusTypeIdle         StatusType = "idle"
-	StatusTypeInvisible    StatusType = "invisible"
-	StatusTypeOffline      StatusType = "offline"
+	StatusTypeOnline       StatusType = "online"    // Online
+	StatusTypeDoNotDisturb StatusType = "dnd"       // Do Not Disturb
+	StatusTypeIdle         StatusType = "idle"      // AFK
+	StatusTypeInvisible    StatusType = "invisible" // Invisible and shown as offline
+	StatusTypeOffline      StatusType = "offline"   // Offline
 )
 
+// PresenceStatus - either "idle", "dnd", "online", or "offline"
 type PresenceStatus string
 
+//goland:noinspection GoUnusedConst
 const (
-	Idle    PresenceStatus = "idle"
-	Dnd     PresenceStatus = "dnd"
-	Online  PresenceStatus = "online"
-	Offline PresenceStatus = "offline"
+	Idle    PresenceStatus = "idle"    // Online
+	Dnd     PresenceStatus = "dnd"     // Do Not Disturb
+	Online  PresenceStatus = "online"  // Online
+	Offline PresenceStatus = "offline" // Offline
 )
 
-type ActivityTypes int8
+// ActivityType - The streaming type currently only supports Twitch and YouTube.
+//
+// Only https://twitch.tv/ and https://youtube.com/ urls will work.
+type ActivityType uint8
 
+//goland:noinspection GoUnusedConst
 const (
-	Game ActivityTypes = iota
-	Streaming
-	Listening
-	Watching
-	Custom
-	Competing
+	Game      ActivityType = iota // Playing {name}
+	Streaming                     // Streaming {details}
+	Listening                     // Listening to {name}
+	Watching                      // Watching {name}
+	Custom                        // {emoji} {name}
+	Competing                     // Competing in {name}
 )
 
+// ActivityTimestamps - start and stop timestamps for an activity
 type ActivityTimestamps struct {
-	Start int64 `json:"start,omitempty"`
-	End   int64 `json:"end,omitempty"`
+	Start int64 `json:"start,omitempty"` // unix time (in milliseconds) of when the activity started
+	End   int64 `json:"end,omitempty"`   // unix time (in milliseconds) of when the activity ends
+}
+
+// ActivityEmoji - representation of an emoji in a custom status
+type ActivityEmoji struct {
+	Name     string    `json:"name"`               // the name of the emoji
+	ID       Snowflake `json:"id,omitempty"`       // the id of the emoji
+	Animated bool      `json:"animated,omitempty"` // whether this emoji is animated
 }
 
 type ActivityParty struct {
-	ID   string  `json:"id,omitempty"`
-	Size []int16 `json:"size,omitempty"`
+	ID   string    `json:"id,omitempty"`   // the id of the party
+	Size [2]uint16 `json:"size,omitempty"` // the id of the party; used to show the party's current and maximum size
 }
 
 type ActivityAssets struct {
-	LargeImage string `json:"large_image,omitempty"`
-	LargeText  string `json:"large_text,omitempty"`
-	SmallImage string `json:"small_image,omitempty"`
-	SmallText  string `json:"small_text,omitempty"`
+	LargeImage string `json:"large_image,omitempty"` // see https://discord.com/developers/docs/topics/gateway#activity-object-activity-asset-image
+	LargeText  string `json:"large_text,omitempty"`  // text displayed when hovering over the large image of the activity
+	SmallImage string `json:"small_image,omitempty"` // see https://discord.com/developers/docs/topics/gateway#activity-object-activity-asset-image
+	SmallText  string `json:"small_text,omitempty"`  // text displayed when hovering over the small image of the activity
 }
 
 type ActivitySecrets struct {
-	Join     string `json:"join,omitempty"`
-	Spectate string `json:"spectate,omitempty"`
-	Match    string `json:"match,omitempty"`
+	Join     string `json:"join,omitempty"`     // the secret for joining a party
+	Spectate string `json:"spectate,omitempty"` // the secret for spectating a game
+	Match    string `json:"match,omitempty"`    // the secret for a specific instanced match
 }
 
-type ActivityFlags int
+type ActivityFlag uint
 
+//goland:noinspection GoUnusedConst
 const (
-	Instance    ActivityFlags = 1 << 0
-	Join        ActivityFlags = 1 << 1
-	Spectate    ActivityFlags = 1 << 2
-	JoinRequest ActivityFlags = 1 << 3
-	Sync        ActivityFlags = 1 << 4
-	Play        ActivityFlags = 1 << 5
+	ActivityFlagInstance                 ActivityFlag = 1 << 0
+	ActivityFlagJoin                     ActivityFlag = 1 << 1
+	ActivityFlagSpectate                 ActivityFlag = 1 << 2
+	ActivityFlagJoinRequest              ActivityFlag = 1 << 3
+	ActivityFlagSync                     ActivityFlag = 1 << 4
+	ActivityFlagPlay                     ActivityFlag = 1 << 5
+	ActivityFlagPartyPrivacyFriends      ActivityFlag = 1 << 6
+	ActivityFlagPartyPrivacyVoiceChannel ActivityFlag = 1 << 7
+	ActivityFlagEmbedded                 ActivityFlag = 1 << 8
 )
 
+// ActivityButtons - When received over the gateway, the buttons field is an array of strings, which are the button labels.
+//
+//   Bots cannot access a user's activity button URLs.
+//
+// When sending, the buttons field must be an array
 type ActivityButtons struct {
-	Label string `json:"label"`
-	URL   string `json:"url"`
+	Label string `json:"label"` // the text shown on the button (1-32 characters)
+	URL   string `json:"url"`   // the url opened when clicking the button (1-512 characters)
 }
 
+// Activity - represents a user activity
 type Activity struct {
-	Name          string             `json:"name"`
-	Type          ActivityTypes      `json:"type"`
-	URL           *string            `json:"url,omitempty"`
-	CreatedAt     int64              `json:"created_at"`
-	Timestamps    ActivityTimestamps `json:"timestamps,omitempty"`
-	ApplicationID Snowflake          `json:"application_id,omitempty"`
-	Details       *string            `json:"details,omitempty"`
-	State         *string            `json:"state,omitempty"`
-	Emoji         *Emoji             `json:"emoji,omitempty"`
-	Party         ActivityParty      `json:"party,omitempty"`
-	Assets        ActivityAssets     `json:"assets,omitempty"`
-	Secrets       ActivitySecrets    `json:"secrets,omitempty"`
-	Instance      bool               `json:"instance,omitempty"`
-	Flags         ActivityFlags      `json:"flags,omitempty"`
-	Buttons       []ActivityButtons  `json:"buttons,omitempty"`
+	Name          string             `json:"name"`                     // the activity's name
+	Type          ActivityType       `json:"type"`                     // activity type
+	URL           *string            `json:"url,omitempty"`            // stream url, is validated when type is 1
+	CreatedAt     int64              `json:"created_at"`               // unix timestamp (in milliseconds) of when the activity was added to the user's session
+	Timestamps    ActivityTimestamps `json:"timestamps,omitempty"`     // unix timestamps for start and/or end of the game
+	ApplicationID Snowflake          `json:"application_id,omitempty"` // application id for the game
+	Details       *string            `json:"details,omitempty"`        // what the player is currently doing
+	State         *string            `json:"state,omitempty"`          // the user's current party status
+	Emoji         *Emoji             `json:"emoji,omitempty"`          // the emoji used for a custom status
+	Party         ActivityParty      `json:"party,omitempty"`          // information for the current party of the player
+	Assets        ActivityAssets     `json:"assets,omitempty"`         // images for the presence and their hover texts
+	Secrets       ActivitySecrets    `json:"secrets,omitempty"`        // secrets for Rich Presence joining and spectating
+	Instance      bool               `json:"instance,omitempty"`       // whether the activity is an instanced game session
+	Flags         ActivityFlag       `json:"flags,omitempty"`          // activity flags ORd together, describes what the payload includes
+	Buttons       []ActivityButtons  `json:"buttons,omitempty"`        // the custom buttons shown in the Rich Presence (max 2)
 }
 
+// ClientStatus - Active sessions are indicated with an "online", "idle", or "dnd" string per platform.
+//
+// If a user is offline or invisible, the corresponding field is not present.
 type ClientStatus struct {
-	Desktop string `json:"desktop,omitempty"`
-	Mobile  string `json:"mobile,omitempty"`
-	Web     string `json:"web,omitempty"`
+	Desktop string `json:"desktop,omitempty"` // the user's status set for an active desktop (Windows, Linux, Mac) application session
+	Mobile  string `json:"mobile,omitempty"`  // the user's status set for an active mobile (iOS, Android) application session
+	Web     string `json:"web,omitempty"`     // the user's status set for an active web (browser, bot account) application session
 }
 
+// PresenceUpdateEvent - If you are using Gateway Intents, you must specify the GuildPresences intent in order to receive Presence Update events
+//
+// A user's presence is their current state on a guild.
+//
+// This event is sent when a user's presence or info, such as name or avatar, is updated.
+//
+//   The user object within this event can be partial, the only field which must be sent is the id field, everything else is optional.
+//   Along with this limitation, no fields are required, and the types of the fields are not validated.
+//   Your client should expect any combination of fields and types within this event.
 type PresenceUpdateEvent struct {
-	User         User           `json:"user"`
-	GuildID      Snowflake      `json:"guild_id"`
-	Status       PresenceStatus `json:"status"`
-	Activities   []Activity     `json:"activities"`
-	ClientStatus ClientStatus   `json:"client_status"`
+	User         User           `json:"user"`          // the user presence is being updated for
+	GuildID      Snowflake      `json:"guild_id"`      // id of the guild
+	Status       PresenceStatus `json:"status"`        // either "idle", "dnd", "online", or "offline"
+	Activities   []Activity     `json:"activities"`    // user's current activities
+	ClientStatus ClientStatus   `json:"client_status"` // user's platform-dependent status
 }

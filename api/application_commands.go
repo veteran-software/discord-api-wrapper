@@ -26,6 +26,7 @@ import (
 // An application command is the base "command" model that belongs to an application. This is what you are creating when you POST a new command.
 //
 // Required options must be listed before optional options
+//goland:noinspection SpellCheckingInspection
 type ApplicationCommand struct {
 	ID                 Snowflake                  `json:"id,omitempty"`                  // unique id of the command
 	Type               ApplicationCommandType     `json:"type,omitempty"`                // the type of command, defaults 1 if not set
@@ -98,17 +99,17 @@ type ApplicationCommandInteractionDataOption struct {
 
 // GuildApplicationCommandPermissions - Returned when fetching the permissions for a command in a guild.
 type GuildApplicationCommandPermissions struct {
-	ID            Snowflake                       `json:"id"`
-	ApplicationID Snowflake                       `json:"application_id"`
-	GuildID       Snowflake                       `json:"guild_id"`
-	Permissions   []ApplicationCommandPermissions `json:"permissions"`
+	ID            Snowflake                       `json:"id"`             // the id of the command
+	ApplicationID Snowflake                       `json:"application_id"` // the id of the application the command belongs to
+	GuildID       Snowflake                       `json:"guild_id"`       // the id of the guild
+	Permissions   []ApplicationCommandPermissions `json:"permissions"`    // the permissions for the command in the guild
 }
 
 // ApplicationCommandPermissions - Application command permissions allow you to enable or disable command for specific users or roles within a guild.
 type ApplicationCommandPermissions struct {
-	ID         Snowflake                        `json:"id"`         // ID: the id of the role or user
-	Type       ApplicationCommandPermissionType `json:"type"`       // Type: role or user
-	Permission bool                             `json:"permission"` // Permission: true to allow, false, to disallow
+	ID         Snowflake                        `json:"id"`         // the id of the role or user
+	Type       ApplicationCommandPermissionType `json:"type"`       // role or user
+	Permission bool                             `json:"permission"` // true to allow, false, to disallow
 }
 
 // ApplicationCommandPermissionType - The permission type for the command
@@ -116,13 +117,14 @@ type ApplicationCommandPermissionType int
 
 //goland:noinspection GoUnusedConst
 const (
-	PermissionTypeRole ApplicationCommandPermissionType = iota + 1
-	PermissionTypeUser
+	PermissionTypeRole ApplicationCommandPermissionType = iota + 1 // ROLE
+	PermissionTypeUser                                             // USER
 )
 
 // GetGlobalApplicationCommands - Fetch all the global commands for your application.
 //
 // Returns an array of application command objects.
+//goland:noinspection GoUnusedExportedFunction
 func GetGlobalApplicationCommands(applicationID string) (method string, route string) {
 	return http.MethodGet, fmt.Sprintf(getGlobalApplicationCommands, api, applicationID)
 }
@@ -132,15 +134,17 @@ func GetGlobalApplicationCommands(applicationID string) (method string, route st
 // New global commands will be available in all guilds after 1 hour. Returns 201 and an application command object.
 //
 //    Creating a command with the same name as an existing command for your application will overwrite the old command.
+//goland:noinspection GoUnusedExportedFunction
 func CreateGlobalApplicationCommand(applicationID string) (method string, route string) {
 	return http.MethodPost, fmt.Sprintf(createGlobalApplicationCommand, api, applicationID)
 }
 
 type CreateApplicationCommandJSON struct {
-	Name              string                      `json:"name"`
-	Description       string                      `json:"description"`
-	Options           *[]ApplicationCommandOption `json:"options,omitempty"`
-	DefaultPermission bool                        `json:"default_permission,omitempty"` // default true
+	Name              string                      `json:"name"`                         // 1-32 character name
+	Description       string                      `json:"description"`                  // 1-100 character description
+	Options           *[]ApplicationCommandOption `json:"options,omitempty"`            // the parameters for the command
+	DefaultPermission bool                        `json:"default_permission,omitempty"` // whether the command is enabled by default when the app is added to a guild; default true
+	Type              ApplicationCommandType      `json:"type,omitempty"`               // the type of command, defaults 1 if not set
 }
 
 // GetGlobalApplicationCommand - Fetch a global command for your application.
@@ -160,10 +164,14 @@ func (i *Interaction) EditGlobalApplicationCommand() (method string, route strin
 }
 
 type EditApplicationCommandJSON struct {
-	CreateApplicationCommandJSON
+	Name              string                      `json:"name"`                         // 1-32 character name
+	Description       string                      `json:"description"`                  // 1-100 character description
+	Options           *[]ApplicationCommandOption `json:"options,omitempty"`            // the parameters for the command
+	DefaultPermission bool                        `json:"default_permission,omitempty"` // whether the command is enabled by default when the app is added to a guild; default true
 }
 
 // DeleteGlobalApplicationCommand - Deletes a global command. Returns 204 No Content on success.
+//goland:noinspection GoUnusedExportedFunction
 func DeleteGlobalApplicationCommand(applicationID string, commandID string) (method string, route string) {
 	return http.MethodDelete, fmt.Sprintf(deleteGlobalApplicationCommand, api, applicationID, commandID)
 }
@@ -189,6 +197,7 @@ func (i *Interaction) GetGuildApplicationCommands() (method string, route string
 // GetGuildApplicationCommands - Fetch all the guild commands for your application for a specific guild.
 //
 // Returns an array of application command objects.
+//goland:noinspection GoUnusedExportedFunction
 func GetGuildApplicationCommands(applicationID string, guildID string) (method string, route string) {
 	return http.MethodGet, fmt.Sprintf(getGuildApplicationCommands, api, applicationID, guildID)
 }
@@ -200,12 +209,17 @@ func GetGuildApplicationCommands(applicationID string, guildID string) (method s
 // Returns 201 and an application command object.
 //
 // If the command did not already exist, it will count toward daily application command create limits.
+//goland:noinspection GoUnusedExportedFunction
 func CreateGuildApplicationCommand(applicationID string, guildID string) (method string, route string) {
 	return http.MethodPost, fmt.Sprintf(createGuildApplicationCommand, api, applicationID, guildID)
 }
 
 type CreateGuildApplicationCommandJSON struct {
-	CreateApplicationCommandJSON
+	Name              string                      `json:"name"`                         // 1-32 character name
+	Description       string                      `json:"description"`                  // 1-100 character description
+	Options           *[]ApplicationCommandOption `json:"options,omitempty"`            // the parameters for the command
+	DefaultPermission bool                        `json:"default_permission,omitempty"` // whether the command is enabled by default when the app is added to a guild; default true
+	Type              ApplicationCommandType      `json:"type,omitempty"`               // the type of command, defaults 1 if not set
 }
 
 // GetGuildApplicationCommand - Fetch a guild command for your application. Returns an application command object.
@@ -223,10 +237,14 @@ func (i *Interaction) EditGuildApplicationCommand() (method string, route string
 }
 
 type EditGuildApplicationCommandJSON struct {
-	CreateApplicationCommandJSON
+	Name              string                      `json:"name"`                         // 1-32 character name
+	Description       string                      `json:"description"`                  // 1-100 character description
+	Options           *[]ApplicationCommandOption `json:"options,omitempty"`            // the parameters for the command
+	DefaultPermission bool                        `json:"default_permission,omitempty"` // whether the command is enabled by default when the app is added to a guild; default true
 }
 
 // DeleteGuildApplicationCommand - Delete a guild command. Returns 204 No Content on success.
+//goland:noinspection GoUnusedExportedFunction
 func DeleteGuildApplicationCommand(applicationID string, guildID string, commandID string) (method string, route string) {
 	return http.MethodDelete, fmt.Sprintf(deleteGuildApplicationCommand, api, applicationID, guildID, commandID)
 }

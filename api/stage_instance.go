@@ -45,10 +45,10 @@ const (
 //    This endpoint supports the X-Audit-Log-Reason header.
 //goland:noinspection GoUnusedExportedFunction
 func CreateStageInstance() (string, string) {
-	return http.MethodPost, fmt.Sprintf("%s/stage-instances", api)
+	return http.MethodPost, fmt.Sprintf(createStageInstance, api)
 }
 
-// CreateStageInstanceJSON - payload parameters for creating a new stage instance
+// CreateStageInstanceJSON - data to send in the CreateStageInstance payload
 type CreateStageInstanceJSON struct {
 	ChannelID    Snowflake    `json:"channel_id"`    // The id of the Stage channel
 	Topic        string       `json:"topic"`         // The topic of the Stage instance (1-120 characters)
@@ -57,7 +57,7 @@ type CreateStageInstanceJSON struct {
 
 // GetStageInstance - Gets the stage instance associated with the Stage channel, if it exists.
 func (s *StageInstance) GetStageInstance() (string, string) {
-	return http.MethodGet, fmt.Sprintf("%s/stage-instances/%s", api, s.ChannelID.String())
+	return http.MethodGet, fmt.Sprintf(getStageInstance, api, s.ChannelID.String())
 }
 
 // ModifyStageInstance - Updates fields of an existing Stage instance.
@@ -66,10 +66,11 @@ func (s *StageInstance) GetStageInstance() (string, string) {
 //
 //    This endpoint supports the X-Audit-Log-Reason header.
 func (s *StageInstance) ModifyStageInstance() (string, string) {
-	return http.MethodPatch, fmt.Sprintf("%s/stage-instances/%s", api, s.ChannelID.String())
+	return http.MethodPatch, fmt.Sprintf(modifyStageInstance, api, s.ChannelID.String())
 }
 
-type ModifyStageInstance struct {
+// ModifyStageInstanceJSON - data to send in the ModifyStageInstance payload
+type ModifyStageInstanceJSON struct {
 	Topic        string       `json:"topic,omitempty"` // The topic of the Stage instance (1-120 characters)
 	PrivacyLevel PrivacyLevel `json:"privacy_level"`   // The privacy level of the Stage instance
 }
@@ -78,5 +79,5 @@ type ModifyStageInstance struct {
 //
 // Requires the user to be a moderator of the Stage channel.
 func (s *StageInstance) DeleteStageInstance() (string, string) {
-	return http.MethodDelete, fmt.Sprintf("%s/stage-instances/%s", api, s.ChannelID.String())
+	return http.MethodDelete, fmt.Sprintf(deleteStageInstance, api, s.ChannelID.String())
 }

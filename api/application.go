@@ -16,6 +16,7 @@
 
 package api
 
+// Application - an application which operates on Discord, commonly referred to as bots
 //goland:noinspection SpellCheckingInspection
 type Application struct {
 	ID                  Snowflake        `json:"id"`                             // the id of the app
@@ -38,15 +39,17 @@ type Application struct {
 	Flags               ApplicationFlags `json:"flags,omitempty"`                // the application's public ApplicationFlags
 }
 
+// ApplicationFlags - the application's public ApplicationFlags
 type ApplicationFlags int64
 
+//goland:noinspection GoUnusedConst
 const (
-	GatewayPresence               ApplicationFlags = 1 << 12
-	GatewayPresenceLimited        ApplicationFlags = 1 << 13
-	GatewayGuildMembers           ApplicationFlags = 1 << 14
-	GatewayGuildMembersLimited    ApplicationFlags = 1 << 15
-	VerificationPendingGuildLimit ApplicationFlags = 1 << 16
-	Embedded                      ApplicationFlags = 1 << 17
-	GatewayMessageContent         ApplicationFlags = 1 << 18
-	GatewayMessageContentLimited  ApplicationFlags = 1 << 19
+	GatewayPresence               ApplicationFlags = 1 << 12 // GATEWAY_PRESENCE
+	GatewayPresenceLimited        ApplicationFlags = 1 << 13 // GATEWAY_PRESENCE_LIMITED
+	GatewayGuildMembers           ApplicationFlags = 1 << 14 // GATEWAY_GUILD_MEMBERS
+	GatewayGuildMembersLimited    ApplicationFlags = 1 << 15 // GATEWAY_GUILD_MEMBERS_LIMITED
+	VerificationPendingGuildLimit ApplicationFlags = 1 << 16 // VERIFICATION_PENDING_GUILD_LIMIT
+	Embedded                      ApplicationFlags = 1 << 17 // EMBEDDED
+	GatewayMessageContent         ApplicationFlags = 1 << 18 // GATEWAY_MESSAGE_CONTENT
+	GatewayMessageContentLimited  ApplicationFlags = 1 << 19 // GATEWAY_MESSAGE_CONTENT_LIMITED
 )

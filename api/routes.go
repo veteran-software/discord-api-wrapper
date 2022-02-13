@@ -110,10 +110,15 @@ const (
 	getWebhookMessage                      = "%s/webhooks/%s/%s/messages/%s%s"
 	editWebhookMessage                     = getWebhookMessage
 	deleteWebhookMessage                   = getWebhookMessage
-	editFollowupMessage                    = "%s/webhooks/%s/%s/messages/%s"
+	getFollowupMessage                     = "%s/webhooks/%s/%s/messages/%s"
+	editFollowupMessage                    = getFollowupMessage
 	deleteFollowupMessage                  = editFollowupMessage
 	getOriginalInteractionResponse         = "%s/webhooks/%s/%s/messages/@original"
 	editOriginalInteractionResponse        = getOriginalInteractionResponse
 	deleteOriginalInteractionResponse      = getOriginalInteractionResponse
 	executeSlackCompatibleWebhook          = "%s/webhooks/%s/%s/slack%s"
+	createStageInstance                    = "%s/stage-instances"
+	getStageInstance                       = "%s/stage-instances/%s"
+	modifyStageInstance                    = getStageInstance
+	deleteStageInstance                    = getStageInstance
 )

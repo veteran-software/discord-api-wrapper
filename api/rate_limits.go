@@ -63,6 +63,7 @@ type bucket struct {
 }
 
 // NewRatelimiter returns a new RateLimiter
+//goland:noinspection SpellCheckingInspection
 func NewRatelimiter() *RateLimiter {
 	return &RateLimiter{
 		buckets: make(map[string]*bucket),
@@ -137,8 +138,7 @@ func (r *RateLimiter) lockBucket(bucketID string) *bucket {
 	return r.lockBucketObject(r.getBucket(bucketID))
 }
 
-// release unlocks the bucket and reads the headers to update the buckets ratelimit info and locks up the whole thing in
-// case if there's a global ratelimit.
+// release unlocks the bucket and reads the headers to update the buckets ratelimit info and locks up the whole thing in case if there's a global ratelimit.
 func (b *bucket) release(headers http.Header) error {
 	defer b.Unlock()
 

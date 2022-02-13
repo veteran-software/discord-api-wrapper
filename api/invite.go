@@ -47,6 +47,7 @@ type Invite struct {
 
 type InviteTargetType int
 
+//goland:noinspection GoUnusedConst
 const (
 	TargetTypeStream InviteTargetType = iota + 1
 	TargetTypeEmbeddedApplication

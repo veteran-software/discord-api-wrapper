@@ -48,6 +48,7 @@ const (
 
 type GuildScheduledEventType int
 
+//goland:noinspection GoUnusedConst
 const (
 	GuildScheduledEventTypeStageInstance GuildScheduledEventType = iota + 1
 	GuildScheduledEventTypeVoice
@@ -57,6 +58,7 @@ const (
 // GuildScheduledEventStatus - Once status is set to Completed or Cancelled, the status can no longer be updated
 type GuildScheduledEventStatus int
 
+//goland:noinspection GoUnusedConst
 const (
 	Scheduled GuildScheduledEventStatus = iota + 1
 	Active

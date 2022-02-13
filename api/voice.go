@@ -22,36 +22,33 @@ import (
 	"time"
 )
 
-/* VOICE STATE OBJECT */
-
+// VoiceState - Used to represent a user's voice connection status.
 type VoiceState struct {
-	GuildID                 Snowflake   `json:"guild_id,omitempty"`
-	ChannelID               *Snowflake  `json:"channel_id"`
-	UserID                  Snowflake   `json:"user_id"`
-	Member                  GuildMember `json:"member,omitempty"`
-	SessionID               string      `json:"session_id"`
-	Deaf                    bool        `json:"deaf"`
-	Mute                    bool        `json:"mute"`
-	SelfDeaf                bool        `json:"self_deaf"`
-	SelfMute                bool        `json:"self_mute"`
-	SelfStream              bool        `json:"self_stream,omitempty"`
-	SelfVideo               bool        `json:"self_video"`
-	Suppress                bool        `json:"suppress"`
-	RequestToSpeakTimestamp *time.Time  `json:"request_to_speak_timestamp"`
+	GuildID                 Snowflake   `json:"guild_id,omitempty"`         // the guild id this voice state is for
+	ChannelID               *Snowflake  `json:"channel_id"`                 // the channel id this user is connected to
+	UserID                  Snowflake   `json:"user_id"`                    // the user id this voice state is for
+	Member                  GuildMember `json:"member,omitempty"`           // the guild member this voice state is for
+	SessionID               string      `json:"session_id"`                 // the session id for this voice state
+	Deaf                    bool        `json:"deaf"`                       // whether this user is deafened by the server
+	Mute                    bool        `json:"mute"`                       // whether this user is muted by the server
+	SelfDeaf                bool        `json:"self_deaf"`                  // whether this user is locally deafened
+	SelfMute                bool        `json:"self_mute"`                  // whether this user is locally muted
+	SelfStream              bool        `json:"self_stream,omitempty"`      // whether this user is streaming using "Go Live"
+	SelfVideo               bool        `json:"self_video"`                 // whether this user's camera is enabled
+	Suppress                bool        `json:"suppress"`                   // whether this user is muted by the current user
+	RequestToSpeakTimestamp *time.Time  `json:"request_to_speak_timestamp"` // the time at which the user requested to speak
 }
 
-/* VOICE REGION OBJECT */
-
+// VoiceRegion - representation of a geographic voice server
 type VoiceRegion struct {
-	ID         string `json:"id"`
-	Name       string `json:"name"`
-	Optimal    bool   `json:"optimal"`
-	Deprecated bool   `json:"deprecated"`
-	Custom     bool   `json:"custom"`
+	ID         string `json:"id"`         // unique ID for the region
+	Name       string `json:"name"`       // name of the region
+	Optimal    bool   `json:"optimal"`    // true for a single server that is closest to the current user's client
+	Deprecated bool   `json:"deprecated"` // whether this is a deprecated voice region (avoid switching to these)
+	Custom     bool   `json:"custom"`     // whether this is a custom voice region (used for events/etc)
 }
 
-/* ENDPOINTS */
-
+// ListVoiceRegions - Returns an array of voice region objects that can be used when setting a voice or stage channel's rtc_region.
 func ListVoiceRegions() (method string, route string) {
 	return http.MethodGet, fmt.Sprintf(listVoiceRegions, api)
 }

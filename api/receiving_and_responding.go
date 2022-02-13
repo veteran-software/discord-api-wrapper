@@ -49,6 +49,7 @@ type Interaction struct {
 // InteractionType - The type of Interaction
 type InteractionType int
 
+//goland:noinspection GoUnusedConst
 const (
 	InteractionTypePing                           InteractionType = iota + 1 // PING
 	InteractionTypeApplicationCommand                                        // APPLICATION_COMMAND
@@ -59,27 +60,16 @@ const (
 
 // InteractionData - Inner payload structure of an Interaction
 type InteractionData struct {
-	/* Application Command */
-	ID       Snowflake                                  `json:"id,omitempty"`       // the ID of the invoked command
-	Name     string                                     `json:"name,omitempty"`     // the name of the invoked command
-	Type     ApplicationCommandType                     `json:"type,omitempty"`     // the type of the invoked command
-	Resolved ResolvedData                               `json:"resolved,omitempty"` // converted users + roles + channels
-	Options  []*ApplicationCommandInteractionDataOption `json:"options,omitempty"`  // the params + values from the user
-
-	/* Component, Modal Submit */
-	CustomID string `json:"custom_id,omitempty"` // for components, the custom_id of the component
-
-	/* Component */
-	ComponentType ComponentType `json:"component_type,omitempty"` // for components, the type of the component
-
-	/* Component (Select) */
-	Values []string `json:"values,omitempty"` // the values the user selected
-
-	/* User Command, Message Command */
-	TargetID Snowflake `json:"target_id,omitempty"` // id the of user or message targeted by a user or message command
-
-	/* Modal Submit */
-	Components []Component `json:"components,omitempty"` // the values submitted by the user
+	ID            Snowflake                                  `json:"id,omitempty"`             // the ID of the invoked command
+	Name          string                                     `json:"name,omitempty"`           // the name of the invoked command
+	Type          ApplicationCommandType                     `json:"type,omitempty"`           // the type of the invoked command
+	Resolved      ResolvedData                               `json:"resolved,omitempty"`       // converted users + roles + channels
+	Options       []*ApplicationCommandInteractionDataOption `json:"options,omitempty"`        // the params + values from the user
+	CustomID      string                                     `json:"custom_id,omitempty"`      // for components, the custom_id of the component
+	ComponentType ComponentType                              `json:"component_type,omitempty"` // for components, the type of the component
+	Values        []string                                   `json:"values,omitempty"`         // the values the user selected
+	TargetID      Snowflake                                  `json:"target_id,omitempty"`      // id the of user or message targeted by a user or message command
+	Components    []Component                                `json:"components,omitempty"`     // the values submitted by the user
 }
 
 // ResolvedData - Descriptive data about the Interaction
@@ -150,6 +140,7 @@ type InteractionResponseModal struct {
 // InteractionCallbackType - The type of callback to an interaction with respond
 type InteractionCallbackType int
 
+//goland:noinspection GoUnusedConst
 const (
 	Pong                             InteractionCallbackType = iota + 1 // ACK a Ping
 	ChannelMessageWithSource         InteractionCallbackType = iota + 3 // respond to an interaction with a message
@@ -160,9 +151,7 @@ const (
 	Modal                                                               // respond to an interaction with a popup modal ** Not available for MODAL_SUBMIT and PING interactions.
 )
 
-// InteractionCallbackDataMessages
-//
-// Not all message fields are currently supported by Discord
+// InteractionCallbackDataMessages - Not all message fields are currently supported by Discord
 //
 // Data payload for InteractionResponseMessages
 type InteractionCallbackDataMessages struct {
@@ -175,24 +164,19 @@ type InteractionCallbackDataMessages struct {
 	Attachments     []Attachment     `json:"attachments,omitempty"` // attachment objects with filename and description
 }
 
-// InteractionCallbackDataAutocomplete
-//
-// Data payload for InteractionResponseAutocomplete
+// InteractionCallbackDataAutocomplete - Data payload for InteractionResponseAutocomplete
 type InteractionCallbackDataAutocomplete struct {
 	Choices []*ApplicationCommandOptionChoice `json:"choices"` // autocomplete choices (max of 25 choices)
 }
 
-// InteractionCallbackDataModal
-//
-// Data payload for InteractionResponseModal
+// InteractionCallbackDataModal - Data payload for InteractionResponseModal
 type InteractionCallbackDataModal struct {
 	CustomID   string      `json:"custom_id"`  // a developer-defined identifier for the component, max 100 characters
 	Title      string      `json:"title"`      // the title of the popup modal
 	Components []Component `json:"components"` // between 1 and 5 (inclusive) components that make up the modal
 }
 
-/* HELPER FUNCTIONS */
-
+// BuildResponse - Deprecated: helper method for building a basic message response
 func (i *Interaction) BuildResponse(embeds []*Embed) *InteractionResponseMessages {
 	ir := &InteractionResponseMessages{
 		Data: &InteractionCallbackDataMessages{},
@@ -232,14 +216,38 @@ func (i *Interaction) DeleteOriginalInteractionResponse() (method string, route 
 	return http.MethodDelete, fmt.Sprintf(deleteOriginalInteractionResponse, api, i.ApplicationID, i.Token)
 }
 
+// CreateFollowupMessage - Create a followup message for an Interaction.
+//
+// Functions the same as Execute Webhook, but wait is always true, and flags can be set to 64 in the body to send an ephemeral message.
+//
+// The thread_id, avatar_url, and username parameters are not supported when using this endpoint for interaction followups.
 func (i *Interaction) CreateFollowupMessage() (method string, route string) {
 	return http.MethodPost, fmt.Sprintf(createFollowupMessage, api, i.ApplicationID, i.Token)
 }
 
+// GetFollowupMessage - Returns a followup message for an Interaction.
+//
+// Functions the same as Get Webhook Message.
+//
+//   Does not support ephemeral followups.
+func (i *Interaction) GetFollowupMessage() (method string, route string) {
+	return http.MethodGet, fmt.Sprintf(getFollowupMessage, api, i.ApplicationID, i.Token, i.Message.ID)
+}
+
+// EditFollowupMessage - Edits a followup message for an Interaction.
+//
+// Functions the same as Edit Webhook Message.
+//
+//   Does not support ephemeral followups.
 func (i *Interaction) EditFollowupMessage() (method string, route string) {
 	return http.MethodPatch, fmt.Sprintf(editFollowupMessage, api, i.ApplicationID, i.Token, i.Message.ID)
 }
 
+// DeleteFollowupMessage - Deletes a followup message for an Interaction.
+//
+// Returns 204 No Content on success.
+//
+//   Does not support ephemeral followups.
 func (i *Interaction) DeleteFollowupMessage() (method string, route string) {
 	return http.MethodDelete, fmt.Sprintf(deleteFollowupMessage, api, i.ApplicationID, i.Token, i.Message.ID)
 }

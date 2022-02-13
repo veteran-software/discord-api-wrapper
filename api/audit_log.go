@@ -32,23 +32,23 @@ This header supports url encoded utf8 characters.
 //
 // This header supports url encoded utf8 characters.
 type AuditLog struct {
-	AuditLogEntries      []AuditLogEntry       `json:"audit_log_entries"`      // AuditLogEntries - list of audit log entries
-	GuildScheduledEvents []GuildScheduledEvent `json:"guild_scheduled_events"` // GuildScheduledEvents - list of GuildScheduledEvent found in the audit log
-	Integrations         []Integration         `json:"integrations"`           // Integrations - list of partial integration objects
-	Threads              []Channel             `json:"threads"`                // Threads - list of threads found in the audit log
-	Users                []User                `json:"users"`                  // Users - list of users found in the audit log
-	Webhooks             []Webhook             `json:"webhooks"`               // Webhooks - list of webhooks found in the audit log
+	AuditLogEntries      []AuditLogEntry       `json:"audit_log_entries"`      // list of audit log entries
+	GuildScheduledEvents []GuildScheduledEvent `json:"guild_scheduled_events"` // list of GuildScheduledEvent found in the audit log
+	Integrations         []Integration         `json:"integrations"`           // list of partial integration objects
+	Threads              []Channel             `json:"threads"`                // list of threads found in the audit log
+	Users                []User                `json:"users"`                  // list of users found in the audit log
+	Webhooks             []Webhook             `json:"webhooks"`               // list of webhooks found in the audit log
 }
 
 // AuditLogEntry - Representation of a single Audit Log
 type AuditLogEntry struct {
-	TargetID   *string            `json:"target_id"`         // TargetID - id of the affected entity (webhook, user, role, etc.)
-	Changes    []AuditLogChange   `json:"changes,omitempty"` // Changes - changes made to the target_id
-	UserID     *Snowflake         `json:"user_id"`           // UserID - the user who made the changes
-	ID         Snowflake          `json:"id"`                // ID - id of the entry
-	ActionType AuditLogEvent      `json:"action_type"`       // ActionType - type of action that occurred
-	Options    OptionalAuditEntry `json:"options,omitempty"` // Options - additional info for certain action types
-	Reason     string             `json:"reason,omitempty"`  // Reason - the reason for the change (0-512 characters)
+	TargetID   *string            `json:"target_id"`         // id of the affected entity (webhook, user, role, etc.)
+	Changes    []AuditLogChange   `json:"changes,omitempty"` // changes made to the target_id
+	UserID     *Snowflake         `json:"user_id"`           // the user who made the changes
+	ID         Snowflake          `json:"id"`                // id of the entry
+	ActionType AuditLogEvent      `json:"action_type"`       // type of action that occurred
+	Options    OptionalAuditEntry `json:"options,omitempty"` // additional info for certain action types
+	Reason     string             `json:"reason,omitempty"`  // the reason for the change (0-512 characters)
 }
 
 // AuditLogEvent - The event type that triggered the log action
@@ -141,21 +141,21 @@ const (
 
 // OptionalAuditEntry - Information that is specific to certain events
 type OptionalAuditEntry struct {
-	ChannelID        Snowflake `json:"channel_id"`         // ChannelID - channel in which the entities were targeted
-	Count            string    `json:"count"`              // Count - number of entities that were targeted
-	DeleteMemberDays string    `json:"delete_member_days"` // DeleteMemberDays - number of days after which inactive members were kicked
-	ID               Snowflake `json:"id"`                 // ID - id of the overwritten entity
-	MembersRemoved   string    `json:"members_removed"`    // MembersRemoved - number of members removed by the prune
-	MessageID        Snowflake `json:"message_id"`         // MessageID - id of the message that was targeted
-	RoleName         string    `json:"role_name"`          // RoleName - name of the role if type is "0" (not present if type is "1")
-	Type             string    `json:"type"`               // Type - type of overwritten entity - "0" for "role" or "1" for "member"
+	ChannelID        Snowflake `json:"channel_id"`         // channel in which the entities were targeted
+	Count            string    `json:"count"`              // number of entities that were targeted
+	DeleteMemberDays string    `json:"delete_member_days"` // number of days after which inactive members were kicked
+	ID               Snowflake `json:"id"`                 // id of the overwritten entity
+	MembersRemoved   string    `json:"members_removed"`    // number of members removed by the prune
+	MessageID        Snowflake `json:"message_id"`         // id of the message that was targeted
+	RoleName         string    `json:"role_name"`          // name of the role if type is "0" (not present if type is "1")
+	Type             string    `json:"type"`               // type of overwritten entity - "0" for "role" or "1" for "member"
 }
 
 // AuditLogChange - If new_value is not present in the change object, while old_value is, that means the property that was changed has been reset, or set to null
 type AuditLogChange struct {
-	NewValue interface{} `json:"new_value,omitempty"` // NewValue - new value of the key
-	OldValue interface{} `json:"old_value,omitempty"` // OldValue - old value of the key
-	Key      string      `json:"key"`                 // Key - name of audit log change key
+	NewValue interface{} `json:"new_value,omitempty"` // new value of the key
+	OldValue interface{} `json:"old_value,omitempty"` // old value of the key
+	Key      string      `json:"key"`                 // name of audit log change key
 }
 
 // GetGuildAuditLog - Returns an audit log object for the guild.

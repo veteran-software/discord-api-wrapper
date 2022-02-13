@@ -97,6 +97,7 @@ const (
 // Format - Discord utilizes a subset of markdown for rendering message content on its clients, while also adding some custom functionality to enable things like mentioning users and channels.
 type Format string
 
+//goland:noinspection GoUnusedConst
 const (
 	userFormat                Format = "<@%s>"     // userFormat - <@USER_ID>
 	userNicknameFormat        Format = "<@!%s>"    // userNicknameFormat - <@!USER_ID>
@@ -111,6 +112,7 @@ const (
 // TimestampStyle - Timestamps will display the given timestamp in the user's timezone and locale.
 type TimestampStyle string
 
+//goland:noinspection GoUnusedConst
 const (
 	ShortTime     TimestampStyle = "t" // ShortTime - 16:20
 	LongTime      TimestampStyle = "T" // LongTime - 16:20:30

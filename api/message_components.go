@@ -16,40 +16,26 @@
 
 package api
 
-/* COMPONENT OBJECT */
-
 // Component - Components are a new field on the message object, so you can use them whether you're sending messages or responding to a slash command or other interaction.
 //
 // The top-level component's field is an array of Action Row components.
 type Component struct {
-	Type ComponentType `json:"type"` // Type - ComponentType; valid for all types
-
-	// Buttons and Select Menus
-	CustomID string `json:"custom_id,omitempty"` // CustomID - a developer-defined identifier for the button, max 100 characters
-	Disabled bool   `json:"disabled,omitempty"`  // Disabled - whether the button is disabled, default false
-
-	// Buttons only
-	Style interface{} `json:"style,omitempty"` // Style - one of ButtonStyle
-	Label string      `json:"label,omitempty"` // Label - text that appears on the button, max 80 characters
-	Emoji *Emoji      `json:"emoji,omitempty"` // Emoji - name, id, and animated
-	URL   string      `json:"url,omitempty"`   // URL - a URL for link-style buttons
-
-	// Select Menus only
-	Options   []SelectOption `json:"options,omitempty"`    // Options - the choices in the select, max 25
-	MinValues int            `json:"min_values,omitempty"` // MinValues - the minimum number of items that must be chosen; default 1, min 0, max 25
-	MaxValues int            `json:"max_values,omitempty"` // MaxValues - the maximum number of items that can be chosen; default 1, max 25
-
-	// Select Menus, Text Inputs
-	Placeholder string `json:"placeholder,omitempty"` // Placeholder - custom placeholder text if nothing is selected, max 100 characters
-
-	// Action Rows
-	Components []Component `json:"components,omitempty"` // Components - a list of child components
-
-	// Text Inputs
-	MinLength int    `json:"min_length,omitempty"` // MinLength - the minimum input length for a text input
-	MaxLength int    `json:"max_length,omitempty"` // MaxLength - the maximum input length for a text input
-	Required  bool   `json:"required,omitempty"`   // Required - whether this component is required to be filled
-	Value     string `json:"value,omitempty"`      // Value - a pre-filled value for this component
+	Type        ComponentType  `json:"type"`                  // Type - ComponentType; valid for all types
+	CustomID    string         `json:"custom_id,omitempty"`   // CustomID - a developer-defined identifier for the button, max 100 characters
+	Disabled    bool           `json:"disabled,omitempty"`    // Disabled - whether the button is disabled, default false
+	Style       interface{}    `json:"style,omitempty"`       // Style - one of ButtonStyle
+	Label       string         `json:"label,omitempty"`       // Label - text that appears on the button, max 80 characters
+	Emoji       *Emoji         `json:"emoji,omitempty"`       // Emoji - name, id, and animated
+	URL         string         `json:"url,omitempty"`         // URL - a URL for link-style buttons
+	Options     []SelectOption `json:"options,omitempty"`     // Options - the choices in the select, max 25
+	MinValues   int            `json:"min_values,omitempty"`  // MinValues - the minimum number of items that must be chosen; default 1, min 0, max 25
+	MaxValues   int            `json:"max_values,omitempty"`  // MaxValues - the maximum number of items that can be chosen; default 1, max 25
+	Placeholder string         `json:"placeholder,omitempty"` // Placeholder - custom placeholder text if nothing is selected, max 100 characters
+	Components  []Component    `json:"components,omitempty"`  // Components - a list of child components
+	MinLength   int            `json:"min_length,omitempty"`  // MinLength - the minimum input length for a text input
+	MaxLength   int            `json:"max_length,omitempty"`  // MaxLength - the maximum input length for a text input
+	Required    bool           `json:"required,omitempty"`    // Required - whether this component is required to be filled
+	Value       string         `json:"value,omitempty"`       // Value - a pre-filled value for this component
 }
 
 // ComponentType - The type of component

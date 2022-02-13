@@ -50,6 +50,7 @@ type Webhook struct {
 
 type WebhookType int
 
+//goland:noinspection GoUnusedConst
 const (
 	WebhookTypeIncoming        WebhookType = iota + 1 // WebhookTypeIncoming - Incoming Webhooks can post messages to channels with a generated token
 	WebhookTypeChannelFollower                        // WebhookTypeChannelFollower - Channel Follower Webhooks are internal webhooks used with Channel Following to post new messages into channels

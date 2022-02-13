@@ -305,7 +305,7 @@ func (g *Guild) GetGuild() (method string, route string) {
 
 // ListGuildMembers - Returns a list of guild member objects that are members of the guild.
 //
-// This endpoint is restricted according to whether the GUILD_MEMBERS Privileged Intent is enabled for your application.
+// This endpoint is restricted according to whether the GuildMembers Privileged Intent is enabled for your application.
 func (g *Guild) ListGuildMembers(after ...*Snowflake) (method string, route string) {
 	var afterSnowflake string
 

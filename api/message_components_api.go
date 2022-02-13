@@ -16,12 +16,12 @@
 
 package api
 
-/* MESSAGE COMPONENT API */
-
+// NewComponent - Build a new Component
 func NewComponent() *Component {
 	return &Component{}
 }
 
+// GetType - Deprecated: access the struct field directly
 func (c *Component) GetType() ComponentType {
 	return c.Type
 }
@@ -32,6 +32,7 @@ func (c *Component) SetType(t ComponentType) *Component {
 	return c
 }
 
+// GetCustomID - Deprecated: access the struct field directly
 func (c *Component) GetCustomID() string {
 	return c.CustomID
 }
@@ -52,6 +53,7 @@ func (c *Component) SetDisabled(d bool) *Component {
 	return c
 }
 
+// GetButtonStyle - Deprecated: access the struct field directly
 func (c *Component) GetButtonStyle() ButtonStyle {
 	return c.Style.(ButtonStyle)
 }
@@ -62,6 +64,7 @@ func (c *Component) SetButtonStyle(s ButtonStyle) *Component {
 	return c
 }
 
+// GetTextInputStyle - Deprecated: access the struct field directly
 func (c *Component) GetTextInputStyle() TextInputStyle {
 	return c.Style.(TextInputStyle)
 }
@@ -72,6 +75,7 @@ func (c *Component) SetTextInputStyle(s TextInputStyle) *Component {
 	return c
 }
 
+// GetEmoji - Deprecated: access the struct field directly
 func (c *Component) GetEmoji() *Emoji {
 	return c.Emoji
 }
@@ -82,6 +86,7 @@ func (c *Component) SetEmoji(e *Emoji) *Component {
 	return c
 }
 
+// GetURL - Deprecated: access the struct field directly
 func (c *Component) GetURL() string {
 	return c.URL
 }
@@ -92,11 +97,8 @@ func (c *Component) SetURL(u string) *Component {
 	return c
 }
 
-/*
-NewModalResponse
-
-Build a new response containing a modal
-*/
+// NewModalResponse - Build a new response containing a modal
+//goland:noinspection GoUnusedExportedFunction
 func NewModalResponse() *InteractionResponseModal {
 	return &InteractionResponseModal{
 		CallbackType: Modal,
@@ -122,11 +124,8 @@ func (i *InteractionResponseModal) AddComponent(c *Component) *InteractionRespon
 	return i
 }
 
-/*
-NewMessageResponse
-
-Build a new response containing a message
-*/
+// NewMessageResponse - Build a new response containing a message
+//goland:noinspection GoUnusedExportedFunction
 func NewMessageResponse() *InteractionResponseMessages {
 	return &InteractionResponseMessages{
 		Data: &InteractionCallbackDataMessages{},
@@ -185,19 +184,18 @@ func (i *InteractionResponseMessages) AddAttachment(a *Attachment) *InteractionR
 	return i
 }
 
+// GetEmbeds - Deprecated: access the struct field directly
 func (i *InteractionResponseMessages) GetEmbeds() []Embed {
 	return i.Data.Embeds
 }
 
+// GetType - Deprecated: access the struct field directly
 func (i *InteractionResponseMessages) GetType() InteractionCallbackType {
 	return i.Type
 }
 
-/*
-NewAutocompleteResponse
-
-Build a new response containing a modal
-*/
+// NewAutocompleteResponse - Build a new response containing a modal
+//goland:noinspection GoUnusedExportedFunction
 func NewAutocompleteResponse() *InteractionResponseAutocomplete {
 	return &InteractionResponseAutocomplete{
 		Type: AutocompleteResult,

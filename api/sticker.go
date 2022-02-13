@@ -39,17 +39,20 @@ type Sticker struct {
 
 type StickerType int
 
+//goland:noinspection GoUnusedConst
 const (
 	StickerTypeStandard StickerType = iota + 1 // StickerTypeStandard - an official sticker in a pack, part of Nitro or in a removed purchasable pack
 	StickerTypeGuild                           // StickerTypeGuild - a sticker uploaded to a Boosted guild for the guild's members
 )
 
+// StickerFormatType - The format of the Sticker
 type StickerFormatType int
 
+//goland:noinspection GoUnusedConst
 const (
-	StickerFormatTypePng StickerFormatType = iota + 1
-	StickerFormatTypeAnimatedPng
-	StickerFormatTypeLottie
+	StickerFormatTypePng         StickerFormatType = iota + 1 // PNG
+	StickerFormatTypeAnimatedPng                              // APNG
+	StickerFormatTypeLottie                                   // LOTTIE
 )
 
 // StickerItem - The smallest amount of data required to render a sticker. A partial sticker object.
@@ -87,6 +90,9 @@ func (g *Guild) ListGuildStickers() (string, string) {
 	return http.MethodGet, fmt.Sprintf(listGuildStickers, api, g.ID.String())
 }
 
+// GetGuildSticker - Returns a sticker object for the given guild and sticker IDs.
+//
+// Includes the user field if the bot has the ManageEmojisAndStickers permission.
 func (g *Guild) GetGuildSticker(stickerID Snowflake) (string, string) {
 	return http.MethodGet, fmt.Sprintf(getGuildSticker, api, g.ID.String(), stickerID.String())
 }
@@ -117,7 +123,7 @@ func (g *Guild) ModifyGuildSticker(stickerID Snowflake) (string, string) {
 
 // DeleteGuildSticker - Delete the given sticker.
 //
-// Requires the MANAGE_EMOJIS_AND_STICKERS permission.
+// Requires the ManageEmojisAndStickers permission.
 //
 // Returns "204 No Content" on success.
 //
