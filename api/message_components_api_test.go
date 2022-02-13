@@ -21,6 +21,11 @@ import (
 	"testing"
 )
 
+const (
+	quickBrownFox = "The quick brown fox jumps over the lazy dog"
+	googleDotCom  = "https://google.com"
+)
+
 func TestComponentGetType(t *testing.T) {
 	type fields struct {
 		Type ComponentType
@@ -142,8 +147,8 @@ func TestComponentGetCustomID(t *testing.T) {
 		},
 		{
 			name:   "Long String Test",
-			fields: fields{CustomID: "The quick brown fox jumps over the lazy dog"},
-			want:   "The quick brown fox jumps over the lazy dog",
+			fields: fields{CustomID: quickBrownFox},
+			want:   quickBrownFox,
 		},
 	}
 	for _, tt := range tests {
@@ -165,6 +170,7 @@ func TestComponentSetCustomID(t *testing.T) {
 	type args struct {
 		t string
 	}
+
 	tests := []struct {
 		name   string
 		fields fields
@@ -189,10 +195,10 @@ func TestComponentSetCustomID(t *testing.T) {
 		},
 		{
 			name:   "Long String Test",
-			fields: fields{CustomID: "The quick brown fox jumps over the lazy dog"},
-			args:   args{t: "The quick brown fox jumps over the lazy dog"},
+			fields: fields{CustomID: quickBrownFox},
+			args:   args{t: quickBrownFox},
 			want: &Component{
-				CustomID: "The quick brown fox jumps over the lazy dog",
+				CustomID: quickBrownFox,
 			},
 		},
 	}
@@ -614,8 +620,8 @@ func TestComponentGetURL(t *testing.T) {
 	}{
 		{
 			name:   "URL",
-			fields: fields{URL: "https://google.com"},
-			want:   "https://google.com",
+			fields: fields{URL: googleDotCom},
+			want:   googleDotCom,
 		},
 	}
 	for _, tt := range tests {
@@ -637,6 +643,7 @@ func TestComponentSetURL(t *testing.T) {
 	type args struct {
 		u string
 	}
+
 	tests := []struct {
 		name   string
 		fields fields
@@ -645,10 +652,10 @@ func TestComponentSetURL(t *testing.T) {
 	}{
 		{
 			name:   "URL",
-			fields: fields{URL: "https://google.com"},
-			args:   args{u: "https://google.com"},
+			fields: fields{URL: googleDotCom},
+			args:   args{u: googleDotCom},
 			want: &Component{
-				URL: "https://google.com",
+				URL: googleDotCom,
 			},
 		},
 	}

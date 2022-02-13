@@ -34,7 +34,7 @@ type AuditLog struct {
 	Integrations         []Integration         `json:"integrations"`
 	Threads              []Channel             `json:"threads"`
 	Users                []User                `json:"users"`
-	// TODO: Webhooks []Webhook `json:"webhooks"`
+	Webhooks             []Webhook             `json:"webhooks"`
 }
 
 type AuditLogEntry struct {

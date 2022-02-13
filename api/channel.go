@@ -24,11 +24,11 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/veteran-software/discord-api-wrapper/logging"
 	"github.com/veteran-software/discord-api-wrapper/routes"
-	"github.com/veteran-software/discord-api-wrapper/utilities"
 )
 
 /* CHANNEL OBJECT */
@@ -476,11 +476,7 @@ func (c *Channel) ModifyChannel(dm *map[string]interface{}, guildChannel *map[st
 			Name: fmt.Sprintf("%v", (*dm)["name"]),
 			Icon: fmt.Sprintf("%v", (*dm)["icon"]),
 		}
-	case GuildPublicThread:
-		fallthrough
-	case GuildPrivateThread:
-		fallthrough
-	case GuildNewsThread:
+	case GuildNewsThread, GuildPublicThread, GuildPrivateThread:
 		archived, _ := strconv.ParseBool(fmt.Sprintf("%v", (*dm)["archived"]))
 
 		payload = struct {
@@ -494,18 +490,7 @@ func (c *Channel) ModifyChannel(dm *map[string]interface{}, guildChannel *map[st
 			Name:     fmt.Sprintf("%v", (*dm)["name"]),
 			Archived: archived,
 		}
-	}
-
-	if c.Type == GroupDM {
-		payload = struct {
-			Name string `json:"name"` // 1-100 character channel name
-			Icon string `json:"icon"` // base64 encoded icon
-		}{
-			Name: fmt.Sprintf("%v", (*dm)["name"]),
-			Icon: fmt.Sprintf("%v", (*dm)["icon"]),
-		}
-
-	} else if c.Type == GuildText || c.Type == GuildVoice || c.Type == GuildCategory || c.Type == GuildNews || c.Type == GuildStore || c.Type == GuildStageVoice {
+	case GuildText, GuildVoice, GuildCategory, GuildNews, GuildStore, GuildStageVoice:
 		payload = struct {
 			Name string          `json:"name"` // 1-100 character channel name
 			Icon base64.Encoding `json:"icon"` // base64 encoded icon
@@ -624,8 +609,26 @@ Returns an array of message objects on success.
 
 SUPPORTS: "around : Snowflake"; "before : Snowflake"; "after : Snowflake"; "limit : int" ; nil
 */
-func (c *Channel) GetChannelMessages(opts *map[string]interface{}) (method, route string) {
-	return http.MethodGet, fmt.Sprintf(routes.Channels_MessagesQsp, api, c.ID.String(), *utilities.ParseQueryString(opts))
+func (c *Channel) GetChannelMessages(around *Snowflake, before *Snowflake, after *Snowflake, limit *int) (method, route string) {
+	var qsp []string
+	if around != nil {
+		qsp = append(qsp, "around="+around.String())
+	}
+	if before != nil {
+		qsp = append(qsp, "before="+before.String())
+	}
+	if after != nil {
+		qsp = append(qsp, "after="+after.String())
+	}
+	if limit != nil {
+		qsp = append(qsp, "limit="+strconv.Itoa(*limit))
+	}
+	var q string
+	if len(qsp) > 0 {
+		q = "?" + strings.Join(qsp, "&")
+	}
+
+	return http.MethodGet, fmt.Sprintf(routes.Channels_MessagesQsp, api, c.ID.String(), q)
 }
 
 /*
@@ -772,8 +775,19 @@ To use custom emoji, you must encode it in the format name:id with the emoji nam
 
 OPTS SUPPORTS: "after : Snowflake"; "limit : int", nil
 */
-func (c *Channel) GetReactions(messageID Snowflake, emoji string, opts *map[string]interface{}) (method, route string) {
-	return http.MethodGet, fmt.Sprintf(routes.Channels_Messages_Reactions__, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji), *utilities.ParseQueryString(opts))
+func (c *Channel) GetReactions(messageID Snowflake, emoji string, after *Snowflake, limit *int) (method, route string) {
+	var qsp []string
+	if after != nil {
+		qsp = append(qsp, "after="+after.String())
+	}
+	if limit != nil {
+		qsp = append(qsp, "limit="+strconv.Itoa(*limit))
+	}
+	var q string
+	if len(qsp) > 0 {
+		q = "?" + strings.Join(qsp, "&")
+	}
+	return http.MethodGet, fmt.Sprintf(routes.Channels_Messages_Reactions__, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji), q)
 }
 
 /*
@@ -1232,8 +1246,19 @@ Threads are ordered by archive_timestamp, in descending order.
 
 Requires the READ_MESSAGE_HISTORY permission.
 */
-func (c *Channel) ListPublicArchivedThreads(opts *map[string]interface{}) (method, route string) {
-	return http.MethodGet, fmt.Sprintf(routes.Channels_ThreadsArchivedPublicQsp, api, c.ID.String(), *utilities.ParseQueryString(opts))
+func (c *Channel) ListPublicArchivedThreads(before *time.Time, limit *int) (method, route string) {
+	var qsp []string
+	if before != nil {
+		qsp = append(qsp, "before="+before.Format(time.RFC3339))
+	}
+	if limit != nil {
+		qsp = append(qsp, "limit="+strconv.Itoa(*limit))
+	}
+	var q string
+	if len(qsp) > 0 {
+		q = "?" + strings.Join(qsp, "&")
+	}
+	return http.MethodGet, fmt.Sprintf(routes.Channels_ThreadsArchivedPublicQsp, api, c.ID.String(), q)
 }
 
 /*
@@ -1245,8 +1270,19 @@ Threads are ordered by archive_timestamp, in descending order.
 
 Requires both the READ_MESSAGE_HISTORY and MANAGE_THREADS permissions.
 */
-func (c *Channel) ListPrivateArchivedThreads(opts *map[string]interface{}) (method, route string) {
-	return http.MethodGet, fmt.Sprintf(routes.Channels_ThreadsArchivedPrivateQsp, api, c.ID.String(), *utilities.ParseQueryString(opts))
+func (c *Channel) ListPrivateArchivedThreads(before *time.Time, limit *int) (method, route string) {
+	var qsp []string
+	if before != nil {
+		qsp = append(qsp, "before="+before.Format(time.RFC3339))
+	}
+	if limit != nil {
+		qsp = append(qsp, "limit="+strconv.Itoa(*limit))
+	}
+	var q string
+	if len(qsp) > 0 {
+		q = "?" + strings.Join(qsp, "&")
+	}
+	return http.MethodGet, fmt.Sprintf(routes.Channels_ThreadsArchivedPrivateQsp, api, c.ID.String(), q)
 }
 
 /*
@@ -1258,8 +1294,19 @@ Threads are ordered by their id, in descending order.
 
 Requires the READ_MESSAGE_HISTORY permission.
 */
-func (c *Channel) ListJoinedPrivateArchivedThreads(opts *map[string]interface{}) (method, route string) {
-	return http.MethodGet, fmt.Sprintf(routes.Channels_UsersMeThreadsArchivedPrivateQsp, api, c.ID.String(), *utilities.ParseQueryString(opts))
+func (c *Channel) ListJoinedPrivateArchivedThreads(before *Snowflake, limit *int) (method, route string) {
+	var qsp []string
+	if before != nil {
+		qsp = append(qsp, "before="+before.String())
+	}
+	if limit != nil {
+		qsp = append(qsp, "limit="+strconv.Itoa(*limit))
+	}
+	var q string
+	if len(qsp) > 0 {
+		q = "?" + strings.Join(qsp, "&")
+	}
+	return http.MethodGet, fmt.Sprintf(routes.Channels_UsersMeThreadsArchivedPrivateQsp, api, c.ID.String(), q)
 }
 
 type ListArchivedThreadsResponse struct {

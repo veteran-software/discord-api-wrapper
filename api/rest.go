@@ -20,7 +20,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 	"strings"
@@ -61,10 +60,10 @@ func init() {
 }
 
 func (r *RateLimiter) Request(method, route string, data interface{}, reason *string) (*http.Response, error) {
-	return r.requestWithBucketID(method, route, data, strings.SplitN(route, "?", 2)[0], reason)
+	return r.requestWithBucketID(method, route, strings.SplitN(route, "?", 2)[0], data, reason)
 }
 
-func (r *RateLimiter) requestWithBucketID(method, route string, data interface{}, bucketID string, reason *string) (*http.Response, error) {
+func (r *RateLimiter) requestWithBucketID(method, route, bucketID string, data interface{}, reason *string) (*http.Response, error) {
 	return r.request(method, route, "application/json", data, bucketID, 0, reason)
 }
 
@@ -73,10 +72,10 @@ func (r *RateLimiter) request(method, route, contentType string, b interface{}, 
 		bucketID = strings.SplitN(route, "?", 2)[0]
 	}
 
-	return r.requestWithLockedBucket(method, route, contentType, b, r.lockBucket(bucketID), sequence, reason)
+	return r.lockedRequest(method, route, contentType, b, r.lockBucket(bucketID), sequence, reason)
 }
 
-func (r *RateLimiter) requestWithLockedBucket(method, route, contentType string, b interface{}, bucket *bucket, sequence int, reason *string) (*http.Response, error) {
+func processBody(b interface{}, bucket *bucket) (*bytes.Buffer, error) {
 	var buffer bytes.Buffer
 	if b != nil {
 		encoder := json.NewEncoder(&buffer)
@@ -86,6 +85,15 @@ func (r *RateLimiter) requestWithLockedBucket(method, route, contentType string,
 			_ = bucket.release(nil)
 			return nil, err
 		}
+	}
+
+	return &buffer, nil
+}
+
+func (r *RateLimiter) lockedRequest(method, route, contentType string, b interface{}, bucket *bucket, sequence int, reason *string) (*http.Response, error) {
+	buffer, err := processBody(b, bucket)
+	if err != nil {
+		return nil, err
 	}
 
 	req, err := http.NewRequest(method, route, bytes.NewReader(buffer.Bytes()))
@@ -102,32 +110,13 @@ func (r *RateLimiter) requestWithLockedBucket(method, route, contentType string,
 
 	req.Header.Set(http.CanonicalHeaderKey("User-Agent"), UserAgent)
 
-	ctx, cancel := context.WithDeadline(req.Context(), time.Now().Add(30*time.Second))
-	go func(ctx context.Context) {
-		defer cancel()
-
-		select {
-		case <-ctx.Done():
-			switch ctx.Err() {
-			case context.DeadlineExceeded:
-				logging.Traceln(logging.LogPrefixDiscord, "context timeout exceeded")
-			case context.Canceled:
-				logging.Traceln(logging.LogPrefixDiscord, "context cancelled; process complete")
-			}
-		}
-	}(ctx)
+	ctx, cancel := context.WithDeadline(req.Context(), time.Now().Add(10*time.Second))
+	handleContextCancel(cancel, ctx)
 
 	resp, err := httpClient.Do(req.WithContext(ctx))
 
 	if err != nil {
 		_ = bucket.release(nil)
-		if errors.Is(err, context.Canceled) {
-			logging.Warnln("Context cancelled. Deadline was 12 seconds.")
-			logging.Warnln("\tRequest was : ", method, " : ", route)
-		} else if errors.Is(err, context.DeadlineExceeded) {
-			logging.Warnln("Context deadline exceeded.")
-			logging.Warnln("\tRequest was : ", method, " : ", route)
-		}
 		return nil, err
 	}
 
@@ -137,10 +126,6 @@ func (r *RateLimiter) requestWithLockedBucket(method, route, contentType string,
 	}
 
 	switch resp.StatusCode {
-	case http.StatusOK:
-	case http.StatusCreated:
-	case http.StatusNoContent:
-	case http.StatusBadGateway:
 	case http.StatusTooManyRequests:
 		logging.Warnln("Rate Limited!")
 		logging.Infoln(route)
@@ -154,8 +139,24 @@ func (r *RateLimiter) requestWithLockedBucket(method, route, contentType string,
 
 		time.Sleep(rlr.RetryAfter)
 
-		resp, err = r.requestWithLockedBucket(method, route, contentType, b, r.lockBucketObject(bucket), sequence, reason)
+		resp, err = r.lockedRequest(method, route, contentType, b, r.lockBucketObject(bucket), sequence, reason)
 	}
 
 	return resp, nil
+}
+
+func handleContextCancel(cancel context.CancelFunc, ctx context.Context) {
+	go func(ctx context.Context) {
+		defer cancel()
+
+		select {
+		case <-ctx.Done():
+			switch ctx.Err() {
+			case context.DeadlineExceeded:
+				logging.Traceln("context timeout exceeded")
+			case context.Canceled:
+				logging.Traceln("context cancelled; process complete")
+			}
+		}
+	}(ctx)
 }

@@ -19,10 +19,11 @@ package api
 import (
 	"fmt"
 	"net/http"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/veteran-software/discord-api-wrapper/routes"
-	"github.com/veteran-software/discord-api-wrapper/utilities"
 )
 
 /*
@@ -79,8 +80,22 @@ GetInvite
 
 Returns an Invite object for the given code.
 */
-func (i *Invite) GetInvite(opts *map[string]interface{}) (method, route string) {
-	return http.MethodGet, fmt.Sprintf(routes.Invites_Qsp, api, i.Code, *utilities.ParseQueryString(opts))
+func (i *Invite) GetInvite(withCounts *bool, withExpiration *bool, guildScheduleEventID *Snowflake) (method, route string) {
+	var qsp []string
+	if withCounts != nil {
+		qsp = append(qsp, "with_counts="+strconv.FormatBool(*withCounts))
+	}
+	if withExpiration != nil {
+		qsp = append(qsp, "with_expiration="+strconv.FormatBool(*withExpiration))
+	}
+	if guildScheduleEventID != nil {
+		qsp = append(qsp, "guild_scheduled_event_id="+(*guildScheduleEventID).String())
+	}
+	var q string
+	if len(qsp) > 0 {
+		q = "?" + strings.Join(qsp, "&")
+	}
+	return http.MethodGet, fmt.Sprintf(routes.Invites_Qsp, api, i.Code, q)
 }
 
 /*

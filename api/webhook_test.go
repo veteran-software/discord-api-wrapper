@@ -22,6 +22,7 @@ import (
 )
 
 const (
+	whIDToken                   = "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"
 	whIdTokenMessagesId         = "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/messages/148336120936005632"
 	whIdTokenMessagesIdThreadId = "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/messages/148336120936005632?thread_id=934478965031174194"
 )
@@ -214,6 +215,7 @@ func TestWebhookDeleteWebhookWithToken(t *testing.T) {
 		ID    Snowflake
 		Token string
 	}
+
 	tests := []struct {
 		name   string
 		fields fields
@@ -224,7 +226,7 @@ func TestWebhookDeleteWebhookWithToken(t *testing.T) {
 			name:   "Delete Webhook With Token",
 			fields: fields{ID: Snowflake("905130195520983061"), Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
 			want:   http.MethodDelete,
-			want1:  "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt",
+			want1:  whIDToken,
 		},
 	}
 	for _, tt := range tests {
@@ -360,7 +362,7 @@ func setupExecute(t string) []struct {
 				threadID *Snowflake
 			}{wait: nil, threadID: nil},
 			want:  http.MethodPost,
-			want1: "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt" + which,
+			want1: whIDToken + which,
 		},
 		{
 			name: "Execute " + t + " Webhook : Wait : non-nil; Thread ID : non-nil",
@@ -373,7 +375,7 @@ func setupExecute(t string) []struct {
 				threadID *Snowflake
 			}{wait: &w, threadID: StringToSnowflake("934478965031174194")},
 			want:  http.MethodPost,
-			want1: "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt" + which + "?wait=true&thread_id=934478965031174194",
+			want1: whIDToken + which + "?wait=true&thread_id=934478965031174194",
 		},
 	}
 }
