@@ -28,7 +28,6 @@ import (
 	"time"
 
 	"github.com/veteran-software/discord-api-wrapper/logging"
-	"github.com/veteran-software/discord-api-wrapper/routes"
 )
 
 const (
@@ -372,7 +371,7 @@ const (
 //
 // If the channel is a thread, a thread member object is included in the returned result.
 func (c *Channel) GetChannel() *Channel {
-	resp, err := Rest.Request(http.MethodGet, fmt.Sprintf(routes.Channels_, api, c.ID), nil, nil)
+	resp, err := Rest.Request(http.MethodGet, fmt.Sprintf(getChannel, api, c.ID), nil, nil)
 	if err != nil {
 		logging.Errorln(err)
 		return nil
@@ -437,7 +436,7 @@ func (c *Channel) ModifyChannel(dm *map[string]interface{}, guildChannel *map[st
 		}
 	}
 
-	resp, err := Rest.Request(http.MethodGet, fmt.Sprintf(routes.Channels_, api, c.ID), &payload, reason)
+	resp, err := Rest.Request(http.MethodGet, fmt.Sprintf(modifyChannel, api, c.ID), &payload, reason)
 	if err != nil {
 		logging.Errorln(err)
 		return nil
@@ -530,7 +529,7 @@ For Community guilds, the Rules or Guidelines channel and the Community Updates 
 This endpoint supports the X-Audit-Log-Reason header.
 */
 func (c *Channel) DeleteChannel() (method, route string) {
-	return http.MethodDelete, fmt.Sprintf(routes.Channels_, api, c.ID)
+	return http.MethodDelete, fmt.Sprintf(deleteChannel, api, c.ID)
 }
 
 /*
@@ -565,7 +564,7 @@ func (c *Channel) GetChannelMessages(around *Snowflake, before *Snowflake, after
 		q = "?" + strings.Join(qsp, "&")
 	}
 
-	return http.MethodGet, fmt.Sprintf(routes.Channels_MessagesQsp, api, c.ID.String(), q)
+	return http.MethodGet, fmt.Sprintf(getChannelMessages, api, c.ID.String(), q)
 }
 
 /*
@@ -578,7 +577,7 @@ If operating on a guild channel, this endpoint requires the 'READ_MESSAGE_HISTOR
 Returns a message object on success.
 */
 func (c *Channel) GetChannelMessage(messageID string) (method, route string) {
-	return http.MethodGet, fmt.Sprintf(routes.Channels_Messages_, api, c.ID.String(), messageID)
+	return http.MethodGet, fmt.Sprintf(getChannelMessage, api, c.ID.String(), messageID)
 }
 
 /*
@@ -620,7 +619,7 @@ You can pass a stringified JSON body as a form value as payload_json instead.
 If you supply a payload_json form value, all fields except for file fields will be ignored in the form data.
 */
 func (c *Channel) CreateMessage() (method, route string) {
-	return http.MethodPost, fmt.Sprintf(routes.Channels_Messages, api, c.ID)
+	return http.MethodPost, fmt.Sprintf(createMessage, api, c.ID)
 }
 
 type CreateMessageJSON struct {
@@ -647,7 +646,7 @@ Returns a message object.
 */
 //goland:noinspection SpellCheckingInspection
 func (c *Channel) CrosspostMessage(messageID string) (method, route string) {
-	return http.MethodPost, fmt.Sprintf(routes.Channels_Messages_Crosspost, api, c.ID.String(), messageID)
+	return http.MethodPost, fmt.Sprintf(crosspostMessage, api, c.ID.String(), messageID)
 }
 
 /*
@@ -666,7 +665,7 @@ The emoji must be URL Encoded or the request will fail with 10014: Unknown Emoji
 To use custom emoji, you must encode it in the format name:id with the emoji name and emoji id.
 */
 func (c *Channel) CreateReaction(messageID Snowflake, emoji string) (method, route string) {
-	return http.MethodPut, fmt.Sprintf(routes.Channels_Messages_Reactions_Me, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji))
+	return http.MethodPut, fmt.Sprintf(createReaction, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji))
 }
 
 /*
@@ -681,7 +680,7 @@ The emoji must be URL Encoded or the request will fail with 10014: Unknown Emoji
 To use custom emoji, you must encode it in the format name:id with the emoji name and emoji id.
 */
 func (c *Channel) DeleteOwnReaction(messageID Snowflake, emoji string) (method, route string) {
-	return http.MethodDelete, fmt.Sprintf(routes.Channels_Messages_Reactions_Me, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji))
+	return http.MethodDelete, fmt.Sprintf(deleteOwnReaction, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji))
 }
 
 /*
@@ -696,7 +695,7 @@ Returns a 204 empty response on success. The emoji must be URL Encoded or the re
 To use custom emoji, you must encode it in the format name:id with the emoji name and emoji id.
 */
 func (c *Channel) DeleteUserReaction(messageID Snowflake, emoji string, userID Snowflake) (method, route string) {
-	return http.MethodDelete, fmt.Sprintf(routes.Channels_Messages_Reactions__, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji), userID.String())
+	return http.MethodDelete, fmt.Sprintf(deleteUserReaction, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji), userID.String())
 }
 
 /*
@@ -724,7 +723,7 @@ func (c *Channel) GetReactions(messageID Snowflake, emoji string, after *Snowfla
 	if len(qsp) > 0 {
 		q = "?" + strings.Join(qsp, "&")
 	}
-	return http.MethodGet, fmt.Sprintf(routes.Channels_Messages_Reactions__, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji), q)
+	return http.MethodGet, fmt.Sprintf(getReactions, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji), q)
 }
 
 /*
@@ -737,7 +736,7 @@ This endpoint requires the 'MANAGE_MESSAGES' permission to be present on the cur
 Fires a Message Reaction Remove All Gateway event.
 */
 func (c *Channel) DeleteAllReactions(messageID Snowflake) (method, route string) {
-	return http.MethodDelete, fmt.Sprintf(routes.Channels_Messages_Reactions, api, c.ID.String(), messageID.String())
+	return http.MethodDelete, fmt.Sprintf(deleteAllReactions, api, c.ID.String(), messageID.String())
 }
 
 /*
@@ -754,7 +753,7 @@ The emoji must be URL Encoded or the request will fail with 10014: Unknown Emoji
 To use custom emoji, you must encode it in the format name:id with the emoji name and emoji id.
 */
 func (c *Channel) DeleteAllReactionsForEmoji(messageID Snowflake, emoji string) (method, route string) {
-	return http.MethodDelete, fmt.Sprintf(routes.Channels_Messages_Reactions_, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji))
+	return http.MethodDelete, fmt.Sprintf(deleteAllReactionsForEmoji, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji))
 }
 
 /*
@@ -782,7 +781,7 @@ Returns a message object.
 Fires a Message Update Gateway event.
 */
 func (c *Channel) EditMessage(messageID string) (method, route string) {
-	return http.MethodPatch, fmt.Sprintf(routes.Channels_Messages_, api, c.ID.String(), messageID)
+	return http.MethodPatch, fmt.Sprintf(editMessage, api, c.ID.String(), messageID)
 }
 
 type EditMessageJSON struct {
@@ -809,7 +808,7 @@ Fires a Message Delete Gateway event.
 This endpoint supports the "X-Audit-Log-Reason" header.
 */
 func (c *Channel) DeleteMessage(messageID string) (method, route string) {
-	return http.MethodDelete, fmt.Sprintf(routes.Channels_Messages_, api, c.ID.String(), messageID)
+	return http.MethodDelete, fmt.Sprintf(deleteMessage, api, c.ID.String(), messageID)
 }
 
 /*
@@ -830,7 +829,7 @@ This endpoint will not delete messages older than 2 weeks, and will fail with a 
 This endpoint supports the "X-Audit-Log-Reason" header.
 */
 func (c *Channel) BulkDeleteMessages() (method, route string) {
-	return http.MethodPost, fmt.Sprintf(routes.Channels_MessagesBulkDelete, api, c.ID.String())
+	return http.MethodPost, fmt.Sprintf(bulkDeleteMessages, api, c.ID.String())
 }
 
 type BulkDeleteJSON struct {
@@ -855,7 +854,7 @@ For more information about permissions, see permissions.
 This endpoint supports the "X-Audit-Log-Reason" header.
 */
 func (c *Channel) EditChannelPermissions(overwriteID Snowflake) (method, route string) {
-	return http.MethodPut, fmt.Sprintf(routes.Channels_Permissions_, api, c.ID.String(), overwriteID.String())
+	return http.MethodPut, fmt.Sprintf(editChannelPermissions, api, c.ID.String(), overwriteID.String())
 }
 
 type EditChannelPermissionsJSON struct {
@@ -874,7 +873,7 @@ Only usable for guild channels.
 Requires the MANAGE_CHANNELS permission.
 */
 func (c *Channel) GetChannelInvites() (method, route string) {
-	return http.MethodPut, fmt.Sprintf(routes.Channels_Invites, api, c.ID.String())
+	return http.MethodPut, fmt.Sprintf(getChannelInvites, api, c.ID.String())
 }
 
 /*
@@ -895,7 +894,7 @@ Returns an Invite object. Fires an Invite Create Gateway event.
 This endpoint supports the X-Audit-Log-Reason header.
 */
 func (c *Channel) CreateChannelInvite() (method, route string) {
-	return http.MethodPost, fmt.Sprintf(routes.Channels_Invites, api, c.ID.String())
+	return http.MethodPost, fmt.Sprintf(getChannelInvites, api, c.ID.String())
 }
 
 type CreateChannelJSON struct {
@@ -924,7 +923,7 @@ For more information about permissions, see permissions
 This endpoint supports the "X-Audit-Log-Reason" header.
 */
 func (c *Channel) DeleteChannelPermission(overwriteID Snowflake) (method, route string) {
-	return http.MethodDelete, fmt.Sprintf(routes.Channels_Permissions_, api, c.ID.String(), overwriteID.String())
+	return http.MethodDelete, fmt.Sprintf(deleteChannelPermission, api, c.ID.String(), overwriteID.String())
 }
 
 /*
@@ -937,7 +936,7 @@ Requires the MANAGE_WEBHOOKS permission in the target channel.
 Returns a followed channel object.
 */
 func (c *Channel) FollowNewsChannel() (method, route string) {
-	return http.MethodPost, fmt.Sprintf(routes.Channels_Followers, api, c.ID.String())
+	return http.MethodPost, fmt.Sprintf(followNewsChannel, api, c.ID.String())
 }
 
 type FollowNewsChannelJSON struct {
@@ -958,7 +957,7 @@ Returns a 204 empty response on success.
 Fires a Typing Start Gateway event.
 */
 func (c *Channel) TriggerTypingIndicator() (method, route string) {
-	return http.MethodPost, fmt.Sprintf(routes.Channels_Typing, api, c.ID.String())
+	return http.MethodPost, fmt.Sprintf(triggerTypingIndicator, api, c.ID.String())
 }
 
 /*
@@ -967,7 +966,7 @@ GetPinnedMessages
 Returns all pinned messages in the channel as an array of message objects.
 */
 func (c *Channel) GetPinnedMessages() (method, route string) {
-	return http.MethodPost, fmt.Sprintf(routes.Channels_Pins, api, c.ID.String())
+	return http.MethodPost, fmt.Sprintf(getPinnedMessages, api, c.ID.String())
 }
 
 /*
@@ -984,7 +983,7 @@ Returns a 204 empty response on success.
     This endpoint supports the X-Audit-Log-Reason header.
 */
 func (c *Channel) PinMessage(messageID Snowflake) (method, route string) {
-	return http.MethodPut, fmt.Sprintf(routes.Channels_Pins_, api, c.ID.String(), messageID.String())
+	return http.MethodPut, fmt.Sprintf(pinMessage, api, c.ID.String(), messageID.String())
 }
 
 /*
@@ -999,7 +998,7 @@ Returns a 204 empty response on success.
     This endpoint supports the X-Audit-Log-Reason header.
 */
 func (c *Channel) UnpinMessage(messageID Snowflake) (method, route string) {
-	return http.MethodDelete, fmt.Sprintf(routes.Channels_Pins_, api, c.ID.String(), messageID.String())
+	return http.MethodDelete, fmt.Sprintf(unpinMessage, api, c.ID.String(), messageID.String())
 }
 
 /*
@@ -1010,7 +1009,7 @@ Adds a recipient to a Group DM using their access token.
 REQUIRES: gdm.join SCOPE
 */
 func (c *Channel) GroupDmAddRecipient(userID Snowflake) (method, route string) {
-	return http.MethodPut, fmt.Sprintf(routes.Channels_Recipients_, api, c.ID.String(), userID.String())
+	return http.MethodPut, fmt.Sprintf(groupDmAddRecipient, api, c.ID.String(), userID.String())
 }
 
 type GroupDmAddRecipientJSON struct {
@@ -1024,7 +1023,7 @@ GroupDmRemoveRecipient
 Removes a recipient from a Group DM.
 */
 func (c *Channel) GroupDmRemoveRecipient(userID Snowflake) (method, route string) {
-	return http.MethodDelete, fmt.Sprintf(routes.Channels_Recipients_, api, c.ID.String(), userID.String())
+	return http.MethodDelete, fmt.Sprintf(groupDmRemoveRecipient, api, c.ID.String(), userID.String())
 }
 
 /*
@@ -1045,7 +1044,7 @@ The id of the created thread will be the same as the id of the message, and as s
     This endpoint supports the X-Audit-Log-Reason header.
 */
 func (c *Channel) StartThreadWithMessage(messageID Snowflake) (method, route string) {
-	return http.MethodPost, fmt.Sprintf(routes.Channels_Messages_Threads, api, c.ID.String(), messageID.String())
+	return http.MethodPost, fmt.Sprintf(startThreadWithMessage, api, c.ID.String(), messageID.String())
 }
 
 type StartThreadWithMessageJSON struct {
@@ -1072,7 +1071,7 @@ Fires a Thread Create Gateway event.
 
 */
 func (c *Channel) StartThreadWithoutMessage() (method, route string) {
-	return http.MethodPost, fmt.Sprintf(routes.Channels_Threads, api, c.ID.String())
+	return http.MethodPost, fmt.Sprintf(startThreadWithoutMessage, api, c.ID.String())
 }
 
 type StartThreadWithoutMessageJSON struct {
@@ -1098,7 +1097,7 @@ Returns a 204 empty response on success.
 Fires a Thread Members Update Gateway event.
 */
 func (c *Channel) JoinThread() (method, route string) {
-	return http.MethodPut, fmt.Sprintf(routes.Channels_ThreadMembersMe, api, c.ID.String())
+	return http.MethodPut, fmt.Sprintf(joinThread, api, c.ID.String())
 }
 
 /*
@@ -1115,7 +1114,7 @@ Returns a 204 empty response if the member is successfully added or was already 
 Fires a Thread Members Update Gateway event.
 */
 func (c *Channel) AddThreadMember(userID Snowflake) (method, route string) {
-	return http.MethodPut, fmt.Sprintf(routes.Channels_ThreadMembers_, api, c.ID.String(), userID.String())
+	return http.MethodPut, fmt.Sprintf(addThreadMember, api, c.ID.String(), userID.String())
 }
 
 /*
@@ -1130,7 +1129,7 @@ Returns a 204 empty response on success.
 Fires a Thread Members Update Gateway event.
 */
 func (c *Channel) LeaveThread() (method, route string) {
-	return http.MethodDelete, fmt.Sprintf(routes.Channels_ThreadMembersMe, api, c.ID.String())
+	return http.MethodDelete, fmt.Sprintf(leaveThread, api, c.ID.String())
 }
 
 /*
@@ -1147,7 +1146,7 @@ Returns a 204 empty response on success.
 Fires a Thread Members Update Gateway event.
 */
 func (c *Channel) RemoveThreadMember(userID Snowflake) (method, route string) {
-	return http.MethodDelete, fmt.Sprintf(routes.Channels_ThreadMembers_, api, c.ID.String(), userID.String())
+	return http.MethodDelete, fmt.Sprintf(removeThreadMember, api, c.ID.String(), userID.String())
 }
 
 /*
@@ -1156,7 +1155,7 @@ GetThreadMember
 Returns a thread member object for the specified user if they are a member of the thread, returns a 404 response otherwise.
 */
 func (c *Channel) GetThreadMember(userID Snowflake) (method, route string) {
-	return http.MethodGet, fmt.Sprintf(routes.Channels_ThreadMembers_, api, c.ID.String(), userID.String())
+	return http.MethodGet, fmt.Sprintf(getThreadMember, api, c.ID.String(), userID.String())
 }
 
 /*
@@ -1167,7 +1166,7 @@ Returns array of thread members objects that are members of the thread.
     This endpoint is restricted according to whether the GUILD_MEMBERS Privileged Intent is enabled for your application.
 */
 func (c *Channel) ListThreadMembers() (method, route string) {
-	return http.MethodGet, fmt.Sprintf(routes.Channels_ThreadMembers, api, c.ID.String())
+	return http.MethodGet, fmt.Sprintf(listThreadMembers, api, c.ID.String())
 }
 
 /*
@@ -1195,7 +1194,7 @@ func (c *Channel) ListPublicArchivedThreads(before *time.Time, limit *int) (meth
 	if len(qsp) > 0 {
 		q = "?" + strings.Join(qsp, "&")
 	}
-	return http.MethodGet, fmt.Sprintf(routes.Channels_ThreadsArchivedPublicQsp, api, c.ID.String(), q)
+	return http.MethodGet, fmt.Sprintf(listPublicArchivedThreads, api, c.ID.String(), q)
 }
 
 /*
@@ -1219,7 +1218,7 @@ func (c *Channel) ListPrivateArchivedThreads(before *time.Time, limit *int) (met
 	if len(qsp) > 0 {
 		q = "?" + strings.Join(qsp, "&")
 	}
-	return http.MethodGet, fmt.Sprintf(routes.Channels_ThreadsArchivedPrivateQsp, api, c.ID.String(), q)
+	return http.MethodGet, fmt.Sprintf(listPrivateArchivedThreads, api, c.ID.String(), q)
 }
 
 /*
@@ -1243,7 +1242,7 @@ func (c *Channel) ListJoinedPrivateArchivedThreads(before *Snowflake, limit *int
 	if len(qsp) > 0 {
 		q = "?" + strings.Join(qsp, "&")
 	}
-	return http.MethodGet, fmt.Sprintf(routes.Channels_UsersMeThreadsArchivedPrivateQsp, api, c.ID.String(), q)
+	return http.MethodGet, fmt.Sprintf(listJoinedPrivateArchivedThreads, api, c.ID.String(), q)
 }
 
 type ListArchivedThreadsResponse struct {

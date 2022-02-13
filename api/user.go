@@ -20,8 +20,6 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-
-	"github.com/veteran-software/discord-api-wrapper/routes"
 )
 
 /* USER OBJECT */
@@ -126,7 +124,7 @@ const (
 //
 // For OAuth2, this requires the `identify` scope, which will return the object without an email, and optionally the email scope, which returns the object with an email.
 func GetCurrentUser() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf(routes.UsersMe, api)
+	return http.MethodGet, fmt.Sprintf(getCurrentUser, api)
 }
 
 /* HELPER METHODS */
@@ -134,11 +132,11 @@ func GetCurrentUser() (method string, route string) {
 func (user *User) GetAvatarUrl() string {
 	if user.Avatar != nil {
 		if PtrStr(user.Avatar)[:2] == "a_" {
-			return CdnBase + fmt.Sprintf(routes.Avatars__Gif, user.ID, PtrStr(user.Avatar))
+			return ImageBaseURL + fmt.Sprintf(getAvatarUrlGif, user.ID, PtrStr(user.Avatar))
 		}
 	}
 
-	return CdnBase + fmt.Sprintf(routes.Avatars__Png, user.ID, PtrStr(user.Avatar))
+	return ImageBaseURL + fmt.Sprintf(getAvatarUrlPng, user.ID, PtrStr(user.Avatar))
 }
 
 func (user *User) GetDefaultUserAvatarUrl() string {
@@ -147,5 +145,5 @@ func (user *User) GetDefaultUserAvatarUrl() string {
 		return ""
 	}
 
-	return CdnBase + fmt.Sprintf(routes.EmbedAvatars_Png, strconv.Itoa(discriminator%5))
+	return ImageBaseURL + fmt.Sprintf(getDefaultUserAvatarUrl, strconv.Itoa(discriminator%5))
 }

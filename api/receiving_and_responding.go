@@ -16,277 +16,175 @@
 
 package api
 
-/* INTERACTION OBJECT */
+import (
+	"fmt"
+	"net/http"
+)
 
-/*
-Interaction
-
-https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-interaction-structure
-
-An interaction is the base "thing" that is sent when a user invokes a command, and is the same for Slash Commands and other future interaction types (such as Component).
-
-Interaction.Data is always present on ApplicationCommand interaction types. It is optional for future-proofing against new interaction types
-
-Interaction.Member is sent when the command is invoked in a guild, and Interaction.User is sent when invoked in a DM
-
---------
-
-ID: id of the interaction
-
-ApplicationID: id of the application this interaction is for
-
-Type: the type of interaction
-
-Data: the command data payload
-
-GuildID: the guild it was sent from
-
-ChannelID: the channel it was sent from
-
-Member: guild member data for the invoking user, including permissions
-
-User: user object for the invoking user, if invoked in a DM
-
-Token: a continuation token for responding to the interaction
-
-Version: read-only property, always 1
-
-Message: for components, the message they were attached to
-*/
+// An Interaction is the message that your application receives when a user uses an application command or a message component.
+//
+// For Slash Commands, it includes the values that the user submitted.
+//
+// For User Commands and Message Commands, it includes the resolved user or message on which the action was taken.
+//
+// For Message Components it includes identifying information about the component that was used.
+//
+// It will also include some metadata about how the interaction was triggered: the guild_id, channel_id, member and other fields.
 type Interaction struct {
-	ID            Snowflake       `json:"id"`
-	ApplicationID Snowflake       `json:"application_id"`
-	Type          InteractionType `json:"type"`
-	Data          InteractionData `json:"data,omitempty"`
-	GuildID       Snowflake       `json:"guild_id,omitempty"`
-	ChannelID     Snowflake       `json:"channel_id,omitempty"`
-	Member        GuildMember     `json:"member,omitempty"`
-	User          *User           `json:"user,omitempty"`
-	Token         string          `json:"token"`
-	Version       int             `json:"version"` // read-only property, always `1`
-	Message       *Message        `json:"message,omitempty"`
-	Locale        string          `json:"locale,omitempty"`
-	GuildLocale   string          `json:"guild_locale,omitempty"`
+	ID            Snowflake       `json:"id"`                     // id of the interaction
+	ApplicationID Snowflake       `json:"application_id"`         // id of the application this interaction is for
+	Type          InteractionType `json:"type"`                   // the type of interaction
+	Data          InteractionData `json:"data,omitempty"`         // the command data payload
+	GuildID       Snowflake       `json:"guild_id,omitempty"`     // the guild it was sent from
+	ChannelID     Snowflake       `json:"channel_id,omitempty"`   // the channel it was sent from
+	Member        GuildMember     `json:"member,omitempty"`       // guild member data for the invoking user, including permissions
+	User          *User           `json:"user,omitempty"`         // user object for the invoking user, if invoked in a DM
+	Token         string          `json:"token"`                  // a continuation token for responding to the interaction
+	Version       int             `json:"version"`                // read-only property, always 1
+	Message       *Message        `json:"message,omitempty"`      // for components, the message they were attached to
+	Locale        string          `json:"locale,omitempty"`       // the selected language of the invoking user
+	GuildLocale   string          `json:"guild_locale,omitempty"` // the guild's preferred locale, if invoked in a guild
 }
 
-/*
-InteractionType
-
-https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-interaction-type
-*/
+// InteractionType - The type of Interaction
 type InteractionType int
 
 const (
-	InteractionTypePing InteractionType = iota + 1
-	InteractionTypeApplicationCommand
-	InteractionTypeMessageComponent
-	InteractionTypeApplicationCommandAutocomplete
-	InteractionTypeModalSubmit
+	InteractionTypePing                           InteractionType = iota + 1 // PING
+	InteractionTypeApplicationCommand                                        // APPLICATION_COMMAND
+	InteractionTypeMessageComponent                                          // MESSAGE_COMPONENT
+	InteractionTypeApplicationCommandAutocomplete                            // APPLICATION_COMMAND_AUTOCOMPLETE
+	InteractionTypeModalSubmit                                               // MODAL_SUBMIT
 )
 
-/*
-InteractionData
-
-https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-interaction-data-structure
-
-ID: the ID of the invoked command
-
-Name: the name of the invoked command
-
-Resolved: converted users + roles + channels
-
-Options: the params + values from the user
-
-CustomID: for components, the custom_id of the component
-
-ComponentType: for components, the type of the component
-*/
+// InteractionData - Inner payload structure of an Interaction
 type InteractionData struct {
 	/* Application Command */
-	ID       Snowflake                                  `json:"id,omitempty"`
-	Name     string                                     `json:"name,omitempty"`
-	Type     ApplicationCommandType                     `json:"type,omitempty"`
-	Resolved ResolvedData                               `json:"resolved,omitempty"`
-	Options  []*ApplicationCommandInteractionDataOption `json:"options,omitempty"`
+	ID       Snowflake                                  `json:"id,omitempty"`       // the ID of the invoked command
+	Name     string                                     `json:"name,omitempty"`     // the name of the invoked command
+	Type     ApplicationCommandType                     `json:"type,omitempty"`     // the type of the invoked command
+	Resolved ResolvedData                               `json:"resolved,omitempty"` // converted users + roles + channels
+	Options  []*ApplicationCommandInteractionDataOption `json:"options,omitempty"`  // the params + values from the user
 
 	/* Component, Modal Submit */
-	CustomID string `json:"custom_id,omitempty"`
+	CustomID string `json:"custom_id,omitempty"` // for components, the custom_id of the component
 
 	/* Component */
-	ComponentType ComponentType `json:"component_type,omitempty"`
+	ComponentType ComponentType `json:"component_type,omitempty"` // for components, the type of the component
 
 	/* Component (Select) */
-	Values []string `json:"values,omitempty"`
+	Values []string `json:"values,omitempty"` // the values the user selected
 
 	/* User Command, Message Command */
-	TargetID Snowflake `json:"target_id,omitempty"`
+	TargetID Snowflake `json:"target_id,omitempty"` // id the of user or message targeted by a user or message command
 
 	/* Modal Submit */
-	Components []Component `json:"components,omitempty"`
+	Components []Component `json:"components,omitempty"` // the values submitted by the user
 }
 
-/*
-ResolvedData
-
-https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-resolved-data-structure
-
-Users: the IDs and DiscordUser objects
-
-Members: the IDs and partial GuildMember objects
-
-Roles: the IDs and GuildRole objects
-
-Channels: the IDs and partial GuildChannel objects
-
-Attachments: the ids and attachment objects
-*/
+// ResolvedData - Descriptive data about the Interaction
+//
+// If data for a GuildMember is included, data for its corresponding User will also be included.
 type ResolvedData struct {
-	Users       map[Snowflake]User        `json:"users,omitempty"`
-	Members     map[Snowflake]GuildMember `json:"members,omitempty"`
-	Roles       map[Snowflake]Role        `json:"roles,omitempty"`
-	Channels    map[Snowflake]Channel     `json:"channels,omitempty"`
-	Messages    map[Snowflake]Message     `json:"messages,omitempty"`
-	Attachments map[Snowflake]Attachment  `json:"attachments,omitempty"`
+	Users       map[Snowflake]User        `json:"users,omitempty"`       // the IDs and DiscordUser objects
+	Members     map[Snowflake]GuildMember `json:"members,omitempty"`     // the IDs and partial GuildMember objects
+	Roles       map[Snowflake]Role        `json:"roles,omitempty"`       // the IDs and GuildRole objects
+	Channels    map[Snowflake]Channel     `json:"channels,omitempty"`    // the IDs and partial GuildChannel objects
+	Messages    map[Snowflake]Message     `json:"messages,omitempty"`    // the ids and partial Message objects
+	Attachments map[Snowflake]Attachment  `json:"attachments,omitempty"` // the ids and attachment objects
 }
 
-/* MESSAGE INTERACTION OBJECT */
-
-/*
-MessageInteraction
-
-https://discord.com/developers/docs/interactions/receiving-and-responding#message-interaction-object-message-interaction-structure
-
-This is sent on the message object when the message is a response to an Interaction.
-
---------
-
-ID: id of the interaction
-
-Type: the type of interaction
-
-Name: the name of the ApplicationCommand
-
-User: the user who invoked the interaction
-*/
+// MessageInteraction - This is sent on the message object when the message is a response to an Interaction.
+//
+// This means responses to Message Components do not include this property, instead including a MessageReference object as components always exist on preexisting messages.
 type MessageInteraction struct {
-	ID     Snowflake       `json:"id"`
-	Type   InteractionType `json:"type"`
-	Name   string          `json:"name"`
-	User   User            `json:"user"`
-	Member GuildMember     `json:"member,omitempty"`
+	ID     Snowflake       `json:"id"`               // id of the Interaction
+	Type   InteractionType `json:"type"`             // the type of Interaction
+	Name   string          `json:"name"`             // the name of the ApplicationCommand
+	User   User            `json:"user"`             // the user who invoked the interaction
+	Member GuildMember     `json:"member,omitempty"` // the Member who invoked the interaction in the Guild
 }
 
-/* INTERACTION RESPONSE OBJECT */
-
-/*
-InteractionResponseMessages
-
-https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-response-object-interaction-response-structure
-
-After receiving an interaction, you must respond to acknowledge it. You can choose to respond with a message immediately using type 4, or you can choose to send a deferred response with type 5. If choosing a deferred response, the user will see a loading state for the interaction, and you'll have up to 15 minutes to edit the original deferred response using Edit Original Interaction Response.
-
-Interaction responses can also be public—everyone can see it—or "ephemeral"—only the invoking user can see it. That is determined by setting flags to 64 on the InteractionCallbackDataMessages.
-
---------
-
-Type: the type of response
-
-Data: an optional response message
-*/
+// InteractionResponseMessages - After receiving an interaction, you must respond to acknowledge it.
+//
+// You can choose to respond with a message immediately using type 4, or you can choose to send a deferred response with type 5.
+//
+// If choosing a deferred response, the user will see a loading state for the interaction, and you'll have up to 15 minutes to edit the original deferred response using Edit Original Interaction Response.
+//
+// Interaction responses can also be public—everyone can see it—or "ephemeral"—only the invoking user can see it.
+//
+// That is determined by setting flags to 64 on the InteractionCallbackDataMessages.
 type InteractionResponseMessages struct {
-	Type InteractionCallbackType          `json:"type"`
-	Data *InteractionCallbackDataMessages `json:"data,omitempty"`
+	Type InteractionCallbackType          `json:"type"`           // the type of response
+	Data *InteractionCallbackDataMessages `json:"data,omitempty"` // an optional response message
 }
 
-/*
-InteractionResponseAutocomplete
-
-https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-response-object-interaction-response-structure
-
-After receiving an interaction, you must respond to acknowledge it. You can choose to respond with a message immediately using type 4, or you can choose to send a deferred response with type 5. If choosing a deferred response, the user will see a loading state for the interaction, and you'll have up to 15 minutes to edit the original deferred response using Edit Original Interaction Response.
-
-Interaction responses can also be public—everyone can see it—or "ephemeral"—only the invoking user can see it. That is determined by setting flags to 64 on the InteractionCallbackDataMessages.
-
---------
-
-Type: the type of response
-
-Data: options for the autocomplete result
-*/
+// InteractionResponseAutocomplete - After receiving an interaction, you must respond to acknowledge it.
+//
+// You can choose to respond with a message immediately using type 4, or you can choose to send a deferred response with type 5.
+//
+// If choosing a deferred response, the user will see a loading state for the interaction, and you'll have up to 15 minutes to edit the original deferred response using Edit Original Interaction Response.
+//
+// Interaction responses can also be public—everyone can see it—or "ephemeral"—only the invoking user can see it.
+//
+// That is determined by setting flags to 64 on the InteractionCallbackDataMessages.
 type InteractionResponseAutocomplete struct {
-	Type InteractionCallbackType              `json:"type"`
-	Data *InteractionCallbackDataAutocomplete `json:"data,omitempty"`
+	Type InteractionCallbackType              `json:"type"`           // the type of response
+	Data *InteractionCallbackDataAutocomplete `json:"data,omitempty"` // options for the autocomplete result
 }
 
+// InteractionResponseModal - After receiving an interaction, you must respond to acknowledge it.
+//
+// You can choose to respond with a message immediately using type 4, or you can choose to send a deferred response with type 5.
+//
+// If choosing a deferred response, the user will see a loading state for the interaction, and you'll have up to 15 minutes to edit the original deferred response using Edit Original Interaction Response.
+//
+// Interaction responses can also be public—everyone can see it—or "ephemeral"—only the invoking user can see it.
+//
+// That is determined by setting flags to 64 on the InteractionCallbackDataMessages.
 type InteractionResponseModal struct {
-	CallbackType InteractionCallbackType       `json:"type"`
-	Data         *InteractionCallbackDataModal `json:"data,omitempty"`
+	CallbackType InteractionCallbackType       `json:"type"`           // the type of response
+	Data         *InteractionCallbackDataModal `json:"data,omitempty"` // the information submitted through the modal
 }
 
-/*
-InteractionCallbackType
-
-https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-response-object-interaction-callback-type
-
-Pong: ACK a Ping
-
-ChannelMessageWithSource: respond to an interaction with a message
-
-DeferredChannelMessageWithSource: ACK an interaction and edit a response later, the user sees a loading state
-
-DeferredUpdateMessage: for components, ACK an interaction and edit the original message later; the user does not see a loading state; edit the message using EditOriginalInteractionResponse
-
-UpdateMessage: for components, edit the message the component was attached to
-*/
+// InteractionCallbackType - The type of callback to an interaction with respond
 type InteractionCallbackType int
 
 const (
-	Pong InteractionCallbackType = iota + 1
-	_
-	_
-	ChannelMessageWithSource
-	DeferredChannelMessageWithSource
-	DeferredUpdateMessage
-	UpdateMessage
-	AutocompleteResult
-	Modal // ** Not available for MODAL_SUBMIT and PING interactions.
+	Pong                             InteractionCallbackType = iota + 1 // ACK a Ping
+	ChannelMessageWithSource         InteractionCallbackType = iota + 3 // respond to an interaction with a message
+	DeferredChannelMessageWithSource                                    // ACK an interaction and edit a response later, the user sees a loading state
+	DeferredUpdateMessage                                               // for components, ACK an interaction and edit the original message later; the user does not see a loading state; edit the message using EditOriginalInteractionResponse
+	UpdateMessage                                                       // for components, edit the message the component was attached to
+	AutocompleteResult                                                  // respond to an autocomplete interaction with suggested choices
+	Modal                                                               // respond to an interaction with a popup modal ** Not available for MODAL_SUBMIT and PING interactions.
 )
 
-/*
-InteractionCallbackDataMessages
-
-https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-response-object-interaction-callback-data-structure
-
-BUG(KeithRusso): Not all message fields are currently supported.
-
---------
-
-TTS: is the response TTS
-
-Content: message content
-
-Embeds: supports up to 10 embeds
-
-AllowedMentions: AllowedMentionType object
-
-Flags: set to 64 to make your response Ephemeral
-
-Components: message components
-*/
+// InteractionCallbackDataMessages
+//
+// Not all message fields are currently supported by Discord
+//
+// Data payload for InteractionResponseMessages
 type InteractionCallbackDataMessages struct {
-	TTS             bool             `json:"tts"`
-	Content         string           `json:"content"`
-	Embeds          []Embed          `json:"embeds,omitempty"`
-	AllowedMentions *AllowedMentions `json:"allowed_mentions"`
-	Flags           MessageFlags     `json:"flags,omitempty"`
-	Components      []Component      `json:"components,omitempty"`
-	Attachments     []Attachment     `json:"attachments,omitempty"`
+	TTS             bool             `json:"tts"`                   // is the response TTS
+	Content         string           `json:"content"`               // message content
+	Embeds          []Embed          `json:"embeds,omitempty"`      // supports up to 10 embeds
+	AllowedMentions *AllowedMentions `json:"allowed_mentions"`      // AllowedMentionType object
+	Flags           MessageFlags     `json:"flags,omitempty"`       // set to 64 to make your response Ephemeral
+	Components      []Component      `json:"components,omitempty"`  // message components
+	Attachments     []Attachment     `json:"attachments,omitempty"` // attachment objects with filename and description
 }
 
+// InteractionCallbackDataAutocomplete
+//
+// Data payload for InteractionResponseAutocomplete
 type InteractionCallbackDataAutocomplete struct {
-	Choices []*ApplicationCommandOptionChoice `json:"choices"`
+	Choices []*ApplicationCommandOptionChoice `json:"choices"` // autocomplete choices (max of 25 choices)
 }
 
+// InteractionCallbackDataModal
+//
+// Data payload for InteractionResponseModal
 type InteractionCallbackDataModal struct {
 	CustomID   string      `json:"custom_id"`  // a developer-defined identifier for the component, max 100 characters
 	Title      string      `json:"title"`      // the title of the popup modal
@@ -312,4 +210,36 @@ func (i *Interaction) BuildResponse(embeds []*Embed) *InteractionResponseMessage
 	}
 
 	return ir
+}
+
+// CreateInteractionResponse Create a response to an Interaction from the gateway.
+func (i *Interaction) CreateInteractionResponse() (method string, route string) {
+	return http.MethodPost, fmt.Sprintf(createInteractionResponse, api, i.ID.String(), i.Token)
+}
+
+// GetOriginalInteractionResponse Returns the initial Interaction response.
+func (i *Interaction) GetOriginalInteractionResponse() (method string, route string) {
+	return http.MethodGet, fmt.Sprintf(getOriginalInteractionResponse, api, i.ApplicationID, i.Token)
+}
+
+// EditOriginalInteractionResponse Edits the initial Interaction response.
+func (i *Interaction) EditOriginalInteractionResponse() (method string, route string) {
+	return http.MethodPatch, fmt.Sprintf(editOriginalInteractionResponse, api, i.ApplicationID, i.Token)
+}
+
+// DeleteOriginalInteractionResponse Deletes the initial Interaction response. Returns 204 on success.
+func (i *Interaction) DeleteOriginalInteractionResponse() (method string, route string) {
+	return http.MethodDelete, fmt.Sprintf(deleteOriginalInteractionResponse, api, i.ApplicationID, i.Token)
+}
+
+func (i *Interaction) CreateFollowupMessage() (method string, route string) {
+	return http.MethodPost, fmt.Sprintf(createFollowupMessage, api, i.ApplicationID, i.Token)
+}
+
+func (i *Interaction) EditFollowupMessage() (method string, route string) {
+	return http.MethodPatch, fmt.Sprintf(editFollowupMessage, api, i.ApplicationID, i.Token, i.Message.ID)
+}
+
+func (i *Interaction) DeleteFollowupMessage() (method string, route string) {
+	return http.MethodDelete, fmt.Sprintf(deleteFollowupMessage, api, i.ApplicationID, i.Token, i.Message.ID)
 }

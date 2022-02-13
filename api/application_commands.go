@@ -19,39 +19,13 @@ package api
 import (
 	"fmt"
 	"net/http"
-
-	"github.com/veteran-software/discord-api-wrapper/routes"
 )
 
-/* APPLICATION COMMAND OBJECT */
-
-/*
-ApplicationCommand
-
-https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-structure
-
-A command, or each individual subcommand, can have a maximum of 25 options
-
-An application command is the base "command" model that belongs to an application. This is what you are creating when you POST a new command.
-
-Required options must be listed before optional options
-
---------
-
-ID: unique id of the command
-
-ApplicationID: unique id of the parent application
-
-GuildID: guild id of the command, if not global
-
-Name:  1-32 lowercase character name matching ^[\w-]{1,32}$
-
-Description: 1-100 character description
-
-Options: the parameters for the command
-
-DefaultPermissions: whether the command is enabled by default when the app is added to a guild
-*/
+// ApplicationCommand - A command, or each individual subcommand, can have a maximum of 25 options
+//
+// An application command is the base "command" model that belongs to an application. This is what you are creating when you POST a new command.
+//
+// Required options must be listed before optional options
 type ApplicationCommand struct {
 	ID                 Snowflake                  `json:"id,omitempty"`                  // unique id of the command
 	Type               ApplicationCommandType     `json:"type,omitempty"`                // the type of command, defaults 1 if not set
@@ -64,26 +38,17 @@ type ApplicationCommand struct {
 	Version            Snowflake                  `json:"version"`                       // autoincrementing version identifier updated during substantial record changes
 }
 
-/*
-ApplicationCommandType
-
-https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-types
-*/
+// ApplicationCommandType - The type of application command
 type ApplicationCommandType int
 
+//goland:noinspection GoUnusedConst
 const (
 	CommandTypeChatInput ApplicationCommandType = iota + 1
 	CommandTypeUser
 	CommandTypeMessage
 )
 
-/*
-ApplicationCommandOption
-
-https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-option-structure
-
-You can specify a maximum of 25 choices per option
-*/
+// ApplicationCommandOption - You can specify a maximum of 25 choices per option
 type ApplicationCommandOption struct {
 	Type         ApplicationCommandOptionType     `json:"type"`                    // the type of option
 	Name         string                           `json:"name"`                    // 1-32 character name
@@ -97,15 +62,12 @@ type ApplicationCommandOption struct {
 	Autocomplete bool                             `json:"autocomplete,omitempty"`  // enable autocomplete interactions for this option
 }
 
-/*
-ApplicationCommandOptionType
-
-https:discord.com/developers/docs/interactions/application-command#application-command-object-application-command-option-type
-*/
+// ApplicationCommandOptionType - The option type of the command
 type ApplicationCommandOptionType int
 
+//goland:noinspection GoUnusedConst
 const (
-	OptionTypeSubCommand = iota + 1
+	OptionTypeSubCommand ApplicationCommandOptionType = iota + 1
 	OptionTypeSubCommandGroup
 	OptionTypeString
 	OptionTypeInteger // Any integer between -2^53 and 2^53
@@ -117,37 +79,15 @@ const (
 	OptionTypeNumber      // Any double between -2^53 and 2^53
 )
 
-/*
-ApplicationCommandOptionChoice
-
-https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-option-choice-structure
-
-If you specify choices for an option, they are the only valid values for a user to pick
-*/
+// ApplicationCommandOptionChoice - If you specify choices for an option, they are the only valid values for a user to pick
 type ApplicationCommandOptionChoice struct {
 	Name  string      `json:"name"`         // 1-100 character choice name
 	Value interface{} `json:"value,string"` // value of the choice, up to 100 characters if string
 }
 
-/*
-ApplicationCommandInteractionDataOption
-
-https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-interaction-data-option-structure
-
-All options have names, and an option can either be a parameter and input value--in which case value will be set--or it can denote a subcommand or group--in which case it will contain a top-level key and another array of options.
-
-value and options are mutually exclusive.
-
---------
-
-Name: the name of the parameter
-
-Type: value of ApplicationCommandOptionType
-
-Value: the value of the pair
-
-Options: present if this option is a group or subcommand
-*/
+// ApplicationCommandInteractionDataOption - All options have names, and an option can either be a parameter and input value--in which case value will be set--or it can denote a subcommand or group--in which case it will contain a top-level key and another array of options.
+//
+// value and options are mutually exclusive.
 type ApplicationCommandInteractionDataOption struct {
 	Name    string                                     `json:"name"`              // the name of the parameter
 	Type    ApplicationCommandOptionType               `json:"type"`              // value of application command option type
@@ -156,15 +96,7 @@ type ApplicationCommandInteractionDataOption struct {
 	Focused bool                                       `json:"focused,omitempty"` // true if this option is the currently focused option for autocomplete
 }
 
-/* APPLICATION COMMAND PERMISSIONS OBJECT */
-
-/*
-GuildApplicationCommandPermissions
-
-https://discord.com/developers/docs/interactions/application-commands#application-command-permissions-object-guild-application-command-permissions-structure
-
-Returned when fetching the permissions for a command in a guild.
-*/
+// GuildApplicationCommandPermissions - Returned when fetching the permissions for a command in a guild.
 type GuildApplicationCommandPermissions struct {
 	ID            Snowflake                       `json:"id"`
 	ApplicationID Snowflake                       `json:"application_id"`
@@ -172,54 +104,36 @@ type GuildApplicationCommandPermissions struct {
 	Permissions   []ApplicationCommandPermissions `json:"permissions"`
 }
 
-/*
-ApplicationCommandPermissions
-
-https://discord.com/developers/docs/interactions/application-commands#application-command-permissions-object-application-command-permissions-structure
-
-Application command permissions allow you to enable or disable command for specific users or roles within a guild.
-
-ID: the id of the role or user
-
-Type: role or user
-
-Permission: true to allow, false, to disallow
-*/
+// ApplicationCommandPermissions - Application command permissions allow you to enable or disable command for specific users or roles within a guild.
 type ApplicationCommandPermissions struct {
-	ID         Snowflake                        `json:"id"`
-	Type       ApplicationCommandPermissionType `json:"type"`
-	Permission bool                             `json:"permission"`
+	ID         Snowflake                        `json:"id"`         // ID: the id of the role or user
+	Type       ApplicationCommandPermissionType `json:"type"`       // Type: role or user
+	Permission bool                             `json:"permission"` // Permission: true to allow, false, to disallow
 }
 
-/*
-ApplicationCommandPermissionType
-
-https://discord.com/developers/docs/interactions/application-commands#application-command-permissions-object-application-command-permission-type
-*/
+// ApplicationCommandPermissionType - The permission type for the command
 type ApplicationCommandPermissionType int
 
+//goland:noinspection GoUnusedConst
 const (
-	_ ApplicationCommandPermissionType = iota
-	PermissionTypeRole
+	PermissionTypeRole ApplicationCommandPermissionType = iota + 1
 	PermissionTypeUser
 )
 
-/* INTERACTION OBJECT */
-
-/* ENDPOINTS */
-
-/**
-Interaction endpoints
-*/
-
-// GLOBAL COMMANDS
-
+// GetGlobalApplicationCommands - Fetch all the global commands for your application.
+//
+// Returns an array of application command objects.
 func GetGlobalApplicationCommands(applicationID string) (method string, route string) {
-	return http.MethodGet, fmt.Sprintf(routes.Applications_Commands, api, applicationID)
+	return http.MethodGet, fmt.Sprintf(getGlobalApplicationCommands, api, applicationID)
 }
 
+// CreateGlobalApplicationCommand - Create a new global command.
+//
+// New global commands will be available in all guilds after 1 hour. Returns 201 and an application command object.
+//
+//    Creating a command with the same name as an existing command for your application will overwrite the old command.
 func CreateGlobalApplicationCommand(applicationID string) (method string, route string) {
-	return http.MethodPost, fmt.Sprintf(routes.Applications_Commands, api, applicationID)
+	return http.MethodPost, fmt.Sprintf(createGlobalApplicationCommand, api, applicationID)
 }
 
 type CreateApplicationCommandJSON struct {
@@ -229,112 +143,140 @@ type CreateApplicationCommandJSON struct {
 	DefaultPermission bool                        `json:"default_permission,omitempty"` // default true
 }
 
-// GetGlobalApplicationCommand
-// Fetch a global command for your application. Returns an application command object.
+// GetGlobalApplicationCommand - Fetch a global command for your application.
+//
+// Returns an application command object.
 func (i *Interaction) GetGlobalApplicationCommand() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf(routes.Applications_Commands_, api, i.ApplicationID, i.Data.ID)
+	return http.MethodGet, fmt.Sprintf(getGlobalApplicationCommand, api, i.ApplicationID, i.Data.ID)
 }
 
+// EditGlobalApplicationCommand - Edit a global command. Updates will be available in all guilds after 1 hour.
+//
+// Returns 200 and an application command object.
+//
+//    All JSON parameters for this endpoint are optional.
 func (i *Interaction) EditGlobalApplicationCommand() (method string, route string) {
-	return http.MethodPatch, fmt.Sprintf(routes.Applications_Commands_, api, i.ApplicationID, i.Data.ID)
+	return http.MethodPatch, fmt.Sprintf(editGlobalApplicationCommand, api, i.ApplicationID, i.Data.ID)
 }
 
 type EditApplicationCommandJSON struct {
 	CreateApplicationCommandJSON
 }
 
-func (i *Interaction) BulkOverwriteGlobalApplicationCommands() (method string, route string) {
-	return http.MethodPut, fmt.Sprintf(routes.Applications_Commands, api, i.ApplicationID)
-}
-
+// DeleteGlobalApplicationCommand - Deletes a global command. Returns 204 No Content on success.
 func DeleteGlobalApplicationCommand(applicationID string, commandID string) (method string, route string) {
-	return http.MethodDelete, fmt.Sprintf(routes.Applications_Commands_, api, applicationID, commandID)
+	return http.MethodDelete, fmt.Sprintf(deleteGlobalApplicationCommand, api, applicationID, commandID)
 }
 
-// GUILD COMMANDS
+// BulkOverwriteGlobalApplicationCommands - Takes a list of application commands, overwriting the existing global command list for this application.
+//
+// Updates will be available in all guilds after 1 hour.
+//
+// Returns 200 and a list of application command objects.
+//
+// Commands that do not already exist will count toward daily application command create limits.
+func (i *Interaction) BulkOverwriteGlobalApplicationCommands() (method string, route string) {
+	return http.MethodPut, fmt.Sprintf(bulkOverwriteGlobalApplicationCommands, api, i.ApplicationID)
+}
 
+// GetGuildApplicationCommands - Fetch all the guild commands for your application for a specific guild.
+//
+// Returns an array of application command objects.
 func (i *Interaction) GetGuildApplicationCommands() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf(routes.Applications_Guilds_Commands, api, i.ApplicationID, i.GuildID)
+	return http.MethodGet, fmt.Sprintf(getGuildApplicationCommands, api, i.ApplicationID, i.GuildID)
 }
 
+// GetGuildApplicationCommands - Fetch all the guild commands for your application for a specific guild.
+//
+// Returns an array of application command objects.
 func GetGuildApplicationCommands(applicationID string, guildID string) (method string, route string) {
-	return http.MethodGet, fmt.Sprintf(routes.Applications_Guilds_Commands, api, applicationID, guildID)
+	return http.MethodGet, fmt.Sprintf(getGuildApplicationCommands, api, applicationID, guildID)
 }
 
+// CreateGuildApplicationCommand - Create a new guild command.
+//
+// New guild commands will be available in the guild immediately.
+//
+// Returns 201 and an application command object.
+//
+// If the command did not already exist, it will count toward daily application command create limits.
 func CreateGuildApplicationCommand(applicationID string, guildID string) (method string, route string) {
-	return http.MethodPost, fmt.Sprintf(routes.Applications_Guilds_Commands, api, applicationID, guildID)
+	return http.MethodPost, fmt.Sprintf(createGuildApplicationCommand, api, applicationID, guildID)
 }
 
 type CreateGuildApplicationCommandJSON struct {
 	CreateApplicationCommandJSON
 }
 
+// GetGuildApplicationCommand - Fetch a guild command for your application. Returns an application command object.
 func (i *Interaction) GetGuildApplicationCommand() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf(routes.Applications_Guilds_Commands_, api, i.ApplicationID, i.GuildID, i.Data.ID)
+	return http.MethodGet, fmt.Sprintf(getGuildApplicationCommand, api, i.ApplicationID, i.GuildID, i.Data.ID)
 }
 
+// EditGuildApplicationCommand - Edit a guild command. Updates for guild commands will be available immediately.
+//
+// Returns 200 and an application command object.
+//
+//    All parameters for this endpoint are optional.
 func (i *Interaction) EditGuildApplicationCommand() (method string, route string) {
-	return http.MethodPatch, fmt.Sprintf(routes.Applications_Guilds_Commands_, api, i.ApplicationID, i.GuildID, i.Data.ID)
+	return http.MethodPatch, fmt.Sprintf(editGuildApplicationCommand, api, i.ApplicationID, i.GuildID, i.Data.ID)
 }
 
 type EditGuildApplicationCommandJSON struct {
 	CreateApplicationCommandJSON
 }
 
+// DeleteGuildApplicationCommand - Delete a guild command. Returns 204 No Content on success.
 func DeleteGuildApplicationCommand(applicationID string, guildID string, commandID string) (method string, route string) {
-	return http.MethodDelete, fmt.Sprintf(routes.Applications_Guilds_Commands_, api, applicationID, guildID, commandID)
+	return http.MethodDelete, fmt.Sprintf(deleteGuildApplicationCommand, api, applicationID, guildID, commandID)
 }
 
+// BulkOverwriteGuildApplicationCommands - Takes a list of application commands, overwriting the existing command list for this application for the targeted guild.
+//
+// Returns 200 and a list of application command objects.
 func (i *Interaction) BulkOverwriteGuildApplicationCommands() (method string, route string) {
-	return http.MethodPut, fmt.Sprintf(routes.Applications_Guilds_Commands, api, i.ApplicationID, i.GuildID.String())
+	return http.MethodPut, fmt.Sprintf(bulkOverwriteGuildApplicationCommands, api, i.ApplicationID, i.GuildID.String())
 }
 
-// INTERACTION ENDPOINTS
-
-// CreateInteractionResponse Create a response to an Interaction from the gateway.
-func (i *Interaction) CreateInteractionResponse() (method string, route string) {
-	return http.MethodPost, fmt.Sprintf(routes.Interaction__Callback, api, i.ID.String(), i.Token)
-}
-
-// GetOriginalInteractionResponse Returns the initial Interaction response.
-func (i *Interaction) GetOriginalInteractionResponse() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf(routes.Webhooks__MessagesOriginal, api, i.ApplicationID, i.Token)
-}
-
-// EditOriginalInteractionResponse Edits the initial Interaction response.
-func (i *Interaction) EditOriginalInteractionResponse() (method string, route string) {
-	return http.MethodPatch, fmt.Sprintf(routes.Webhooks__MessagesOriginal, api, i.ApplicationID, i.Token)
-}
-
-// DeleteOriginalInteractionResponse Deletes the initial Interaction response. Returns 204 on success.
-func (i *Interaction) DeleteOriginalInteractionResponse() (method string, route string) {
-	return http.MethodDelete, fmt.Sprintf(routes.Webhooks__MessagesOriginal, api, i.ApplicationID, i.Token)
-}
-
-func (i *Interaction) CreateFollowupMessage() (method string, route string) {
-	return http.MethodPost, fmt.Sprintf(routes.Webhooks__, api, i.ApplicationID, i.Token)
-}
-
-func (i *Interaction) EditFollowupMessage() (method string, route string) {
-	return http.MethodPatch, fmt.Sprintf(routes.Webhooks__Messages_, api, i.ApplicationID, i.Token, i.Message.ID)
-}
-
-func (i *Interaction) DeleteFollowupMessage() (method string, route string) {
-	return http.MethodDelete, fmt.Sprintf(routes.Webhooks__Messages_, api, i.ApplicationID, i.Token, i.Message.ID)
-}
-
+// GetGuildApplicationCommandPermissions - Fetches command permissions for all commands for your application in a guild.
+//
+// Returns an array of guild application command permissions objects.
 func (i *Interaction) GetGuildApplicationCommandPermissions() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf(routes.Applications_Guilds_CommandPermissions, api, i.ApplicationID, i.GuildID)
+	return http.MethodGet, fmt.Sprintf(getGuildApplicationCommandPermissions, api, i.ApplicationID, i.GuildID)
 }
 
+// GetApplicationCommandPermissions - Fetches command permissions for a specific command for your application in a guild.
+//
+// Returns a guild application command permissions object.
 func (i *Interaction) GetApplicationCommandPermissions() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf(routes.Applications_Guilds_Command_Permissions, api, i.ApplicationID, i.GuildID, i.Data.ID)
+	return http.MethodGet, fmt.Sprintf(getApplicationCommandPermissions, api, i.ApplicationID, i.GuildID, i.Data.ID)
 }
 
+// EditApplicationCommandPermissions - Edits command permissions for a specific command for your application in a guild.
+//
+// You can only add up to 10 permission overwrites for a command.
+//
+// Returns a GuildApplicationCommandPermissions object.
+//
+//   This endpoint will overwrite existing permissions for the command in that guild
+//   Deleting or renaming a command will permanently delete all permissions for that command
 func (i *Interaction) EditApplicationCommandPermissions() (method string, route string) {
-	return http.MethodPut, fmt.Sprintf(routes.Applications_Guilds_Command_Permissions, api, i.ApplicationID, i.GuildID, i.Data.ID)
+	return http.MethodPut, fmt.Sprintf(editApplicationCommandPermissions, api, i.ApplicationID, i.GuildID, i.Data.ID)
 }
 
+type EditApplicationCommandPermissionsJSON struct {
+	Permissions []ApplicationCommandPermissions `json:"permissions"` // the permissions for the command in the guild
+}
+
+// BatchEditApplicationCommandPermissions - Batch edits permissions for all commands in a guild.
+//
+// Takes an array of partial guild application command permissions objects including id and permissions.
+//
+// You can only add up to 10 permission overwrites for a command.
+//
+// Returns an array of GuildApplicationCommandPermissions objects.
+//
+//   This endpoint will overwrite all existing permissions for all commands in a guild, including slash commands, user commands, and message commands.
 func (i *Interaction) BatchEditApplicationCommandPermissions() (method string, route string) {
-	return http.MethodPut, fmt.Sprintf(routes.Applications_Guilds_CommandPermissions, api, i.ApplicationID, i.GuildID)
+	return http.MethodPut, fmt.Sprintf(batchEditApplicationCommandPermissions, api, i.ApplicationID, i.GuildID)
 }

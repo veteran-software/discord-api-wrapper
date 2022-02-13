@@ -22,8 +22,6 @@ import (
 	"time"
 )
 
-/* API Versioning */
-
 var (
 	apiBase            = "https://discord.com/api"
 	apiVersion         = fmt.Sprintf("/v%d", gatewayVersion)
@@ -31,8 +29,16 @@ var (
 	discordEpoch int64 = 1420070400000
 )
 
+// Snowflake - Discord utilizes Twitter's snowflake format for uniquely identifiable descriptors (IDs).
+//
+// These IDs are guaranteed to be unique across all of Discord, except in some unique scenarios in which child objects share their parent's ID.
+//
+// Because Snowflake IDs are up to 64 bits in size (e.g. a uint64), they are always returned as strings in the HTTP API to prevent integer overflows in some languages.
+//
+// See Gateway ETF/JSON for more information regarding Gateway encoding.
 type Snowflake string
 
+// FormattedSnowflake - A breakdown of the data contained in a Snowflake
 type FormattedSnowflake struct {
 	Timestamp         int64
 	InternalWorkerID  int64
@@ -40,14 +46,12 @@ type FormattedSnowflake struct {
 	Increment         int64
 }
 
-func (s Snowflake) GetSnowflake() Snowflake {
-	return s
-}
-
+// String - Type converts a Snowflake into a string
 func (s Snowflake) String() string {
 	return string(s)
 }
 
+// ToBinary - Type converts a Snowflake into its binary representation
 func (s Snowflake) ToBinary() string {
 	var b []byte
 
@@ -58,11 +62,13 @@ func (s Snowflake) ToBinary() string {
 	return string(b)
 }
 
+// StringToSnowflake - Type converts a string into a Snowflake
 func StringToSnowflake(s string) *Snowflake {
 	q := Snowflake(s)
 	return &q
 }
 
+// ParseSnowflake - Breaks down a Snowflake and assigns each value to the FormattedSnowflake struct
 func (s Snowflake) ParseSnowflake() FormattedSnowflake {
 	bin := s.ToBinary()
 	tStamp, _ := strconv.ParseInt(bin[0:42], 2, 64)
@@ -77,47 +83,46 @@ func (s Snowflake) ParseSnowflake() FormattedSnowflake {
 	}
 }
 
+// Timestamp - Extracts only the timestamp from a Snowflake
+//
+// Useful for determining when the object belonging to the Snowflake was created
 func (s Snowflake) Timestamp() time.Time {
 	return time.Unix(0, s.ParseSnowflake().Timestamp)
 }
 
-/* User Agent */
-
 const (
-	UserAgent = "NowLiveCustomLib (https://nowlivebot.com, 1.0)"
+	UserAgent = "NowLiveCustomLib (https://nowlivebot.com, 1.0)" // UserAgent - header value to be sent with each API request
 )
 
-/* Message Formatting */
-
+// Format - Discord utilizes a subset of markdown for rendering message content on its clients, while also adding some custom functionality to enable things like mentioning users and channels.
 type Format string
 
 const (
-	userFormat                Format = "<@%s>"
-	userNicknameFormat               = "<@!%s>"
-	ChannelFormat                    = "<#%s>"
-	roleFormat                       = "<@&%s>"
-	customEmojiFormat                = "<:%s:%s>"
-	customEmojiAnimatedFormat        = "<a:%s:%s>"
-	unitTimestampFormat              = "<t:%s>"
-	unixTimestampStyledFormat        = "<t:%s:%s>"
+	userFormat                Format = "<@%s>"     // userFormat - <@USER_ID>
+	userNicknameFormat        Format = "<@!%s>"    // userNicknameFormat - <@!USER_ID>
+	ChannelFormat             Format = "<#%s>"     // ChannelFormat - <#CHANNEL_ID>
+	roleFormat                Format = "<@&%s>"    // roleFormat - <@&ROLE_ID>
+	customEmojiFormat         Format = "<:%s:%s>"  // customEmojiFormat - <:NAME:ID>
+	customEmojiAnimatedFormat Format = "<a:%s:%s>" // customEmojiAnimatedFormat - <a:NAME:ID>
+	unixTimestampFormat       Format = "<t:%s>"    // unixTimestampFormat - <t:TIMESTAMP>
+	unixTimestampStyledFormat Format = "<t:%s:%s>" // unixTimestampStyledFormat - <t:TIMESTAMP:STYLE>
 )
 
+// TimestampStyle - Timestamps will display the given timestamp in the user's timezone and locale.
 type TimestampStyle string
 
 const (
-	ShortTime     TimestampStyle = "t"
-	LongTime                     = "T"
-	ShortDate                    = "d"
-	LongDate                     = "D"
-	ShortDateTime                = "f" // default
-	LongDateTime                 = "F"
-	RelativeTime                 = "R"
+	ShortTime     TimestampStyle = "t" // ShortTime - 16:20
+	LongTime      TimestampStyle = "T" // LongTime - 16:20:30
+	ShortDate     TimestampStyle = "d" // ShortDate - 20/04/2021
+	LongDate      TimestampStyle = "D" // LongDate - 20 April 2021
+	ShortDateTime TimestampStyle = "f" // ShortDateTime - 20 April 2021 16:20; default
+	LongDateTime  TimestampStyle = "F" // LongDateTime - Tuesday, 20 April 2021 16:20
+	RelativeTime  TimestampStyle = "R" // RelativeTime - 2 months ago
 )
 
-/*  Image Formatting */
-
 const (
-	CdnBase string = "https://cdn.discordapp.com/"
+	ImageBaseURL string = "https://cdn.discordapp.com/" // ImageBaseURL - The root URL for image links
 )
 
 // PtrStr converts a string pointer to a string

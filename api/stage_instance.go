@@ -16,18 +16,67 @@
 
 package api
 
-type PrivacyLevel int
-
-const (
-	_ PrivacyLevel = iota
-	Public
-	GuildOnly
+import (
+	"fmt"
+	"net/http"
 )
 
+// StageInstance - A StageInstance holds information about a live stage.
 type StageInstance struct {
-	ID           Snowflake    `json:"id"`
-	GuildID      Snowflake    `json:"guild_id"`
-	ChannelID    Snowflake    `json:"channel_id"`
-	Topic        string       `json:"topic"`
-	PrivacyLevel PrivacyLevel `json:"privacy_level"`
+	ID           Snowflake    `json:"id"`            // The id of this Stage instance
+	GuildID      Snowflake    `json:"guild_id"`      // The guild id of the associated Stage channel
+	ChannelID    Snowflake    `json:"channel_id"`    // The id of the associated Stage channel
+	Topic        string       `json:"topic"`         // The topic of the Stage instance (1-120 characters)
+	PrivacyLevel PrivacyLevel `json:"privacy_level"` // The privacy level of the Stage instance
+}
+
+type PrivacyLevel int
+
+//goland:noinspection GoUnusedConst
+const (
+	Public    PrivacyLevel = iota + 1 // Deprecated: The Stage instance is visible publicly. (deprecated)
+	GuildOnly                         // The Stage instance is visible to only guild members.
+)
+
+// CreateStageInstance - Creates a new Stage instance associated to a Stage channel.
+//
+// Requires the user to be a moderator of the Stage channel.
+//
+//    This endpoint supports the X-Audit-Log-Reason header.
+//goland:noinspection GoUnusedExportedFunction
+func CreateStageInstance() (string, string) {
+	return http.MethodPost, fmt.Sprintf("%s/stage-instances", api)
+}
+
+// CreateStageInstanceJSON - payload parameters for creating a new stage instance
+type CreateStageInstanceJSON struct {
+	ChannelID    Snowflake    `json:"channel_id"`    // The id of the Stage channel
+	Topic        string       `json:"topic"`         // The topic of the Stage instance (1-120 characters)
+	PrivacyLevel PrivacyLevel `json:"privacy_level"` // The privacy level of the Stage instance (default GuildOnly)
+}
+
+// GetStageInstance - Gets the stage instance associated with the Stage channel, if it exists.
+func (s *StageInstance) GetStageInstance() (string, string) {
+	return http.MethodGet, fmt.Sprintf("%s/stage-instances/%s", api, s.ChannelID.String())
+}
+
+// ModifyStageInstance - Updates fields of an existing Stage instance.
+//
+//  Requires the user to be a moderator of the Stage channel.
+//
+//    This endpoint supports the X-Audit-Log-Reason header.
+func (s *StageInstance) ModifyStageInstance() (string, string) {
+	return http.MethodPatch, fmt.Sprintf("%s/stage-instances/%s", api, s.ChannelID.String())
+}
+
+type ModifyStageInstance struct {
+	Topic        string       `json:"topic,omitempty"` // The topic of the Stage instance (1-120 characters)
+	PrivacyLevel PrivacyLevel `json:"privacy_level"`   // The privacy level of the Stage instance
+}
+
+// DeleteStageInstance - Deletes the Stage instance.
+//
+// Requires the user to be a moderator of the Stage channel.
+func (s *StageInstance) DeleteStageInstance() (string, string) {
+	return http.MethodDelete, fmt.Sprintf("%s/stage-instances/%s", api, s.ChannelID.String())
 }

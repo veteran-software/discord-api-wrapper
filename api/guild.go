@@ -20,105 +20,108 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/veteran-software/discord-api-wrapper/routes"
 )
 
-/* GUILD OBJECT */
-
+// Guild - Guilds in Discord represent an isolated collection of users and channels, and are often referred to as "servers" in the UI.
 type Guild struct {
-	ID                          Snowflake                       `json:"id"`
-	Name                        string                          `json:"name"`
-	Icon                        *string                         `json:"icon"`
-	IconHash                    *string                         `json:"icon_hash,omitempty"`
-	Splash                      *string                         `json:"splash,omitempty"`
-	DiscoverySplash             *string                         `json:"discovery_splash"`
-	OwnerID                     Snowflake                       `json:"owner_id"`
-	AfkChannelID                Snowflake                       `json:"afk_channel_id,omitempty"`
-	AfkTimeout                  int64                           `json:"afk_timeout"`
-	WidgetEnabled               bool                            `json:"widget_enabled,omitempty"`
-	WidgetChannelID             *Snowflake                      `json:"widget_channel_id,omitempty"`
-	VerificationLevel           VerificationLevel               `json:"verification_level"`
-	DefaultMessageNotifications DefaultMessageNotificationLevel `json:"default_message_notifications"`
-	ExplicitContentFilter       ExplicitContentFilterLevel      `json:"explicit_content_filter"`
-	Roles                       []Role                          `json:"roles"`
-	Emojis                      []Emoji                         `json:"emojis"`
-	Features                    []GuildFeatures                 `json:"features"`
-	MfaLevel                    MfaLevel                        `json:"mfa_level"`
-	ApplicationID               *Snowflake                      `json:"application_id"`
-	SystemChannelID             *Snowflake                      `json:"system_channel_id"`
-	SystemChannelFlags          SystemChannelFlags              `json:"system_channel_flags"`
-	RulesChannelID              *Snowflake                      `json:"rules_channel_id"`
-	MaxPresences                *int64                          `json:"max_presences,omitempty"`
-	MaxMembers                  int64                           `json:"max_members,omitempty"`
-	VanityUrlCode               *string                         `json:"vanity_url_code"`
-	Description                 *string                         `json:"description"`
-	Banner                      *string                         `json:"banner"`
-	PremiumTier                 PremiumTier                     `json:"premium_tier"`
-	PremiumSubscriptionCount    uint64                          `json:"premium_subscription_count,omitempty"`
-	PreferredLocale             string                          `json:"preferred_locale"`
-	PublicUpdatesChannelID      *Snowflake                      `json:"public_updates_channel_id"`
-	MaxVideoChannelUsers        uint64                          `json:"max_video_channel_users,omitempty"`
-	ApproximateMemberCount      uint64                          `json:"approximate_member_count,omitempty"`
-	ApproximatePresenceCount    uint64                          `json:"approximate_presence_count,omitempty"`
-	WelcomeScreen               WelcomeScreen                   `json:"welcome_screen,omitempty"`
-	NsfwLevel                   GuildNsfwLevel                  `json:"nsfw_level"`
-	Stickers                    []Sticker                       `json:"stickers,omitempty"`
-	PremiumProgressBarEnabled   bool                            `json:"premium_progress_bar_enabled"`
+	ID                          Snowflake                       `json:"id"`                                   // guild id
+	Name                        string                          `json:"name"`                                 // guild name (2-100 characters, excluding trailing and leading whitespace)
+	Icon                        *string                         `json:"icon"`                                 // icon hash
+	IconHash                    *string                         `json:"icon_hash,omitempty"`                  // icon hash, returned when in the template object
+	Splash                      *string                         `json:"splash,omitempty"`                     // splash hash
+	DiscoverySplash             *string                         `json:"discovery_splash"`                     // discovery splash hash; only present for guilds with the "DISCOVERABLE" feature
+	OwnerID                     Snowflake                       `json:"owner_id"`                             // id of owner
+	AfkChannelID                Snowflake                       `json:"afk_channel_id,omitempty"`             // id of afk channel
+	AfkTimeout                  int64                           `json:"afk_timeout"`                          // afk timeout in seconds
+	WidgetEnabled               bool                            `json:"widget_enabled,omitempty"`             // true if the server widget is enabled
+	WidgetChannelID             *Snowflake                      `json:"widget_channel_id,omitempty"`          // the channel id that the widget will generate an "invite" to, or null if set to no invite
+	VerificationLevel           VerificationLevel               `json:"verification_level"`                   // verification level required for the guild
+	DefaultMessageNotifications DefaultMessageNotificationLevel `json:"default_message_notifications"`        // default message notifications level
+	ExplicitContentFilter       ExplicitContentFilterLevel      `json:"explicit_content_filter"`              // explicit content filter level
+	Roles                       []Role                          `json:"roles"`                                // roles in the guild
+	Emojis                      []Emoji                         `json:"emojis"`                               // custom guild emojis
+	Features                    []GuildFeatures                 `json:"features"`                             // enabled guild features
+	MfaLevel                    MfaLevel                        `json:"mfa_level"`                            // required MFA level for the guild
+	ApplicationID               *Snowflake                      `json:"application_id"`                       // application id of the guild creator if it is bot-created
+	SystemChannelID             *Snowflake                      `json:"system_channel_id"`                    // the id of the channel where guild notices such as welcome messages and boost events are posted
+	SystemChannelFlags          SystemChannelFlags              `json:"system_channel_flags"`                 // system channel flags
+	RulesChannelID              *Snowflake                      `json:"rules_channel_id"`                     // the id of the channel where Community guilds can display rules and/or guidelines
+	MaxPresences                *int64                          `json:"max_presences,omitempty"`              // the maximum number of presences for the guild (null is always returned, apart from the largest of guilds)
+	MaxMembers                  int64                           `json:"max_members,omitempty"`                // the maximum number of members for the guild
+	VanityUrlCode               *string                         `json:"vanity_url_code"`                      // the vanity url code for the guild
+	Description                 *string                         `json:"description"`                          // the description of a Community guild
+	Banner                      *string                         `json:"banner"`                               // banner hash
+	PremiumTier                 PremiumTier                     `json:"premium_tier"`                         // premium tier (Server Boost level)
+	PremiumSubscriptionCount    uint64                          `json:"premium_subscription_count,omitempty"` // the number of boosts this guild currently has
+	PreferredLocale             string                          `json:"preferred_locale"`                     // the preferred locale of a Community guild; used in server discovery and notices from Discord, and sent in interactions; defaults to "en-US"
+	PublicUpdatesChannelID      *Snowflake                      `json:"public_updates_channel_id"`            // the id of the channel where admins and moderators of Community guilds receive notices from Discord
+	MaxVideoChannelUsers        uint64                          `json:"max_video_channel_users,omitempty"`    // the maximum amount of users in a video channel
+	ApproximateMemberCount      uint64                          `json:"approximate_member_count,omitempty"`   // approximate number of members in this guild, returned from the GET /guilds/<id> endpoint when with_counts is true
+	ApproximatePresenceCount    uint64                          `json:"approximate_presence_count,omitempty"` // approximate number of non-offline members in this guild, returned from the GET /guilds/<id> endpoint when with_counts is true
+	WelcomeScreen               WelcomeScreen                   `json:"welcome_screen,omitempty"`             // the welcome screen of a Community guild, shown to new members, returned in an Invite's guild object
+	NsfwLevel                   GuildNsfwLevel                  `json:"nsfw_level"`                           // guild NSFW level
+	Stickers                    []Sticker                       `json:"stickers,omitempty"`                   // custom guild stickers
+	PremiumProgressBarEnabled   bool                            `json:"premium_progress_bar_enabled"`         // whether the guild has the boost progress bar enabled
 
 	// These fields are only sent within the GUILD_CREATE event
 
-	JoinedAt       time.Time             `json:"joined_at,omitempty"`
-	Large          bool                  `json:"large,omitempty"`
-	Unavailable    bool                  `json:"unavailable,omitempty"`
-	MemberCount    int64                 `json:"member_count,omitempty"`
-	VoiceStates    []VoiceState          `json:"voice_states,omitempty"`
-	Members        []GuildMember         `json:"members,omitempty"`
-	Channel        []Channel             `json:"channel,omitempty"`
-	Threads        []Channel             `json:"threads,omitempty"`
-	Presences      []PresenceUpdateEvent `json:"presences,omitempty"`
-	StageInstances []StageInstance       `json:"stage_instances,omitempty"`
+	JoinedAt             time.Time             `json:"joined_at,omitempty"`              // when this guild was joined at
+	Large                bool                  `json:"large,omitempty"`                  // true if this is considered a large guild
+	Unavailable          bool                  `json:"unavailable,omitempty"`            // true if this guild is unavailable due to an outage
+	MemberCount          int64                 `json:"member_count,omitempty"`           // total number of members in this guild
+	VoiceStates          []VoiceState          `json:"voice_states,omitempty"`           // states of members currently in voice channels; lacks the guild_id key
+	Members              []GuildMember         `json:"members,omitempty"`                // users in the guild
+	Channel              []Channel             `json:"channel,omitempty"`                // channels in the guild
+	Threads              []Channel             `json:"threads,omitempty"`                // all active threads in the guild that current user has permission to view
+	Presences            []PresenceUpdateEvent `json:"presences,omitempty"`              // presences of the members in the guild, will only include non-offline members if the size is greater than large threshold
+	StageInstances       []StageInstance       `json:"stage_instances,omitempty"`        // Stage instances in the guild
+	GuildScheduledEvents []GuildScheduledEvent `json:"guild_scheduled_events,omitempty"` // the scheduled events in the guild
 
 	// These fields are only sent when using the GET Current user Guilds endpoint and are relative to the requested user
 
-	Owner       bool   `json:"owner,omitempty"`
-	Permissions string `json:"permissions,omitempty"`
+	Owner       bool   `json:"owner,omitempty"`       // true if the user is the owner of the guild
+	Permissions string `json:"permissions,omitempty"` // total permissions for the user in the guild (excludes overwrites)
 }
 
 type DefaultMessageNotificationLevel int
 
+//goland:noinspection GoUnusedConst
 const (
-	AllMessages DefaultMessageNotificationLevel = iota
-	OnlyMentions
+	AllMessages  DefaultMessageNotificationLevel = iota // members will receive notifications for all messages by default
+	OnlyMentions                                        // members will receive notifications only for messages that @mention them by default
 )
 
 type ExplicitContentFilterLevel int
 
+//goland:noinspection GoUnusedConst
 const (
-	Disabled ExplicitContentFilterLevel = iota
-	MembersWithoutRoles
-	AllMembers
+	Disabled            ExplicitContentFilterLevel = iota // media content will not be scanned
+	MembersWithoutRoles                                   // media content sent by members without roles will be scanned
+	AllMembers                                            // media content sent by all members will be scanned
 )
 
 type MfaLevel int
 
+//goland:noinspection GoUnusedConst
 const (
-	MfaNone MfaLevel = iota
-	MfaElevated
+	MfaNone     MfaLevel = iota // guild has no MFA/2FA requirement for moderation actions
+	MfaElevated                 // guild has a 2FA requirement for moderation actions
 )
 
 type VerificationLevel int
 
+//goland:noinspection GoUnusedConst
 const (
-	VerificationLevelNone VerificationLevel = iota
-	VerificationLevelLow
-	VerificationLevelMedium
-	VerificationLevelHigh
-	VerificationLevelVeryHigh
+	VerificationLevelNone     VerificationLevel = iota // unrestricted
+	VerificationLevelLow                               // must have verified email on account
+	VerificationLevelMedium                            // must be registered on Discord for longer than 5 minutes
+	VerificationLevelHigh                              // must be a member of the server for longer than 10 minutes
+	VerificationLevelVeryHigh                          // must have a verified phone number
 )
 
 type GuildNsfwLevel int
 
+//goland:noinspection GoUnusedConst
 const (
 	NsfwDefault GuildNsfwLevel = iota
 	NsfwExplicit
@@ -128,184 +131,179 @@ const (
 
 type PremiumTier int
 
+//goland:noinspection GoUnusedConst
 const (
-	PremiumNone PremiumTier = iota
-	PremiumTier1
-	PremiumTier2
-	PremiumTier3
+	PremiumNone  PremiumTier = iota // guild has not unlocked any Server Boost perks
+	PremiumTier1                    // guild has unlocked Server Boost level 1 perks
+	PremiumTier2                    // guild has unlocked Server Boost level 2 perks
+	PremiumTier3                    // guild has unlocked Server Boost level 3 perks
 )
 
 type SystemChannelFlags int
 
+//goland:noinspection GoUnusedConst
 const (
-	SuppressJoinNotifications          SystemChannelFlags = 1 << 0
-	SuppressPremiumSubscriptions       SystemChannelFlags = 1 << 1
-	SuppressGuildReminderNotifications SystemChannelFlags = 1 << 2
-	SuppressJoinNotificationReplies    SystemChannelFlags = 1 << 3
+	SuppressJoinNotifications          SystemChannelFlags = 1 << 0 // Suppress member join notifications
+	SuppressPremiumSubscriptions       SystemChannelFlags = 1 << 1 // Suppress server boost notifications
+	SuppressGuildReminderNotifications SystemChannelFlags = 1 << 2 // Suppress server setup tips
+	SuppressJoinNotificationReplies    SystemChannelFlags = 1 << 3 // Hide member join sticker reply buttons
 )
 
 type GuildFeatures string
 
-//goland:noinspection SpellCheckingInspection
+//goland:noinspection SpellCheckingInspection,GrazieInspection,GoUnusedConst
 const (
-	AnimatedIcon                  GuildFeatures = "ANIMATED_ICON"
-	Banner                        GuildFeatures = "BANNER"
-	Commerce                      GuildFeatures = "COMMERCE"
-	Community                     GuildFeatures = "COMMUNITY"
-	Discoverable                  GuildFeatures = "DISCOVERABLE"
-	Featurable                    GuildFeatures = "FEATURABLE"
-	InviteSplash                  GuildFeatures = "INVITE_SPLASH"
-	MemberVerificationGateEnabled GuildFeatures = "MEMBER_VERIFICATION_GATE_ENABLED"
-	MonetizationEnabled           GuildFeatures = "MONETIZATION_ENABLED"
-	MoreStickers                  GuildFeatures = "MORE_STICKERS"
-	News                          GuildFeatures = "NEWS"
-	Partnered                     GuildFeatures = "PARTNERED"
-	PreviewEnabled                GuildFeatures = "PREVIEW_ENABLED"
-	PrivateThreads                GuildFeatures = "PRIVATE_THREADS"
-	RoleIcons                     GuildFeatures = "ROLE_ICONS"
-	SevenDayThreadArchive         GuildFeatures = "SEVEN_DAY_THREAD_ARCHIVE"
-	ThreeDayThreadArchive         GuildFeatures = "THREE_DAY_THREAD_ARCHIVE"
-	TicketedEventsEnabled         GuildFeatures = "TICKETED_EVENTS_ENABLED"
-	VanityURL                     GuildFeatures = "VANITY_URL"
-	Verified                      GuildFeatures = "VERIFIED"
-	VipRegions                    GuildFeatures = "VIP_REGIONS"
-	WelcomeScreenEnabled          GuildFeatures = "WELCOME_SCREEN_ENABLED"
+	AnimatedIcon                  GuildFeatures = "ANIMATED_ICON"                    // guild has access to set an animated guild icon
+	Banner                        GuildFeatures = "BANNER"                           // guild has access to set a guild banner image
+	Commerce                      GuildFeatures = "COMMERCE"                         // guild has access to use commerce features (i.e. create store channels)
+	Community                     GuildFeatures = "COMMUNITY"                        // guild can enable welcome screen, Membership Screening, stage channels and discovery, and receives community updates
+	Discoverable                  GuildFeatures = "DISCOVERABLE"                     // guild is able to be discovered in the directory
+	Featurable                    GuildFeatures = "FEATURABLE"                       // guild is able to be featured in the directory
+	InviteSplash                  GuildFeatures = "INVITE_SPLASH"                    // guild has access to set an invite splash background
+	MemberVerificationGateEnabled GuildFeatures = "MEMBER_VERIFICATION_GATE_ENABLED" // guild has enabled Membership Screening
+	MonetizationEnabled           GuildFeatures = "MONETIZATION_ENABLED"             // guild has enabled monetization
+	MoreStickers                  GuildFeatures = "MORE_STICKERS"                    // guild has increased custom sticker slots
+	News                          GuildFeatures = "NEWS"                             // guild has access to create news channels
+	Partnered                     GuildFeatures = "PARTNERED"                        // guild is partnered
+	PreviewEnabled                GuildFeatures = "PREVIEW_ENABLED"                  // guild can be previewed before joining via Membership Screening or the directory
+	PrivateThreads                GuildFeatures = "PRIVATE_THREADS"                  // guild has access to create private threads
+	RoleIcons                     GuildFeatures = "ROLE_ICONS"                       // guild is able to set role icons
+	SevenDayThreadArchive         GuildFeatures = "SEVEN_DAY_THREAD_ARCHIVE"         // guild has access to the seven day archive time for threads
+	ThreeDayThreadArchive         GuildFeatures = "THREE_DAY_THREAD_ARCHIVE"         // guild has access to the three day archive time for threads
+	TicketedEventsEnabled         GuildFeatures = "TICKETED_EVENTS_ENABLED"          // guild has enabled ticketed events
+	VanityURL                     GuildFeatures = "VANITY_URL"                       // guild has access to set a vanity URL
+	Verified                      GuildFeatures = "VERIFIED"                         // guild is verified
+	VipRegions                    GuildFeatures = "VIP_REGIONS"                      // guild has access to set 384kbps bitrate in voice (previously VIP voice servers)
+	WelcomeScreenEnabled          GuildFeatures = "WELCOME_SCREEN_ENABLED"           // guild has enabled the welcome screen
 )
 
+// UnavailableGuild - A partial guild object.
+//
+// Represents an Offline Guild, or a Guild whose information has not been provided through Guild Create events during the Gateway connect.
 type UnavailableGuild struct {
 	ID          Snowflake `json:"id"`
 	Unavailable bool      `json:"unavailable"`
 }
 
-/* GUILD WIDGET OBJECT */
+// GuildPreview - preview object
+type GuildPreview struct {
+	ID                       Snowflake       `json:"id"`                         // guild id
+	Name                     string          `json:"name"`                       // guild name (2-100 characters)
+	Icon                     *string         `json:"icon"`                       // icon hash
+	Splash                   *string         `json:"splash"`                     // splash hash
+	DiscoverySplash          *string         `json:"discovery_splash"`           // discovery splash hash
+	Emojis                   []Emoji         `json:"emojis"`                     // custom guild emojis
+	Features                 []GuildFeatures `json:"features"`                   // enabled guild features
+	ApproximateMemberCount   int             `json:"approximate_member_count"`   // approximate number of members in this guild
+	ApproximatePresenceCount int             `json:"approximate_presence_count"` // approximate number of online members in this guild
+	Description              *string         `json:"description"`                // the description for the guild, if the guild is discoverable
+	Stickers                 []Sticker       `json:"stickers"`                   // custom guild stickers
+}
 
 type GuildWidget struct {
-	Enabled   bool       `json:"enabled"`
-	ChannelID *Snowflake `json:"channel_id"`
+	Enabled   bool       `json:"enabled"`    // whether the widget is enabled
+	ChannelID *Snowflake `json:"channel_id"` // the widget channel id
 }
 
-/* GUILD MEMBER OBJECT */
+type GetGuildWidget struct {
+	ID            Snowflake     `json:"id"`             // guild id
+	Name          string        `json:"name"`           // guild name (2-100 characters)
+	InstantInvite *string       `json:"instant_invite"` // instant invite for the guilds specified widget invite channel
+	Channels      []Channel     `json:"channels"`       // voice and stage channels which are accessible by @everyone
+	Members       []GuildMember `json:"members"`        // special widget user objects that includes users presence (Limit 100)
+	PresenceCount int           `json:"presence_count"` // number of online members in this guild
+}
 
-/*
-GuildMember
-
-Avatar: guild specific avatar
-
-CommunicationDisabledUntil: when the user's timeout will expire and the user will be able to communicate in the guild again, null or a time in the past if the user is not timed out
-
-User: the user this guild member represents
-
-Nick: the users' guild nickname
-
-Roles: array of GuildRole id's
-
-JoinedAt: when the user joined the guild
-
-PremiumSince: when the user started boosting the guild
-
-Deaf: whether the user is deafened in voice channels
-
-Mute: whether the user is muted in voice channels
-
-Pending: whether the user has not yet passed the guild's Membership Screening requirements
-
-Permissions: total permissions of the member in the channel, including overwrites, returned when in the interaction object
-*/
+// GuildMember - Represents a member of a Guild
+//
+//   The field user won't be included in the member object attached to MESSAGE_CREATE and MESSAGE_UPDATE gateway events.
+//
+//   In GUILD_ events, pending will always be included as true or false.
+//   In non GUILD_ events which can only be triggered by non-pending users, pending will not be included.
 type GuildMember struct {
-	Avatar                     *string     `json:"avatar,omitempty"`
-	CommunicationDisabledUntil *time.Time  `json:"communication_disabled_until,omitempty"`
-	Deaf                       bool        `json:"deaf"`
-	JoinedAt                   time.Time   `json:"joined_at"`
-	Mute                       bool        `json:"mute"`
-	Nick                       *string     `json:"nick,omitempty"`
-	Pending                    bool        `json:"pending,omitempty"`
-	Permissions                string      `json:"permissions,omitempty"`
-	PremiumSince               *time.Time  `json:"premium_since,omitempty"`
-	Roles                      []Snowflake `json:"roles"`
-	User                       User        `json:"user,omitempty"`
+	User                       User        `json:"user,omitempty"`                         // User - the user this guild member represents
+	Nick                       *string     `json:"nick,omitempty"`                         // Nick - the users' guild nickname
+	Avatar                     *string     `json:"avatar,omitempty"`                       // Avatar - guild specific avatar
+	Roles                      []Snowflake `json:"roles"`                                  // Roles - array of GuildRole id's
+	JoinedAt                   time.Time   `json:"joined_at"`                              // JoinedAt - when the user joined the guild
+	PremiumSince               *time.Time  `json:"premium_since,omitempty"`                // PremiumSince - when the user started boosting the guild
+	Deaf                       bool        `json:"deaf"`                                   // Deaf - whether the user is deafened in voice channels
+	Mute                       bool        `json:"mute"`                                   // Mute - whether the user is muted in voice channels
+	Pending                    bool        `json:"pending,omitempty"`                      // Pending - whether the user has not yet passed the guild's Membership Screening requirements
+	Permissions                string      `json:"permissions,omitempty"`                  // Permissions - total permissions of the member in the channel, including overwrites, returned when in the interaction object
+	CommunicationDisabledUntil *time.Time  `json:"communication_disabled_until,omitempty"` // CommunicationDisabledUntil - when the user's timeout will expire and the user will be able to communicate in the guild again, null or a time in the past if the user is not timed out
 }
-
-/* INTEGRATION OBJECT */
 
 type Integration struct {
-	ID                Snowflake                 `json:"id"`
-	Name              string                    `json:"name"`
-	Type              string                    `json:"type"`
-	Enabled           bool                      `json:"enabled"`
-	Syncing           bool                      `json:"syncing,omitempty"`
-	RoleID            Snowflake                 `json:"role_id,omitempty"`
-	EnableEmoticons   bool                      `json:"enable_emoticons,omitempty"`
-	ExpireBehavior    IntegrationExpireBehavior `json:"expire_behavior,omitempty"`
-	ExpireGracePeriod int                       `json:"expire_grace_period,omitempty"`
-	User              User                      `json:"user,omitempty"`
-	Account           IntegrationAccount        `json:"account"`
-	SyncedAt          time.Time                 `json:"synced_at,omitempty"`
-	SubscriberCount   int                       `json:"subscriber_count,omitempty"`
-	Revoked           bool                      `json:"revoked,omitempty"`
-	Application       IntegrationApplication    `json:"application,omitempty"`
+	ID                Snowflake                 `json:"id"`                            // integration id
+	Name              string                    `json:"name"`                          // integration name
+	Type              string                    `json:"type"`                          // integration type (twitch, YouTube, or discord)
+	Enabled           bool                      `json:"enabled"`                       // is this integration enabled
+	Syncing           bool                      `json:"syncing,omitempty"`             // is this integration syncing
+	RoleID            Snowflake                 `json:"role_id,omitempty"`             // id that this integration uses for "subscribers"
+	EnableEmoticons   bool                      `json:"enable_emoticons,omitempty"`    // whether emoticons should be synced for this integration (twitch only currently)
+	ExpireBehavior    IntegrationExpireBehavior `json:"expire_behavior,omitempty"`     // the behavior of expiring subscribers
+	ExpireGracePeriod int                       `json:"expire_grace_period,omitempty"` // the grace period (in days) before expiring subscribers
+	User              User                      `json:"user,omitempty"`                // user for this integration
+	Account           IntegrationAccount        `json:"account"`                       // integration account information
+	SyncedAt          time.Time                 `json:"synced_at,omitempty"`           // when this integration was last synced
+	SubscriberCount   int                       `json:"subscriber_count,omitempty"`    // how many subscribers this integration has
+	Revoked           bool                      `json:"revoked,omitempty"`             // has this integration been revoked
+	Application       IntegrationApplication    `json:"application,omitempty"`         // The bot/OAuth2 application for discord integrations
 }
 
 type IntegrationExpireBehavior int
 
+//goland:noinspection GoUnusedConst
 const (
-	RemoveRole IntegrationExpireBehavior = iota
-	Kick
+	RemoveRole IntegrationExpireBehavior = iota // Remove role
+	Kick                                        // Kick
 )
 
-/* INTEGRATION ACCOUNT OBJECT */
-
 type IntegrationAccount struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+	ID   string `json:"id"`   // id of the account
+	Name string `json:"name"` // name of the account
 }
 
-/* INTEGRATION APPLICATION OBJECT */
-
 type IntegrationApplication struct {
-	ID          Snowflake `json:"id"`
-	Name        string    `json:"name"`
-	Icon        *string   `json:"icon"`
-	Description string    `json:"description"`
-	Summary     string    `json:"summary"`
-	Bot         User      `json:"bot,omitempty"`
+	ID          Snowflake `json:"id"`            // the id of the app
+	Name        string    `json:"name"`          // the name of the app
+	Icon        *string   `json:"icon"`          // the icon hash of the app
+	Description string    `json:"description"`   // the description of the app
+	Summary     string    `json:"summary"`       // the summary of the app
+	Bot         User      `json:"bot,omitempty"` // the bot associated with this application
 }
 
 type Ban struct {
-	Reason *string `json:"reason"`
-	User   User    `json:"user"`
+	Reason *string `json:"reason"` // the reason for the ban
+	User   User    `json:"user"`   // the banned user
 }
 
-/* WELCOME SCREEN OBJECT */
-
 type WelcomeScreen struct {
-	Description     *string                `json:"description,omitempty"`
-	WelcomeChannels []WelcomeScreenChannel `json:"welcome_channels,omitempty"`
+	Description     *string                `json:"description,omitempty"`      // the server description shown in the welcome screen
+	WelcomeChannels []WelcomeScreenChannel `json:"welcome_channels,omitempty"` // the channels shown in the welcome screen, up to 5
 }
 
 type WelcomeScreenChannel struct {
-	ChannelID   Snowflake  `json:"channel_id,omitempty"`
-	Description string     `json:"description,omitempty"`
-	EmojiID     *Snowflake `json:"emoji_id,omitempty"`
-	EmojiName   *string    `json:"emoji_name,omitempty"`
+	ChannelID   Snowflake  `json:"channel_id,omitempty"`  // the channel's id
+	Description string     `json:"description,omitempty"` // the description shown for the channel
+	EmojiID     *Snowflake `json:"emoji_id,omitempty"`    // the emoji id, if the emoji is custom
+	EmojiName   *string    `json:"emoji_name,omitempty"`  // the emoji name if custom, the unicode character if standard, or null if no emoji is set
 }
 
-/* HELPER FUNCTIONS */
+// String - Helper function to convert basic Guild data into string form
 func (g *Guild) String() string {
 	return g.Name + "(" + g.ID.String() + ")"
 }
 
-/* ENDPOINTS */
-
-// GetGuild
-// Returns the guild object for the given id.
+// GetGuild - Returns the guild object for the given id.
 //
 // If with_counts is set to true, this endpoint will also return approximate_member_count and approximate_presence_count for the guild.
 func (g *Guild) GetGuild() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf(routes.Guilds_QSP, api, g.ID.String())
+	return http.MethodGet, fmt.Sprintf(getGuild, api, g.ID.String())
 }
 
-// ListGuildMembers
-// Returns a list of guild member objects that are members of the guild.
+// ListGuildMembers - Returns a list of guild member objects that are members of the guild.
 //
 // This endpoint is restricted according to whether the GUILD_MEMBERS Privileged Intent is enabled for your application.
 func (g *Guild) ListGuildMembers(after ...*Snowflake) (method string, route string) {
@@ -317,35 +315,31 @@ func (g *Guild) ListGuildMembers(after ...*Snowflake) (method string, route stri
 		afterSnowflake = ""
 	}
 
-	return http.MethodGet, fmt.Sprintf(routes.Guilds_MembersQsp, api, g.ID.String(), afterSnowflake)
+	return http.MethodGet, fmt.Sprintf(listGuildMembers, api, g.ID.String(), afterSnowflake)
 }
 
-// AddGuildMemberRole
+// AddGuildMemberRole - Adds a role to a guild member.
 //
-// Adds a role to a guild member.
-//
-// Requires the MANAGE_ROLES permission.
+// Requires the ManageRoles permission.
 //
 // Returns a 204 empty response on success.
 //
 // Fires a Guild Member Update Gateway event.
 //
-// This endpoint supports the X-Audit-Log-Reason header.
+// This endpoint supports the "X-Audit-Log-Reason" header.
 func (g *Guild) AddGuildMemberRole(user *User, role *Snowflake) (method string, route string) {
-	return http.MethodPut, fmt.Sprintf(routes.Guilds_Members_Roles_, api, g.ID.String(), user.ID.String(), role.String())
+	return http.MethodPut, fmt.Sprintf(addGuildMemberRole, api, g.ID.String(), user.ID.String(), role.String())
 }
 
-// RemoveGuildMemberRole
+// RemoveGuildMemberRole - Removes a role from a guild member.
 //
-// Removes a role from a guild member.
-//
-// Requires the MANAGE_ROLES permission.
+// Requires the ManageRoles permission.
 //
 // Returns a 204 empty response on success.
 //
-// Fires a Guild Member Update Gateway event.
+// Fires a GuildMember Update Gateway event.
 //
 // This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) RemoveGuildMemberRole(user *User, role *Snowflake) (method string, route string) {
-	return http.MethodDelete, fmt.Sprintf("%s/guilds/%s/members/%s/roles/%s", api, g.ID.String(), user.ID.String(), role.String())
+	return http.MethodDelete, fmt.Sprintf(removeGuildMemberRole, api, g.ID.String(), user.ID.String(), role.String())
 }

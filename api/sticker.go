@@ -19,8 +19,6 @@ package api
 import (
 	"fmt"
 	"net/http"
-
-	"github.com/veteran-software/discord-api-wrapper/routes"
 )
 
 // Sticker - Represents a sticker that can be sent in messages.
@@ -74,23 +72,23 @@ type StickerPack struct {
 
 // GetSticker - Returns a sticker object for the given sticker ID.
 func (s *Sticker) GetSticker() (string, string) {
-	return http.MethodGet, fmt.Sprintf(routes.Stickers_, api, s.ID.String())
+	return http.MethodGet, fmt.Sprintf(getSticker, api, s.ID.String())
 }
 
 // ListNitroStickerPacks - Returns the list of sticker packs available to Nitro subscribers.
 func ListNitroStickerPacks() (string, string) {
-	return http.MethodGet, fmt.Sprintf(routes.StickerPacks, api)
+	return http.MethodGet, fmt.Sprintf(listNitroStickerPacks, api)
 }
 
 // ListGuildStickers - Returns an array of sticker objects for the given guild.
 //
 // Includes user fields if the bot has the ManageEmojisAndStickers permission.
 func (g *Guild) ListGuildStickers() (string, string) {
-	return http.MethodGet, fmt.Sprintf(routes.Guilds_Stickers, api, g.ID.String())
+	return http.MethodGet, fmt.Sprintf(listGuildStickers, api, g.ID.String())
 }
 
 func (g *Guild) GetGuildSticker(stickerID Snowflake) (string, string) {
-	return http.MethodGet, fmt.Sprintf(routes.Guilds_Stickers_, api, g.ID.String(), stickerID.String())
+	return http.MethodGet, fmt.Sprintf(getGuildSticker, api, g.ID.String(), stickerID.String())
 }
 
 // CreateGuildSticker - Create a new sticker for the guild.
@@ -101,7 +99,7 @@ func (g *Guild) GetGuildSticker(stickerID Snowflake) (string, string) {
 //
 // Returns the new sticker object on success.
 func (g *Guild) CreateGuildSticker() (string, string) {
-	return http.MethodPost, fmt.Sprintf(routes.Guilds_Stickers, api, g.ID.String())
+	return http.MethodPost, fmt.Sprintf(createGuildSticker, api, g.ID.String())
 }
 
 // ModifyGuildSticker - Modify the given sticker.
@@ -114,7 +112,7 @@ func (g *Guild) CreateGuildSticker() (string, string) {
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
 func (g *Guild) ModifyGuildSticker(stickerID Snowflake) (string, string) {
-	return http.MethodPatch, fmt.Sprintf(routes.Guilds_Stickers_, api, g.ID.String(), stickerID.String())
+	return http.MethodPatch, fmt.Sprintf(modifyGuildSticker, api, g.ID.String(), stickerID.String())
 }
 
 // DeleteGuildSticker - Delete the given sticker.
@@ -125,5 +123,5 @@ func (g *Guild) ModifyGuildSticker(stickerID Snowflake) (string, string) {
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
 func (g *Guild) DeleteGuildSticker(stickerID Snowflake) (string, string) {
-	return http.MethodDelete, fmt.Sprintf(routes.Guilds_Stickers_, api, g.ID.String(), stickerID.String())
+	return http.MethodDelete, fmt.Sprintf(deleteGuildSticker, api, g.ID.String(), stickerID.String())
 }

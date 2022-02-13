@@ -18,206 +18,127 @@ package api
 
 /* COMPONENT OBJECT */
 
-/*
-Component
-
-https://discord.com/developers/docs/interactions/message-components#component-object-component-structure
-
-Type: ComponentType; valid for all types
-
-ButtonStyle: one of ButtonStyle
-
-Label: text that appears on the button, max 80 characters
-
-Emoji: name, id, and animated
-
-CustomID: a developer-defined identifier for the button, max 100 characters
-
-URL: a URL for link-style buttons
-
-Disabled: whether the button is disabled, default false
-*/
+// Component - Components are a new field on the message object, so you can use them whether you're sending messages or responding to a slash command or other interaction.
+//
+// The top-level component's field is an array of Action Row components.
 type Component struct {
-	Type ComponentType `json:"type"`
+	Type ComponentType `json:"type"` // Type - ComponentType; valid for all types
 
 	// Buttons and Select Menus
-	CustomID string `json:"custom_id,omitempty"`
-	Disabled bool   `json:"disabled,omitempty"`
+	CustomID string `json:"custom_id,omitempty"` // CustomID - a developer-defined identifier for the button, max 100 characters
+	Disabled bool   `json:"disabled,omitempty"`  // Disabled - whether the button is disabled, default false
 
 	// Buttons only
-	Style interface{} `json:"style,omitempty"`
-	Label string      `json:"label,omitempty"` // And Text inputs
-	Emoji *Emoji      `json:"emoji,omitempty"`
-	URL   string      `json:"url,omitempty"`
+	Style interface{} `json:"style,omitempty"` // Style - one of ButtonStyle
+	Label string      `json:"label,omitempty"` // Label - text that appears on the button, max 80 characters
+	Emoji *Emoji      `json:"emoji,omitempty"` // Emoji - name, id, and animated
+	URL   string      `json:"url,omitempty"`   // URL - a URL for link-style buttons
 
 	// Select Menus only
-	Options   []SelectOption `json:"options,omitempty"`
-	MinValues int            `json:"min_values,omitempty"`
-	MaxValues int            `json:"max_values,omitempty"`
+	Options   []SelectOption `json:"options,omitempty"`    // Options - the choices in the select, max 25
+	MinValues int            `json:"min_values,omitempty"` // MinValues - the minimum number of items that must be chosen; default 1, min 0, max 25
+	MaxValues int            `json:"max_values,omitempty"` // MaxValues - the maximum number of items that can be chosen; default 1, max 25
 
-	/* Select Menus, Text Inputs */
-	Placeholder string `json:"placeholder,omitempty"`
+	// Select Menus, Text Inputs
+	Placeholder string `json:"placeholder,omitempty"` // Placeholder - custom placeholder text if nothing is selected, max 100 characters
 
 	// Action Rows
-	Components []Component `json:"components,omitempty"`
+	Components []Component `json:"components,omitempty"` // Components - a list of child components
 
-	/* Text Inputs */
-	MinLength int    `json:"min_length,omitempty"`
-	MaxLength int    `json:"max_length"`
-	Required  bool   `json:"required,omitempty"`
-	Value     string `json:"value,omitempty"`
+	// Text Inputs
+	MinLength int    `json:"min_length,omitempty"` // MinLength - the minimum input length for a text input
+	MaxLength int    `json:"max_length,omitempty"` // MaxLength - the maximum input length for a text input
+	Required  bool   `json:"required,omitempty"`   // Required - whether this component is required to be filled
+	Value     string `json:"value,omitempty"`      // Value - a pre-filled value for this component
 }
 
-/*
-ComponentType
-
-https://discord.com/developers/docs/interactions/message-components#component-object-component-types
-
-ComponentTypeActionRow: A container for other components
-
-ComponentTypeButton: A clickable button
-*/
+// ComponentType - The type of component
 type ComponentType int
 
 const (
-	ComponentTypeActionRow  ComponentType = iota + 1 // A container for other components
-	ComponentTypeButton                              // A button object
-	ComponentTypeSelectMenu                          // A select menu for picking from choices
-	ComponentTypeTextInput                           // A text input object
+	ComponentTypeActionRow  ComponentType = iota + 1 // ComponentTypeActionRow - A container for other components
+	ComponentTypeButton                              // ComponentTypeButton - A clickable button
+	ComponentTypeSelectMenu                          // ComponentTypeSelectMenu - A select menu for picking from choices
+	ComponentTypeTextInput                           // ComponentTypeTextInput - A text input object
 )
 
-/* BUTTON OBJECT */
-
-/*
-Button
-
-Buttons are interactive components that render on messages. They can be clicked by users, and send an interaction to your app when clicked.
-
-    * Buttons must be sent inside an ComponentTypeActionRow
-    * An ComponentTypeActionRow can contain up to 5 buttons
-
---------
-
-Type: ComponentTypeButton for a button
-
-Style: one of ButtonStyle
-
-Label: text that appears on the button, max 80 characters
-
-Emoji: name, id, and animated
-
-CustomID: a developer-defined identifier for the button, max 100 characters
-
-URL: a URL for link-style buttons
-
-Disabled: whether the button is disabled, default false
-*/
+// Button - Buttons are interactive components that render on messages.
+//
+// They can be clicked by users, and send an interaction to your app when clicked.
+//
+//    * Buttons must be sent inside an ComponentTypeActionRow
+//    * An ComponentTypeActionRow can contain up to 5 buttons
 type Button struct {
-	Type     ComponentType `json:"type"`
-	Style    ButtonStyle   `json:"style"`
-	Label    string        `json:"label,omitempty"`
-	Emoji    Emoji         `json:"emoji,omitempty"`
-	CustomID string        `json:"custom_id,omitempty"`
-	URL      string        `json:"url,omitempty"`
-	Disabled bool          `json:"disabled,omitempty"`
+	Type     ComponentType `json:"type"`                // Type - ComponentType for a button
+	Style    ButtonStyle   `json:"style"`               // Style - one of ButtonStyle
+	Label    string        `json:"label,omitempty"`     // Label - text that appears on the button, max 80 characters
+	Emoji    Emoji         `json:"emoji,omitempty"`     // Emoji - name, id, and animated
+	CustomID string        `json:"custom_id,omitempty"` // CustomID - a developer-defined identifier for the button, max 100 characters
+	URL      string        `json:"url,omitempty"`       // URL - a URL for link-style buttons
+	Disabled bool          `json:"disabled,omitempty"`  // Disabled - whether the button is disabled, default false
 }
 
-/*
-ButtonStyle
-
-Buttons come in a variety of styles to convey different types of actions. These styles also define what fields are valid for a button.
-
-    Non-link buttons must have a custom_id, and cannot have a URL
-    Link buttons must have a URL, and cannot have a custom_id
-    Link buttons do not send an interaction to your app when clicked
-
---------
-
-ButtonPrimary: color: blurple; requires field: custom_id
-
-ButtonSecondary: color: grey; requires field: custom_id
-
-ButtonSuccess: color: green; requires field: custom_id
-
-ButtonDanger: color: red; requires field: custom_id
-
-ButtonLink: color: grey; requires field: url
-*/
+// ButtonStyle - Buttons come in a variety of styles to convey different types of actions.
+//
+// These styles also define what fields are valid for a button.
+//
+//    Non-link buttons must have a custom_id, and cannot have a URL
+//    Link buttons must have a URL, and cannot have a custom_id
+//    Link buttons do not send an interaction to your app when clicked
 type ButtonStyle int
 
+//goland:noinspection SpellCheckingInspection
 const (
-	ButtonPrimary   ButtonStyle = iota + 1 // Color: blurple
-	ButtonSecondary                        // Color: grey
-	ButtonSuccess                          // Color: green
-	ButtonDanger                           // Color: red
-	ButtonLink                             // Color: grey, navigates to a URL
+	ButtonPrimary   ButtonStyle = iota + 1 // ButtonPrimary: color: blurple; requires field: custom_id
+	ButtonSecondary                        // ButtonSecondary: color: grey; requires field: custom_id
+	ButtonSuccess                          // ButtonSuccess: color: green; requires field: custom_id
+	ButtonDanger                           // ButtonDanger: color: red; requires field: custom_id
+	ButtonLink                             // ButtonLink: color: grey; requires field: url
 )
 
-/* SELECT MENU OBJECT */
-
-/*
-SelectMenu
-
-https://discord.com/developers/docs/interactions/message-components#select-menu-object-select-menu-structure
-
-CustomID: a developer-defined identifier for the button, max 100 characters
-
-Options: the choices in the select, max 25
-
-Placeholder: custom placeholder text if nothing is selected, max 100 characters
-
-MinValues: the minimum number of items that must be chosen; default 1, min 0, max 25
-
-MaxValues: the maximum number of items that can be chosen; default 1, max 25
-*/
+// SelectMenu - Select menus support single-select and multi-select behavior, meaning you can prompt a user to choose just one item from a list, or multiple.
+//
+// When a user finishes making their choice by clicking out of the dropdown or closing the half-sheet, your app will receive an interaction.
+//
+//    Select menus must be sent inside an Action Row
+//    An Action Row can contain only one select menu
+//    An Action Row containing a select menu cannot also contain buttons
 type SelectMenu struct {
-	Type        ComponentType  `json:"type"`
-	CustomID    string         `json:"custom_id"`
-	Options     []SelectOption `json:"options"`
-	Placeholder string         `json:"placeholder,omitempty"`
-	MinValues   int64          `json:"min_values,omitempty"`
-	MaxValues   int64          `json:"max_values,omitempty"`
-	Disabled    bool           `json:"disabled,omitempty"`
+	Type        ComponentType  `json:"type"`                  // Type - ComponentTypeSelectMenu for a select menu
+	CustomID    string         `json:"custom_id"`             // CustomID - a developer-defined identifier for the button, max 100 characters
+	Options     []SelectOption `json:"options"`               // Options - the choices in the select, max 25
+	Placeholder string         `json:"placeholder,omitempty"` // Placeholder - custom placeholder text if nothing is selected, max 100 characters
+	MinValues   int64          `json:"min_values,omitempty"`  // MinValues - the minimum number of items that must be chosen; default 1, min 0, max 25
+	MaxValues   int64          `json:"max_values,omitempty"`  // MaxValues - the maximum number of items that can be chosen; default 1, max 25
+	Disabled    bool           `json:"disabled,omitempty"`    // Disabled - disable the select, default false
 }
 
-/*
-SelectOption
-
-https://discord.com/developers/docs/interactions/message-components#select-menu-object-select-option-structure
-
-Label: the user-facing name of the option, max 25 characters
-
-Value: 	the dev-define value of the option, max 100 characters
-
-Description: an additional description of the option, max 50 characters
-
-Emoji: id, name, and animated
-
-Default: will render this option as selected by default
-*/
+// SelectOption - Represents a single select menu option
 type SelectOption struct {
-	Label       string `json:"label"`
-	Value       string `json:"value"`
-	Description string `json:"description,omitempty"`
-	Emoji       *Emoji `json:"emoji,omitempty"`
-	Default     bool   `json:"default,omitempty"`
+	Label       string `json:"label"`                 // Label - the user-facing name of the option, max 25 characters
+	Value       string `json:"value"`                 // Value - the dev-define value of the option, max 100 characters
+	Description string `json:"description,omitempty"` // Description - an additional description of the option, max 50 characters
+	Emoji       *Emoji `json:"emoji,omitempty"`       // Emoji - id, name, and animated
+	Default     bool   `json:"default,omitempty"`     // Default - will render this option as selected by default
 }
 
-type TextInputObject struct {
-	Type        ComponentType  `json:"type"`                  // 4 for a text input
+// TextInput - Text inputs are an interactive component that render on modals. They can be used to collect short-form or long-form text.
+type TextInput struct {
+	Type        ComponentType  `json:"type"`                  // ComponentTypeTextInput for a text input
 	CustomID    string         `json:"custom_id"`             // a developer-defined identifier for the input, max 100 characters
-	Style       TextInputStyle `json:"style"`                 // the Text Input Style
+	Style       TextInputStyle `json:"style"`                 // the TextInputStyle
 	Label       string         `json:"label"`                 // the label for this component
 	MinLength   uint           `json:"min_length,omitempty"`  // the minimum input length for a text input, min 0, max 4000
 	MaxLength   uint           `json:"max_length,omitempty"`  // the maximum input length for a text input, min 1, max 4000
-	Required    bool           `json:"required,omitempty"`    // whether this component is required to be filled, default false
+	Required    bool           `json:"required,omitempty"`    // whether this component is required to be filled, default true
 	Value       string         `json:"value,omitempty"`       // a pre-filled value for this component, max 4000 characters
 	Placeholder string         `json:"placeholder,omitempty"` // custom placeholder text if the input is empty, max 100 characters
 }
 
+// TextInputStyle - Denotes if a text input is short form or paragraph form
 type TextInputStyle int
 
 const (
-	TextInputShort TextInputStyle = iota + 1
-	TextInputParagraph
+	TextInputShort     TextInputStyle = iota + 1 // TextInputShort - A single-line input
+	TextInputParagraph                           // TextInputParagraph - 	A multi-line input
 )

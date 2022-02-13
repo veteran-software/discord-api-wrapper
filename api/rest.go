@@ -139,7 +139,7 @@ func (r *RateLimiter) lockedRequest(method, route, contentType string, b interfa
 
 		time.Sleep(rlr.RetryAfter)
 
-		resp, err = r.lockedRequest(method, route, contentType, b, r.lockBucketObject(bucket), sequence, reason)
+		return r.lockedRequest(method, route, contentType, b, r.lockBucketObject(bucket), sequence, reason)
 	}
 
 	return resp, nil

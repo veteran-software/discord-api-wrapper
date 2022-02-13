@@ -22,8 +22,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/veteran-software/discord-api-wrapper/routes"
 )
 
 /*
@@ -95,7 +93,7 @@ func (i *Invite) GetInvite(withCounts *bool, withExpiration *bool, guildSchedule
 	if len(qsp) > 0 {
 		q = "?" + strings.Join(qsp, "&")
 	}
-	return http.MethodGet, fmt.Sprintf(routes.Invites_Qsp, api, i.Code, q)
+	return http.MethodGet, fmt.Sprintf(getInvite, api, i.Code, q)
 }
 
 /*
@@ -110,5 +108,5 @@ Returns an Invite object on success.
 Fires an Invite Delete Gateway event.
 */
 func (i *Invite) DeleteInvite() (method, route string) {
-	return http.MethodDelete, fmt.Sprintf(routes.Invites_, api, i.Code)
+	return http.MethodDelete, fmt.Sprintf(deleteInvite, api, i.Code)
 }

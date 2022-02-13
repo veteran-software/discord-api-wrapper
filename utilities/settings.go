@@ -16,7 +16,8 @@
 
 package utilities
 
+//goland:noinspection GoUnusedGlobalVariable
 var (
-	Token         string
-	ApplicationID string
+	Token         string // Token - The application's token
+	ApplicationID string // ApplicationID -  The Snowflake of the application
 )
