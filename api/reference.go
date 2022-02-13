@@ -17,21 +17,19 @@
 package api
 
 import (
+	"fmt"
 	"strconv"
 	"time"
 )
 
 /* API Versioning */
 
-const apiBase string = "https://discord.com/api"
-const apiVersion string = "/v"
-const api = apiBase + apiVersion + string(rune(gatewayVersion))
-
-/* Authentication */
-
-/* Snowflakes */
-
-const discordEpoch int64 = 1420070400000
+var (
+	apiBase            = "https://discord.com/api"
+	apiVersion         = fmt.Sprintf("/v%d", gatewayVersion)
+	api                = apiBase + apiVersion
+	discordEpoch int64 = 1420070400000
+)
 
 type Snowflake string
 
