@@ -21,9 +21,46 @@ import (
 	"time"
 )
 
-/*
-NewEmbed - Instantiates a new Embed object with the color defaulted to red and the timestamp defaulted to time.Now()
-*/
+// IsValidLength - Checks that the total size of an Embed is valid for sending
+func (e *Embed) IsValidLength() bool {
+	if len(e.Title) <= titleLimit && len(e.Description) <= descriptionLimit && len(e.Fields) <= fieldCount && len(e.Footer.Text) <= footerTextLimit && len(e.Author.Name) <= authorNameLimit {
+		for _, field := range e.Fields {
+			if len(field.Name) > fieldNameLimit || len(field.Value) > fieldValueLimit {
+				return false
+			}
+		}
+
+		return true
+	}
+
+	return false
+}
+
+// String - Converts a Channel into a string for easy output
+func (c *Channel) String() string {
+	var chanType string
+
+	switch c.Type {
+	case GuildText:
+		chanType = "GTC:"
+	case DM:
+		chanType = "DM:"
+	case GroupDM:
+		chanType = "GDM:"
+	case GuildNews:
+		chanType = "GNC:"
+	case GuildNewsThread:
+		chanType = "GNT:"
+	case GuildPublicThread:
+		chanType = "GPuT:"
+	case GuildPrivateThread:
+		chanType = "GPrT:"
+	}
+
+	return chanType + c.Name + "(" + c.ID.String() + ")"
+}
+
+//NewEmbed - Instantiates a new Embed object with the color defaulted to red and the timestamp defaulted to time.Now()
 func NewEmbed() *Embed {
 	return &Embed{
 		Title:       "",

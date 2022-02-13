@@ -35,92 +35,93 @@ import (
 
 // Channel - Represents a guild or DM channel within Discord.
 type Channel struct {
-	// ID - the id of this channel
-	ID                         Snowflake      `json:"id"`
-	Type                       ChannelType    `json:"type"`
-	GuildID                    Snowflake      `json:"guild_id,omitempty"`
-	Position                   int8           `json:"position,omitempty"`
-	PermissionOverwrites       []Overwrite    `json:"permission_overwrites,omitempty"`
-	Name                       string         `json:"name,omitempty"`
-	Topic                      *string        `json:"topic,omitempty"`
-	Nsfw                       bool           `json:"nsfw,omitempty"`
-	LastMessageID              *Snowflake     `json:"last_message_id,omitempty"`
-	Bitrate                    int64          `json:"bitrate,omitempty"`
-	UserLimit                  int64          `json:"user_limit,omitempty"`
-	RateLimitPerUser           int64          `json:"rate_limit_per_user,omitempty"`
-	Recipients                 []User         `json:"recipients,omitempty"`
-	Icon                       *string        `json:"icon,omitempty"`
-	OwnerID                    Snowflake      `json:"owner_id,omitempty"`
-	ApplicationID              Snowflake      `json:"application_id,omitempty"`
-	ParentID                   *Snowflake     `json:"parent_id,omitempty"`
-	LastPinTimestamp           *time.Time     `json:"last_pin_timestamp,omitempty"`
-	RtcRegion                  *string        `json:"rtc_region,omitempty"`
-	VideoQualityMode           int64          `json:"video_quality_mode,omitempty"`
-	MessageCount               int64          `json:"message_count,omitempty"`
-	MemberCount                int64          `json:"member_count,omitempty"`
-	ThreadMetadata             ThreadMetadata `json:"thread_metadata,omitempty"`
-	Member                     ThreadMember   `json:"member,omitempty"`
-	DefaultAutoArchiveDuration int64          `json:"default_auto_archive_duration,omitempty"`
-	// Only available from Interaction Webhooks
-	Permissions string `json:"permissions"`
+	ID                         Snowflake      `json:"id"`                                      // ID - the id of this channel
+	Type                       ChannelType    `json:"type"`                                    // Type - the ChannelType
+	GuildID                    Snowflake      `json:"guild_id,omitempty"`                      // GuildID - the id of the guild (may be missing for some channel objects received over gateway guild dispatches)
+	Position                   int            `json:"position,omitempty"`                      // Position - sorting position of the channel
+	PermissionOverwrites       []Overwrite    `json:"permission_overwrites,omitempty"`         // PermissionOverwrites - explicit permission overwrites for members and roles
+	Name                       string         `json:"name,omitempty"`                          // Name - the name of the channel (1-100 characters)
+	Topic                      *string        `json:"topic,omitempty"`                         // Topic - the channel topic (0-1024 characters)
+	Nsfw                       bool           `json:"nsfw,omitempty"`                          // Nsfw - whether the channel is nsfw
+	LastMessageID              *Snowflake     `json:"last_message_id,omitempty"`               // LastMessageID - the id of the last message sent in this channel (may not point to an existing or valid message)
+	Bitrate                    int64          `json:"bitrate,omitempty"`                       // Bitrate - the bitrate (in bits) of the voice channel
+	UserLimit                  int64          `json:"user_limit,omitempty"`                    // UserLimit - the user limit of the voice channel
+	RateLimitPerUser           int64          `json:"rate_limit_per_user,omitempty"`           // RateLimitPerUser - amount of seconds a user has to wait before sending another Message (0-21600); bots, as well as users with the permission ManageMessages or ManageChannels, are unaffected
+	Recipients                 []User         `json:"recipients,omitempty"`                    // Recipients - the recipients of the DM
+	Icon                       *string        `json:"icon,omitempty"`                          // Icon - icon hash of the group DM
+	OwnerID                    Snowflake      `json:"owner_id,omitempty"`                      // OwnerID - id of the creator of the group DM or thread
+	ApplicationID              Snowflake      `json:"application_id,omitempty"`                // ApplicationID - application id of the group DM creator if it is bot-created
+	ParentID                   *Snowflake     `json:"parent_id,omitempty"`                     // ParentID - for guild channels: id of the parent category for a channel (each parent category can contain up to 50 channels), for threads: id of the text channel this thread was created
+	LastPinTimestamp           *time.Time     `json:"last_pin_timestamp,omitempty"`            // LastPinTimestamp - when the last pinned message was pinned. This may be null in events such as GUILD_CREATE when a message is not pinned.
+	RtcRegion                  *string        `json:"rtc_region,omitempty"`                    // RtcRegion - voice region id for the voice channel, automatic when set to null
+	VideoQualityMode           int64          `json:"video_quality_mode,omitempty"`            // VideoQualityMode - the camera video quality mode of the voice channel, 1 when not present
+	MessageCount               int64          `json:"message_count,omitempty"`                 // MessageCount - an approximate count of messages in a thread, stops counting at 50
+	MemberCount                int64          `json:"member_count,omitempty"`                  // MemberCount - an approximate count of users in a thread, stops counting at 50
+	ThreadMetadata             ThreadMetadata `json:"thread_metadata,omitempty"`               // ThreadMetadata - thread-specific fields not needed by other channels
+	Member                     ThreadMember   `json:"member,omitempty"`                        // Member - ThreadMember for the current User, if they have joined the thread, only included on certain API endpoints
+	DefaultAutoArchiveDuration int            `json:"default_auto_archive_duration,omitempty"` // DefaultAutoArchiveDuration - default duration that the clients (not the API) will use for newly created threads, in minutes, to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080
+	Permissions                string         `json:"permissions"`                             // Permissions - computed permissions for the invoking user in the channel, including overwrites, only included when part of the resolved data received on a slash command interaction
 }
 
 type ChannelType int
 
+//goland:noinspection SpellCheckingInspection
 const (
-	GuildText ChannelType = iota
-	DM
-	GuildVoice
-	GroupDM
-	GuildCategory
-	GuildNews
-	GuildStore
-	GuildNewsThread ChannelType = iota + 3
-	GuildPublicThread
-	GuildPrivateThread
-	GuildStageVoice
+	GuildText          ChannelType = iota     // GuildText - a text channel within a server
+	DM                                        // DM - a direct message between users
+	GuildVoice                                // GuildVoice - a voice channel within a server
+	GroupDM                                   // GroupDM - a direct message between multiple users
+	GuildCategory                             // GuildCategory - an organizational category that contains up to 50 channels
+	GuildNews                                 // GuildNews - a channel that users can follow and crosspost into their own server
+	GuildStore                                // GuildStore - a channel in which game developers can sell their game on Discord
+	GuildNewsThread    ChannelType = iota + 3 // GuildNewsThread - a temporary sub-channel within a GuildNews channel
+	GuildPublicThread                         // GuildPublicThread - a temporary sub-channel within a GuildText channel
+	GuildPrivateThread                        // GuildPrivateThread - a temporary sub-channel within a GuildText channel that is only viewable by those invited and those with the ManageThreads permission
+	GuildStageVoice                           // GuildStageVoice - a voice channel for hosting events with an audience
 )
 
 type VideoQualityMode int
 
 //goland:noinspection GoUnusedConst
 const (
-	// Auto - Discord chooses the quality for optimal performance
-	Auto VideoQualityMode = iota + 1
-	// Full - 720p
-	Full
+	Auto VideoQualityMode = iota + 1 // Auto - Discord chooses the quality for optimal performance
+	Full                             // Full - 720p
 )
 
-/* MESSAGE OBJECT */
-
+// Message - Represents a message sent in a channel within Discord.
 type Message struct {
-	ID                Snowflake          `json:"id,omitempty"`
-	ChannelID         Snowflake          `json:"channel_id,omitempty"`
-	GuildID           Snowflake          `json:"guild_id,omitempty"`
-	Author            User               `json:"author,omitempty"`
-	Member            GuildMember        `json:"member,omitempty"`
-	Content           string             `json:"content,omitempty"`
-	Timestamp         time.Time          `json:"timestamp,omitempty"`
-	EditedTimestamp   *time.Time         `json:"edited_timestamp,omitempty"`
-	TTS               bool               `json:"tts,omitempty"`
-	MentionEveryone   bool               `json:"mention_everyone,omitempty"`
-	Mentions          []User             `json:"mentions,omitempty"`
-	MentionRoles      []Snowflake        `json:"mention_roles,omitempty"`
-	MentionChannels   []Channel          `json:"mention_channels,omitempty"`
-	Attachments       []Attachment       `json:"attachments,omitempty"`
-	Embeds            []Embed            `json:"embeds,omitempty"`
-	Reactions         []ReactionObject   `json:"reactions,omitempty"`
-	Nonce             interface{}        `json:"nonce,string,omitempty"`
-	Pinned            bool               `json:"pinned,omitempty"`
-	WebhookID         Snowflake          `json:"webhook_id,omitempty"`
-	Type              MessageType        `json:"type,omitempty"`
-	ApplicationID     Snowflake          `json:"application_id,omitempty"`
-	MessageReference  MessageReference   `json:"message_reference,omitempty"`
-	Flags             MessageFlags       `json:"flags,omitempty"`
-	ReferencedMessage *Message           `json:"referenced_message,omitempty"`
-	Interaction       MessageInteraction `json:"interaction,omitempty"`
-	Thread            Channel            `json:"thread,omitempty"`
-	Components        []Component        `json:"components,omitempty"`
+	ID                Snowflake          `json:"id,omitempty"`                 // ID - id of the message
+	ChannelID         Snowflake          `json:"channel_id,omitempty"`         // ChannelID - id of the Channel the message was sent in
+	GuildID           Snowflake          `json:"guild_id,omitempty"`           // GuildID - id of the Guild the message was sent in
+	Author            User               `json:"author,omitempty"`             // Author - the author of this message (not guaranteed to be a valid user)
+	Member            GuildMember        `json:"member,omitempty"`             // Member - member properties for this message's author
+	Content           string             `json:"content,omitempty"`            // Content - contents of the message
+	Timestamp         time.Time          `json:"timestamp,omitempty"`          // Timestamp - when this message was sent
+	EditedTimestamp   *time.Time         `json:"edited_timestamp,omitempty"`   // EditedTimestamp - when this message was edited (or null if never)
+	TTS               bool               `json:"tts,omitempty"`                // TTS - whether this was a TTS message
+	MentionEveryone   bool               `json:"mention_everyone,omitempty"`   // MentionEveryone - whether this message mentions everyone
+	Mentions          []User             `json:"mentions,omitempty"`           // Mentions - users specifically mentioned in the message
+	MentionRoles      []Snowflake        `json:"mention_roles,omitempty"`      // MentionRoles - roles specifically mentioned in this message
+	MentionChannels   []Channel          `json:"mention_channels,omitempty"`   // MentionChannels - channels specifically mentioned in this message
+	Attachments       []Attachment       `json:"attachments,omitempty"`        // Attachments - any attached files
+	Embeds            []Embed            `json:"embeds,omitempty"`             // Embeds - any embedded content
+	Reactions         []ReactionObject   `json:"reactions,omitempty"`          // Reactions - reactions to the message
+	Nonce             interface{}        `json:"nonce,string,omitempty"`       // Nonce - used for validating a message was sent
+	Pinned            bool               `json:"pinned,omitempty"`             // Pinned - whether this message is pinned
+	WebhookID         Snowflake          `json:"webhook_id,omitempty"`         // WebhookID - if the message is generated by a Webhook, this is the webhook's id
+	Type              MessageType        `json:"type,omitempty"`               // Type - the MessageType
+	Activity          MessageActivity    `json:"activity,omitempty"`           // Activity - sent with Rich Presence-related chat embeds
+	Application       Application        `json:"application,omitempty"`        // Application - sent with Rich Presence-related chat embeds
+	ApplicationID     Snowflake          `json:"application_id,omitempty"`     // ApplicationID - if the message is an Interaction or application-owned webhook, this is the id of the application
+	MessageReference  MessageReference   `json:"message_reference,omitempty"`  // MessageReference - data showing the source of a crosspost, channel follow add, pin, or reply message
+	Flags             MessageFlags       `json:"flags,omitempty"`              // Flags - MessageFlags combined as a bitfield
+	ReferencedMessage *Message           `json:"referenced_message,omitempty"` // ReferencedMessage - the message associated with the MessageReference
+	Interaction       MessageInteraction `json:"interaction,omitempty"`        // Interaction - sent if the message is a response to an Interaction
+	Thread            Channel            `json:"thread,omitempty"`             // Thread - the thread that was started from this message, includes ThreadMember object
+	Components        []Component        `json:"components,omitempty"`         // Components - sent if the message contains components like buttons, action rows, or other interactive components
+	StickerItems      []string           `json:"sticker_items,omitempty"`      // StickerItems - sent if the message contains stickers
+	// Deprecated
+	Stickers []string `json:"stickers,omitempty"` // Stickers - the stickers sent with the message
 }
 
 type MessageType int
@@ -153,6 +154,20 @@ const (
 	ContextMenuCommand
 )
 
+type MessageActivity struct {
+	Type    MessageActivityType `json:"type"`     // Type - type of message activity
+	PartyID string              `json:"party_id"` // PartyID - party_id from a Rich Presence event
+}
+
+type MessageActivityType int
+
+const (
+	MessageActivityTypeJoin MessageActivityType = iota + 1
+	MessageActivityTypeSpectate
+	MessageActivityTypeListen
+	MessageActivityTypeJoinRequest MessageActivityType = iota + 2
+)
+
 type MessageFlags int
 
 const (
@@ -167,34 +182,30 @@ const (
 	FailedToMentionSomeRolesInThread MessageFlags = 1 << 8 // this message failed to mention some roles and add their members to the thread
 )
 
-/* MESSAGE REFERENCE OBJECT */
-
+// MessageReference - ChannelID is optional when creating a reply, but will always be present when receiving an event/response that includes this data model.
 type MessageReference struct {
-	MessageID       Snowflake `json:"message_id,omitempty"`
-	ChannelID       Snowflake `json:"channel_id,omitempty"`
-	GuildID         Snowflake `json:"guild_id,omitempty"`
-	FailIfNotExists bool      `json:"fail_if_not_exists,omitempty"` // default true
+	MessageID       Snowflake `json:"message_id,omitempty"`         // MessageID - id of the originating message
+	ChannelID       Snowflake `json:"channel_id,omitempty"`         // ChannelID - id of the originating message's channel
+	GuildID         Snowflake `json:"guild_id,omitempty"`           // GuildID - id of the originating message's guild
+	FailIfNotExists bool      `json:"fail_if_not_exists,omitempty"` // FailIfNotExists - when sending, whether to error if the referenced message doesn't exist instead of sending as a normal (non-reply) message, default true
 }
 
-/* FOLLOWED CHANNEL OBJECT */
-
-// TODO
-
-/* REACTION OBJECT */
+type FollowedChannel struct {
+	ChannelID Snowflake `json:"channel_id"` // ChannelID - source Channel id
+	WebhookID Snowflake `json:"webhook_id"` // WebhookID - created target Webhook id
+}
 
 type ReactionObject struct {
-	Count int   `json:"count"`
-	Me    bool  `json:"me"`
-	Emoji Emoji `json:"emoji"`
+	Count int   `json:"count"` // Count - times this Emoji has been used to react
+	Me    bool  `json:"me"`    // Me - whether the current User reacted using this Emoji
+	Emoji Emoji `json:"emoji"` // Emoji - Emoji information
 }
 
-/* OVERWRITE OBJECT */
-
 type Overwrite struct {
-	ID    string         `json:"id"`
-	Type  PermissionType `json:"type"`
-	Allow string         `json:"allow"`
-	Deny  string         `json:"deny"`
+	ID    Snowflake      `json:"id"`    // ID - Role or User id
+	Type  PermissionType `json:"type"`  // Type - either PermissionRole or PermissionMember
+	Allow string         `json:"allow"` // Allow - permission bit set
+	Deny  string         `json:"deny"`  // Deny - permission bit set
 }
 
 type PermissionType int
@@ -204,226 +215,147 @@ const (
 	PermissionMember
 )
 
-/* THREAD METADATA OBJECT */
-
+// ThreadMetadata - The thread metadata object contains a number of thread-specific channel fields that are not needed by other channel types.
 type ThreadMetadata struct {
-	Archived            bool      `json:"archived"`
-	AutoArchiveDuration int64     `json:"auto_archive_duration"`
-	ArchiveTimestamp    time.Time `json:"archive_timestamp"`
-	Locked              bool      `json:"locked"`
-	Invitable           bool      `json:"invitable,omitempty"`
+	Archived            bool       `json:"archived"`                   // Archived - whether the thread is archived
+	AutoArchiveDuration int        `json:"auto_archive_duration"`      // AutoArchiveDuration - duration in minutes to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080
+	ArchiveTimestamp    time.Time  `json:"archive_timestamp"`          // ArchiveTimestamp - timestamp when the thread's archive status was last changed, used for calculating recent activity
+	Locked              bool       `json:"locked"`                     // Locked - whether the thread is locked; when a thread is locked, only users with ManageThreads can unarchive it
+	Invitable           bool       `json:"invitable,omitempty"`        // Invitable - whether non-moderators can add other non-moderators to a thread; only available on private threads
+	CreateTimestamp     *time.Time `json:"create_timestamp,omitempty"` // CreateTimestamp - timestamp when the thread was created; only populated for threads created after 2022-01-09
 }
 
-/* THREAD MEMBER OBJECT */
-
+// ThreadMember - A thread member is used to indicate whether a user has joined a thread or not.
 type ThreadMember struct {
-	ID            *Snowflake `json:"id"`
-	UserID        *Snowflake `json:"user_id"`
-	JoinTimestamp time.Time  `json:"join_timestamp"`
-	Flags         int64      `json:"flags"`
+	ID            Snowflake `json:"id,omitempty"`      // ID - the id of the thread
+	UserID        Snowflake `json:"user_id,omitempty"` // UserID - the id of the User
+	JoinTimestamp time.Time `json:"join_timestamp"`    // JoinTimestamp - the time the current user last joined the thread
+	Flags         int64     `json:"flags"`             // Flags - any user-thread settings, currently only used for notifications
 }
 
-/* EMBED OBJECT */
-
-/*
-Embed
-
-Title: title of embed
-
-Type: EmbedType (always RichEmbed for webhook embeds)
-
-Description: description of embed
-
-URL: url of embed
-
-Timestamp: timestamp of embed content
-
-Color: color code of the embed
-
-Footer: footer information
-
-Image: image information
-
-Thumbnail: thumbnail information
-
-Author: author information
-
-Fields: fields information
-*/
 type Embed struct {
-	Title       string     `json:"title,omitempty"`
-	Type        EmbedType  `json:"type,omitempty"`
-	Description string     `json:"description,omitempty"`
-	URL         string     `json:"url,omitempty"`
-	Timestamp   string     `json:"timestamp,omitempty"`
-	Color       int64      `json:"color,omitempty"`
-	Footer      *Footer    `json:"footer,omitempty"`
-	Image       *Image     `json:"image,omitempty"`
-	Thumbnail   *Thumbnail `json:"thumbnail,omitempty"`
-	Author      *Author    `json:"author,omitempty"`
-	Fields      []*Field   `json:"fields,omitempty"`
+	Title       string     `json:"title,omitempty"`       // Title - title of embed
+	Type        EmbedType  `json:"type,omitempty"`        // Type - EmbedType (always RichEmbed for webhook embeds)
+	Description string     `json:"description,omitempty"` // Description - description of embed
+	URL         string     `json:"url,omitempty"`         // URL - url of embed
+	Timestamp   string     `json:"timestamp,omitempty"`   // Timestamp - timestamp of embed content
+	Color       int64      `json:"color,omitempty"`       // Color - color code of the embed
+	Footer      *Footer    `json:"footer,omitempty"`      // Footer - footer information
+	Image       *Image     `json:"image,omitempty"`       // Image - image information
+	Thumbnail   *Thumbnail `json:"thumbnail,omitempty"`   // Thumbnail - thumbnail information
+	Video       *video     `json:"video,omitempty"`       // Video - video information; cannot set this when sending an Embed
+	Provider    *provider  `json:"provider,omitempty"`    // Provider - provider information; cannot set this when sending an Embed
+	Author      *Author    `json:"author,omitempty"`      // Author - author information
+	Fields      []*Field   `json:"fields,omitempty"`      // Fields - fields information
 }
 
-/*
-EmbedType
-
-Embed types are "loosely defined" and, for the most part, are not used by our clients for rendering. Embed attributes power what is rendered. Embed types should be considered deprecated and might be removed in a future API version.
-
---------
-
-RichEmbed: generic embed rendered from embed attributes
-
-imageEmbed: image embed
-
-videoEmbed: video embed
-
-gifVEmbed: animated gif image embed rendered as a video embed
-
-articleEmbed: article embed
-
-linkEmbed: link embed
-*/
+// EmbedType - Embed types are "loosely defined" and, for the most part, are not used by our clients for rendering.
+//
+// Embed attributes power what is rendered.
+//
+// Embed types should be considered deprecated and might be removed in a future API version.
 type EmbedType string
 
 const (
-	RichEmbed    EmbedType = "rich"
-	imageEmbed   EmbedType = "image"
-	videoEmbed   EmbedType = "video"
-	gifVEmbed    EmbedType = "gifv"
-	articleEmbed EmbedType = "article"
-	linkEmbed    EmbedType = "link"
+	RichEmbed    EmbedType = "rich"    // RichEmbed - generic embed rendered from embed attributes
+	imageEmbed   EmbedType = "image"   // imageEmbed - image embed
+	videoEmbed   EmbedType = "video"   // videoEmbed - video embed
+	gifVEmbed    EmbedType = "gifv"    // gifVEmbed - animated gif image embed rendered as a video embed
+	articleEmbed EmbedType = "article" // articleEmbed - article embed
+	linkEmbed    EmbedType = "link"    // linkEmbed - link embed
 )
 
 type Thumbnail struct {
-	URL    string `json:"url,omitempty"`
-	Height int    `json:"height,omitempty"`
-	Width  int    `json:"width,omitempty"`
+	URL    string `json:"url,omitempty"`    // URL - source url of thumbnail (only supports http(s) and attachments)
+	Height int    `json:"height,omitempty"` // Height - height of thumbnail
+	Width  int    `json:"width,omitempty"`  // Width - width of thumbnail
 }
 
-type Video struct {
-	URL    string `json:"url,omitempty"`
-	Height int    `json:"height,omitempty"`
-	Width  int    `json:"width,omitempty"`
+type video struct {
+	URL    string `json:"url,omitempty"`    // URL - source url of video
+	Height int    `json:"height,omitempty"` // Height - height of video
+	Width  int    `json:"width,omitempty"`  // Width - width of video
 }
 
 type Image struct {
-	URL    string `json:"url,omitempty"`
-	Height int    `json:"height,omitempty"`
-	Width  int    `json:"width,omitempty"`
+	URL    string `json:"url,omitempty"`    // URL - source url of image (only supports http(s) and attachments)
+	Height int    `json:"height,omitempty"` // Height - height of image
+	Width  int    `json:"width,omitempty"`  // Width - width of image
 }
 
-type Provider struct {
-	Name string `json:"name,omitempty"`
-	URL  string `json:"url,omitempty"`
+type provider struct {
+	Name string `json:"name,omitempty"` // Name - name of provider
+	URL  string `json:"url,omitempty"`  // provider - url of provider
 }
 
 type Author struct {
-	Name    string  `json:"name,omitempty"`
-	URL     string  `json:"url,omitempty"`
-	IconURL *string `json:"icon_url,omitempty"`
+	Name    string  `json:"name,omitempty"`     // Name - name of author
+	URL     string  `json:"url,omitempty"`      // URL - url of author
+	IconURL *string `json:"icon_url,omitempty"` // IconURL - url of author icon (only supports http(s) and attachments)
 }
 
 type Footer struct {
-	Text    string `json:"text"`
-	IconURL string `json:"icon_url,omitempty"`
+	Text    string `json:"text"`               // Text - footer text
+	IconURL string `json:"icon_url,omitempty"` // IconURL - url of footer icon (only supports http(s) and attachments)
 }
 
 type Field struct {
-	Name   string `json:"name"`
-	Value  string `json:"value"`
-	Inline bool   `json:"inline"`
+	Name   string `json:"name"`   // Name - name of the field
+	Value  string `json:"value"`  // Value - value of the field
+	Inline bool   `json:"inline"` // Inline - whether this field should display inline
 }
 
-/* ATTACHMENT OBJECT */
-
+// Attachment - For the attachments array in Message Create/Edit requests, only the id is required.
 type Attachment struct {
-	ID          Snowflake `json:"id"`
-	Filename    string    `json:"filename"`
-	Description string    `json:"description,omitempty"`
-	ContentType string    `json:"content_type,omitempty"`
-	Size        int       `json:"size"`
-	URL         string    `json:"url"`
-	ProxyURL    string    `json:"proxy_url"`
-	Height      int       `json:"height,omitempty"`
-	Width       int       `json:"width,omitempty"`
-	Ephemeral   bool      `json:"ephemeral,omitempty"`
+	ID          Snowflake `json:"id"`                     // ID - attachment id
+	Filename    string    `json:"filename"`               // Filename - name of file attached
+	Description string    `json:"description,omitempty"`  // Description - description for the file
+	ContentType string    `json:"content_type,omitempty"` // ContentType - the attachment's media type
+	Size        int       `json:"size"`                   // Size - size of file in bytes
+	URL         string    `json:"url"`                    // URL - source url of file
+	ProxyURL    string    `json:"proxy_url"`              // ProxyURL - a proxied url of file
+	Height      *int      `json:"height,omitempty"`       // Height - height of file (if image)
+	Width       *int      `json:"width,omitempty"`        // Width - width of file (if image)
+	Ephemeral   bool      `json:"ephemeral,omitempty"`    // Ephemeral - whether this attachment is ephemeral
 }
-
-/* CHANNEL MENTION OBJECT */
 
 type ChannelMention struct {
-	ID      Snowflake   `json:"id"`
-	GuildID Snowflake   `json:"guild_id"`
-	Type    ChannelType `json:"type"`
-	Name    string      `json:"name"`
+	ID      Snowflake   `json:"id"`       // ID - id of the channel
+	GuildID Snowflake   `json:"guild_id"` // GuildID - id of the guild containing the channel
+	Type    ChannelType `json:"type"`     // Type - the ChannelType
+	Name    string      `json:"name"`     // Name - the name of the channel
 }
 
-/* ALLOWED MENTIONS OBJECT */
+// AllowedMentions - The allowed mention field allows for more granular control over mentions without various hacks to the message content.
+//
+// This will always validate against message content to avoid phantom pings (e.g. to ping everyone, you must still have @everyone in the message content), and check against user/bot permissions.
+type AllowedMentions struct {
+	Parse       []AllowedMentionType `json:"parse"`                  // Parse - An array of AllowedMentionType to parse from the content.
+	Roles       []Snowflake          `json:"roles,omitempty"`        // Roles - Array of role_ids to mention (Max size of 100)
+	Users       []Snowflake          `json:"users,omitempty"`        // Users - Array of user_ids to mention (Max size of 100)
+	RepliedUser bool                 `json:"replied_user,omitempty"` // RepliedUser - For replies, whether to mention the author of the message being replied to (default false)
+}
 
 type AllowedMentionType string
 
 const (
-	RoleMentions     AllowedMentionType = "roles"
-	UserMentions     AllowedMentionType = "users"
-	EveryoneMentions AllowedMentionType = "everyone"
+	RoleMentions     AllowedMentionType = "roles"    // RoleMentions - Controls role mentions
+	UserMentions     AllowedMentionType = "users"    // UserMentions - Controls user mentions
+	EveryoneMentions AllowedMentionType = "everyone" // EveryoneMentions - Controls @everyone and @here mentions
 )
 
-type AllowedMentions struct {
-	Parse       []AllowedMentionType `json:"parse"`
-	Roles       []Snowflake          `json:"roles,omitempty"`
-	Users       []Snowflake          `json:"users,omitempty"`
-	RepliedUser bool                 `json:"replied_user,omitempty"`
-}
-
-/* HELPER FUNCTIONS */
-
-// Embed limits
+// Additionally, the combined sum of characters in all title, description, field.name, field.value, footer.text, and author.name fields across all embeds attached to a message must not exceed 6000 characters.
+//
+// Violating any of these constraints will result in a Bad Request response.
 const (
-	titleLimit       = 256
-	descriptionLimit = 4096
-	fieldCount       = 25
-	fieldNameLimit   = 256
-	fieldValueLimit  = 1024
-	footerTextLimit  = 2048
-	authorNameLimit  = 256
+	titleLimit       = 256  // titleLimit - 256 characters
+	descriptionLimit = 4096 // descriptionLimit - 4096 characters
+	fieldCount       = 25   // fieldCount - Up to 25 field objects
+	fieldNameLimit   = 256  // fieldNameLimit - 256 characters
+	fieldValueLimit  = 1024 // fieldValueLimit - 1024 characters
+	footerTextLimit  = 2048 // footerTextLimit - 2048 characters
+	authorNameLimit  = 256  // authorNameLimit - 256 characters
 )
-
-func (e *Embed) isValidLength() bool {
-	if len(e.Title) <= titleLimit && len(e.Description) <= descriptionLimit && len(e.Fields) <= fieldCount && len(e.Footer.Text) <= footerTextLimit && len(e.Author.Name) <= authorNameLimit {
-		for _, field := range e.Fields {
-			if len(field.Name) > fieldNameLimit || len(field.Value) > fieldValueLimit {
-				return false
-			}
-		}
-
-		return true
-	}
-
-	return false
-}
-
-func (c *Channel) String() string {
-	var chanType string
-
-	switch c.Type {
-	case GuildText:
-		chanType = "GTC:"
-	case DM:
-		chanType = "DM:"
-	case GroupDM:
-		chanType = "GDM:"
-	case GuildNews:
-		chanType = "GNC:"
-	case GuildNewsThread:
-		chanType = "GNT:"
-	case GuildPublicThread:
-		chanType = "GPuT:"
-	case GuildPrivateThread:
-		chanType = "GPrT:"
-	}
-
-	return chanType + c.Name + "(" + c.ID.String() + ")"
-}
 
 /* API endpoints */
 
