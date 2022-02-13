@@ -20,32 +20,32 @@ package api
 //
 // The top-level component's field is an array of Action Row components.
 type Component struct {
-	Type        ComponentType  `json:"type"`                  // Type - ComponentType; valid for all types
-	CustomID    string         `json:"custom_id,omitempty"`   // CustomID - a developer-defined identifier for the button, max 100 characters
-	Disabled    bool           `json:"disabled,omitempty"`    // Disabled - whether the button is disabled, default false
-	Style       interface{}    `json:"style,omitempty"`       // Style - one of ButtonStyle
-	Label       string         `json:"label,omitempty"`       // Label - text that appears on the button, max 80 characters
-	Emoji       *Emoji         `json:"emoji,omitempty"`       // Emoji - name, id, and animated
-	URL         string         `json:"url,omitempty"`         // URL - a URL for link-style buttons
-	Options     []SelectOption `json:"options,omitempty"`     // Options - the choices in the select, max 25
-	MinValues   int            `json:"min_values,omitempty"`  // MinValues - the minimum number of items that must be chosen; default 1, min 0, max 25
-	MaxValues   int            `json:"max_values,omitempty"`  // MaxValues - the maximum number of items that can be chosen; default 1, max 25
-	Placeholder string         `json:"placeholder,omitempty"` // Placeholder - custom placeholder text if nothing is selected, max 100 characters
-	Components  []Component    `json:"components,omitempty"`  // Components - a list of child components
-	MinLength   int            `json:"min_length,omitempty"`  // MinLength - the minimum input length for a text input
-	MaxLength   int            `json:"max_length,omitempty"`  // MaxLength - the maximum input length for a text input
-	Required    bool           `json:"required,omitempty"`    // Required - whether this component is required to be filled
-	Value       string         `json:"value,omitempty"`       // Value - a pre-filled value for this component
+	Type        ComponentType  `json:"type"`                  // ComponentType; valid for all types
+	CustomID    string         `json:"custom_id,omitempty"`   // a developer-defined identifier for the button, max 100 characters
+	Disabled    bool           `json:"disabled,omitempty"`    // whether the button is disabled, default false
+	Style       interface{}    `json:"style,omitempty"`       // one of ButtonStyle
+	Label       string         `json:"label,omitempty"`       // text that appears on the button, max 80 characters
+	Emoji       *Emoji         `json:"emoji,omitempty"`       // name, id, and animated
+	URL         string         `json:"url,omitempty"`         // a URL for link-style buttons
+	Options     []SelectOption `json:"options,omitempty"`     // the choices in the select, max 25
+	MinValues   int            `json:"min_values,omitempty"`  // the minimum number of items that must be chosen; default 1, min 0, max 25
+	MaxValues   int            `json:"max_values,omitempty"`  // the maximum number of items that can be chosen; default 1, max 25
+	Placeholder string         `json:"placeholder,omitempty"` // custom placeholder text if nothing is selected, max 100 characters
+	Components  []Component    `json:"components,omitempty"`  // a list of child components
+	MinLength   int            `json:"min_length,omitempty"`  // the minimum input length for a text input
+	MaxLength   int            `json:"max_length,omitempty"`  // the maximum input length for a text input
+	Required    bool           `json:"required,omitempty"`    // whether this component is required to be filled
+	Value       string         `json:"value,omitempty"`       // a pre-filled value for this component
 }
 
 // ComponentType - The type of component
 type ComponentType int
 
 const (
-	ComponentTypeActionRow  ComponentType = iota + 1 // ComponentTypeActionRow - A container for other components
-	ComponentTypeButton                              // ComponentTypeButton - A clickable button
-	ComponentTypeSelectMenu                          // ComponentTypeSelectMenu - A select menu for picking from choices
-	ComponentTypeTextInput                           // ComponentTypeTextInput - A text input object
+	ComponentTypeActionRow  ComponentType = iota + 1 // A container for other components
+	ComponentTypeButton                              // A clickable button
+	ComponentTypeSelectMenu                          // A select menu for picking from choices
+	ComponentTypeTextInput                           // A text input object
 )
 
 // Button - Buttons are interactive components that render on messages.
@@ -55,13 +55,13 @@ const (
 //    * Buttons must be sent inside an ComponentTypeActionRow
 //    * An ComponentTypeActionRow can contain up to 5 buttons
 type Button struct {
-	Type     ComponentType `json:"type"`                // Type - ComponentType for a button
-	Style    ButtonStyle   `json:"style"`               // Style - one of ButtonStyle
-	Label    string        `json:"label,omitempty"`     // Label - text that appears on the button, max 80 characters
-	Emoji    Emoji         `json:"emoji,omitempty"`     // Emoji - name, id, and animated
-	CustomID string        `json:"custom_id,omitempty"` // CustomID - a developer-defined identifier for the button, max 100 characters
-	URL      string        `json:"url,omitempty"`       // URL - a URL for link-style buttons
-	Disabled bool          `json:"disabled,omitempty"`  // Disabled - whether the button is disabled, default false
+	Type     ComponentType `json:"type"`                // ComponentType for a button
+	Style    ButtonStyle   `json:"style"`               // one of ButtonStyle
+	Label    string        `json:"label,omitempty"`     // text that appears on the button, max 80 characters
+	Emoji    Emoji         `json:"emoji,omitempty"`     // name, id, and animated
+	CustomID string        `json:"custom_id,omitempty"` // a developer-defined identifier for the button, max 100 characters
+	URL      string        `json:"url,omitempty"`       // a URL for link-style buttons
+	Disabled bool          `json:"disabled,omitempty"`  // whether the button is disabled, default false
 }
 
 // ButtonStyle - Buttons come in a variety of styles to convey different types of actions.
@@ -75,11 +75,11 @@ type ButtonStyle int
 
 //goland:noinspection SpellCheckingInspection
 const (
-	ButtonPrimary   ButtonStyle = iota + 1 // ButtonPrimary: color: blurple; requires field: custom_id
-	ButtonSecondary                        // ButtonSecondary: color: grey; requires field: custom_id
-	ButtonSuccess                          // ButtonSuccess: color: green; requires field: custom_id
-	ButtonDanger                           // ButtonDanger: color: red; requires field: custom_id
-	ButtonLink                             // ButtonLink: color: grey; requires field: url
+	ButtonPrimary   ButtonStyle = iota + 1 // color: blurple; requires field: custom_id
+	ButtonSecondary                        // color: grey; requires field: custom_id
+	ButtonSuccess                          // color: green; requires field: custom_id
+	ButtonDanger                           // color: red; requires field: custom_id
+	ButtonLink                             // color: grey; requires field: url
 )
 
 // SelectMenu - Select menus support single-select and multi-select behavior, meaning you can prompt a user to choose just one item from a list, or multiple.
@@ -90,22 +90,22 @@ const (
 //    An Action Row can contain only one select menu
 //    An Action Row containing a select menu cannot also contain buttons
 type SelectMenu struct {
-	Type        ComponentType  `json:"type"`                  // Type - ComponentTypeSelectMenu for a select menu
-	CustomID    string         `json:"custom_id"`             // CustomID - a developer-defined identifier for the button, max 100 characters
-	Options     []SelectOption `json:"options"`               // Options - the choices in the select, max 25
-	Placeholder string         `json:"placeholder,omitempty"` // Placeholder - custom placeholder text if nothing is selected, max 100 characters
-	MinValues   int64          `json:"min_values,omitempty"`  // MinValues - the minimum number of items that must be chosen; default 1, min 0, max 25
-	MaxValues   int64          `json:"max_values,omitempty"`  // MaxValues - the maximum number of items that can be chosen; default 1, max 25
-	Disabled    bool           `json:"disabled,omitempty"`    // Disabled - disable the select, default false
+	Type        ComponentType  `json:"type"`                  // ComponentTypeSelectMenu for a select menu
+	CustomID    string         `json:"custom_id"`             // a developer-defined identifier for the button, max 100 characters
+	Options     []SelectOption `json:"options"`               // the choices in the select, max 25
+	Placeholder string         `json:"placeholder,omitempty"` // custom placeholder text if nothing is selected, max 100 characters
+	MinValues   int64          `json:"min_values,omitempty"`  // the minimum number of items that must be chosen; default 1, min 0, max 25
+	MaxValues   int64          `json:"max_values,omitempty"`  // the maximum number of items that can be chosen; default 1, max 25
+	Disabled    bool           `json:"disabled,omitempty"`    // disable the select, default false
 }
 
 // SelectOption - Represents a single select menu option
 type SelectOption struct {
-	Label       string `json:"label"`                 // Label - the user-facing name of the option, max 25 characters
-	Value       string `json:"value"`                 // Value - the dev-define value of the option, max 100 characters
-	Description string `json:"description,omitempty"` // Description - an additional description of the option, max 50 characters
-	Emoji       *Emoji `json:"emoji,omitempty"`       // Emoji - id, name, and animated
-	Default     bool   `json:"default,omitempty"`     // Default - will render this option as selected by default
+	Label       string `json:"label"`                 // the user-facing name of the option, max 25 characters
+	Value       string `json:"value"`                 // the dev-define value of the option, max 100 characters
+	Description string `json:"description,omitempty"` // an additional description of the option, max 50 characters
+	Emoji       *Emoji `json:"emoji,omitempty"`       // id, name, and animated
+	Default     bool   `json:"default,omitempty"`     // will render this option as selected by default
 }
 
 // TextInput - Text inputs are an interactive component that render on modals. They can be used to collect short-form or long-form text.
@@ -125,6 +125,6 @@ type TextInput struct {
 type TextInputStyle int
 
 const (
-	TextInputShort     TextInputStyle = iota + 1 // TextInputShort - A single-line input
-	TextInputParagraph                           // TextInputParagraph - 	A multi-line input
+	TextInputShort     TextInputStyle = iota + 1 // A single-line input
+	TextInputParagraph                           // A multi-line input
 )

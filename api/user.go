@@ -22,25 +22,29 @@ import (
 	"strconv"
 )
 
-/*
-User
-
-
-
-
-
-
-
-Locale:
-*/
+// User - Discord enforces the following restrictions for usernames and nicknames:
+//
+//    Names can contain most valid unicode characters. We limit some zero-width and non-rendering characters.
+//    Usernames must be between 2 and 32 characters long.
+//    Nicknames must be between 1 and 32 characters long.
+//    Names are sanitized and trimmed of leading, trailing, and excessive internal whitespace.
+//
+// The following restrictions are additionally enforced for usernames:
+//
+//    Names cannot contain the following substrings: '@', '#', ':', '```'.
+//    Names cannot be: 'discordtag', 'everyone', 'here'.
+//
+// There are other rules and restrictions not shared here for the sake of spam and abuse mitigation, but the majority of users won't encounter them.
+//
+// It's important to properly handle all error messages returned by Discord when editing or updating names.
 type User struct {
-	ID            Snowflake   `json:"id,omitempty"`            // ID: the user's id
-	Username      string      `json:"username,omitempty"`      // Username: the user's username, not unique across the platform
-	Discriminator string      `json:"discriminator,omitempty"` // Discriminator: the user's 4-digit discord-tag
-	Avatar        *string     `json:"avatar"`                  // Avatar: the user's avatar hash
-	Bot           bool        `json:"bot,omitempty"`           // Bot: whether the user belongs to an OAuth2 application
-	System        bool        `json:"system,omitempty"`        // System: whether the user is an Official Discord System user (part of the urgent message system)
-	MfaEnabled    bool        `json:"mfa_enabled,omitempty"`   // MfaEnabled: whether the user has two factor enabled on their account
+	ID            Snowflake   `json:"id,omitempty"`            // the user's id
+	Username      string      `json:"username,omitempty"`      // the user's username, not unique across the platform
+	Discriminator string      `json:"discriminator,omitempty"` // the user's 4-digit discord-tag
+	Avatar        *string     `json:"avatar"`                  // the user's avatar hash
+	Bot           bool        `json:"bot,omitempty"`           // whether the user belongs to an OAuth2 application
+	System        bool        `json:"system,omitempty"`        // whether the user is an Official Discord System user (part of the urgent message system)
+	MfaEnabled    bool        `json:"mfa_enabled,omitempty"`   // whether the user has two factor enabled on their account
 	Banner        *string     `json:"banner,omitempty"`        // the user's banner hash
 	BannerColor   string      `json:"banner_color,omitempty"`  // Undocumented as of 10/31/21
 	AccentColor   *uint       `json:"accent_color,omitempty"`  // the user's banner color encoded as an integer representation of hexadecimal color code
@@ -99,6 +103,7 @@ type Connection struct {
 	Visibility   ConnectionVisibilityType `json:"visibility"`             // visibility of this connection
 }
 
+// ConnectionVisibilityType - visibility of this connection
 type ConnectionVisibilityType int
 
 //goland:noinspection GoUnusedConst
@@ -114,6 +119,7 @@ func GetCurrentUser() (method string, route string) {
 	return http.MethodGet, fmt.Sprintf(getCurrentUser, api)
 }
 
+// GetAvatarUrl - returns a properly formatted avatar url
 func (user *User) GetAvatarUrl() string {
 	if user.Avatar != nil {
 		if PtrStr(user.Avatar)[:2] == "a_" {
@@ -124,6 +130,7 @@ func (user *User) GetAvatarUrl() string {
 	return ImageBaseURL + fmt.Sprintf(getAvatarUrlPng, user.ID, PtrStr(user.Avatar))
 }
 
+// GetDefaultUserAvatarUrl - returns the default Discord avatar
 func (user *User) GetDefaultUserAvatarUrl() string {
 	discriminator, err := strconv.Atoi(user.Discriminator)
 	if err != nil {

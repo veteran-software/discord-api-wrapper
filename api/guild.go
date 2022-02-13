@@ -83,6 +83,7 @@ type Guild struct {
 	Permissions string `json:"permissions,omitempty"` // total permissions for the user in the guild (excludes overwrites)
 }
 
+// DefaultMessageNotificationLevel - default message notifications level
 type DefaultMessageNotificationLevel int
 
 //goland:noinspection GoUnusedConst
@@ -91,6 +92,7 @@ const (
 	OnlyMentions                                        // members will receive notifications only for messages that @mention them by default
 )
 
+// ExplicitContentFilterLevel - explicit content filter level
 type ExplicitContentFilterLevel int
 
 //goland:noinspection GoUnusedConst
@@ -100,6 +102,7 @@ const (
 	AllMembers                                            // media content sent by all members will be scanned
 )
 
+// MfaLevel - required MFA level for the guild
 type MfaLevel int
 
 //goland:noinspection GoUnusedConst
@@ -108,6 +111,7 @@ const (
 	MfaElevated                 // guild has a 2FA requirement for moderation actions
 )
 
+// VerificationLevel - verification level required for the guild
 type VerificationLevel int
 
 //goland:noinspection GoUnusedConst
@@ -119,6 +123,7 @@ const (
 	VerificationLevelVeryHigh                          // must have a verified phone number
 )
 
+// GuildNsfwLevel - guild NSFW level
 type GuildNsfwLevel int
 
 //goland:noinspection GoUnusedConst
@@ -129,6 +134,7 @@ const (
 	NsfwAgeRestricted
 )
 
+// PremiumTier - premium tier (Server Boost level)
 type PremiumTier int
 
 //goland:noinspection GoUnusedConst
@@ -139,6 +145,7 @@ const (
 	PremiumTier3                    // guild has unlocked Server Boost level 3 perks
 )
 
+// SystemChannelFlags - system channel flags
 type SystemChannelFlags int
 
 //goland:noinspection GoUnusedConst
@@ -149,6 +156,7 @@ const (
 	SuppressJoinNotificationReplies    SystemChannelFlags = 1 << 3 // Hide member join sticker reply buttons
 )
 
+// GuildFeatures - enabled guild features
 type GuildFeatures string
 
 //goland:noinspection SpellCheckingInspection,GrazieInspection,GoUnusedConst
@@ -200,11 +208,13 @@ type GuildPreview struct {
 	Stickers                 []Sticker       `json:"stickers"`                   // custom guild stickers
 }
 
+// GuildWidget - the guild widget status
 type GuildWidget struct {
 	Enabled   bool       `json:"enabled"`    // whether the widget is enabled
 	ChannelID *Snowflake `json:"channel_id"` // the widget channel id
 }
 
+// GetGuildWidget - the guild widget
 type GetGuildWidget struct {
 	ID            Snowflake     `json:"id"`             // guild id
 	Name          string        `json:"name"`           // guild name (2-100 characters)
@@ -234,6 +244,7 @@ type GuildMember struct {
 	CommunicationDisabledUntil *time.Time  `json:"communication_disabled_until,omitempty"` // CommunicationDisabledUntil - when the user's timeout will expire and the user will be able to communicate in the guild again, null or a time in the past if the user is not timed out
 }
 
+// Integration - a guild integration
 type Integration struct {
 	ID                Snowflake                 `json:"id"`                            // integration id
 	Name              string                    `json:"name"`                          // integration name
@@ -252,6 +263,7 @@ type Integration struct {
 	Application       IntegrationApplication    `json:"application,omitempty"`         // The bot/OAuth2 application for discord integrations
 }
 
+// IntegrationExpireBehavior - the behavior of expiring subscribers
 type IntegrationExpireBehavior int
 
 //goland:noinspection GoUnusedConst
@@ -260,11 +272,13 @@ const (
 	Kick                                        // Kick
 )
 
+// IntegrationAccount - integration account information
 type IntegrationAccount struct {
 	ID   string `json:"id"`   // id of the account
 	Name string `json:"name"` // name of the account
 }
 
+// IntegrationApplication - The bot/OAuth2 application for discord integrations
 type IntegrationApplication struct {
 	ID          Snowflake `json:"id"`            // the id of the app
 	Name        string    `json:"name"`          // the name of the app
@@ -274,16 +288,19 @@ type IntegrationApplication struct {
 	Bot         User      `json:"bot,omitempty"` // the bot associated with this application
 }
 
+// Ban - represents a guild member ban object
 type Ban struct {
 	Reason *string `json:"reason"` // the reason for the ban
 	User   User    `json:"user"`   // the banned user
 }
 
+// WelcomeScreen - the welcome screen object
 type WelcomeScreen struct {
 	Description     *string                `json:"description,omitempty"`      // the server description shown in the welcome screen
 	WelcomeChannels []WelcomeScreenChannel `json:"welcome_channels,omitempty"` // the channels shown in the welcome screen, up to 5
 }
 
+// WelcomeScreenChannel - the channels shown in the welcome screen, up to 5
 type WelcomeScreenChannel struct {
 	ChannelID   Snowflake  `json:"channel_id,omitempty"`  // the channel's id
 	Description string     `json:"description,omitempty"` // the description shown for the channel

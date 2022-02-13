@@ -34,32 +34,31 @@ const thrID = "thread_id="
 
 // Webhook - Used to represent a webhook.
 type Webhook struct {
-	ID            Snowflake   `json:"id"`                       // ID - the id of the webhook
-	Type          WebhookType `json:"type"`                     // Type - the type of the webhook
-	GuildID       *Snowflake  `json:"guild_id,omitempty"`       // GuildID - the guild id this webhook is for, if any
-	ChannelID     *Snowflake  `json:"channel_id"`               // ChannelID - the channel id this webhook is for, if any
-	User          User        `json:"user,omitempty"`           // User - the user this webhook was created by (not returned when getting a webhook with its token)
-	Name          *string     `json:"name"`                     // Name - the default name of the webhook
-	Avatar        *string     `json:"avatar"`                   // Avatar - the default user avatar hash of the webhook
-	Token         string      `json:"token,omitempty"`          // Token - the secure token of the webhook (returned for Incoming Webhooks)
-	ApplicationID *Snowflake  `json:"application_id"`           // ApplicationID - the bot/OAuth2 application that created this webhook
-	SourceGuild   Guild       `json:"source_guild,omitempty"`   // SourceGuild - the guild of the channel that this webhook is following (returned for Channel Follower Webhooks)
-	SourceChannel Channel     `json:"source_channel,omitempty"` // SourceChannel - the channel that this webhook is following (returned for Channel Follower Webhooks)
-	URL           string      `json:"url,omitempty"`            // URL - the url used for executing the webhook (returned by the webhooks OAuth2 flow)
+	ID            Snowflake   `json:"id"`                       // the id of the webhook
+	Type          WebhookType `json:"type"`                     // the type of the webhook
+	GuildID       *Snowflake  `json:"guild_id,omitempty"`       // the guild id this webhook is for, if any
+	ChannelID     *Snowflake  `json:"channel_id"`               // the channel id this webhook is for, if any
+	User          User        `json:"user,omitempty"`           // the user this webhook was created by (not returned when getting a webhook with its token)
+	Name          *string     `json:"name"`                     // the default name of the webhook
+	Avatar        *string     `json:"avatar"`                   // the default user avatar hash of the webhook
+	Token         string      `json:"token,omitempty"`          // the secure token of the webhook (returned for Incoming Webhooks)
+	ApplicationID *Snowflake  `json:"application_id"`           // the bot/OAuth2 application that created this webhook
+	SourceGuild   Guild       `json:"source_guild,omitempty"`   // the guild of the channel that this webhook is following (returned for Channel Follower Webhooks)
+	SourceChannel Channel     `json:"source_channel,omitempty"` // the channel that this webhook is following (returned for Channel Follower Webhooks)
+	URL           string      `json:"url,omitempty"`            // the url used for executing the webhook (returned by the webhooks OAuth2 flow)
 }
 
+// WebhookType - the type of the webhook
 type WebhookType int
 
 //goland:noinspection GoUnusedConst
 const (
-	WebhookTypeIncoming        WebhookType = iota + 1 // WebhookTypeIncoming - Incoming Webhooks can post messages to channels with a generated token
-	WebhookTypeChannelFollower                        // WebhookTypeChannelFollower - Channel Follower Webhooks are internal webhooks used with Channel Following to post new messages into channels
-	WebhookTypeApplication                            // WebhookTypeApplication - Application webhooks are webhooks used with Interactions
+	WebhookTypeIncoming        WebhookType = iota + 1 // Incoming Webhooks can post messages to channels with a generated token
+	WebhookTypeChannelFollower                        // Channel Follower Webhooks are internal webhooks used with Channel Following to post new messages into channels
+	WebhookTypeApplication                            // Application webhooks are webhooks used with Interactions
 )
 
-// CreateWebhook
-//
-// Create a new webhook.
+// CreateWebhook - Create a new webhook.
 //
 // Requires the ManageWebhooks permission.
 //
@@ -74,9 +73,10 @@ func (c *Channel) CreateWebhook() (string, string) {
 	return http.MethodPost, fmt.Sprintf(createWebhook, api, c.ID.String())
 }
 
+// CreateWebhookJSON - JSON payload structure
 type CreateWebhookJSON struct {
-	Name   string           `json:"name"`             // Name - name of the webhook (1-80 characters)
-	Avatar *base64.Encoding `json:"avatar,omitempty"` // Avatar - image for the default webhook avatar
+	Name   string           `json:"name"`             // name of the webhook (1-80 characters)
+	Avatar *base64.Encoding `json:"avatar,omitempty"` // image for the default webhook avatar
 }
 
 // GetChannelWebhooks - Returns a list of channel webhook objects. Requires the ManageWebhooks permission.
@@ -108,10 +108,11 @@ func (w *Webhook) ModifyWebhook() (string, string) {
 	return http.MethodPatch, fmt.Sprintf(modifyWebhook, api, w.ID.String())
 }
 
+// ModifyWebhookJSON - JSON payload structure
 type ModifyWebhookJSON struct {
-	Name      string           `json:"name,omitempty"`       // Name - the default name of the webhook
-	Avatar    *base64.Encoding `json:"avatar,omitempty"`     // Avatar - image for the default webhook avatar
-	ChannelID Snowflake        `json:"channel_id,omitempty"` // ChannelID - the new channel id this webhook should be moved to
+	Name      string           `json:"name,omitempty"`       // the default name of the webhook
+	Avatar    *base64.Encoding `json:"avatar,omitempty"`     // image for the default webhook avatar
+	ChannelID Snowflake        `json:"channel_id,omitempty"` // the new channel id this webhook should be moved to
 }
 
 // ModifyWebhookWithToken - Same as above, except this call does not require authentication, does not accept a channel_id parameter in the body, and does not return a user in the webhook object.
@@ -152,17 +153,18 @@ func (w *Webhook) ExecuteWebhook(wait *bool, threadID *Snowflake) (string, strin
 	return http.MethodPost, fmt.Sprintf(executeWebhook, api, w.ID.String(), w.Token, query)
 }
 
+// ExecuteWebhookJSON - JSON payload structure
 type ExecuteWebhookJSON struct {
-	Content         string          `json:"content"`                    // Content - the message contents (up to 2000 characters); Required - one of content, file, embeds
-	Username        string          `json:"username,omitempty"`         // Username - override the default username of the webhook; Required - false
-	AvatarURL       string          `json:"avatar_url,omitempty"`       // AvatarURL - override the default avatar of the webhook; Required - false
-	Tts             bool            `json:"tts,omitempty"`              // Tts - true if this is a TTS message; Required - false
-	Embeds          []Embed         `json:"embeds"`                     // Embeds - embedded rich content; Required - one of content, file, embeds
-	AllowedMentions AllowedMentions `json:"allowed_mentions,omitempty"` // AllowedMentions - allowed mentions for the message; Required - false
-	Components      []Component     `json:"components,omitempty"`       // Components - the components to include with the message - Required - false
-	PayloadJson     string          `json:"payload_json"`               // PayloadJson - JSON encoded body of non-file params; Required - "multipart/form-data" only
-	Attachments     []Attachment    `json:"attachments,omitempty"`      // Attachments - Attachment objects with filename and description; Required - false
-	Flags           MessageFlags    `json:"flags,omitempty"`            // Flags - MessageFlags combined as a bitfield (only SuppressEmbeds can be set)
+	Content         string          `json:"content"`                    // the message contents (up to 2000 characters); Required - one of content, file, embeds
+	Username        string          `json:"username,omitempty"`         // override the default username of the webhook; Required - false
+	AvatarURL       string          `json:"avatar_url,omitempty"`       // override the default avatar of the webhook; Required - false
+	Tts             bool            `json:"tts,omitempty"`              // true if this is a TTS message; Required - false
+	Embeds          []Embed         `json:"embeds"`                     // embedded rich content; Required - one of content, file, embeds
+	AllowedMentions AllowedMentions `json:"allowed_mentions,omitempty"` // allowed mentions for the message; Required - false
+	Components      []Component     `json:"components,omitempty"`       // the components to include with the message - Required - false
+	PayloadJson     string          `json:"payload_json"`               // JSON encoded body of non-file params; Required - "multipart/form-data" only
+	Attachments     []Attachment    `json:"attachments,omitempty"`      // Attachment objects with filename and description; Required - false
+	Flags           MessageFlags    `json:"flags,omitempty"`            // MessageFlags combined as a bitfield (only SuppressEmbeds can be set)
 }
 
 // ExecuteSlackCompatibleWebhook - Refer to Slack's documentation for more information. We do not support Slack's channel, icon_emoji, mrkdwn, or mrkdwn_in properties.
@@ -184,9 +186,7 @@ func (w *Webhook) ExecuteSlackCompatibleWebhook(wait *bool, threadID *Snowflake)
 	return http.MethodPost, fmt.Sprintf(executeSlackCompatibleWebhook, api, w.ID.String(), w.Token, query)
 }
 
-// ExecuteGitHubCompatibleWebhook
-//
-// Add a new webhook to your GitHub repo (in the repo's settings), and use this endpoint as the "Payload URL."
+// ExecuteGitHubCompatibleWebhook - Add a new webhook to your GitHub repo (in the repo's settings), and use this endpoint as the "Payload URL."
 //
 // You can choose what events your Discord channel receives by choosing the "Let me select individual events" option and selecting individual events for the new webhook you're configuring.
 //
@@ -219,9 +219,7 @@ func (w *Webhook) GetWebhookMessage(msgID Snowflake, threadID *Snowflake) (strin
 	return http.MethodGet, fmt.Sprintf(getWebhookMessage, api, w.ID.String(), w.Token, msgID.String(), query)
 }
 
-// EditWebhookMessage
-//
-// Edits a previously-sent webhook message from the same token. Returns a message object on success.
+// EditWebhookMessage - Edits a previously-sent webhook message from the same token. Returns a message object on success.
 //
 // When the content field is edited, the mentions array in the message object will be reconstructed from scratch based on the new content.
 // The allowed_mentions field of the edit request controls how this happens.
@@ -247,12 +245,12 @@ func (w *Webhook) EditWebhookMessage(msgID Snowflake, threadID *Snowflake) (stri
 
 // EditWebhookMessageJSON - All parameters to this endpoint are optional and nullable.
 type EditWebhookMessageJSON struct {
-	Content         *string          `json:"content,omitempty"`          // Content - the message contents (up to 2000 characters)
-	Embeds          *[]Embed         `json:"embeds,omitempty"`           // Embeds - embedded rich content
-	AllowedMentions *AllowedMentions `json:"allowed_mentions,omitempty"` // AllowedMentions - allowed mentions for the message
-	Components      *[]Component     `json:"components,omitempty"`       // Components - the components to include with the message
-	PayloadJson     *string          `json:"payload_json,omitempty"`     // PayloadJson - JSON encoded body of non-file params (multipart/form-data only)
-	Attachments     *[]Attachment    `json:"attachments,omitempty"`      // Attachments - attached files to keep and possible descriptions for new files
+	Content         *string          `json:"content,omitempty"`          // the message contents (up to 2000 characters)
+	Embeds          *[]Embed         `json:"embeds,omitempty"`           // embedded rich content
+	AllowedMentions *AllowedMentions `json:"allowed_mentions,omitempty"` // allowed mentions for the message
+	Components      *[]Component     `json:"components,omitempty"`       // the components to include with the message
+	PayloadJson     *string          `json:"payload_json,omitempty"`     // JSON encoded body of non-file params (multipart/form-data only)
+	Attachments     *[]Attachment    `json:"attachments,omitempty"`      // attached files to keep and possible descriptions for new files
 }
 
 // DeleteWebhookMessage - Deletes a message that was created by the webhook. Returns a 204 No Content response on success.

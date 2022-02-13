@@ -91,7 +91,8 @@ func (s Snowflake) Timestamp() time.Time {
 }
 
 const (
-	UserAgent = "NowLiveCustomLib (https://nowlivebot.com, 1.0)" // UserAgent - header value to be sent with each API request
+	// UserAgent - header value to be sent with each API request
+	UserAgent = "NowLiveCustomLib (https://nowlivebot.com, 1.0)"
 )
 
 // Format - Discord utilizes a subset of markdown for rendering message content on its clients, while also adding some custom functionality to enable things like mentioning users and channels.
@@ -124,7 +125,8 @@ const (
 )
 
 const (
-	ImageBaseURL string = "https://cdn.discordapp.com/" // ImageBaseURL - The root URL for image links
+	// ImageBaseURL - The root URL for image links
+	ImageBaseURL string = "https://cdn.discordapp.com/"
 )
 
 // PtrStr converts a string pointer to a string

@@ -40,12 +40,15 @@ type GuildScheduledEvent struct {
 	Image              *string                            `json:"image"`                 // the cover image hash of the scheduled event
 }
 
+// GuildScheduledEventPrivacyLevel - the privacy level of the scheduled event
 type GuildScheduledEventPrivacyLevel int
 
 const (
-	GuildScheduledEventPrivacyLevelGuildOnly GuildScheduledEventPrivacyLevel = iota + 2 // the scheduled event is only accessible to guild members
+	// GuildScheduledEventPrivacyLevelGuildOnly - the scheduled event is only accessible to guild members
+	GuildScheduledEventPrivacyLevelGuildOnly GuildScheduledEventPrivacyLevel = iota + 2
 )
 
+// GuildScheduledEventType - the type of the scheduled event
 type GuildScheduledEventType int
 
 //goland:noinspection GoUnusedConst

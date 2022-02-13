@@ -30,6 +30,7 @@ type StageInstance struct {
 	PrivacyLevel PrivacyLevel `json:"privacy_level"` // The privacy level of the Stage instance
 }
 
+// PrivacyLevel - The privacy level of the Stage instance
 type PrivacyLevel int
 
 //goland:noinspection GoUnusedConst

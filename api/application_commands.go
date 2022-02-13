@@ -139,6 +139,7 @@ func CreateGlobalApplicationCommand(applicationID string) (method string, route 
 	return http.MethodPost, fmt.Sprintf(createGlobalApplicationCommand, api, applicationID)
 }
 
+// CreateApplicationCommandJSON - JSON payload structure
 type CreateApplicationCommandJSON struct {
 	Name              string                      `json:"name"`                         // 1-32 character name
 	Description       string                      `json:"description"`                  // 1-100 character description
@@ -163,6 +164,7 @@ func (i *Interaction) EditGlobalApplicationCommand() (method string, route strin
 	return http.MethodPatch, fmt.Sprintf(editGlobalApplicationCommand, api, i.ApplicationID, i.Data.ID)
 }
 
+// EditApplicationCommandJSON - JSON payload structure
 type EditApplicationCommandJSON struct {
 	Name              string                      `json:"name"`                         // 1-32 character name
 	Description       string                      `json:"description"`                  // 1-100 character description
@@ -214,6 +216,7 @@ func CreateGuildApplicationCommand(applicationID string, guildID string) (method
 	return http.MethodPost, fmt.Sprintf(createGuildApplicationCommand, api, applicationID, guildID)
 }
 
+// CreateGuildApplicationCommandJSON - JSON payload structure
 type CreateGuildApplicationCommandJSON struct {
 	Name              string                      `json:"name"`                         // 1-32 character name
 	Description       string                      `json:"description"`                  // 1-100 character description
@@ -236,6 +239,7 @@ func (i *Interaction) EditGuildApplicationCommand() (method string, route string
 	return http.MethodPatch, fmt.Sprintf(editGuildApplicationCommand, api, i.ApplicationID, i.GuildID, i.Data.ID)
 }
 
+// EditGuildApplicationCommandJSON - JSON payload structure
 type EditGuildApplicationCommandJSON struct {
 	Name              string                      `json:"name"`                         // 1-32 character name
 	Description       string                      `json:"description"`                  // 1-100 character description
@@ -282,6 +286,7 @@ func (i *Interaction) EditApplicationCommandPermissions() (method string, route 
 	return http.MethodPut, fmt.Sprintf(editApplicationCommandPermissions, api, i.ApplicationID, i.GuildID, i.Data.ID)
 }
 
+// EditApplicationCommandPermissionsJSON - JSON payload structure
 type EditApplicationCommandPermissionsJSON struct {
 	Permissions []ApplicationCommandPermissions `json:"permissions"` // the permissions for the command in the guild
 }

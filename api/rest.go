@@ -52,6 +52,7 @@ var (
 )
 
 var (
+	// Rest - Holds the rate limit buckets
 	Rest *RateLimiter
 )
 
@@ -59,6 +60,7 @@ func init() {
 	Rest = NewRatelimiter()
 }
 
+// Request - send an HTTP request with rate limiting
 func (r *RateLimiter) Request(method, route string, data interface{}, reason *string) (*http.Response, error) {
 	return r.requestWithBucketID(method, route, strings.SplitN(route, "?", 2)[0], data, reason)
 }
@@ -111,7 +113,7 @@ func (r *RateLimiter) lockedRequest(method, route, contentType string, b interfa
 	req.Header.Set(http.CanonicalHeaderKey("User-Agent"), UserAgent)
 
 	ctx, cancel := context.WithDeadline(req.Context(), time.Now().Add(5*time.Second))
-	handleContextCancel(cancel, ctx)
+	handleContextCancel(ctx, cancel)
 
 	resp, err := httpClient.Do(req.WithContext(ctx))
 
@@ -145,7 +147,7 @@ func (r *RateLimiter) lockedRequest(method, route, contentType string, b interfa
 	return resp, nil
 }
 
-func handleContextCancel(cancel context.CancelFunc, ctx context.Context) {
+func handleContextCancel(ctx context.Context, cancel context.CancelFunc) {
 	go func(ctx context.Context) {
 		defer cancel()
 

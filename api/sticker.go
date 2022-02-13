@@ -23,26 +23,27 @@ import (
 
 // Sticker - Represents a sticker that can be sent in messages.
 type Sticker struct {
-	ID          Snowflake   `json:"id"`                   // ID - id of the sticker
-	PackID      Snowflake   `json:"pack_id,omitempty"`    // PackID - for standard stickers, id of the pack the sticker is from
-	Name        string      `json:"name"`                 // Name - name of the sticker
-	Description *string     `json:"description"`          // Description - description of the sticker
-	Tags        string      `json:"tags,omitempty"`       // Tags - autocomplete/suggestion tags for the sticker (max 200 characters)
-	Asset       string      `json:"asset,omitempty"`      // Asset - Deprecated: previously the sticker asset hash, now an empty string
-	Type        StickerType `json:"type"`                 // Type - type of sticker
-	FormatType  int         `json:"format_type"`          // FormatType - type of sticker format
-	Available   bool        `json:"available,omitempty"`  // Available - whether this guild sticker can be used, may be false due to loss of Server Boosts
-	GuildID     Snowflake   `json:"guild_id,omitempty"`   // GuildID - id of the guild that owns this sticker
-	User        User        `json:"user,omitempty"`       // User - the user that uploaded the guild sticker
-	SortValue   int         `json:"sort_value,omitempty"` // SortValue - the standard sticker's sort order within its pack
+	ID          Snowflake   `json:"id"`                   // id of the sticker
+	PackID      Snowflake   `json:"pack_id,omitempty"`    // for standard stickers, id of the pack the sticker is from
+	Name        string      `json:"name"`                 // name of the sticker
+	Description *string     `json:"description"`          // description of the sticker
+	Tags        string      `json:"tags,omitempty"`       // autocomplete/suggestion tags for the sticker (max 200 characters)
+	Asset       string      `json:"asset,omitempty"`      // Deprecated: previously the sticker asset hash, now an empty string
+	Type        StickerType `json:"type"`                 // type of sticker
+	FormatType  int         `json:"format_type"`          // type of sticker format
+	Available   bool        `json:"available,omitempty"`  // whether this guild sticker can be used, may be false due to loss of Server Boosts
+	GuildID     Snowflake   `json:"guild_id,omitempty"`   // id of the guild that owns this sticker
+	User        User        `json:"user,omitempty"`       // the user that uploaded the guild sticker
+	SortValue   int         `json:"sort_value,omitempty"` // the standard sticker's sort order within its pack
 }
 
+// StickerType - type of sticker
 type StickerType int
 
 //goland:noinspection GoUnusedConst
 const (
-	StickerTypeStandard StickerType = iota + 1 // StickerTypeStandard - an official sticker in a pack, part of Nitro or in a removed purchasable pack
-	StickerTypeGuild                           // StickerTypeGuild - a sticker uploaded to a Boosted guild for the guild's members
+	StickerTypeStandard StickerType = iota + 1 // an official sticker in a pack, part of Nitro or in a removed purchasable pack
+	StickerTypeGuild                           // a sticker uploaded to a Boosted guild for the guild's members
 )
 
 // StickerFormatType - The format of the Sticker
@@ -57,20 +58,20 @@ const (
 
 // StickerItem - The smallest amount of data required to render a sticker. A partial sticker object.
 type StickerItem struct {
-	ID         Snowflake         `json:"id"`          // ID - id of the sticker
-	Name       string            `json:"name"`        // Name - name of the sticker
-	FormatType StickerFormatType `json:"format_type"` // FormatType - type of sticker format
+	ID         Snowflake         `json:"id"`          // id of the sticker
+	Name       string            `json:"name"`        // name of the sticker
+	FormatType StickerFormatType `json:"format_type"` // type of sticker format
 }
 
 // StickerPack - Represents a pack of standard stickers.
 type StickerPack struct {
-	ID             Snowflake `json:"id"`                         // ID - id of the sticker pack
-	Stickers       []Sticker `json:"stickers"`                   // Stickers - the stickers in the pack
-	Name           string    `json:"name"`                       // Name - name of the sticker pack
-	SkuID          Snowflake `json:"sku_id"`                     // SkuID - id of the pack's SKU
-	CoverStickerID Snowflake `json:"cover_sticker_id,omitempty"` // CoverStickerID - id of a sticker in the pack which is shown as the pack's icon
-	Description    string    `json:"description"`                // Description - description of the sticker pack
-	BannerAssetID  Snowflake `json:"banner_asset_id,omitempty"`  // BannerAssetID - id of the sticker pack's banner image
+	ID             Snowflake `json:"id"`                         // id of the sticker pack
+	Stickers       []Sticker `json:"stickers"`                   // the stickers in the pack
+	Name           string    `json:"name"`                       // name of the sticker pack
+	SkuID          Snowflake `json:"sku_id"`                     // id of the pack's SKU
+	CoverStickerID Snowflake `json:"cover_sticker_id,omitempty"` // id of a sticker in the pack which is shown as the pack's icon
+	Description    string    `json:"description"`                // description of the sticker pack
+	BannerAssetID  Snowflake `json:"banner_asset_id,omitempty"`  // id of the sticker pack's banner image
 }
 
 // GetSticker - Returns a sticker object for the given sticker ID.

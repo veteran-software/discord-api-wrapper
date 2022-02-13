@@ -30,6 +30,13 @@ type GatewayPayload struct {
 	T  *string      `json:"t"`  // the event name for this payload
 }
 
+// GatewayIntents - Maintaining a stateful application can be difficult when it comes to the amount of data you're expected to process, especially at scale.
+//
+// Gateway Intents are a system to help you lower that computational burden.
+//
+// When identifying to the gateway, you can specify an intents parameter which allows you to conditionally subscribe to pre-defined "intents", groups of events defined by Discord.
+//
+// If you do not specify a certain intent, you will not receive any of the gateway events that are batched into that group.
 type GatewayIntents int64
 
 //goland:noinspection GoUnusedConst
@@ -63,6 +70,7 @@ type Identify struct {
 	Intents        GatewayIntents        `json:"intents"`                   // the Gateway Intents you wish to receive
 }
 
+// IdentifyConnection - properties
 type IdentifyConnection struct {
 	OS      string `json:"$os"`      // your operating system
 	Browser string `json:"$browser"` // your library name
@@ -192,11 +200,13 @@ type ActivityEmoji struct {
 	Animated bool      `json:"animated,omitempty"` // whether this emoji is animated
 }
 
+// ActivityParty - information for the current party of the player
 type ActivityParty struct {
 	ID   string    `json:"id,omitempty"`   // the id of the party
 	Size [2]uint16 `json:"size,omitempty"` // the id of the party; used to show the party's current and maximum size
 }
 
+// ActivityAssets - images for the presence and their hover texts
 type ActivityAssets struct {
 	LargeImage string `json:"large_image,omitempty"` // see https://discord.com/developers/docs/topics/gateway#activity-object-activity-asset-image
 	LargeText  string `json:"large_text,omitempty"`  // text displayed when hovering over the large image of the activity
@@ -204,12 +214,14 @@ type ActivityAssets struct {
 	SmallText  string `json:"small_text,omitempty"`  // text displayed when hovering over the small image of the activity
 }
 
+// ActivitySecrets - secrets for Rich Presence joining and spectating
 type ActivitySecrets struct {
 	Join     string `json:"join,omitempty"`     // the secret for joining a party
 	Spectate string `json:"spectate,omitempty"` // the secret for spectating a game
 	Match    string `json:"match,omitempty"`    // the secret for a specific instanced match
 }
 
+// ActivityFlag - describes what the payload includes
 type ActivityFlag uint
 
 //goland:noinspection GoUnusedConst

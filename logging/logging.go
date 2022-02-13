@@ -25,6 +25,7 @@ import (
 )
 
 const (
+	// LogPrefixDiscord - log output format for logs sent from this package
 	LogPrefixDiscord = "[DISCORD  ]"
 )
 

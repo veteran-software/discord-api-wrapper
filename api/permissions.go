@@ -20,6 +20,15 @@ import (
 	"strconv"
 )
 
+// Permission - Permissions in Discord are a way to limit and grant certain abilities to users.
+// A set of base permissions can be configured at the guild level for different roles.
+// When these roles are attached to users, they grant or revoke specific privileges within the guild.
+// Along with the guild-level permissions, Discord also supports permission overwrites that can be assigned to individual guild roles or guild members on a per-channel basis.
+//
+// Permissions are stored within a variable-length integer serialized into a string, and are calculated using bitwise operations.
+// For example, the permission value 123 will be serialized as "123".
+// For long-term stability, we recommend deserializing the permissions using your languages' Big Integer libraries.
+// The total permissions integer can be determined by ORing together each individual value, and flags can be checked using AND operations.
 type Permission uint64
 
 //goland:noinspection GoUnusedConst
