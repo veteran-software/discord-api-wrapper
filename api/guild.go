@@ -63,8 +63,8 @@ type Guild struct {
 	ApproximatePresenceCount    uint64                          `json:"approximate_presence_count,omitempty"`
 	WelcomeScreen               WelcomeScreen                   `json:"welcome_screen,omitempty"`
 	NsfwLevel                   GuildNsfwLevel                  `json:"nsfw_level"`
-	// TODO: Stickers
-	PremiumProgressBarEnabled bool `json:"premium_progress_bar_enabled"`
+	Stickers                    []Sticker                       `json:"stickers,omitempty"`
+	PremiumProgressBarEnabled   bool                            `json:"premium_progress_bar_enabled"`
 
 	// These fields are only sent within the GUILD_CREATE event
 
@@ -146,6 +146,7 @@ const (
 
 type GuildFeatures string
 
+//goland:noinspection SpellCheckingInspection
 const (
 	AnimatedIcon                  GuildFeatures = "ANIMATED_ICON"
 	Banner                        GuildFeatures = "BANNER"
@@ -170,6 +171,11 @@ const (
 	VipRegions                    GuildFeatures = "VIP_REGIONS"
 	WelcomeScreenEnabled          GuildFeatures = "WELCOME_SCREEN_ENABLED"
 )
+
+type UnavailableGuild struct {
+	ID          Snowflake `json:"id"`
+	Unavailable bool      `json:"unavailable"`
+}
 
 /* GUILD WIDGET OBJECT */
 

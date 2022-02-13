@@ -24,8 +24,8 @@ import (
 /* API Versioning */
 
 const apiBase string = "https://discord.com/api"
-const apiVersion string = "/v9"
-const api = apiBase + apiVersion
+const apiVersion string = "/v"
+const api = apiBase + apiVersion + string(rune(gatewayVersion))
 
 /* Authentication */
 
