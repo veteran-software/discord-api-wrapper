@@ -18,7 +18,7 @@ package api
 
 //goland:noinspection GoUnusedConst
 const (
-	gatewayVersion        = 9
+	gatewayVersion        = 10
 	gatewayURLQueryString = "?v=" + string(rune(gatewayVersion)) + "&encoding=json"
 )
 

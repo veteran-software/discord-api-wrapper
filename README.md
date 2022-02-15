@@ -22,7 +22,7 @@ project.
 
 > NOTE:  This wrapper always uses the latest version of the Discord API
 >
->  Gateway Version: 9
+>  Gateway Version: 10
 
 If you wish to import this library into your project, please
 read [LICENSE.md](https://github.com/veteran-software/discord-api-wrapper/blob/main/LICENSE.md)
