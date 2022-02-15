@@ -22,9 +22,9 @@ import (
 )
 
 const (
-	whIDToken                   = "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"
-	whIdTokenMessagesId         = "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/messages/148336120936005632"
-	whIdTokenMessagesIdThreadId = "https://discord.com/api/v9/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/messages/148336120936005632?thread_id=934478965031174194"
+	whIDToken                   = "https://discord.com/api/v10/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"
+	whIdTokenMessagesId         = "https://discord.com/api/v10/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/messages/148336120936005632"
+	whIdTokenMessagesIdThreadId = "https://discord.com/api/v10/webhooks/905130195520983061/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt/messages/148336120936005632?thread_id=934478965031174194"
 )
 
 var w = true
@@ -43,7 +43,7 @@ func TestChannelCreateWebhook(t *testing.T) {
 			name:   "Create Webhook",
 			fields: fields{ID: Snowflake("753228874875273256")},
 			want:   http.MethodPost,
-			want1:  "https://discord.com/api/v9/channels/753228874875273256/webhooks",
+			want1:  "https://discord.com/api/v10/channels/753228874875273256/webhooks",
 		},
 	}
 	for _, tt := range tests {
@@ -76,7 +76,7 @@ func TestChannelGetChannelWebhooks(t *testing.T) {
 			name:   "Get Channel Webhooks",
 			fields: fields{ID: Snowflake("753228874875273256")},
 			want:   http.MethodGet,
-			want1:  "https://discord.com/api/v9/channels/753228874875273256/webhooks",
+			want1:  "https://discord.com/api/v10/channels/753228874875273256/webhooks",
 		},
 	}
 	for _, tt := range tests {
@@ -109,7 +109,7 @@ func TestGuildGetGuildWebhooks(t *testing.T) {
 			name:   "Get Guild Webhooks",
 			fields: fields{ID: Snowflake("250045505659207699")},
 			want:   http.MethodGet,
-			want1:  "https://discord.com/api/v9/guilds/250045505659207699/webhooks",
+			want1:  "https://discord.com/api/v10/guilds/250045505659207699/webhooks",
 		},
 	}
 	for _, tt := range tests {
@@ -142,7 +142,7 @@ func TestWebhookDeleteWebhook(t *testing.T) {
 			name:   "Delete Webhook",
 			fields: fields{ID: Snowflake("905130195520983061")},
 			want:   http.MethodDelete,
-			want1:  "https://discord.com/api/v9/webhooks/905130195520983061",
+			want1:  "https://discord.com/api/v10/webhooks/905130195520983061",
 		},
 	}
 	for _, tt := range tests {
@@ -434,7 +434,7 @@ func TestWebhookGetWebhook(t *testing.T) {
 			name:   "Get Webhook",
 			fields: fields{ID: Snowflake("753228874875273256")},
 			want:   http.MethodGet,
-			want1:  "https://discord.com/api/v9/webhooks/753228874875273256",
+			want1:  "https://discord.com/api/v10/webhooks/753228874875273256",
 		},
 	}
 	for _, tt := range tests {
@@ -516,7 +516,7 @@ func TestWebhookGetWebhookWithToken(t *testing.T) {
 			name:   "Get Webhook With Token",
 			fields: fields{ID: Snowflake("753228874875273256"), Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
 			want:   http.MethodGet,
-			want1:  "https://discord.com/api/v9/webhooks/753228874875273256/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt",
+			want1:  "https://discord.com/api/v10/webhooks/753228874875273256/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt",
 		},
 	}
 	for _, tt := range tests {
@@ -550,7 +550,7 @@ func TestWebhookModifyWebhook(t *testing.T) {
 			name:   "Modify Webhook",
 			fields: fields{ID: Snowflake("753228874875273256")},
 			want:   http.MethodPatch,
-			want1:  "https://discord.com/api/v9/webhooks/753228874875273256",
+			want1:  "https://discord.com/api/v10/webhooks/753228874875273256",
 		},
 	}
 	for _, tt := range tests {
@@ -584,7 +584,7 @@ func TestWebhookModifyWebhookWithToken(t *testing.T) {
 			name:   "Modify Webhook With Token",
 			fields: fields{ID: Snowflake("753228874875273256"), Token: "fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt"},
 			want:   http.MethodPatch,
-			want1:  "https://discord.com/api/v9/webhooks/753228874875273256/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt",
+			want1:  "https://discord.com/api/v10/webhooks/753228874875273256/fQvqTTtCJVKrBRnUawZG6eFfPJ41A83tmFzTNArt",
 		},
 	}
 	for _, tt := range tests {

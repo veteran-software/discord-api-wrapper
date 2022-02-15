@@ -980,14 +980,11 @@ func (c *Channel) StartThreadWithoutMessage() (method, route string) {
 
 // StartThreadWithoutMessageJSON - JSON payload structure
 type StartThreadWithoutMessageJSON struct {
-	Name                string `json:"name"`                  // 1-100 character channel name
-	AutoArchiveDuration uint64 `json:"auto_archive_duration"` // duration in minutes to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080
-
-	// In API v9, type defaults to GuildPrivateThread in order to match the behavior when thread documentation was first published.
-	// In API v10 this will be changed to be a required field, with no default.
-	Type             ChannelType `json:"type"`                          // the type of thread to create
-	Invitable        bool        `json:"invitable"`                     // whether non-moderators can add other non-moderators to a thread; only available when creating a private thread
-	RateLimitPerUser *uint64     `json:"rate_limit_per_user,omitempty"` // amount of seconds a user has to wait before sending another message (0-21600)
+	Name                string      `json:"name"`                          // 1-100 character channel name
+	AutoArchiveDuration uint64      `json:"auto_archive_duration"`         // duration in minutes to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080
+	Type                ChannelType `json:"type"`                          // the type of thread to create
+	Invitable           bool        `json:"invitable"`                     // whether non-moderators can add other non-moderators to a thread; only available when creating a private thread
+	RateLimitPerUser    *uint64     `json:"rate_limit_per_user,omitempty"` // amount of seconds a user has to wait before sending another message (0-21600)
 }
 
 // JoinThread - Adds the current user to a thread.
