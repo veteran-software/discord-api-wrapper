@@ -56,6 +56,7 @@ const (
 	DirectMessages         GatewayIntents = 1 << 12
 	DirectMessageReactions GatewayIntents = 1 << 13
 	DirectMessageTyping    GatewayIntents = 1 << 14
+	MessageContent         GatewayIntents = 1 << 15
 	GuildScheduleEvents    GatewayIntents = 1 << 16
 )
 
