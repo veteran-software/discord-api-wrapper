@@ -29,6 +29,7 @@ type Application struct {
 	TermsOfServiceURL   string    `json:"terms_of_service_url,omitempty"` // the url of the app's terms of service
 	PrivacyPolicyURL    string    `json:"privacy_policy_url,omitempty"`   // the url of the app's privacy policy
 	Owner               User      `json:"owner,omitempty"`                // partial user object containing info on the owner of the application
+	// Summary
 	// Deprecated: application.summary now returns an empty string. This field will be removed in gateway v11
 	Summary      string           `json:"summary"`               // if this application is a game sold on Discord, this field will be the summary field for the store page of its primary sku
 	VerifyKey    string           `json:"verify_key"`            // the hex encoded key for verification in interactions and the GameSDK's GetTicket

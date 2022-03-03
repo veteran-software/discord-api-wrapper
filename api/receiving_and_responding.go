@@ -176,7 +176,8 @@ type InteractionCallbackDataModal struct {
 	Components []Component `json:"components"` // between 1 and 5 (inclusive) components that make up the modal
 }
 
-// BuildResponse - Deprecated: helper method for building a basic message response
+// BuildResponse
+// Deprecated: helper method for building a basic message response
 func (i *Interaction) BuildResponse(embeds []*Embed) *InteractionResponseMessages {
 	ir := &InteractionResponseMessages{
 		Data: &InteractionCallbackDataMessages{},
@@ -203,17 +204,17 @@ func (i *Interaction) CreateInteractionResponse() (method string, route string) 
 
 // GetOriginalInteractionResponse Returns the initial Interaction response.
 func (i *Interaction) GetOriginalInteractionResponse() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf(getOriginalInteractionResponse, api, i.ApplicationID, i.Token)
+	return http.MethodGet, fmt.Sprintf(getOriginalInteractionResponse, api, i.ApplicationID.String(), i.Token)
 }
 
 // EditOriginalInteractionResponse Edits the initial Interaction response.
 func (i *Interaction) EditOriginalInteractionResponse() (method string, route string) {
-	return http.MethodPatch, fmt.Sprintf(editOriginalInteractionResponse, api, i.ApplicationID, i.Token)
+	return http.MethodPatch, fmt.Sprintf(editOriginalInteractionResponse, api, i.ApplicationID.String(), i.Token)
 }
 
 // DeleteOriginalInteractionResponse Deletes the initial Interaction response. Returns 204 on success.
 func (i *Interaction) DeleteOriginalInteractionResponse() (method string, route string) {
-	return http.MethodDelete, fmt.Sprintf(deleteOriginalInteractionResponse, api, i.ApplicationID, i.Token)
+	return http.MethodDelete, fmt.Sprintf(deleteOriginalInteractionResponse, api, i.ApplicationID.String(), i.Token)
 }
 
 // CreateFollowupMessage - Create a followup message for an Interaction.
@@ -222,7 +223,7 @@ func (i *Interaction) DeleteOriginalInteractionResponse() (method string, route 
 //
 // The thread_id, avatar_url, and username parameters are not supported when using this endpoint for interaction followups.
 func (i *Interaction) CreateFollowupMessage() (method string, route string) {
-	return http.MethodPost, fmt.Sprintf(createFollowupMessage, api, i.ApplicationID, i.Token)
+	return http.MethodPost, fmt.Sprintf(createFollowupMessage, api, i.ApplicationID.String(), i.Token)
 }
 
 // GetFollowupMessage - Returns a followup message for an Interaction.
@@ -231,7 +232,7 @@ func (i *Interaction) CreateFollowupMessage() (method string, route string) {
 //
 //   Does not support ephemeral followups.
 func (i *Interaction) GetFollowupMessage() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf(getFollowupMessage, api, i.ApplicationID, i.Token, i.Message.ID)
+	return http.MethodGet, fmt.Sprintf(getFollowupMessage, api, i.ApplicationID.String(), i.Token, i.Message.ID)
 }
 
 // EditFollowupMessage - Edits a followup message for an Interaction.

@@ -125,8 +125,8 @@ const (
 //
 // Returns an array of application command objects.
 //goland:noinspection GoUnusedExportedFunction
-func GetGlobalApplicationCommands(applicationID string) (method string, route string) {
-	return http.MethodGet, fmt.Sprintf(getGlobalApplicationCommands, api, applicationID)
+func GetGlobalApplicationCommands(applicationID Snowflake) (method string, route string) {
+	return http.MethodGet, fmt.Sprintf(getGlobalApplicationCommands, api, applicationID.String())
 }
 
 // CreateGlobalApplicationCommand - Create a new global command.
@@ -135,8 +135,8 @@ func GetGlobalApplicationCommands(applicationID string) (method string, route st
 //
 //    Creating a command with the same name as an existing command for your application will overwrite the old command.
 //goland:noinspection GoUnusedExportedFunction
-func CreateGlobalApplicationCommand(applicationID string) (method string, route string) {
-	return http.MethodPost, fmt.Sprintf(createGlobalApplicationCommand, api, applicationID)
+func CreateGlobalApplicationCommand(applicationID Snowflake) (method string, route string) {
+	return http.MethodPost, fmt.Sprintf(createGlobalApplicationCommand, api, applicationID.String())
 }
 
 // CreateApplicationCommandJSON - JSON payload structure
@@ -152,7 +152,7 @@ type CreateApplicationCommandJSON struct {
 //
 // Returns an application command object.
 func (i *Interaction) GetGlobalApplicationCommand() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf(getGlobalApplicationCommand, api, i.ApplicationID, i.Data.ID)
+	return http.MethodGet, fmt.Sprintf(getGlobalApplicationCommand, api, i.ApplicationID.String(), i.Data.ID.String())
 }
 
 // EditGlobalApplicationCommand - Edit a global command. Updates will be available in all guilds after 1 hour.
@@ -161,7 +161,7 @@ func (i *Interaction) GetGlobalApplicationCommand() (method string, route string
 //
 //    All JSON parameters for this endpoint are optional.
 func (i *Interaction) EditGlobalApplicationCommand() (method string, route string) {
-	return http.MethodPatch, fmt.Sprintf(editGlobalApplicationCommand, api, i.ApplicationID, i.Data.ID)
+	return http.MethodPatch, fmt.Sprintf(editGlobalApplicationCommand, api, i.ApplicationID.String(), i.Data.ID.String())
 }
 
 // EditApplicationCommandJSON - JSON payload structure
@@ -174,8 +174,8 @@ type EditApplicationCommandJSON struct {
 
 // DeleteGlobalApplicationCommand - Deletes a global command. Returns 204 No Content on success.
 //goland:noinspection GoUnusedExportedFunction
-func DeleteGlobalApplicationCommand(applicationID string, commandID string) (method string, route string) {
-	return http.MethodDelete, fmt.Sprintf(deleteGlobalApplicationCommand, api, applicationID, commandID)
+func DeleteGlobalApplicationCommand(applicationID Snowflake, commandID string) (method string, route string) {
+	return http.MethodDelete, fmt.Sprintf(deleteGlobalApplicationCommand, api, applicationID.String(), commandID)
 }
 
 // BulkOverwriteGlobalApplicationCommands - Takes a list of application commands, overwriting the existing global command list for this application.
@@ -186,22 +186,22 @@ func DeleteGlobalApplicationCommand(applicationID string, commandID string) (met
 //
 // Commands that do not already exist will count toward daily application command create limits.
 func (i *Interaction) BulkOverwriteGlobalApplicationCommands() (method string, route string) {
-	return http.MethodPut, fmt.Sprintf(bulkOverwriteGlobalApplicationCommands, api, i.ApplicationID)
+	return http.MethodPut, fmt.Sprintf(bulkOverwriteGlobalApplicationCommands, api, i.ApplicationID.String())
 }
 
 // GetGuildApplicationCommands - Fetch all the guild commands for your application for a specific guild.
 //
 // Returns an array of application command objects.
 func (i *Interaction) GetGuildApplicationCommands() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf(getGuildApplicationCommands, api, i.ApplicationID, i.GuildID)
+	return http.MethodGet, fmt.Sprintf(getGuildApplicationCommands, api, i.ApplicationID.String(), i.GuildID.String())
 }
 
 // GetGuildApplicationCommands - Fetch all the guild commands for your application for a specific guild.
 //
 // Returns an array of application command objects.
 //goland:noinspection GoUnusedExportedFunction
-func GetGuildApplicationCommands(applicationID string, guildID string) (method string, route string) {
-	return http.MethodGet, fmt.Sprintf(getGuildApplicationCommands, api, applicationID, guildID)
+func GetGuildApplicationCommands(applicationID Snowflake, guildID Snowflake) (method string, route string) {
+	return http.MethodGet, fmt.Sprintf(getGuildApplicationCommands, api, applicationID.String(), guildID.String())
 }
 
 // CreateGuildApplicationCommand - Create a new guild command.
@@ -212,8 +212,8 @@ func GetGuildApplicationCommands(applicationID string, guildID string) (method s
 //
 // If the command did not already exist, it will count toward daily application command create limits.
 //goland:noinspection GoUnusedExportedFunction
-func CreateGuildApplicationCommand(applicationID string, guildID string) (method string, route string) {
-	return http.MethodPost, fmt.Sprintf(createGuildApplicationCommand, api, applicationID, guildID)
+func CreateGuildApplicationCommand(applicationID Snowflake, guildID Snowflake) (method string, route string) {
+	return http.MethodPost, fmt.Sprintf(createGuildApplicationCommand, api, applicationID.String(), guildID.String())
 }
 
 // CreateGuildApplicationCommandJSON - JSON payload structure
@@ -227,7 +227,7 @@ type CreateGuildApplicationCommandJSON struct {
 
 // GetGuildApplicationCommand - Fetch a guild command for your application. Returns an application command object.
 func (i *Interaction) GetGuildApplicationCommand() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf(getGuildApplicationCommand, api, i.ApplicationID, i.GuildID, i.Data.ID)
+	return http.MethodGet, fmt.Sprintf(getGuildApplicationCommand, api, i.ApplicationID.String(), i.GuildID.String(), i.Data.ID.String())
 }
 
 // EditGuildApplicationCommand - Edit a guild command. Updates for guild commands will be available immediately.
@@ -236,7 +236,7 @@ func (i *Interaction) GetGuildApplicationCommand() (method string, route string)
 //
 //    All parameters for this endpoint are optional.
 func (i *Interaction) EditGuildApplicationCommand() (method string, route string) {
-	return http.MethodPatch, fmt.Sprintf(editGuildApplicationCommand, api, i.ApplicationID, i.GuildID, i.Data.ID)
+	return http.MethodPatch, fmt.Sprintf(editGuildApplicationCommand, api, i.ApplicationID.String(), i.GuildID.String(), i.Data.ID.String())
 }
 
 // EditGuildApplicationCommandJSON - JSON payload structure
@@ -249,29 +249,29 @@ type EditGuildApplicationCommandJSON struct {
 
 // DeleteGuildApplicationCommand - Delete a guild command. Returns 204 No Content on success.
 //goland:noinspection GoUnusedExportedFunction
-func DeleteGuildApplicationCommand(applicationID string, guildID string, commandID string) (method string, route string) {
-	return http.MethodDelete, fmt.Sprintf(deleteGuildApplicationCommand, api, applicationID, guildID, commandID)
+func DeleteGuildApplicationCommand(applicationID Snowflake, guildID Snowflake, commandID string) (method string, route string) {
+	return http.MethodDelete, fmt.Sprintf(deleteGuildApplicationCommand, api, applicationID.String(), guildID.String(), commandID)
 }
 
 // BulkOverwriteGuildApplicationCommands - Takes a list of application commands, overwriting the existing command list for this application for the targeted guild.
 //
 // Returns 200 and a list of application command objects.
 func (i *Interaction) BulkOverwriteGuildApplicationCommands() (method string, route string) {
-	return http.MethodPut, fmt.Sprintf(bulkOverwriteGuildApplicationCommands, api, i.ApplicationID, i.GuildID.String())
+	return http.MethodPut, fmt.Sprintf(bulkOverwriteGuildApplicationCommands, api, i.ApplicationID.String(), i.GuildID.String())
 }
 
 // GetGuildApplicationCommandPermissions - Fetches command permissions for all commands for your application in a guild.
 //
 // Returns an array of guild application command permissions objects.
 func (i *Interaction) GetGuildApplicationCommandPermissions() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf(getGuildApplicationCommandPermissions, api, i.ApplicationID, i.GuildID)
+	return http.MethodGet, fmt.Sprintf(getGuildApplicationCommandPermissions, api, i.ApplicationID.String(), i.GuildID.String())
 }
 
 // GetApplicationCommandPermissions - Fetches command permissions for a specific command for your application in a guild.
 //
 // Returns a guild application command permissions object.
 func (i *Interaction) GetApplicationCommandPermissions() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf(getApplicationCommandPermissions, api, i.ApplicationID, i.GuildID, i.Data.ID)
+	return http.MethodGet, fmt.Sprintf(getApplicationCommandPermissions, api, i.ApplicationID.String(), i.GuildID.String(), i.Data.ID.String())
 }
 
 // EditApplicationCommandPermissions - Edits command permissions for a specific command for your application in a guild.
@@ -283,7 +283,7 @@ func (i *Interaction) GetApplicationCommandPermissions() (method string, route s
 //   This endpoint will overwrite existing permissions for the command in that guild
 //   Deleting or renaming a command will permanently delete all permissions for that command
 func (i *Interaction) EditApplicationCommandPermissions() (method string, route string) {
-	return http.MethodPut, fmt.Sprintf(editApplicationCommandPermissions, api, i.ApplicationID, i.GuildID, i.Data.ID)
+	return http.MethodPut, fmt.Sprintf(editApplicationCommandPermissions, api, i.ApplicationID.String(), i.GuildID.String(), i.Data.ID.String())
 }
 
 // EditApplicationCommandPermissionsJSON - JSON payload structure
@@ -301,5 +301,5 @@ type EditApplicationCommandPermissionsJSON struct {
 //
 //   This endpoint will overwrite all existing permissions for all commands in a guild, including slash commands, user commands, and message commands.
 func (i *Interaction) BatchEditApplicationCommandPermissions() (method string, route string) {
-	return http.MethodPut, fmt.Sprintf(batchEditApplicationCommandPermissions, api, i.ApplicationID, i.GuildID)
+	return http.MethodPut, fmt.Sprintf(batchEditApplicationCommandPermissions, api, i.ApplicationID.String(), i.GuildID.String())
 }

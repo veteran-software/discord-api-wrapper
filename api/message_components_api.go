@@ -21,7 +21,8 @@ func NewComponent() *Component {
 	return &Component{}
 }
 
-// GetType - Deprecated: access the struct field directly
+// GetType
+// Deprecated: access the struct field directly
 func (c *Component) GetType() ComponentType {
 	return c.Type
 }
@@ -32,7 +33,8 @@ func (c *Component) SetType(t ComponentType) *Component {
 	return c
 }
 
-// GetCustomID - Deprecated: access the struct field directly
+// GetCustomID
+// Deprecated: access the struct field directly
 func (c *Component) GetCustomID() string {
 	return c.CustomID
 }
@@ -53,7 +55,8 @@ func (c *Component) SetDisabled(d bool) *Component {
 	return c
 }
 
-// GetButtonStyle - Deprecated: access the struct field directly
+// GetButtonStyle
+// Deprecated: access the struct field directly
 func (c *Component) GetButtonStyle() ButtonStyle {
 	return c.Style.(ButtonStyle)
 }
@@ -64,7 +67,8 @@ func (c *Component) SetButtonStyle(s ButtonStyle) *Component {
 	return c
 }
 
-// GetTextInputStyle - Deprecated: access the struct field directly
+// GetTextInputStyle
+// Deprecated: access the struct field directly
 func (c *Component) GetTextInputStyle() TextInputStyle {
 	return c.Style.(TextInputStyle)
 }
@@ -75,7 +79,8 @@ func (c *Component) SetTextInputStyle(s TextInputStyle) *Component {
 	return c
 }
 
-// GetEmoji - Deprecated: access the struct field directly
+// GetEmoji
+// Deprecated: access the struct field directly
 func (c *Component) GetEmoji() *Emoji {
 	return c.Emoji
 }
@@ -86,7 +91,8 @@ func (c *Component) SetEmoji(e *Emoji) *Component {
 	return c
 }
 
-// GetURL - Deprecated: access the struct field directly
+// GetURL
+// Deprecated: access the struct field directly
 func (c *Component) GetURL() string {
 	return c.URL
 }
@@ -184,12 +190,14 @@ func (i *InteractionResponseMessages) AddAttachment(a *Attachment) *InteractionR
 	return i
 }
 
-// GetEmbeds - Deprecated: access the struct field directly
+// GetEmbeds
+// Deprecated: access the struct field directly
 func (i *InteractionResponseMessages) GetEmbeds() []Embed {
 	return i.Data.Embeds
 }
 
-// GetType - Deprecated: access the struct field directly
+// GetType
+// Deprecated: access the struct field directly
 func (i *InteractionResponseMessages) GetType() InteractionCallbackType {
 	return i.Type
 }

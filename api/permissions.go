@@ -135,7 +135,8 @@ func rawPerms(channel *Channel) Permission {
 	return Permission(i)
 }
 
-// CanAnnounce - Deprecated: helper function for checking bas permissions for sending announcements
+// CanAnnounce
+// Deprecated: helper function for checking bas permissions for sending announcements
 func CanAnnounce(c *Channel) bool {
 	if CanEmbedLinks(c) && CanManageMessages(c) && CanSendMessages(c) && CanReadMessageHistory(c) && CanViewChannel(c) {
 		return true
