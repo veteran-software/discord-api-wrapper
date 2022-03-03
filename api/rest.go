@@ -102,13 +102,13 @@ func (r *RateLimiter) lockedRequest(method, route, contentType string, b interfa
 		return nil, err
 	}
 
-	req.Header.Set(http.CanonicalHeaderKey("Authorization"), fmt.Sprintf("Bot %s", Token))
+	req.Header.Set("Authorization", fmt.Sprintf("Bot %s", Token))
 
 	if b != nil {
-		req.Header.Set(http.CanonicalHeaderKey("Content-Type"), contentType)
+		req.Header.Set("Content-Type", contentType)
 	}
 
-	req.Header.Set(http.CanonicalHeaderKey("User-Agent"), UserAgent)
+	req.Header.Set("User-Agent", UserAgent)
 
 	ctx, cancel := context.WithDeadline(req.Context(), time.Now().Add(5*time.Second))
 	handleContextCancel(ctx, cancel)
@@ -149,14 +149,13 @@ func handleContextCancel(ctx context.Context, cancel context.CancelFunc) {
 	go func(ctx context.Context) {
 		defer cancel()
 
-		select {
-		case <-ctx.Done():
-			switch ctx.Err() {
-			case context.DeadlineExceeded:
-				logging.Traceln("context timeout exceeded")
-			case context.Canceled:
-				logging.Traceln("context cancelled; process complete")
-			}
+		<-ctx.Done()
+
+		switch ctx.Err() {
+		case context.DeadlineExceeded:
+			logging.Traceln("context timeout exceeded")
+		case context.Canceled:
+			logging.Traceln("context cancelled; process complete")
 		}
 	}(ctx)
 }

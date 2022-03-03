@@ -45,7 +45,6 @@ type RateLimiter struct {
 
 	global           *int64
 	buckets          map[string]*bucket
-	globalRateLimit  time.Duration
 	customRateLimits []*customRateLimit
 }
 
@@ -55,7 +54,6 @@ type bucket struct {
 
 	Key             string
 	Remaining       int
-	limit           int
 	reset           time.Time
 	global          *int64
 	lastReset       time.Time
@@ -108,7 +106,7 @@ func (r *RateLimiter) getBucket(key string) *bucket {
 // getWaitTime returns the duration you should wait for a bucket
 func (r *RateLimiter) getWaitTime(b *bucket, minRemaining int) time.Duration {
 	if b.Remaining < minRemaining && b.reset.After(time.Now()) {
-		return b.reset.Sub(time.Now())
+		return time.Until(b.reset)
 	}
 
 	// Check global rate limits
@@ -185,7 +183,7 @@ func (b *bucket) release(headers http.Header) error {
 }
 
 func (b *bucket) checkCustomLimit(rl *customRateLimit) error {
-	if time.Now().Sub(b.lastReset) >= rl.reset {
+	if time.Since(b.lastReset) >= rl.reset {
 		b.Remaining = rl.requests - 1
 		b.lastReset = time.Now()
 	}
