@@ -14,10 +14,16 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-package utilities
+package api
+
+import (
+	"github.com/sirupsen/logrus"
+)
 
 //goland:noinspection GoUnusedGlobalVariable
 var (
+	ApplicationID Snowflake // ApplicationID -  The Snowflake of the application
+	DefaultColor  int64     = 16711680
+	LogLevel      logrus.Level
 	Token         string // Token - The application's token
-	ApplicationID string // ApplicationID -  The Snowflake of the application
 )

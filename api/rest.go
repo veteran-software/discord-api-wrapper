@@ -25,11 +25,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/veteran-software/discord-api-wrapper/logging"
-	"github.com/veteran-software/discord-api-wrapper/utilities"
-
 	"github.com/gojek/heimdall/v7"
 	"github.com/gojek/heimdall/v7/httpclient"
+	"github.com/veteran-software/discord-api-wrapper/logging"
 )
 
 //goland:noinspection SpellCheckingInspection
@@ -104,7 +102,7 @@ func (r *RateLimiter) lockedRequest(method, route, contentType string, b interfa
 		return nil, err
 	}
 
-	req.Header.Set(http.CanonicalHeaderKey("Authorization"), fmt.Sprintf("Bot %s", utilities.Token))
+	req.Header.Set(http.CanonicalHeaderKey("Authorization"), fmt.Sprintf("Bot %s", Token))
 
 	if b != nil {
 		req.Header.Set(http.CanonicalHeaderKey("Content-Type"), contentType)
