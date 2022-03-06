@@ -162,6 +162,12 @@ func (i *InteractionResponseMessages) AddEmbed(e *Embed) *InteractionResponseMes
 	return i
 }
 
+func (i *InteractionResponseMessages) AddEmbeds(e []Embed) *InteractionResponseMessages {
+	i.Data.Embeds = append(i.Data.Embeds, e...)
+
+	return i
+}
+
 func (i *InteractionResponseMessages) SetEphemeral() *InteractionResponseMessages {
 	i.Data.Flags = i.Data.Flags | Ephemeral
 
@@ -213,6 +219,12 @@ func NewAutocompleteResponse() *InteractionResponseAutocomplete {
 
 func (i *InteractionResponseAutocomplete) AddChoice(c *ApplicationCommandOptionChoice) *InteractionResponseAutocomplete {
 	i.Data.Choices = append(i.Data.Choices, c)
+
+	return i
+}
+
+func (i *InteractionResponseAutocomplete) AddChoices(c []*ApplicationCommandOptionChoice) *InteractionResponseAutocomplete {
+	i.Data.Choices = append(i.Data.Choices, c...)
 
 	return i
 }

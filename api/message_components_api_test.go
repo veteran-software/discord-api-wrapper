@@ -156,7 +156,7 @@ func TestComponentGetCustomID(t *testing.T) {
 			c := &Component{
 				CustomID: tt.fields.CustomID,
 			}
-			if got := c.GetCustomID(); got != tt.want {
+			if got := c.CustomID; got != tt.want {
 				t.Errorf("GetCustomID() = %v, want %v", got, tt.want)
 			}
 		})
@@ -329,7 +329,7 @@ func TestComponentGetButtonStyle(t *testing.T) {
 			c := &Component{
 				Style: tt.fields.Style,
 			}
-			if got := c.GetButtonStyle(); got != tt.want {
+			if got := c.Style.(ButtonStyle); got != tt.want {
 				t.Errorf("GetButtonStyle() = %v, want %v", got, tt.want)
 			}
 		})
