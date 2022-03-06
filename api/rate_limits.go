@@ -27,9 +27,9 @@ import (
 )
 
 type rateLimitResponse struct {
-	Message    string        `json:"message"`
-	RetryAfter time.Duration `json:"retry_after"`
-	Global     bool          `json:"global"`
+	Message    string  `json:"message"`
+	RetryAfter float64 `json:"retry_after"`
+	Global     bool    `json:"global"`
 }
 
 // customRateLimit holds information for defining a custom rate limit
