@@ -27,7 +27,7 @@ type GuildScheduledEvent struct {
 	ChannelID          *Snowflake                         `json:"channel_id"`            // the channel id in which the scheduled event will be hosted, or null if scheduled entity type is EXTERNAL
 	CreatorID          *Snowflake                         `json:"creator_id"`            // the id of the user that created the scheduled event
 	Name               string                             `json:"name"`                  // the name of the scheduled event (1-100 characters)
-	Description        string                             `json:"description,omitempty"` // the description of the scheduled event (1-1000 characters)
+	Description        *string                            `json:"description,omitempty"` // the description of the scheduled event (1-1000 characters)
 	ScheduledStartTime time.Time                          `json:"scheduled_start_time"`  // the time the scheduled event will start
 	ScheduledEndTime   *time.Time                         `json:"scheduled_end_time"`    // the time the scheduled event will end, required if entity_type is EXTERNAL
 	PrivacyLevel       GuildScheduledEventPrivacyLevel    `json:"privacy_level"`         // the privacy level of the scheduled event
@@ -37,7 +37,7 @@ type GuildScheduledEvent struct {
 	EntityMetadata     *GuildScheduledEventEntityMetadata `json:"entity_metadata"`       // additional metadata for the guild scheduled event
 	Creator            User                               `json:"creator,omitempty"`     // the user that created the scheduled event
 	UserCount          int64                              `json:"user_count,omitempty"`  // the number of users subscribed to the scheduled event
-	Image              *string                            `json:"image"`                 // the cover image hash of the scheduled event
+	Image              *string                            `json:"image,omitempty"`       // the cover image hash of the scheduled event
 }
 
 // GuildScheduledEventPrivacyLevel - the privacy level of the scheduled event

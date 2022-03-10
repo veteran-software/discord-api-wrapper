@@ -24,19 +24,19 @@ import (
 
 // VoiceState - Used to represent a user's voice connection status.
 type VoiceState struct {
-	GuildID                 Snowflake   `json:"guild_id,omitempty"`         // the guild id this voice state is for
-	ChannelID               *Snowflake  `json:"channel_id"`                 // the channel id this user is connected to
-	UserID                  Snowflake   `json:"user_id"`                    // the user id this voice state is for
-	Member                  GuildMember `json:"member,omitempty"`           // the guild member this voice state is for
-	SessionID               string      `json:"session_id"`                 // the session id for this voice state
-	Deaf                    bool        `json:"deaf"`                       // whether this user is deafened by the server
-	Mute                    bool        `json:"mute"`                       // whether this user is muted by the server
-	SelfDeaf                bool        `json:"self_deaf"`                  // whether this user is locally deafened
-	SelfMute                bool        `json:"self_mute"`                  // whether this user is locally muted
-	SelfStream              bool        `json:"self_stream,omitempty"`      // whether this user is streaming using "Go Live"
-	SelfVideo               bool        `json:"self_video"`                 // whether this user's camera is enabled
-	Suppress                bool        `json:"suppress"`                   // whether this user is muted by the current user
-	RequestToSpeakTimestamp *time.Time  `json:"request_to_speak_timestamp"` // the time at which the user requested to speak
+	GuildID                 Snowflake   `json:"guild_id,omitempty"`                   // the guild id this voice state is for
+	ChannelID               Snowflake   `json:"channel_id,omitempty"`                 // the channel id this user is connected to
+	UserID                  Snowflake   `json:"user_id"`                              // the user id this voice state is for
+	Member                  GuildMember `json:"member,omitempty"`                     // the guild member this voice state is for
+	SessionID               string      `json:"session_id"`                           // the session id for this voice state
+	Deaf                    bool        `json:"deaf"`                                 // whether this user is deafened by the server
+	Mute                    bool        `json:"mute"`                                 // whether this user is muted by the server
+	SelfDeaf                bool        `json:"self_deaf"`                            // whether this user is locally deafened
+	SelfMute                bool        `json:"self_mute"`                            // whether this user is locally muted
+	SelfStream              bool        `json:"self_stream,omitempty"`                // whether this user is streaming using "Go Live"
+	SelfVideo               bool        `json:"self_video"`                           // whether this user's camera is enabled
+	Suppress                bool        `json:"suppress"`                             // whether this user is muted by the current user
+	RequestToSpeakTimestamp time.Time   `json:"request_to_speak_timestamp,omitempty"` // the time at which the user requested to speak
 }
 
 // VoiceRegion - representation of a geographic voice server

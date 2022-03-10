@@ -93,7 +93,7 @@ type SelectMenu struct {
 	Type        ComponentType  `json:"type"`                  // ComponentTypeSelectMenu for a select menu
 	CustomID    string         `json:"custom_id"`             // a developer-defined identifier for the button, max 100 characters
 	Options     []SelectOption `json:"options"`               // the choices in the select, max 25
-	Placeholder string         `json:"placeholder,omitempty"` // custom placeholder text if nothing is selected, max 100 characters
+	Placeholder string         `json:"placeholder,omitempty"` // custom placeholder text if nothing is selected, max 150 characters
 	MinValues   int64          `json:"min_values,omitempty"`  // the minimum number of items that must be chosen; default 1, min 0, max 25
 	MaxValues   int64          `json:"max_values,omitempty"`  // the maximum number of items that can be chosen; default 1, max 25
 	Disabled    bool           `json:"disabled,omitempty"`    // disable the select, default false

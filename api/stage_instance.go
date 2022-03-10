@@ -23,11 +23,12 @@ import (
 
 // StageInstance - A StageInstance holds information about a live stage.
 type StageInstance struct {
-	ID           Snowflake    `json:"id"`            // The id of this Stage instance
-	GuildID      Snowflake    `json:"guild_id"`      // The guild id of the associated Stage channel
-	ChannelID    Snowflake    `json:"channel_id"`    // The id of the associated Stage channel
-	Topic        string       `json:"topic"`         // The topic of the Stage instance (1-120 characters)
-	PrivacyLevel PrivacyLevel `json:"privacy_level"` // The privacy level of the Stage instance
+	ID                    Snowflake    `json:"id"`                       // The id of this Stage instance
+	GuildID               Snowflake    `json:"guild_id"`                 // The guild id of the associated Stage channel
+	ChannelID             Snowflake    `json:"channel_id"`               // The id of the associated Stage channel
+	Topic                 string       `json:"topic"`                    // The topic of the Stage instance (1-120 characters)
+	PrivacyLevel          PrivacyLevel `json:"privacy_level"`            // The privacy level of the Stage instance
+	GuildScheduledEventID *Snowflake   `json:"guild_scheduled_event_id"` // The id of the scheduled event for this Stage instance
 }
 
 // PrivacyLevel - The privacy level of the Stage instance
