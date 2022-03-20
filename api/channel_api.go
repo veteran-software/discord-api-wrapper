@@ -351,6 +351,10 @@ func (a *Author) GetURL() string {
 
 // SetIconURL - set the Author IconURL
 func (a *Author) SetIconURL(u *string) *Author {
+	if u == nil {
+		return a
+	}
+
 	if _, err := url.Parse(*u); err != nil {
 		return a
 	}
