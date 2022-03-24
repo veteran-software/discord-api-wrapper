@@ -133,3 +133,36 @@ const (
 func PtrStr(s *string) string {
 	return *s
 }
+
+type LocalizationDict struct {
+	Danish              string `json:"da,omitempty"`
+	German              string `json:"de,omitempty"`
+	EnglishUK           string `json:"en-GB,omitempty"`
+	EnglishUS           string `json:"en-US,omitempty"`
+	Spanish             string `json:"es-ES,omitempty"`
+	French              string `json:"fr,omitempty"`
+	Croatian            string `json:"hr,omitempty"`
+	Italian             string `json:"it,omitempty"`
+	Lithuanian          string `json:"lt,omitempty"`
+	Hungarian           string `json:"hu,omitempty"`
+	Dutch               string `json:"nl,omitempty"`
+	Norwegian           string `json:"no,omitempty"`
+	Polish              string `json:"pl,omitempty"`
+	PortugueseBrazilian string `json:"pt-BR,omitempty"`
+	Romanian            string `json:"ro,omitempty"`
+	Finnish             string `json:"fi,omitempty"`
+	Swedish             string `json:"sv-SE,omitempty"`
+	Vietnamese          string `json:"vi,omitempty"`
+	Turkish             string `json:"tr,omitempty"`
+	Czech               string `json:"cs,omitempty"`
+	Greek               string `json:"el,omitempty"`
+	Bulgarian           string `json:"bg,omitempty"`
+	Russian             string `json:"ru,omitempty"`
+	Ukrainian           string `json:"uk,omitempty"`
+	Hindi               string `json:"hi,omitempty"`
+	Thai                string `json:"th,omitempty"`
+	ChineseChina        string `json:"zh-CN,omitempty"`
+	Japanese            string `json:"ja,omitempty"`
+	ChineseTaiwan       string `json:"zh-TW,omitempty"`
+	Korean              string `json:"ko,omitempty"`
+}

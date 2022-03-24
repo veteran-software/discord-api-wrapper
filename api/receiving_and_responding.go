@@ -172,7 +172,7 @@ type InteractionCallbackDataAutocomplete struct {
 // InteractionCallbackDataModal - Data payload for InteractionResponseModal
 type InteractionCallbackDataModal struct {
 	CustomID   string      `json:"custom_id"`  // a developer-defined identifier for the component, max 100 characters
-	Title      string      `json:"title"`      // the title of the popup modal
+	Title      string      `json:"title"`      // the title of the popup modal, max 45 characters
 	Components []Component `json:"components"` // between 1 and 5 (inclusive) components that make up the modal
 }
 

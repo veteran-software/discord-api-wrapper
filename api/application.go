@@ -31,7 +31,7 @@ type Application struct {
 	Owner               User      `json:"owner,omitempty"`                // partial user object containing info on the owner of the application
 	// Summary
 	// Deprecated: application.summary now returns an empty string. This field will be removed in gateway v11
-	Summary      string           `json:"summary"`               // if this application is a game sold on Discord, this field will be the summary field for the store page of its primary sku
+	Summary      string           `json:"summary"`               // deprecated: previously if this application was a game sold on Discord, this field would be the summary field for the store page of its primary SKU; now an empty string
 	VerifyKey    string           `json:"verify_key"`            // the hex encoded key for verification in interactions and the GameSDK's GetTicket
 	Team         *Team            `json:"team"`                  // if the application belongs to a team, this will be a list of the members of that team
 	GuildID      Snowflake        `json:"guild_id,omitempty"`    // if this application is a game sold on Discord, this field will be the guild to which it has been linked

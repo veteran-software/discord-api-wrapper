@@ -28,15 +28,17 @@ import (
 // Required options must be listed before optional options
 //goland:noinspection SpellCheckingInspection
 type ApplicationCommand struct {
-	ID                 Snowflake                  `json:"id,omitempty"`                  // unique id of the command
-	Type               ApplicationCommandType     `json:"type,omitempty"`                // the type of command, defaults 1 if not set
-	ApplicationID      Snowflake                  `json:"application_id"`                // unique id of the parent application
-	GuildID            Snowflake                  `json:"guild_id,omitempty"`            // guild id of the command, if not global
-	Name               string                     `json:"name"`                          // max 32 chars, must follow ^[\w-]{1,32}$ regex
-	Description        string                     `json:"description"`                   // 1-100 character description for CHAT_INPUT command, empty string for USER and MESSAGE command
-	Options            []ApplicationCommandOption `json:"options,omitempty"`             // the parameters for the command, max 25; CHAT_INPUT
-	DefaultPermissions bool                       `json:"default_permissions,omitempty"` // default true; whether the command is enabled by default when added to a guild
-	Version            Snowflake                  `json:"version"`                       // autoincrementing version identifier updated during substantial record changes
+	ID                       Snowflake                  `json:"id,omitempty"`                        // unique id of the command
+	Type                     ApplicationCommandType     `json:"type,omitempty"`                      // the type of command, defaults 1 if not set
+	ApplicationID            Snowflake                  `json:"application_id"`                      // unique id of the parent application
+	GuildID                  Snowflake                  `json:"guild_id,omitempty"`                  // guild id of the command, if not global
+	Name                     string                     `json:"name"`                                // max 32 chars, must follow ^[\w-]{1,32}$ regex
+	NameLocalizations        LocalizationDict           `json:"name_localizations,omitempty"`        // Localization dictionary for the name field. Values follow the same restrictions as name
+	Description              string                     `json:"description"`                         // 1-100 character description for CHAT_INPUT command, empty string for USER and MESSAGE command
+	DescriptionLocalizations LocalizationDict           `json:"description_localizations,omitempty"` // Localization dictionary for the description field. Values follow the same restrictions as description
+	Options                  []ApplicationCommandOption `json:"options,omitempty"`                   // the parameters for the command, max 25; CHAT_INPUT
+	DefaultPermissions       bool                       `json:"default_permissions,omitempty"`       // default true; whether the command is enabled by default when added to a guild
+	Version                  Snowflake                  `json:"version"`                             // autoincrementing version identifier updated during substantial record changes
 }
 
 // ApplicationCommandType - The type of application command
@@ -51,16 +53,18 @@ const (
 
 // ApplicationCommandOption - You can specify a maximum of 25 choices per option
 type ApplicationCommandOption struct {
-	Type         ApplicationCommandOptionType     `json:"type"`                    // the type of option
-	Name         string                           `json:"name"`                    // 1-32 character name
-	Description  string                           `json:"description"`             // 1-100 character description
-	Required     bool                             `json:"required,omitempty"`      // if the parameter is required or optional--default `false`
-	Choices      []ApplicationCommandOptionChoice `json:"choices,omitempty"`       // choices for STRING, INTEGER, and NUMBER types for the user to pick from, max 25
-	Options      []ApplicationCommandOption       `json:"options,omitempty"`       // if the option is a subcommand or subcommand group type, these nested options will be the parameters
-	ChannelTypes []ChannelType                    `json:"channel_types,omitempty"` // if the option is a channel type, the channels shown will be restricted to these types
-	MinValue     interface{}                      `json:"min_value,omitempty"`     // if the option is an INTEGER or NUMBER type, the minimum value permitted; integer for INTEGER options, double for NUMBER options
-	MaxValue     interface{}                      `json:"max_value,omitempty"`     // if the option is an INTEGER or NUMBER type, the maximum value permitted; integer for INTEGER options, double for NUMBER options
-	Autocomplete bool                             `json:"autocomplete,omitempty"`  // enable autocomplete interactions for this option
+	Type                     ApplicationCommandOptionType     `json:"type"`                                // the type of option
+	Name                     string                           `json:"name"`                                // 1-32 character name
+	NameLocalizations        LocalizationDict                 `json:"name_localizations,omitempty"`        // Localization dictionary for the name field. Values follow the same restrictions as name
+	Description              string                           `json:"description"`                         // 1-100 character description
+	DescriptionLocalizations LocalizationDict                 `json:"description_localizations,omitempty"` // Localization dictionary for the description field. Values follow the same restrictions as description
+	Required                 bool                             `json:"required,omitempty"`                  // if the parameter is required or optional--default `false`
+	Choices                  []ApplicationCommandOptionChoice `json:"choices,omitempty"`                   // choices for STRING, INTEGER, and NUMBER types for the user to pick from, max 25
+	Options                  []ApplicationCommandOption       `json:"options,omitempty"`                   // if the option is a subcommand or subcommand group type, these nested options will be the parameters
+	ChannelTypes             []ChannelType                    `json:"channel_types,omitempty"`             // if the option is a channel type, the channels shown will be restricted to these types
+	MinValue                 interface{}                      `json:"min_value,omitempty"`                 // if the option is an INTEGER or NUMBER type, the minimum value permitted; integer for INTEGER options, double for NUMBER options
+	MaxValue                 interface{}                      `json:"max_value,omitempty"`                 // if the option is an INTEGER or NUMBER type, the maximum value permitted; integer for INTEGER options, double for NUMBER options
+	Autocomplete             bool                             `json:"autocomplete,omitempty"`              // enable autocomplete interactions for this option
 }
 
 // ApplicationCommandOptionType - The option type of the command
@@ -78,12 +82,14 @@ const (
 	OptionTypeRole
 	OptionTypeMentionable // Includes users and roles
 	OptionTypeNumber      // Any double between -2^53 and 2^53
+	OptionTypeAttachment
 )
 
 // ApplicationCommandOptionChoice - If you specify choices for an option, they are the only valid values for a user to pick
 type ApplicationCommandOptionChoice struct {
-	Name  string      `json:"name"`         // 1-100 character choice name
-	Value interface{} `json:"value,string"` // value of the choice, up to 100 characters if string
+	Name              string           `json:"name"`                         // 1-100 character choice name
+	NameLocalizations LocalizationDict `json:"name_localizations,omitempty"` // Localization dictionary for the name field. Values follow the same restrictions as name
+	Value             interface{}      `json:"value,string"`                 // value of the choice, up to 100 characters if string
 }
 
 // ApplicationCommandInteractionDataOption - All options have names, and an option can either be a parameter and input value--in which case value will be set--or it can denote a subcommand or group--in which case it will contain a top-level key and another array of options.
