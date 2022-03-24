@@ -1,4 +1,4 @@
-module github.com/veteran-software/discord-api-wrapper
+module github.com/veteran-software/discord-api-wrapper/v10
 
 go 1.18
 

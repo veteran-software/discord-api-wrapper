@@ -27,7 +27,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/veteran-software/discord-api-wrapper/logging"
+	"github.com/veteran-software/discord-api-wrapper/v10/logging"
 )
 
 const (

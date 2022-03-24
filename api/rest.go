@@ -27,7 +27,7 @@ import (
 
 	"github.com/gojek/heimdall/v7"
 	"github.com/gojek/heimdall/v7/httpclient"
-	"github.com/veteran-software/discord-api-wrapper/logging"
+	"github.com/veteran-software/discord-api-wrapper/v10/logging"
 )
 
 //goland:noinspection SpellCheckingInspection
