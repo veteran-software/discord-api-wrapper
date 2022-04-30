@@ -108,6 +108,10 @@ func (r *RateLimiter) lockedRequest(method, route, contentType string, b interfa
 		req.Header.Set("Content-Type", contentType)
 	}
 
+	if reason != nil {
+		req.Header.Set("X-Audit-Log-Reason", *reason)
+	}
+
 	req.Header.Set("User-Agent", UserAgent)
 
 	ctx, cancel := context.WithDeadline(req.Context(), time.Now().Add(5*time.Second))
