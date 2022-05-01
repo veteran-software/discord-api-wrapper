@@ -17,24 +17,16 @@
 package api
 
 import (
-	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/veteran-software/discord-api-wrapper/v10/logging"
-)
-
-const (
-	afterQsp  = "after="
-	aroundQsp = "around="
-	beforeQsp = "before="
-	limitQsp  = "limit="
 )
 
 // Channel - Represents a guild or DM channel within Discord.
@@ -65,12 +57,13 @@ type Channel struct {
 	Member                     ThreadMember   `json:"member,omitempty"`                        // ThreadMember for the current User, if they have joined the thread, only included on certain API endpoints
 	DefaultAutoArchiveDuration int            `json:"default_auto_archive_duration,omitempty"` // default duration that the clients (not the API) will use for newly created threads, in minutes, to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080
 	Permissions                string         `json:"permissions"`                             // computed permissions for the invoking user in the channel, including overwrites, only included when part of the resolved data received on a slash command interaction
+	Flags                      ChannelFlag    `json:"flags,omitempty"`                         // channel flags combined as a bitfield
 }
 
 // ChannelType - the type of channel
 type ChannelType int
 
-//goland:noinspection SpellCheckingInspection
+//goland:noinspection SpellCheckingInspection,GoUnusedConst
 const (
 	GuildText          ChannelType = iota     // a text channel within a server
 	DM                                        // a direct message between users
@@ -83,6 +76,8 @@ const (
 	GuildPublicThread                         // a temporary sub-channel within a GuildText channel
 	GuildPrivateThread                        // a temporary sub-channel within a GuildText channel that is only viewable by those invited and those with the ManageThreads permission
 	GuildStageVoice                           // a voice channel for hosting events with an audience
+	GuildDirectory                            // the channel in a hub containing the listed servers
+	GuildForum                                // (still in development) a channel that can only contain threads
 )
 
 // VideoQualityMode - the camera video quality mode of the voice channel, 1 when not present
@@ -92,6 +87,13 @@ type VideoQualityMode int
 const (
 	Auto VideoQualityMode = iota + 1 // Discord chooses the quality for optimal performance
 	Full                             // 720p
+)
+
+type ChannelFlag uint64
+
+//goland:noinspection GoUnusedConst
+const (
+	Pinned ChannelFlag = 1 << 1
 )
 
 // Message - Represents a message sent in a channel within Discord.
@@ -201,7 +203,7 @@ type MessageReference struct {
 	FailIfNotExists bool      `json:"fail_if_not_exists,omitempty"` // when sending, whether to error if the referenced message doesn't exist instead of sending as a normal (non-reply) message, default true
 }
 
-// FollowedChannel - representation of a followed news channel
+// FollowedChannel - representation of a followed News Channel
 type FollowedChannel struct {
 	ChannelID Snowflake `json:"channel_id"` // source Channel id
 	WebhookID Snowflake `json:"webhook_id"` // created target Webhook id
@@ -338,11 +340,11 @@ type Attachment struct {
 	Filename    string    `json:"filename"`               // name of file attached
 	Description string    `json:"description,omitempty"`  // description for the file
 	ContentType string    `json:"content_type,omitempty"` // the attachment's media type
-	Size        int       `json:"size"`                   // size of file in bytes
+	Size        uint64    `json:"size"`                   // size of file in bytes
 	URL         string    `json:"url"`                    // source url of file
 	ProxyURL    string    `json:"proxy_url"`              // a proxied url of file
-	Height      *int      `json:"height,omitempty"`       // height of file (if image)
-	Width       *int      `json:"width,omitempty"`        // width of file (if image)
+	Height      *int64    `json:"height,omitempty"`       // height of file (if image)
+	Width       *int64    `json:"width,omitempty"`        // width of file (if image)
 	Ephemeral   bool      `json:"ephemeral,omitempty"`    // whether this attachment is ephemeral
 }
 
@@ -392,11 +394,17 @@ const (
 // Returns a channel object.
 //
 // If the channel is a thread, a thread member object is included in the returned result.
-func (c *Channel) GetChannel() *Channel {
-	resp, err := Rest.Request(http.MethodGet, fmt.Sprintf(getChannel, api, c.ID), nil, nil)
+func (c *Channel) GetChannel() (*Channel, error) {
+	u, err := url.Parse(fmt.Sprintf(getChannel, api, c.ID.String()))
 	if err != nil {
 		logging.Errorln(err)
-		return nil
+		return nil, err
+	}
+
+	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
 	}
 	defer func(Body io.ReadCloser) {
 		_ = Body.Close()
@@ -406,109 +414,95 @@ func (c *Channel) GetChannel() *Channel {
 	err = json.NewDecoder(resp.Body).Decode(&channel)
 	if err != nil {
 		logging.Errorln(err)
-		return nil
+		return nil, err
 	}
 
-	return &channel
+	return &channel, nil
 }
 
-// ModifyChannel - Update a channel's settings.
-//
-// Returns a channel on success, and a 400 BAD REQUEST on invalid parameters.
-//
-//   All JSON parameters are optional.
-//
-//   This endpoint supports the "X-Audit-Log-Reason" header.
-//goland:noinspection SpellCheckingInspection
-func (c *Channel) ModifyChannel(dm *map[string]interface{}, guildChannel *map[string]interface{}, name *string, icon *base64.Encoding, reason *string) *Channel {
-	var payload interface{}
-
-	switch c.Type {
-	case GroupDM:
-		payload = struct {
-			Name string `json:"name"` // 1-100 character channel name
-			Icon string `json:"icon"` // base64 encoded icon
-		}{
-			Name: fmt.Sprintf("%v", (*dm)["name"]),
-			Icon: fmt.Sprintf("%v", (*dm)["icon"]),
-		}
-	case GuildNewsThread, GuildPublicThread, GuildPrivateThread:
-		archived, _ := strconv.ParseBool(fmt.Sprintf("%v", (*dm)["archived"]))
-
-		payload = struct {
-			Name                string `json:"name"`                  // 1-100 character channel name
-			Archived            bool   `json:"archived"`              // whether the thread is archived
-			AutoArchiveDuration int    `json:"auto_archive_duration"` // duration in minutes to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080
-			Locked              bool   `json:"locked"`                // whether the thread is locked; when a thread is locked, only users with MANAGE_THREADS can unarchive it
-			Invitable           bool   `json:"invitable"`             // whether non-moderators can add other non-moderators to a thread; only available on private threads
-			RateLimitPerUser    *int   `json:"rate_limit_per_user"`   // amount of seconds a user has to wait before sending another message (0-21600); bots, as well as users with the permission manage_messages, manage_thread, or manage_channel, are unaffected
-		}{
-			Name:     fmt.Sprintf("%v", (*dm)["name"]),
-			Archived: archived,
-		}
-	case GuildText, GuildVoice, GuildCategory, GuildNews, GuildStore, GuildStageVoice:
-		payload = struct {
-			Name string          `json:"name"` // 1-100 character channel name
-			Icon base64.Encoding `json:"icon"` // base64 encoded icon
-		}{
-			Name: fmt.Sprintf("%v", (*dm)["name"]),
-			Icon: *icon,
-		}
-	}
-
-	resp, err := Rest.Request(http.MethodGet, fmt.Sprintf(modifyChannel, api, c.ID), &payload, reason)
-	if err != nil {
-		logging.Errorln(err)
-		return nil
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
-
-	var channel Channel
-	err = json.NewDecoder(resp.Body).Decode(&channel)
-	if err != nil {
-		logging.Errorln(err)
-		return nil
-	}
-
-	return &channel
+// ModifyGroupDm - Fires a ChannelUpdate Gateway event.
+func (c *Channel) ModifyGroupDm(payload ModifyGroupDmJSON, reason *string) (*Channel, error) {
+	return c.modifyChannel(payload, reason)
 }
 
-// ModifyGuildChannelJSON - Requires the MANAGE_CHANNELS permission for the guild.
-//
-// Fires a Channel Update Gateway event.
-//
-// If modifying a category, individual Channel Update events will fire for each child channel that also changes.
-//
-// If modifying permission overwrites, the MANAGE_ROLES permission is required.
-//
-// Only permissions your bot has in the guild or channel can be allowed/denied (unless your bot has a MANAGE_ROLES overwrite in the channel).
-type ModifyGuildChannelJSON struct {
-	// All
-	Name                 string       `json:"name"`                  // 1-100 character channel name
-	Position             *int         `json:"position,omitempty"`    // the position of the channel in the left-hand listing
-	PermissionOverwrites *[]Overwrite `json:"permission_overwrites"` // channel or category-specific permissions
+type ModifyGroupDmJSON struct {
+	Name string `json:"name"` // 1-100 character channel name
+	Icon string `json:"icon"` // base64 encoded icon
+}
 
-	// Text
-	RateLimitPerUser *int `json:"rate_limit_per_user"` // amount of seconds a user has to wait before sending another message (0-21600); bots, as well as users with the permission manage_messages or manage_channel, are unaffected
+func (c *Channel) ModifyGuildTextChannel(payload ModifyTextChannelJSON, reason *string) (*Channel, error) {
+	return c.modifyChannel(payload, reason)
+}
 
-	// Text, News
-	Type                       ChannelType `json:"type,omitempty"`                // the type of channel; only conversion between text and news is supported and only in guilds with the "NEWS" feature
+func (c *Channel) ModifyGuildNewsChannel(payload ModifyNewsChannelJSON, reason *string) (*Channel, error) {
+	return c.modifyChannel(payload, reason)
+}
+
+func (c *Channel) ModifyThread(payload ModifyThreadJSON, reason *string) (*Channel, error) {
+	return c.modifyChannel(payload, reason)
+}
+
+func (c *Channel) ModifyGuildVoiceChannel(payload ModifyGuildVoiceChannelJSON, reason *string) (*Channel, error) {
+	return c.modifyChannel(payload, reason)
+}
+
+type ModifyAllChannelJSON struct {
+	Name                 string      `json:"name"`                  // 1-100 character channel name
+	Position             *int        `json:"position"`              // the position of the channel in the left-hand listing
+	PermissionOverwrites []Overwrite `json:"permission_overwrites"` // channel or category-specific permissions
+}
+
+type ModifyNewsChannelJSON struct {
+	ModifyAllChannelJSON
+
+	Type                       ChannelType `json:"type"`                          // the type of channel; only conversion between text and news is supported and only in guilds with the "NEWS" feature
 	Topic                      *string     `json:"topic"`                         // 0-1024 character channel topic
-	DefaultAutoArchiveDuration *int        `json:"default_auto_archive_duration"` // the default duration that the clients use (not the API) for newly created threads in the channel, in minutes, to automatically archive the thread after recent activity
+	Nsfw                       *bool       `json:"nsfw"`                          // whether the channel is nsfw
+	ParentID                   *Snowflake  `json:"parent_id"`                     // id of the new parent category for a channel
+	DefaultAutoArchiveDuration *uint64     `json:"default_auto_archive_duration"` // the default duration that the clients use (not the API) for newly created threads in the channel, in minutes, to automatically archive the thread after recent activity
+}
 
-	// Text, News, Store
-	Nsfw *bool `json:"nsfw"` // whether the channel is nsfw
+type ModifyTextChannelJSON struct {
+	ModifyNewsChannelJSON
 
-	// Text, News, Store, Voice
-	ParentID *Snowflake `json:"parent_id"` // id of the new parent category for a channel
+	RateLimitPerUser *uint64 `json:"rate_limit_per_user"` // amount of seconds a user has to wait before sending another message (0-21600); bots, as well as users with the permission ManageMessages, or ManageChannels, are unaffected
+}
 
-	// Voice
-	Bitrate          *int             `json:"bitrate"`            // the bitrate (in bits) of the voice channel; 8000 to 96000 (128000 for VIP servers)
-	UserLimit        *int             `json:"user_limit"`         // the user limit of the voice channel; 0 refers to no limit, 1 to 99 refers to a user limit
+type ModifyGuildVoiceChannelJSON struct {
+	ModifyAllChannelJSON
+
+	Bitrate          *uint64          `json:"bitrate"`            // the bitrate (in bits) of the voice channel; 8000 to 96000 (128000 for VIP servers)
+	UserLimit        *uint            `json:"user_limit"`         // the user limit of the voice channel; 0 refers to no limit, 1 to 99 refers to a user limit
+	ParentID         *Snowflake       `json:"parent_id"`          // id of the new parent category for a channel
 	RtcRegion        *string          `json:"rtc_region"`         // channel voice region id, automatic when set to null
 	VideoQualityMode VideoQualityMode `json:"video_quality_mode"` // the camera video quality mode of the voice channel
+}
+
+// modifyChannel - Update a channel's settings. Returns a channel on success, and a 400 BAD REQUEST on invalid parameters. All JSON parameters are optional.
+func (c *Channel) modifyChannel(payload interface{}, reason *string) (*Channel, error) {
+	u, err := url.Parse(fmt.Sprintf(modifyChannel, api, c.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	resp, err := Rest.Request(http.MethodGet, u.String(), &payload, reason)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var channel Channel
+	err = json.NewDecoder(resp.Body).Decode(&channel)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return &channel, nil
 }
 
 // ModifyThreadJSON - When setting archived to false, when locked is also false, only the SEND_MESSAGES permission is required.
@@ -527,50 +521,90 @@ type ModifyThreadJSON struct {
 
 // DeleteChannel - Delete a channel, or close a private message.
 //
-// Requires the MANAGE_CHANNELS permission for the guild, or MANAGE_THREADS if the channel is a thread.
+// Requires the ManageChannels permission for the guild, or ManageThreads if the channel is a thread.
 //
-// Deleting a category does not delete its child channels; they will have their parent_id removed and a Channel Update Gateway event will fire for each of them.
+// Deleting a category does not delete its child channels; they will have their parent_id removed and a ChannelUpdate Gateway event will fire for each of them.
 //
-// Returns a channel object on success. Fires a Channel Delete Gateway event (or Thread Delete if the channel was a thread).
+// Returns a channel object on success. Fires a ChannelDelete Gateway event (or ThreadDelete if the channel was a thread).
 //
-// Deleting a guild channel cannot be undone. Use this with caution, as it is impossible to undo this action when performed on a guild channel. In contrast, when used with a private message, it is possible to undo the action by opening a private message with the recipient again.
+//     Deleting a guild channel cannot be undone. Use this with caution, as it is impossible to undo this action when performed on a guild channel. In contrast, when used with a private message, it is possible to undo the action by opening a private message with the recipient again.
 //
-// For Community guilds, the Rules or Guidelines channel and the Community Updates channel cannot be deleted.
+//     For Community guilds, the Rules or Guidelines channel and the Community Updates channel cannot be deleted.
 //
-// This endpoint supports the X-Audit-Log-Reason header.
-func (c *Channel) DeleteChannel() (method, route string) {
-	return http.MethodDelete, fmt.Sprintf(deleteChannel, api, c.ID)
+//     This endpoint supports the `X-Audit-Log-Reason` header.
+func (c *Channel) DeleteChannel(reason *string) error {
+	u, err := url.Parse(fmt.Sprintf(deleteChannel, api, c.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+
+	resp, err := Rest.Request(http.MethodDelete, u.String(), nil, reason)
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	return nil
 }
 
 // GetChannelMessages - Returns the messages for a channel.
 //
-// If operating on a guild channel, this endpoint requires the VIEW_CHANNEL permission to be present on the current user.
+// If operating on a guild channel, this endpoint requires the ViewChannel permission to be present on the current user.
 //
-// If the current user is missing the 'READ_MESSAGE_HISTORY' permission in the channel then this will return no messages (since they cannot read the message history).
+// If the current user is missing the ReadMessageHistory permission in the channel then this will return no messages (since they cannot read the message history).
 //
 // Returns an array of message objects on success.
 //
 // SUPPORTS: "around : Snowflake"; "before : Snowflake"; "after : Snowflake"; "limit : int" ; nil
-func (c *Channel) GetChannelMessages(around *Snowflake, before *Snowflake, after *Snowflake, limit *int) (method, route string) {
-	var qsp []string
-	if around != nil {
-		qsp = append(qsp, aroundQsp+around.String())
-	}
-	if before != nil {
-		qsp = append(qsp, beforeQsp+before.String())
-	}
-	if after != nil {
-		qsp = append(qsp, afterQsp+after.String())
-	}
-	if limit != nil {
-		qsp = append(qsp, limitQsp+strconv.Itoa(*limit))
-	}
-	var q string
-	if len(qsp) > 0 {
-		q = "?" + strings.Join(qsp, "&")
+//
+//      The before, after, and around keys are mutually exclusive, only one may be passed at a time.
+//
+// TODO: Check permissions; required ViewChannel and ReadMessageHistory
+func (c *Channel) GetChannelMessages(around *Snowflake, before *Snowflake, after *Snowflake, limit *int) ([]Message, error) {
+	u, err := url.Parse(fmt.Sprintf(getChannelMessages, api, c.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
 	}
 
-	return http.MethodGet, fmt.Sprintf(getChannelMessages, api, c.ID.String(), q)
+	q := u.Query()
+	if around != nil {
+		q.Set("around", around.String())
+	}
+	if before != nil {
+		q.Set("before", before.String())
+	}
+	if after != nil {
+		q.Set("after", after.String())
+	}
+	if limit != nil {
+		q.Set("limit", strconv.Itoa(*limit))
+	}
+	if len(q) > 0 {
+		u.RawQuery = q.Encode()
+	}
+
+	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var messages []Message
+	err = json.NewDecoder(resp.Body).Decode(&messages)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return messages, nil
 }
 
 // GetChannelMessage - Returns a specific message in the channel.
@@ -578,32 +612,52 @@ func (c *Channel) GetChannelMessages(around *Snowflake, before *Snowflake, after
 // If operating on a guild channel, this endpoint requires the 'READ_MESSAGE_HISTORY' permission to be present on the current user.
 //
 // Returns a message object on success
-func (c *Channel) GetChannelMessage(messageID string) (method, route string) {
-	return http.MethodGet, fmt.Sprintf(getChannelMessage, api, c.ID.String(), messageID)
+func (c *Channel) GetChannelMessage(messageID string) (*Message, error) {
+	u, err := url.Parse(fmt.Sprintf(getChannelMessage, api, c.ID.String(), messageID))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var message *Message
+	err = json.NewDecoder(resp.Body).Decode(&message)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return message, nil
 }
 
 // CreateMessage - Post a message to a guild text or DM channel. Returns a message object.
+//
+//      Discord may strip certain characters from message content, like invalid unicode characters or characters which cause unexpected message formatting. If you are passing user-generated strings into message content, consider sanitizing the data to prevent unexpected behavior and utilizing allowed_mentions to prevent unexpected mentions.
 //
 // Fires a Message Create Gateway event.
 //
 // See message formatting for more information on how to properly format messages.
 //
 // Limitations
-//   * When operating on a guild channel, the current user must have the SEND_MESSAGES permission.
-//   * When sending a message with tts (text-to-speech) set to true, the current user must have the SEND_TTS_MESSAGES permission.
-//   * When creating a message as a reply to another message, the current user must have the READ_MESSAGE_HISTORY permission.
+//   * When operating on a guild channel, the current user must have the SendMessages permission.
+//   * When sending a message with tts (text-to-speech) set to true, the current user must have the SendTtsMessages permission.
+//   * When creating a message as a reply to another message, the current user must have the ReadMessageHistory permission.
 //       * The referenced message must exist and cannot be a system message.
 //   * The maximum request size when sending a message is 8 MB
 //   * For the embed object, you can set every field except type (it will be rich regardless of if you try to set it), provider, video, and any height, width, or proxy_url values for images.
 //   * Files can only be uploaded when using the multipart/form-data content type.
 //
-// You may create a message as a reply to another message.
+// You may create a message as a reply to another message. To do so, include a `message_reference` with a `message_id`. The `channel_id` and `guild_id` in the `message_reference` are optional, but will be validated if provided.
 //
-// To do so, include a message_reference with a message_id.
-//
-// The channel_id and guild_id in the message_reference are optional, but will be validated if provided.
-//
-// Note that when sending a message, you must provide a value for at least one of content, embeds, or file.
+//     Note that when sending a message, you must provide a value for at least one of content, embeds, or file.
 //
 // For a file attachment, the Content-Disposition subpart header MUST contain a filename parameter.
 //
@@ -616,11 +670,34 @@ func (c *Channel) GetChannelMessage(messageID string) (method, route string) {
 // You can pass a stringified JSON body as a form value as payload_json instead.
 //
 // If you supply a payload_json form value, all fields except for file fields will be ignored in the form data.
-func (c *Channel) CreateMessage() (method, route string) {
-	return http.MethodPost, fmt.Sprintf(createMessage, api, c.ID)
+func (c *Channel) CreateMessage(payload CreateMessageJSON) (*Message, error) {
+	u, err := url.Parse(fmt.Sprintf(createMessage, api, c.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	resp, err := Rest.Request(http.MethodPost, u.String(), payload, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var message *Message
+	err = json.NewDecoder(resp.Body).Decode(&message)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return message, nil
 }
 
 // CreateMessageJSON - JSON payload structure
+// TODO: files[n]
 type CreateMessageJSON struct {
 	Content          string           `json:"content"`           // the message contents (up to 2000 characters)
 	TTS              bool             `json:"tts"`               // true if this is a TTS message
@@ -640,8 +717,30 @@ type CreateMessageJSON struct {
 //
 // Returns a message object.
 //goland:noinspection SpellCheckingInspection
-func (c *Channel) CrosspostMessage(messageID string) (method, route string) {
-	return http.MethodPost, fmt.Sprintf(crosspostMessage, api, c.ID.String(), messageID)
+func (c *Channel) CrosspostMessage(messageID string) (*Message, error) {
+	u, err := url.Parse(fmt.Sprintf(crosspostMessage, api, c.ID.String(), messageID))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	resp, err := Rest.Request(http.MethodPost, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var message *Message
+	err = json.NewDecoder(resp.Body).Decode(&message)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return message, nil
 }
 
 // CreateReaction - Create a reaction for the message.
@@ -655,8 +754,23 @@ func (c *Channel) CrosspostMessage(messageID string) (method, route string) {
 // The emoji must be URL Encoded or the request will fail with 10014: Unknown Emoji.
 //
 // To use custom emoji, you must encode it in the format name:id with the emoji name and emoji id.
-func (c *Channel) CreateReaction(messageID Snowflake, emoji string) (method, route string) {
-	return http.MethodPut, fmt.Sprintf(createReaction, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji))
+func (c *Channel) CreateReaction(messageID Snowflake, emoji string) error {
+	u, err := url.Parse(fmt.Sprintf(createReaction, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji)))
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+
+	resp, err := Rest.Request(http.MethodPut, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	return nil
 }
 
 // DeleteOwnReaction - Delete a reaction the current user has made for the message.
@@ -666,8 +780,23 @@ func (c *Channel) CreateReaction(messageID Snowflake, emoji string) (method, rou
 // The emoji must be URL Encoded or the request will fail with 10014: Unknown Emoji.
 //
 // To use custom emoji, you must encode it in the format name:id with the emoji name and emoji id.
-func (c *Channel) DeleteOwnReaction(messageID Snowflake, emoji string) (method, route string) {
-	return http.MethodDelete, fmt.Sprintf(deleteOwnReaction, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji))
+func (c *Channel) DeleteOwnReaction(messageID Snowflake, emoji string) error {
+	u, err := url.Parse(fmt.Sprintf(deleteOwnReaction, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji)))
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+
+	resp, err := Rest.Request(http.MethodDelete, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	return nil
 }
 
 // DeleteUserReaction - Deletes another user's reaction.
@@ -677,8 +806,23 @@ func (c *Channel) DeleteOwnReaction(messageID Snowflake, emoji string) (method, 
 // Returns a 204 empty response on success. The emoji must be URL Encoded or the request will fail with 10014: Unknown Emoji.
 //
 // To use custom emoji, you must encode it in the format name:id with the emoji name and emoji id.
-func (c *Channel) DeleteUserReaction(messageID Snowflake, emoji string, userID Snowflake) (method, route string) {
-	return http.MethodDelete, fmt.Sprintf(deleteUserReaction, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji), userID.String())
+func (c *Channel) DeleteUserReaction(messageID Snowflake, emoji string, userID Snowflake) error {
+	u, err := url.Parse(fmt.Sprintf(deleteUserReaction, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji), userID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+
+	resp, err := Rest.Request(http.MethodDelete, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	return nil
 }
 
 // GetReactions - Get a list of users that reacted with this emoji.
@@ -690,19 +834,41 @@ func (c *Channel) DeleteUserReaction(messageID Snowflake, emoji string, userID S
 // To use custom emoji, you must encode it in the format name:id with the emoji name and emoji id.
 //
 // OPTS SUPPORTS: "after : Snowflake"; "limit : int", nil
-func (c *Channel) GetReactions(messageID Snowflake, emoji string, after *Snowflake, limit *int) (method, route string) {
-	var qsp []string
+func (c *Channel) GetReactions(messageID Snowflake, emoji string, after *Snowflake, limit *int) ([]User, error) {
+	u, err := url.Parse(fmt.Sprintf(getReactions, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji)))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	q := u.Query()
 	if after != nil {
-		qsp = append(qsp, afterQsp+after.String())
+		q.Set("after", after.String())
 	}
 	if limit != nil {
-		qsp = append(qsp, limitQsp+strconv.Itoa(*limit))
+		q.Set("limit", strconv.Itoa(*limit))
 	}
-	var q string
-	if len(qsp) > 0 {
-		q = "?" + strings.Join(qsp, "&")
+	if len(q) > 0 {
+		u.RawQuery = q.Encode()
 	}
-	return http.MethodGet, fmt.Sprintf(getReactions, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji), q)
+
+	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var users []User
+	err = json.NewDecoder(resp.Body).Decode(&users)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return users, nil
 }
 
 // DeleteAllReactions - Deletes all reactions on a message.
@@ -710,8 +876,23 @@ func (c *Channel) GetReactions(messageID Snowflake, emoji string, after *Snowfla
 // This endpoint requires the 'MANAGE_MESSAGES' permission to be present on the current user.
 //
 // Fires a Message Reaction Remove All Gateway event.
-func (c *Channel) DeleteAllReactions(messageID Snowflake) (method, route string) {
-	return http.MethodDelete, fmt.Sprintf(deleteAllReactions, api, c.ID.String(), messageID.String())
+func (c *Channel) DeleteAllReactions(messageID Snowflake) error {
+	u, err := url.Parse(fmt.Sprintf(deleteAllReactions, api, c.ID.String(), messageID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+
+	resp, err := Rest.Request(http.MethodDelete, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	return nil
 }
 
 // DeleteAllReactionsForEmoji - Deletes all the reactions for a given emoji on a message.
@@ -723,8 +904,23 @@ func (c *Channel) DeleteAllReactions(messageID Snowflake) (method, route string)
 // The emoji must be URL Encoded or the request will fail with 10014: Unknown Emoji.
 //
 // To use custom emoji, you must encode it in the format name:id with the emoji name and emoji id.
-func (c *Channel) DeleteAllReactionsForEmoji(messageID Snowflake, emoji string) (method, route string) {
-	return http.MethodDelete, fmt.Sprintf(deleteAllReactionsForEmoji, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji))
+func (c *Channel) DeleteAllReactionsForEmoji(messageID Snowflake, emoji string) error {
+	u, err := url.Parse(fmt.Sprintf(deleteAllReactionsForEmoji, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji)))
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+
+	resp, err := Rest.Request(http.MethodDelete, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	return nil
 }
 
 // EditMessage - Edit a previously sent message.
@@ -741,19 +937,45 @@ func (c *Channel) DeleteAllReactionsForEmoji(messageID Snowflake, emoji string) 
 // Returns a message object.
 //
 // Fires a Message Update Gateway event.
-func (c *Channel) EditMessage(messageID string) (method, route string) {
-	return http.MethodPatch, fmt.Sprintf(editMessage, api, c.ID.String(), messageID)
+func (c *Channel) EditMessage(messageID string, payload EditMessageJSON) (*Message, error) {
+	u, err := url.Parse(fmt.Sprintf(editMessage, api, c.ID.String(), messageID))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	resp, err := Rest.Request(http.MethodPatch, u.String(), payload, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var message *Message
+	err = json.NewDecoder(resp.Body).Decode(&message)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return message, nil
 }
 
 // EditMessageJSON - JSON payload structure
+//
+// All parameters are optional and nullable.
+//
+// TODO: files[n]
 type EditMessageJSON struct {
-	Content         string          `json:"content"`
-	Embeds          []Embed         `json:"embeds"`
-	Flags           int             `json:"flags"`
-	AllowedMentions AllowedMentions `json:"allowed_mentions"`
-	Components      []Component     `json:"components"`
-	PayloadJson     string          `json:"payload_json"`
-	Attachments     []Attachment    `json:"attachments"`
+	Content         *string          `json:"content,omitempty"`
+	Embeds          []*Embed         `json:"embeds,omitempty"`
+	Flags           *int             `json:"flags,omitempty"`
+	AllowedMentions *AllowedMentions `json:"allowed_mentions,omitempty"`
+	Components      []*Component     `json:"components,omitempty"`
+	PayloadJson     *string          `json:"payload_json,omitempty"`
+	Attachments     []*Attachment    `json:"attachments,omitempty"`
 }
 
 // DeleteMessage - Delete a message.
@@ -762,11 +984,26 @@ type EditMessageJSON struct {
 //
 // Returns a 204 empty response on success.
 //
-// Fires a Message Delete Gateway event.
+// Fires a MessageDelete Gateway event.
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
-func (c *Channel) DeleteMessage(messageID string) (method, route string) {
-	return http.MethodDelete, fmt.Sprintf(deleteMessage, api, c.ID.String(), messageID)
+func (c *Channel) DeleteMessage(messageID string, reason *string) error {
+	u, err := url.Parse(fmt.Sprintf(deleteMessage, api, c.ID.String(), messageID))
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+
+	resp, err := Rest.Request(http.MethodDelete, u.String(), nil, reason)
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	return nil
 }
 
 // BulkDeleteMessages - Delete multiple messages in a single request.
@@ -781,8 +1018,33 @@ func (c *Channel) DeleteMessage(messageID string) (method, route string) {
 // This endpoint will not delete messages older than 2 weeks, and will fail with a 400 BAD REQUEST if any message provided is older than that or if any duplicate message IDs are provided.
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
-func (c *Channel) BulkDeleteMessages() (method, route string) {
-	return http.MethodPost, fmt.Sprintf(bulkDeleteMessages, api, c.ID.String())
+func (c *Channel) BulkDeleteMessages(payload BulkDeleteJSON, reason *string) error {
+	if len(payload.Messages) < 2 || len(payload.Messages) > 100 {
+		return errors.New("you can only bulk delete >= 2 && <= 100 messages at a time")
+	}
+
+	for _, message := range payload.Messages {
+		if time.Now().Sub(time.Unix(message.ParseSnowflake().Timestamp, 0)).Hours() > float64(14*24) {
+			return errors.New("cannot bulk delete message older than 2 weeks")
+		}
+	}
+
+	u, err := url.Parse(fmt.Sprintf(bulkDeleteMessages, api, c.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+
+	resp, err := Rest.Request(http.MethodPost, u.String(), payload, reason)
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	return nil
 }
 
 // BulkDeleteJSON - JSON payload structure
@@ -803,15 +1065,30 @@ type BulkDeleteJSON struct {
 // For more information about permissions, see permissions.
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
-func (c *Channel) EditChannelPermissions(overwriteID Snowflake) (method, route string) {
-	return http.MethodPut, fmt.Sprintf(editChannelPermissions, api, c.ID.String(), overwriteID.String())
+func (c *Channel) EditChannelPermissions(overwriteID Snowflake, payload EditChannelPermissionsJSON, reason *string) error {
+	u, err := url.Parse(fmt.Sprintf(editChannelPermissions, api, c.ID.String(), overwriteID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+
+	resp, err := Rest.Request(http.MethodPut, u.String(), payload, reason)
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	return nil
 }
 
 // EditChannelPermissionsJSON - JSON payload structure
 type EditChannelPermissionsJSON struct {
-	Allow *string        `json:"allow,omitempty"`
-	Deny  *string        `json:"deny,omitempty"`
-	Type  PermissionType `json:"type"`
+	Allow *string        `json:"allow,omitempty"` // the bitwise value of all allowed permissions (default "0")
+	Deny  *string        `json:"deny,omitempty"`  // the bitwise value of all disallowed permissions (default "0")
+	Type  PermissionType `json:"type"`            // 0 for a role or 1 for a member
 }
 
 // GetChannelInvites - Returns a list of invite objects (with invite metadata) for the channel.
@@ -819,8 +1096,30 @@ type EditChannelPermissionsJSON struct {
 // Only usable for guild channels.
 //
 // Requires the ManageChannels permission.
-func (c *Channel) GetChannelInvites() (method, route string) {
-	return http.MethodPut, fmt.Sprintf(getChannelInvites, api, c.ID.String())
+func (c *Channel) GetChannelInvites() ([]Invite, error) {
+	u, err := url.Parse(fmt.Sprintf(getChannelInvites, api, c.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var invites []Invite
+	err = json.NewDecoder(resp.Body).Decode(&invites)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return invites, nil
 }
 
 // CreateChannelInvite - Create a new invite object for the channel.
@@ -836,19 +1135,41 @@ func (c *Channel) GetChannelInvites() (method, route string) {
 // Returns an Invite object. Fires an Invite Create Gateway event.
 //
 // This endpoint supports the X-Audit-Log-Reason header.
-func (c *Channel) CreateChannelInvite() (method, route string) {
-	return http.MethodPost, fmt.Sprintf(getChannelInvites, api, c.ID.String())
+func (c *Channel) CreateChannelInvite(payload CreateChannelInviteJSON, reason *string) (*Invite, error) {
+	u, err := url.Parse(fmt.Sprintf(getChannelInvites, api, c.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	resp, err := Rest.Request(http.MethodPost, u.String(), payload, reason)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var invite *Invite
+	err = json.NewDecoder(resp.Body).Decode(&invite)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return invite, nil
 }
 
-// CreateChannelJSON - JSON payload structure
-type CreateChannelJSON struct {
+// CreateChannelInviteJSON - JSON payload structure
+type CreateChannelInviteJSON struct {
 	MaxAge              uint64           `json:"max_age"`               // duration of invite in seconds before expiry, or 0 for never. between 0 and 604800 (7 days)
 	MaxUses             int              `json:"max_uses"`              // max number of uses or 0 for unlimited. between 0 and 100
 	Temporary           bool             `json:"temporary"`             // whether this invite only grants temporary membership
 	Unique              bool             `json:"unique"`                // if true, don't try to reuse a similar invite (useful for creating many unique one time use invites)
 	TargetType          InviteTargetType `json:"target_type"`           // the type of target for this voice channel invite
 	TargetUserID        Snowflake        `json:"target_user_id"`        // the id of the user whose stream to display for this invite, required if target_type is 1, the user must be streaming in the channel
-	TargetApplicationID Snowflake        `json:"target_application_id"` // the id of the embedded application to open for this invite, required if target_type is 2, the application must have the EMBEDDED flag
+	TargetApplicationID Snowflake        `json:"target_application_id"` // the id of the embedded application to open for this invite, required if target_type is 2, the application must have the Embedded flag
 }
 
 // DeleteChannelPermission - Delete a channel permission overwrite for a user or role in a channel.
@@ -862,8 +1183,23 @@ type CreateChannelJSON struct {
 // For more information about permissions, see permissions
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
-func (c *Channel) DeleteChannelPermission(overwriteID Snowflake) (method, route string) {
-	return http.MethodDelete, fmt.Sprintf(deleteChannelPermission, api, c.ID.String(), overwriteID.String())
+func (c *Channel) DeleteChannelPermission(overwriteID Snowflake, reason *string) error {
+	u, err := url.Parse(fmt.Sprintf(deleteChannelPermission, api, c.ID.String(), overwriteID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+
+	resp, err := Rest.Request(http.MethodDelete, u.String(), nil, reason)
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	return nil
 }
 
 // FollowNewsChannel - Follow a News Channel to send messages to a target channel.
@@ -871,8 +1207,30 @@ func (c *Channel) DeleteChannelPermission(overwriteID Snowflake) (method, route 
 // Requires the ManageWebhooks permission in the target channel.
 //
 // Returns a followed channel object.
-func (c *Channel) FollowNewsChannel() (method, route string) {
-	return http.MethodPost, fmt.Sprintf(followNewsChannel, api, c.ID.String())
+func (c *Channel) FollowNewsChannel(payload FollowNewsChannelJSON) (*FollowedChannel, error) {
+	u, err := url.Parse(fmt.Sprintf(followNewsChannel, api, c.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	resp, err := Rest.Request(http.MethodPost, u.String(), payload, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var followedChannel *FollowedChannel
+	err = json.NewDecoder(resp.Body).Decode(&followedChannel)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return followedChannel, nil
 }
 
 // FollowNewsChannelJSON - JSON payload structure
@@ -888,13 +1246,50 @@ type FollowNewsChannelJSON struct {
 // Returns a 204 empty response on success.
 //
 // Fires a Typing Start Gateway event.
-func (c *Channel) TriggerTypingIndicator() (method, route string) {
-	return http.MethodPost, fmt.Sprintf(triggerTypingIndicator, api, c.ID.String())
+func (c *Channel) TriggerTypingIndicator() error {
+	u, err := url.Parse(fmt.Sprintf(triggerTypingIndicator, api, c.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+
+	resp, err := Rest.Request(http.MethodPost, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	return nil
 }
 
 // GetPinnedMessages - Returns all pinned messages in the channel as an array of message objects.
-func (c *Channel) GetPinnedMessages() (method, route string) {
-	return http.MethodPost, fmt.Sprintf(getPinnedMessages, api, c.ID.String())
+func (c *Channel) GetPinnedMessages() ([]Message, error) {
+	u, err := url.Parse(fmt.Sprintf(getPinnedMessages, api, c.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var messages []Message
+	err = json.NewDecoder(resp.Body).Decode(&messages)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return messages, nil
 }
 
 // PinMessage - Pin a message in a channel.
@@ -906,8 +1301,23 @@ func (c *Channel) GetPinnedMessages() (method, route string) {
 //    The max pinned messages is 50.
 //
 //    This endpoint supports the X-Audit-Log-Reason header.
-func (c *Channel) PinMessage(messageID Snowflake) (method, route string) {
-	return http.MethodPut, fmt.Sprintf(pinMessage, api, c.ID.String(), messageID.String())
+func (c *Channel) PinMessage(messageID Snowflake, reason *string) error {
+	u, err := url.Parse(fmt.Sprintf(pinMessage, api, c.ID.String(), messageID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+
+	resp, err := Rest.Request(http.MethodPut, u.String(), nil, reason)
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	return nil
 }
 
 // UnpinMessage - Unpin a message in a channel.
@@ -917,43 +1327,112 @@ func (c *Channel) PinMessage(messageID Snowflake) (method, route string) {
 // Returns a 204 empty response on success.
 //
 //    This endpoint supports the X-Audit-Log-Reason header.
-func (c *Channel) UnpinMessage(messageID Snowflake) (method, route string) {
-	return http.MethodDelete, fmt.Sprintf(unpinMessage, api, c.ID.String(), messageID.String())
+func (c *Channel) UnpinMessage(messageID Snowflake, reason *string) error {
+	u, err := url.Parse(fmt.Sprintf(unpinMessage, api, c.ID.String(), messageID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+
+	resp, err := Rest.Request(http.MethodDelete, u.String(), nil, reason)
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	return nil
 }
 
 // GroupDmAddRecipient - Adds a recipient to a Group DM using their access token.
 //
 // REQUIRES: gdm.join SCOPE
-func (c *Channel) GroupDmAddRecipient(userID Snowflake) (method, route string) {
-	return http.MethodPut, fmt.Sprintf(groupDmAddRecipient, api, c.ID.String(), userID.String())
+func (c *Channel) GroupDmAddRecipient(userID Snowflake, payload GroupDmAddRecipientJSON) error {
+	u, err := url.Parse(fmt.Sprintf(groupDmAddRecipient, api, c.ID.String(), userID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+
+	resp, err := Rest.Request(http.MethodPut, u.String(), payload, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	return nil
 }
 
 // GroupDmAddRecipientJSON - JSON payload structure
+//
+// IMPORTANT: requires a Bearer token for the user
 type GroupDmAddRecipientJSON struct {
 	AccessToken string `json:"access_token"` // access token of a user that has granted your app the gdm.join scope
 	Nick        string `json:"nick"`         // nickname of the user being added
 }
 
 // GroupDmRemoveRecipient - Removes a recipient from a Group DM.
-func (c *Channel) GroupDmRemoveRecipient(userID Snowflake) (method, route string) {
-	return http.MethodDelete, fmt.Sprintf(groupDmRemoveRecipient, api, c.ID.String(), userID.String())
+func (c *Channel) GroupDmRemoveRecipient(userID Snowflake) error {
+	u, err := url.Parse(fmt.Sprintf(groupDmRemoveRecipient, api, c.ID.String(), userID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+
+	resp, err := Rest.Request(http.MethodDelete, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	return nil
 }
 
 // StartThreadWithMessage - Creates a new thread from an existing message.
 //
 // Returns a channel on success, and a 400 BAD REQUEST on invalid parameters.
 //
-// Fires a Thread Create Gateway event.
+// Fires a ThreadCreate Gateway event.
 //
-// When called on a GuildText channel, creates a GuildPublicThread.
+// When called on a GuildText channel, creates a GuildPublicThread. When called on a GuildNews channel, creates a GuildNewsThread.
 //
-// When called on a GuildNews channel, creates a GuildNewsThread.
+// Does not work on a GuildForum channel.
 //
-// The id of the created thread will be the same as the id of the message, and as such a message can only have a single thread created from it.
+// The id of the created thread will be the same as the id of the source message, and as such a message can only have a single thread created from it.
 //
 //    This endpoint supports the X-Audit-Log-Reason header.
-func (c *Channel) StartThreadWithMessage(messageID Snowflake) (method, route string) {
-	return http.MethodPost, fmt.Sprintf(startThreadWithMessage, api, c.ID.String(), messageID.String())
+func (c *Channel) StartThreadWithMessage(messageID Snowflake, payload StartThreadWithMessageJSON, reason *string) (*Channel, error) {
+	u, err := url.Parse(fmt.Sprintf(startThreadWithMessage, api, c.ID.String(), messageID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	resp, err := Rest.Request(http.MethodPost, u.String(), payload, reason)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var channel Channel
+	err = json.NewDecoder(resp.Body).Decode(&channel)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return &channel, nil
 }
 
 // StartThreadWithMessageJSON - JSON payload structure
@@ -965,17 +1444,37 @@ type StartThreadWithMessageJSON struct {
 
 // StartThreadWithoutMessage - Creates a new thread that is not connected to an existing message.
 //
-// The created thread defaults to a GuildPrivateThread.
-//
 // Returns a channel on success, and a 400 BAD REQUEST on invalid parameters.
 //
-// Fires a Thread Create Gateway event.
+// Fires a ThreadCreate Gateway event.
 //
 //    This endpoint supports the X-Audit-Log-Reason header.
 //
-// * Creating a private thread requires the server to be boosted. The guild features will indicate if that is possible for the guild.
-func (c *Channel) StartThreadWithoutMessage() (method, route string) {
-	return http.MethodPost, fmt.Sprintf(startThreadWithoutMessage, api, c.ID.String())
+// * Creating a GuildPrivateThread requires the server to be boosted. The GuildFeatures will indicate if that is possible for the guild.
+func (c *Channel) StartThreadWithoutMessage(payload StartThreadWithoutMessageJSON, reason *string) (*Channel, error) {
+	u, err := url.Parse(fmt.Sprintf(startThreadWithoutMessage, api, c.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	resp, err := Rest.Request(http.MethodPost, u.String(), payload, reason)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var channel Channel
+	err = json.NewDecoder(resp.Body).Decode(&channel)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return &channel, nil
 }
 
 // StartThreadWithoutMessageJSON - JSON payload structure
@@ -987,15 +1486,94 @@ type StartThreadWithoutMessageJSON struct {
 	RateLimitPerUser    *uint64     `json:"rate_limit_per_user,omitempty"` // amount of seconds a user has to wait before sending another message (0-21600)
 }
 
+// StartThreadInForumChannel
+//
+// Creates a new thread in a forum channel, and sends a message within the created thread. Returns a Channel, with a nested Message object, on success, and a 400 BAD REQUEST on invalid parameters. Fires a ThreadCreate and Message Create Gateway event.
+//
+//     The type of the created thread is GuildPublicThread.
+//     See message formatting for more information on how to properly format messages.
+//     The current user must have the SendMessages permission (CreatePublicThreads is ignored).
+//     The maximum request size when sending a message is 8MiB.
+//     For the embed object, you can set every field except type (it will be rich regardless of if you try to set it), provider, video, and any height, width, or proxy_url values for images.
+//     Examples for file uploads are available in Uploading Files.
+//     Files must be attached using a multipart/form-data body as described in Uploading Files.
+//     Note that when sending a message, you must provide a value for at least one of content, embeds, or files[n].
+//
+//     Discord may strip certain characters from message content, like invalid unicode characters or characters which cause unexpected message formatting. If you are passing user-generated strings into message content, consider sanitizing the data to prevent unexpected behavior and utilizing allowed_mentions to prevent unexpected mentions.
+//
+//     This endpoint supports the X-Audit-Log-Reason header.
+func (c *Channel) StartThreadInForumChannel(payload StartThreadWithoutMessageJSON, reason *string) (*Channel, error) {
+	u, err := url.Parse(fmt.Sprintf(startThreadInForumChannel, api, c.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	resp, err := Rest.Request(http.MethodPost, u.String(), payload, reason)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var channel Channel
+	err = json.NewDecoder(resp.Body).Decode(&channel)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return &channel, nil
+}
+
+// StartThreadInForumJSON - JSON payload structure
+type StartThreadInForumJSON struct {
+	Name                string                   `json:"name"`                          // 1-100 character channel name
+	AutoArchiveDuration uint64                   `json:"auto_archive_duration"`         // duration in minutes to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080
+	RateLimitPerUser    *uint64                  `json:"rate_limit_per_user,omitempty"` // amount of seconds a user has to wait before sending another message (0-21600)
+	Message             ForumThreadMessageParams `json:"message"`                       // contents of the first message in the forum thread
+}
+
+// ForumThreadMessageParams - JSON for starting a new forum thread
+//
+// TODO: files[n]
+type ForumThreadMessageParams struct {
+	Content         string          `json:"content"`          // the message contents (up to 2000 characters)
+	Embeds          []Embed         `json:"embeds"`           // embedded rich content (up to 6000 characters)
+	AllowedMentions AllowedMentions `json:"allowed_mentions"` // allowed mentions for the message
+	Components      []Component     `json:"components"`       // the components to include with the message
+	StickerIDs      []Snowflake     `json:"sticker_ids"`      // IDs of up to 3 stickers in the server to send in the message
+	PayloadJson     string          `json:"payload_json"`     // JSON encoded body of non-file params
+	Attachments     []Attachment    `json:"attachments"`      // attachment objects with filename and description
+	Flags           MessageFlags    `json:"flags"`            // message flags combined as a bitfield (only SUPPRESS_EMBEDS can be set)
+}
+
 // JoinThread - Adds the current user to a thread.
 //
 // Also requires the thread is not archived.
 //
 // Returns a 204 empty response on success.
 //
-// Fires a Thread Members Update Gateway event.
-func (c *Channel) JoinThread() (method, route string) {
-	return http.MethodPut, fmt.Sprintf(joinThread, api, c.ID.String())
+// Fires a ThreadMembersUpdate Gateway event.
+func (c *Channel) JoinThread() error {
+	u, err := url.Parse(fmt.Sprintf(joinThread, api, c.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+
+	resp, err := Rest.Request(http.MethodPut, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	return nil
 }
 
 // AddThreadMember - Adds another member to a thread.
@@ -1007,8 +1585,23 @@ func (c *Channel) JoinThread() (method, route string) {
 // Returns a 204 empty response if the member is successfully added or was already a member of the thread.
 //
 // Fires a Thread Members Update Gateway event.
-func (c *Channel) AddThreadMember(userID Snowflake) (method, route string) {
-	return http.MethodPut, fmt.Sprintf(addThreadMember, api, c.ID.String(), userID.String())
+func (c *Channel) AddThreadMember(userID Snowflake) error {
+	u, err := url.Parse(fmt.Sprintf(addThreadMember, api, c.ID.String(), userID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+
+	resp, err := Rest.Request(http.MethodPut, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	return nil
 }
 
 // LeaveThread - Removes the current user from a thread.
@@ -1017,9 +1610,24 @@ func (c *Channel) AddThreadMember(userID Snowflake) (method, route string) {
 //
 // Returns a 204 empty response on success.
 //
-// Fires a Thread Members Update Gateway event.
-func (c *Channel) LeaveThread() (method, route string) {
-	return http.MethodDelete, fmt.Sprintf(leaveThread, api, c.ID.String())
+// Fires a ThreadMembersUpdate Gateway event.
+func (c *Channel) LeaveThread() error {
+	u, err := url.Parse(fmt.Sprintf(leaveThread, api, c.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+
+	resp, err := Rest.Request(http.MethodDelete, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	return nil
 }
 
 // RemoveThreadMember - Removes another member from a thread.
@@ -1031,20 +1639,83 @@ func (c *Channel) LeaveThread() (method, route string) {
 // Returns a 204 empty response on success.
 //
 // Fires a Thread Members Update Gateway event.
-func (c *Channel) RemoveThreadMember(userID Snowflake) (method, route string) {
-	return http.MethodDelete, fmt.Sprintf(removeThreadMember, api, c.ID.String(), userID.String())
+func (c *Channel) RemoveThreadMember(userID Snowflake) error {
+	u, err := url.Parse(fmt.Sprintf(removeThreadMember, api, c.ID.String(), userID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+
+	resp, err := Rest.Request(http.MethodDelete, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	return nil
 }
 
 // GetThreadMember - Returns a thread member object for the specified user if they are a member of the thread, returns a 404 response otherwise.
-func (c *Channel) GetThreadMember(userID Snowflake) (method, route string) {
-	return http.MethodGet, fmt.Sprintf(getThreadMember, api, c.ID.String(), userID.String())
+func (c *Channel) GetThreadMember(userID Snowflake) (*ThreadMember, error) {
+	u, err := url.Parse(fmt.Sprintf(getThreadMember, api, c.ID.String(), userID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var threadMember *ThreadMember
+	err = json.NewDecoder(resp.Body).Decode(&threadMember)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	if resp.StatusCode != http.StatusNotFound {
+		return threadMember, nil
+	}
+
+	return nil, errors.New("requested thread member not found in the specified thread")
 }
 
 // ListThreadMembers - Returns array of thread members objects that are members of the thread.
 //
 // This endpoint is restricted according to whether the GuildMembers Privileged Intent is enabled for your application.
-func (c *Channel) ListThreadMembers() (method, route string) {
-	return http.MethodGet, fmt.Sprintf(listThreadMembers, api, c.ID.String())
+func (c *Channel) ListThreadMembers() ([]ThreadMember, error) {
+	u, err := url.Parse(fmt.Sprintf(listThreadMembers, api, c.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var threadMembers []ThreadMember
+	err = json.NewDecoder(resp.Body).Decode(&threadMembers)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return threadMembers, nil
 }
 
 // ListPublicArchivedThreads - Returns archived threads in the channel that are public.
@@ -1056,19 +1727,47 @@ func (c *Channel) ListThreadMembers() (method, route string) {
 // Threads are ordered by archive_timestamp, in descending order.
 //
 // Requires the ReadMessageHistory permission.
-func (c *Channel) ListPublicArchivedThreads(before *time.Time, limit *int) (method, route string) {
-	var qsp []string
+func (c *Channel) ListPublicArchivedThreads(before *time.Time, limit *int) (*ThreadListResponse, error) {
+	u, err := url.Parse(fmt.Sprintf(listPublicArchivedThreads, api, c.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	q := u.Query()
 	if before != nil {
-		qsp = append(qsp, beforeQsp+before.Format(time.RFC3339))
+		q.Set("before", before.String())
 	}
 	if limit != nil {
-		qsp = append(qsp, limitQsp+strconv.Itoa(*limit))
+		q.Set("limit", strconv.Itoa(*limit))
 	}
-	var q string
-	if len(qsp) > 0 {
-		q = "?" + strings.Join(qsp, "&")
+	if len(q) > 0 {
+		u.RawQuery = q.Encode()
 	}
-	return http.MethodGet, fmt.Sprintf(listPublicArchivedThreads, api, c.ID.String(), q)
+
+	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var threadListResponse *ThreadListResponse
+	err = json.NewDecoder(resp.Body).Decode(&threadListResponse)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return threadListResponse, nil
+}
+
+type ThreadListResponse struct {
+	Threads []Channel      `json:"threads"`  // the archived threads
+	Members []ThreadMember `json:"members"`  // a thread member object for each returned thread the current user has joined
+	HasMore bool           `json:"has_more"` // whether there are potentially additional threads that could be returned on a subsequent call
 }
 
 // ListPrivateArchivedThreads - Returns archived threads in the channel that are of type GuildPrivateThread.
@@ -1076,19 +1775,41 @@ func (c *Channel) ListPublicArchivedThreads(before *time.Time, limit *int) (meth
 // Threads are ordered by archive_timestamp, in descending order.
 //
 // Requires both the READ_MESSAGE_HISTORY and MANAGE_THREADS permissions.
-func (c *Channel) ListPrivateArchivedThreads(before *time.Time, limit *int) (method, route string) {
-	var qsp []string
+func (c *Channel) ListPrivateArchivedThreads(before *time.Time, limit *int) (*ThreadListResponse, error) {
+	u, err := url.Parse(fmt.Sprintf(listPrivateArchivedThreads, api, c.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	q := u.Query()
 	if before != nil {
-		qsp = append(qsp, beforeQsp+before.Format(time.RFC3339))
+		q.Set("before", before.String())
 	}
 	if limit != nil {
-		qsp = append(qsp, limitQsp+strconv.Itoa(*limit))
+		q.Set("limit", strconv.Itoa(*limit))
 	}
-	var q string
-	if len(qsp) > 0 {
-		q = "?" + strings.Join(qsp, "&")
+	if len(q) > 0 {
+		u.RawQuery = q.Encode()
 	}
-	return http.MethodGet, fmt.Sprintf(listPrivateArchivedThreads, api, c.ID.String(), q)
+
+	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var threadListResponse *ThreadListResponse
+	err = json.NewDecoder(resp.Body).Decode(&threadListResponse)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return threadListResponse, nil
 }
 
 // ListJoinedPrivateArchivedThreads - Returns archived threads in the channel that are of type GuildPrivateThread, and the user has joined.
@@ -1096,24 +1817,39 @@ func (c *Channel) ListPrivateArchivedThreads(before *time.Time, limit *int) (met
 // Threads are ordered by their id, in descending order.
 //
 // Requires the READ_MESSAGE_HISTORY permission.
-func (c *Channel) ListJoinedPrivateArchivedThreads(before *Snowflake, limit *int) (method, route string) {
-	var qsp []string
+func (c *Channel) ListJoinedPrivateArchivedThreads(before *Snowflake, limit *int) (*ThreadListResponse, error) {
+	u, err := url.Parse(fmt.Sprintf(listJoinedPrivateArchivedThreads, api, c.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	q := u.Query()
 	if before != nil {
-		qsp = append(qsp, beforeQsp+before.String())
+		q.Set("before", before.String())
 	}
 	if limit != nil {
-		qsp = append(qsp, limitQsp+strconv.Itoa(*limit))
+		q.Set("limit", strconv.Itoa(*limit))
 	}
-	var q string
-	if len(qsp) > 0 {
-		q = "?" + strings.Join(qsp, "&")
+	if len(q) > 0 {
+		u.RawQuery = q.Encode()
 	}
-	return http.MethodGet, fmt.Sprintf(listJoinedPrivateArchivedThreads, api, c.ID.String(), q)
-}
 
-// ListArchivedThreadsResponse - JSON payload structure
-type ListArchivedThreadsResponse struct {
-	Threads []Channel      `json:"threads"`  // the public, archived threads
-	Members []ThreadMember `json:"members"`  // a thread member object for each returned thread the current user has joined
-	HasMore bool           `json:"has_more"` // whether there are potentially additional threads that could be returned on a subsequent call
+	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var threadListResponse *ThreadListResponse
+	err = json.NewDecoder(resp.Body).Decode(&threadListResponse)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return threadListResponse, nil
 }

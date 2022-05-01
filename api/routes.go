@@ -42,7 +42,7 @@ const (
 	followNewsChannel                      = "%s/channels/%s/followers"
 	getChannelInvites                      = "%s/channels/%s/invites"
 	createMessage                          = "%s/channels/%s/messages"
-	getChannelMessages                     = "%s/channels/%s/messages%s"
+	getChannelMessages                     = createMessage
 	getChannelMessage                      = "%s/channels/%s/messages/%s"
 	editMessage                            = getChannelMessage
 	deleteMessage                          = getChannelMessage
@@ -50,7 +50,7 @@ const (
 	deleteAllReactions                     = "%s/channels/%s/messages/%s/reactions"
 	deleteAllReactionsForEmoji             = "%s/channels/%s/messages/%s/reactions/%s"
 	deleteUserReaction                     = "%s/channels/%s/messages/%s/reactions/%s/%s"
-	getReactions                           = deleteUserReaction
+	getReactions                           = deleteAllReactionsForEmoji
 	createReaction                         = "%s/channels/%s/messages/%s/reactions/%s/@me"
 	deleteOwnReaction                      = createReaction
 	startThreadWithMessage                 = "%s/channels/%s/messages/%s/threads"
@@ -69,10 +69,11 @@ const (
 	joinThread                             = "%s/channels/%s/thread-members/@me"
 	leaveThread                            = joinThread
 	startThreadWithoutMessage              = "%s/channels/%s/threads"
-	listPrivateArchivedThreads             = "%s/channels/%s/threads/archived/private%s"
-	listPublicArchivedThreads              = "%s/channels/%s/threads/archived/public%s"
+	startThreadInForumChannel              = startThreadWithoutMessage
+	listPrivateArchivedThreads             = "%s/channels/%s/threads/archived/private"
+	listPublicArchivedThreads              = "%s/channels/%s/threads/archived/public"
 	triggerTypingIndicator                 = "%s/channels/%s/typing"
-	listJoinedPrivateArchivedThreads       = "%s/channels/%s/users/@me/threads/archived/private%s"
+	listJoinedPrivateArchivedThreads       = "%s/channels/%s/users/@me/threads/archived/private"
 	listGuildEmojis                        = "%s/guilds/%s/emojis"
 	createGuildEmoji                       = listGuildEmojis
 	getGuildEmoji                          = "%s/guilds/%s/emojis/%s"
