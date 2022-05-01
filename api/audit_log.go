@@ -17,8 +17,15 @@
 package api
 
 import (
+	"encoding/json"
+	"errors"
 	"fmt"
+	"io"
 	"net/http"
+	"net/url"
+	"strconv"
+
+	"github.com/veteran-software/discord-api-wrapper/v10/logging"
 )
 
 /* Whenever an admin action is performed on the API, an entry is added to the respective guild's audit log.
@@ -137,6 +144,10 @@ const (
 	ThreadCreate AuditLogEvent = iota + 66
 	ThreadUpdate
 	ThreadDelete
+
+	/* Application Command Events */
+
+	ApplicationCommandPermissionUpdate AuditLogEvent = iota + 74
 )
 
 // OptionalAuditEntry - Information that is specific to certain events
@@ -161,6 +172,52 @@ type AuditLogChange struct {
 // GetGuildAuditLog - Returns an audit log object for the guild.
 //
 // Requires the ViewAuditLog permission.
-func (g *Guild) GetGuildAuditLog() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf(getGuildAuditLog, api, g.ID.String())
+func (g *Guild) GetGuildAuditLog(userID *Snowflake, actionType *uint64, before *Snowflake, limit *uint64) (*AuditLog, error) {
+	u, err := url.Parse(fmt.Sprintf(getGuildAuditLog, api, g.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	// Set the optional qsp
+	q := u.Query()
+	if userID != nil {
+		q.Set("user_id", userID.String())
+	}
+	if actionType != nil {
+		q.Set("action_type", strconv.FormatUint(*actionType, 10))
+	}
+	if before != nil {
+		q.Set("before", before.String())
+	}
+	if limit != nil {
+		if *limit >= 1 && *limit <= 100 {
+			q.Set("limit", strconv.FormatUint(*limit, 10))
+		} else {
+			return nil, errors.New("the limit filter must be >= 1 && <= 100")
+		}
+	}
+
+	// If there's any of the optional qsp present, encode and add to the URL
+	if len(q) != 0 {
+		u.RawQuery = q.Encode()
+	}
+
+	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var log AuditLog
+	err = json.NewDecoder(resp.Body).Decode(&log)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return &log, nil
 }
