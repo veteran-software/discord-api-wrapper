@@ -79,9 +79,19 @@ const (
 	getGuildEmoji                          = "%s/guilds/%s/emojis/%s"
 	modifyGuildEmoji                       = getGuildEmoji
 	deleteGuildEmoji                       = getGuildEmoji
-	getGuild                               = "%s/guilds/%s?with_counts=true"
-	listGuildMembers                       = "%s/guilds/%s/members?limit=1000%s"
+	createGuild                            = "%s/guilds"
+	getGuild                               = "%s/guilds/%s"
+	modifyGuild                            = getGuild
+	deleteGuild                            = modifyGuild
+	getGuildChannels                       = "%s/guilds/%s/channels"
+	createGuildChannel                     = getGuildChannels
+	modifyGuildChannelPositions            = createGuildChannel
+	getGuildPreview                        = "%s/guilds/%s/preview"
+	listGuildMembers                       = "%s/guilds/%s/members"
+	searchGuildMembers                     = "%s/guilds/%s/members/search"
+	getGuildMember                         = "%s/guilds/%s/members/%s"
 	addGuildMemberRole                     = "%s/guilds/%s/members/%s/roles/%s"
+	listActiveThreads                      = "%s/guilds/%s/threads/active"
 	removeGuildMemberRole                  = addGuildMemberRole
 	deleteInvite                           = "%s/invites/%s"
 	getInvite                              = "%s/invites/%s%s"

@@ -17,9 +17,15 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
+	"net/url"
+	"strconv"
 	"time"
+
+	"github.com/veteran-software/discord-api-wrapper/v10/logging"
 )
 
 // Guild - Guilds in Discord represent an isolated collection of users and channels, and are often referred to as "servers" in the UI.
@@ -71,7 +77,7 @@ type Guild struct {
 	MemberCount          int64                 `json:"member_count,omitempty"`           // total number of members in this guild
 	VoiceStates          []VoiceState          `json:"voice_states,omitempty"`           // states of members currently in voice channels; lacks the guild_id key
 	Members              []GuildMember         `json:"members,omitempty"`                // users in the guild
-	Channel              []Channel             `json:"channel,omitempty"`                // channels in the guild
+	Channels             []Channel             `json:"channels,omitempty"`               // channels in the guild
 	Threads              []Channel             `json:"threads,omitempty"`                // all active threads in the guild that current user has permission to view
 	Presences            []PresenceUpdateEvent `json:"presences,omitempty"`              // presences of the members in the guild, will only include non-offline members if the size is greater than large threshold
 	StageInstances       []StageInstance       `json:"stage_instances,omitempty"`        // Stage instances in the guild
@@ -161,6 +167,7 @@ type GuildFeatures string
 
 //goland:noinspection SpellCheckingInspection,GrazieInspection,GoUnusedConst
 const (
+	AnimatedBanner                GuildFeatures = "ANIMATED_BANNER"                  // guild has access to set an animated guild banner image
 	AnimatedIcon                  GuildFeatures = "ANIMATED_ICON"                    // guild has access to set an animated guild icon
 	Banner                        GuildFeatures = "BANNER"                           // guild has access to set a guild banner image
 	Commerce                      GuildFeatures = "COMMERCE"                         // guild has access to use commerce features (i.e. create store channels)
@@ -215,6 +222,8 @@ type GuildWidget struct {
 }
 
 // GetGuildWidget - the guild widget
+//
+// The fields `id`, `discriminator` and `avatar` are anonymized to prevent abuse.
 type GetGuildWidget struct {
 	ID            Snowflake     `json:"id"`             // guild id
 	Name          string        `json:"name"`           // guild name (2-100 characters)
@@ -226,7 +235,7 @@ type GetGuildWidget struct {
 
 // GuildMember - Represents a member of a Guild
 //
-//   The field user won't be included in the member object attached to MESSAGE_CREATE and MESSAGE_UPDATE gateway events.
+//   The field `user` won't be included in the member object attached to MessageCreate and MessageUpdate gateway events.
 //
 //   In GUILD_ events, pending will always be included as true or false.
 //   In non GUILD_ events which can only be triggered by non-pending users, pending will not be included.
@@ -313,27 +322,452 @@ func (g *Guild) String() string {
 	return g.Name + "(" + g.ID.String() + ")"
 }
 
+// CreateGuild
+//
+// Create a new guild. Returns a guild object on success. Fires a GuildCreate Gateway event.
+//
+//    This endpoint can be used only by bots in less than 10 guilds.
+//
+//    When using the roles parameter, the first member of the array is used to change properties of the guild's @everyone role. If you are trying to bootstrap a guild with additional roles, keep this in mind.
+//
+//    When using the roles parameter, the required id field within each role object is an integer placeholder, and will be replaced by the API upon consumption. Its purpose is to allow you to overwrite a role's permissions in a channel when also passing in channels with the channels array.
+//
+//    When using the channels parameter, the position field is ignored, and none of the default channels are created.
+//
+//    When using the channels parameter, the id field within each channel object may be set to an integer placeholder, and will be replaced by the API upon consumption. Its purpose is to allow you to create GUILD_CATEGORY channels by setting the parent_id field on any children to the category's id field. Category channels must be listed before any children.
+//goland:noinspection GoUnusedExportedFunction
+func CreateGuild(payload CreateGuildJSON) (*Guild, error) {
+	u, err := url.Parse(fmt.Sprintf(createGuild, api))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	resp, err := Rest.Request(http.MethodPost, u.String(), payload, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var guild *Guild
+	err = json.NewDecoder(resp.Body).Decode(&guild)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return guild, nil
+}
+
+type CreateGuildJSON struct {
+	Name                        string                          `json:"name"`                          // guild name (2-100 characters, excluding trailing and leading whitespace)
+	Icon                        *string                         `json:"icon"`                          // icon hash
+	VerificationLevel           VerificationLevel               `json:"verification_level"`            // verification level required for the guild
+	DefaultMessageNotifications DefaultMessageNotificationLevel `json:"default_message_notifications"` // default message notifications level
+	ExplicitContentFilter       ExplicitContentFilterLevel      `json:"explicit_content_filter"`       // explicit content filter level
+	Roles                       []Role                          `json:"roles"`                         // roles in the guild
+	Channels                    []Channel                       `json:"channels,omitempty"`            // channels in the guild
+	AfkChannelID                Snowflake                       `json:"afk_channel_id,omitempty"`      // id of afk channel
+	AfkTimeout                  int64                           `json:"afk_timeout"`                   // afk timeout in seconds
+	SystemChannelID             *Snowflake                      `json:"system_channel_id"`             // the id of the channel where guild notices such as welcome messages and boost events are posted
+	SystemChannelFlags          SystemChannelFlags              `json:"system_channel_flags"`          // system channel flags
+}
+
 // GetGuild - Returns the guild object for the given id.
 //
 // If with_counts is set to true, this endpoint will also return approximate_member_count and approximate_presence_count for the guild.
-func (g *Guild) GetGuild() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf(getGuild, api, g.ID.String())
+func (g *Guild) GetGuild(withCounts *bool) (*Guild, error) {
+	u, err := url.Parse(fmt.Sprintf(getGuild, api, g.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	q := u.Query()
+	if withCounts != nil {
+		q.Set("with_counts", strconv.FormatBool(*withCounts))
+	}
+	if len(q) > 0 {
+		u.RawQuery = q.Encode()
+	}
+
+	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var guild *Guild
+	err = json.NewDecoder(resp.Body).Decode(&guild)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return guild, nil
+}
+
+// GetGuildPreview - Returns the guild preview object for the given id. If the user is not in the guild, then the guild must be lurkable.
+func (g *Guild) GetGuildPreview() (*GuildPreview, error) {
+	u, err := url.Parse(fmt.Sprintf(getGuildPreview, api, g.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var guildPreview *GuildPreview
+	err = json.NewDecoder(resp.Body).Decode(&guildPreview)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return guildPreview, nil
+}
+
+// ModifyGuild - Modify a guild's settings.
+//
+// Requires the ManageGuild permission.
+//
+// Returns the updated guild object on success.
+//
+// Fires a GuildUpdate Gateway event.
+//
+//    All parameters to this endpoint are optional
+//
+//    This endpoint supports the X-Audit-Log-Reason header.
+//
+//    Attempting to add or remove the Community guild feature requires the Administrator permission.
+func (g *Guild) ModifyGuild(payload ModifyGuildJSON, reason *string) (*Guild, error) {
+	u, err := url.Parse(fmt.Sprintf(modifyGuild, api, g.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	resp, err := Rest.Request(http.MethodPatch, u.String(), payload, reason)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var guild *Guild
+	err = json.NewDecoder(resp.Body).Decode(&guild)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return guild, nil
+}
+
+type ModifyGuildJSON struct {
+	Name                        string                           `json:"name"`                          // guild name (2-100 characters, excluding trailing and leading whitespace)
+	VerificationLevel           *VerificationLevel               `json:"verification_level"`            // verification level required for the guild
+	DefaultMessageNotifications *DefaultMessageNotificationLevel `json:"default_message_notifications"` // default message notifications level
+	ExplicitContentFilter       *ExplicitContentFilterLevel      `json:"explicit_content_filter"`       // explicit content filter level
+	AfkChannelID                *Snowflake                       `json:"afk_channel_id,omitempty"`      // id of afk channel
+	AfkTimeout                  int64                            `json:"afk_timeout"`                   // afk timeout in seconds
+	Icon                        *string                          `json:"icon"`                          // icon hash
+	OwnerID                     Snowflake                        `json:"owner_id"`                      // id of owner
+	Splash                      *string                          `json:"splash,omitempty"`              // splash hash
+	DiscoverySplash             *string                          `json:"discovery_splash"`              // discovery splash hash; only present for guilds with the "DISCOVERABLE" feature
+	Banner                      *string                          `json:"banner"`                        // banner hash
+	SystemChannelID             *Snowflake                       `json:"system_channel_id"`             // the id of the channel where guild notices such as welcome messages and boost events are posted
+	SystemChannelFlags          SystemChannelFlags               `json:"system_channel_flags"`          // system channel flags
+	RulesChannelID              *Snowflake                       `json:"rules_channel_id"`              // the id of the channel where Community guilds can display rules and/or guidelines
+	PublicUpdatesChannelID      *Snowflake                       `json:"public_updates_channel_id"`     // the id of the channel where admins and moderators of Community guilds receive notices from Discord
+	PreferredLocale             string                           `json:"preferred_locale"`              // the preferred locale of a Community guild; used in server discovery and notices from Discord, and sent in interactions; defaults to "en-US"
+	Features                    []GuildFeatures                  `json:"features"`                      // enabled guild features
+	Description                 *string                          `json:"description"`                   // the description of a Community guild
+	PremiumProgressBarEnabled   bool                             `json:"premium_progress_bar_enabled"`  // whether the guild has the boost progress bar enabled
+}
+
+// DeleteGuild - Delete a guild permanently. User must be owner. Returns 204 No Content on success. Fires a GuildDelete Gateway event.
+func (g *Guild) DeleteGuild() error {
+	u, err := url.Parse(fmt.Sprintf(deleteGuild, api, g.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+
+	resp, err := Rest.Request(http.MethodDelete, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	return nil
+}
+
+// GetGuildChannels - Returns a list of guild Channel objects. Does not include threads.
+func (g *Guild) GetGuildChannels() ([]Channel, error) {
+	u, err := url.Parse(fmt.Sprintf(getGuildChannels, api, g.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var channels []Channel
+	err = json.NewDecoder(resp.Body).Decode(&channels)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return channels, nil
+}
+
+// CreateGuildChannel - Create a new channel object for the guild.
+//
+// Requires the ManageChannels permission.
+//
+// If setting permission overwrites, only permissions your bot has in the guild can be allowed/denied.
+//
+// Setting ManageRoles permission in channels is only possible for guild administrators.
+//
+// Returns the new channel object on success. Fires a Channel Create Gateway event.
+//
+//    All parameters to this endpoint are optional excluding name
+//
+//    This endpoint supports the X-Audit-Log-Reason header.
+func (g *Guild) CreateGuildChannel(payload CreateGuildChannelJSON, reason *string) (*Channel, error) {
+	u, err := url.Parse(fmt.Sprintf(createGuildChannel, api, g.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	resp, err := Rest.Request(http.MethodPost, u.String(), payload, reason)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var channel *Channel
+	err = json.NewDecoder(resp.Body).Decode(&channel)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return channel, nil
+}
+
+type CreateGuildChannelJSON struct {
+	Name                       string      `json:"name,omitempty"`                          // the name of the channel (1-100 characters)
+	Type                       ChannelType `json:"type"`                                    // the ChannelType
+	Topic                      *string     `json:"topic,omitempty"`                         // the channel topic (0-1024 characters)
+	Bitrate                    int64       `json:"bitrate,omitempty"`                       // the bitrate (in bits) of the voice channel
+	UserLimit                  int64       `json:"user_limit,omitempty"`                    // the user limit of the voice channel
+	RateLimitPerUser           int64       `json:"rate_limit_per_user,omitempty"`           // amount of seconds a user has to wait before sending another Message (0-21600); bots, as well as users with the permission ManageMessages or ManageChannels, are unaffected
+	Position                   int         `json:"position,omitempty"`                      // sorting position of the channel
+	PermissionOverwrites       []Overwrite `json:"permission_overwrites,omitempty"`         // explicit permission overwrites for members and roles
+	ParentID                   *Snowflake  `json:"parent_id,omitempty"`                     // for guild channels: id of the parent category for a channel (each parent category can contain up to 50 channels), for threads: id of the text channel this thread was created
+	Nsfw                       bool        `json:"nsfw,omitempty"`                          // whether the channel is nsfw
+	DefaultAutoArchiveDuration int         `json:"default_auto_archive_duration,omitempty"` // default duration that the clients (not the API) will use for newly created threads, in minutes, to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080
+}
+
+// ModifyGuildChannelPositions - Modify the positions of a set of channel objects for the guild.
+//
+// Requires ManageChannels permission. Returns a 204 empty response on success. Fires multiple ChannelUpdate Gateway events.
+//
+//    Only channels to be modified are required.
+//
+//    This endpoint supports the X-Audit-Log-Reason header.
+func (g *Guild) ModifyGuildChannelPositions(payload ModifyGuildChannelPositionsJSON, reason *string) error {
+	u, err := url.Parse(fmt.Sprintf(modifyGuildChannelPositions, api, g.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+
+	resp, err := Rest.Request(http.MethodPatch, u.String(), payload, reason)
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	return nil
+}
+
+// ModifyGuildChannelPositionsJSON - JSON payload
+type ModifyGuildChannelPositionsJSON struct {
+	ID              Snowflake  `json:"id"`               // channel id
+	Position        *uint64    `json:"position"`         // sorting position of the channel
+	LockPermissions *bool      `json:"lock_permissions"` // syncs the permission overwrites with the new parent, if moving to a new category
+	ParentID        *Snowflake `json:"parent_id"`        // the new parent ID for the channel that is moved
+}
+
+// ListActiveThreads - Returns all active threads in the guild, including public and private threads. Threads are ordered by their id, in descending order.
+func (g *Guild) ListActiveThreads() (*ThreadListResponse, error) {
+	u, err := url.Parse(fmt.Sprintf(listActiveThreads, api, g.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var threadListResponse *ThreadListResponse
+	err = json.NewDecoder(resp.Body).Decode(&threadListResponse)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return threadListResponse, nil
+}
+
+// GetGuildMember - Returns a GuildMember object for the specified User.
+func (g *Guild) GetGuildMember(userID Snowflake) (*GuildMember, error) {
+	u, err := url.Parse(fmt.Sprintf(getGuildMember, api, g.ID.String(), userID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var guildMember *GuildMember
+	err = json.NewDecoder(resp.Body).Decode(&guildMember)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return guildMember, nil
 }
 
 // ListGuildMembers - Returns a list of guild member objects that are members of the guild.
 //
 // This endpoint is restricted according to whether the GuildMembers Privileged Intent is enabled for your application.
-func (g *Guild) ListGuildMembers(after ...*Snowflake) (method string, route string) {
-	var afterSnowflake string
-
-	if len(after) != 0 && after[0].String() != "" {
-		afterSnowflake = "&after=" + after[0].String()
-	} else {
-		afterSnowflake = ""
+//
+//     All parameters to this endpoint are optional
+func (g *Guild) ListGuildMembers(limit *uint64, after *Snowflake) ([]GuildMember, error) {
+	u, err := url.Parse(fmt.Sprintf(listGuildMembers, api, g.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
 	}
 
-	return http.MethodGet, fmt.Sprintf(listGuildMembers, api, g.ID.String(), afterSnowflake)
+	q := u.Query()
+	if after != nil {
+		q.Set("after", after.String())
+	}
+	if limit != nil {
+		q.Set("limit", strconv.FormatUint(*limit, 10))
+	}
+	if len(q) > 0 {
+		u.RawQuery = q.Encode()
+	}
+
+	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var guildMembers []GuildMember
+	err = json.NewDecoder(resp.Body).Decode(&guildMembers)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return guildMembers, nil
 }
+
+// SearchGuildMembers - Returns a list of GuildMember objects whose username or nickname starts with a provided string.
+//
+//    All parameters to this endpoint except for `query` are optional
+func (g *Guild) SearchGuildMembers(query string, limit *uint64) ([]GuildMember, error) {
+	u, err := url.Parse(fmt.Sprintf(searchGuildMembers, api, g.ID.String()))
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	q := u.Query()
+	q.Set("query", query)
+	if limit != nil {
+		q.Set("limit", strconv.FormatUint(*limit, 10))
+	}
+	u.RawQuery = q.Encode()
+
+	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var guildMembers []GuildMember
+	err = json.NewDecoder(resp.Body).Decode(&guildMembers)
+	if err != nil {
+		logging.Errorln(err)
+		return nil, err
+	}
+
+	return guildMembers, nil
+}
+
+// TODO: Left off here https://discord.com/developers/docs/resources/guild#add-guild-member
 
 // AddGuildMemberRole - Adds a role to a guild member.
 //

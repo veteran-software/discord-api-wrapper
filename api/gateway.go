@@ -56,14 +56,14 @@ const (
 	DirectMessages         GatewayIntents = 1 << 12
 	DirectMessageReactions GatewayIntents = 1 << 13
 	DirectMessageTyping    GatewayIntents = 1 << 14
-	MessageContent         GatewayIntents = 1 << 15
+	MessageContent         GatewayIntents = 1 << 15 // Not documented as of May 1, 2022
 	GuildScheduleEvents    GatewayIntents = 1 << 16
 )
 
 // Identify - Used to trigger the initial handshake with the gateway.
 type Identify struct {
 	Token          string                `json:"token"`                     // authentication token
-	Properties     string                `json:"properties"`                // IdentifyConnection properties
+	Properties     IdentifyConnection    `json:"properties"`                // IdentifyConnection properties
 	Compress       bool                  `json:"compress,omitempty"`        // whether this connection supports compression of packets
 	LargeThreshold int                   `json:"large_threshold,omitempty"` // value between 50 and 250, total number of members where the gateway will stop sending offline members in the guild member list
 	Shard          [2]int                `json:"shard,omitempty"`           // used for Guild Sharding

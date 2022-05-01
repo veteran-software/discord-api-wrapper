@@ -1765,9 +1765,9 @@ func (c *Channel) ListPublicArchivedThreads(before *time.Time, limit *int) (*Thr
 }
 
 type ThreadListResponse struct {
-	Threads []Channel      `json:"threads"`  // the archived threads
-	Members []ThreadMember `json:"members"`  // a thread member object for each returned thread the current user has joined
-	HasMore bool           `json:"has_more"` // whether there are potentially additional threads that could be returned on a subsequent call
+	Threads []Channel      `json:"threads"`            // the archived threads
+	Members []ThreadMember `json:"members"`            // a thread member object for each returned thread the current user has joined
+	HasMore bool           `json:"has_more,omitempty"` // whether there are potentially additional threads that could be returned on a subsequent call
 }
 
 // ListPrivateArchivedThreads - Returns archived threads in the channel that are of type GuildPrivateThread.
