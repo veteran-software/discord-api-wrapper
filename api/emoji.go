@@ -20,11 +20,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
-	"net/url"
-
-	"github.com/veteran-software/discord-api-wrapper/v10/logging"
 )
 
 // Emoji - Routes for controlling emojis do not follow the normal rate limit conventions.
@@ -45,56 +40,22 @@ type Emoji struct {
 
 // ListGuildEmojis - Returns a list of emoji objects for the given guild.
 func (g *Guild) ListGuildEmojis() ([]Emoji, error) {
-	u, err := url.Parse(fmt.Sprintf(listGuildEmojis, api, g.ID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-
-	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
+	u := parseRoute(fmt.Sprintf(listGuildEmojis, api, g.ID.String()))
 
 	var emojis []Emoji
-	err = json.NewDecoder(resp.Body).Decode(&emojis)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &emojis)
 
-	return emojis, nil
+	return emojis, err
 }
 
 // GetGuildEmoji - Returns an emoji object for the given guild and emoji IDs.
 func (g *Guild) GetGuildEmoji(emoji Emoji) (*Emoji, error) {
-	u, err := url.Parse(fmt.Sprintf(getGuildEmoji, api, g.ID.String(), emoji.ID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	u := parseRoute(fmt.Sprintf(getGuildEmoji, api, g.ID.String(), emoji.ID.String()))
 
-	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
+	var e *Emoji
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &e)
 
-	var emojis *Emoji
-	err = json.NewDecoder(resp.Body).Decode(&emojis)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-
-	return emojis, nil
+	return e, err
 }
 
 // CreateGuildEmoji - Create a new emoji for the guild.
@@ -111,29 +72,12 @@ func (g *Guild) GetGuildEmoji(emoji Emoji) (*Emoji, error) {
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
 func (g *Guild) CreateGuildEmoji(payload CreateEmojiJSON, reason *string) (*Emoji, error) {
-	u, err := url.Parse(fmt.Sprintf(createGuildEmoji, api, g.ID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	u := parseRoute(fmt.Sprintf(createGuildEmoji, api, g.ID.String()))
 
-	resp, err := Rest.Request(http.MethodPost, u.String(), payload, reason)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
+	var emoji *Emoji
+	err := json.Unmarshal(firePostRequest(u, payload, reason), &emoji)
 
-	var emojis *Emoji
-	err = json.NewDecoder(resp.Body).Decode(&emojis)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-
-	return emojis, nil
+	return emoji, err
 }
 
 // CreateEmojiJSON - Parameters to pass in the JSON payload
@@ -157,29 +101,12 @@ type CreateEmojiJSON struct {
 //
 // This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) ModifyGuildEmoji(emoji Emoji, payload ModifyGuildEmojiJSON, reason *string) (*Emoji, error) {
-	u, err := url.Parse(fmt.Sprintf(modifyGuildEmoji, api, g.ID.String(), emoji.ID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-
-	resp, err := Rest.Request(http.MethodPatch, u.String(), payload, reason)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
+	u := parseRoute(fmt.Sprintf(modifyGuildEmoji, api, g.ID.String(), emoji.ID.String()))
 
 	var e *Emoji
-	err = json.NewDecoder(resp.Body).Decode(&e)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	err := json.Unmarshal(firePatchRequest(u, payload, reason), &e)
 
-	return e, nil
+	return e, err
 }
 
 // ModifyGuildEmojiJSON - Parameters to pass in the JSON payload
@@ -198,20 +125,7 @@ type ModifyGuildEmojiJSON struct {
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
 func (g *Guild) DeleteGuildEmoji(emoji Emoji, reason *string) error {
-	u, err := url.Parse(fmt.Sprintf(deleteGuildEmoji, api, g.ID.String(), emoji.ID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
+	u := parseRoute(fmt.Sprintf(deleteGuildEmoji, api, g.ID.String(), emoji.ID.String()))
 
-	resp, err := Rest.Request(http.MethodDelete, u.String(), nil, reason)
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
-
-	return nil
+	return fireDeleteRequest(u, reason)
 }

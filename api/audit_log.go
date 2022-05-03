@@ -20,12 +20,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
-	"net/http"
-	"net/url"
 	"strconv"
-
-	"github.com/veteran-software/discord-api-wrapper/v10/logging"
 )
 
 /* Whenever an admin action is performed on the API, an entry is added to the respective guild's audit log.
@@ -173,11 +168,7 @@ type AuditLogChange struct {
 //
 // Requires the ViewAuditLog permission.
 func (g *Guild) GetGuildAuditLog(userID *Snowflake, actionType *uint64, before *Snowflake, limit *uint64) (*AuditLog, error) {
-	u, err := url.Parse(fmt.Sprintf(getGuildAuditLog, api, g.ID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	u := parseRoute(fmt.Sprintf(getGuildAuditLog, api, g.ID.String()))
 
 	// Set the optional qsp
 	q := u.Query()
@@ -197,27 +188,13 @@ func (g *Guild) GetGuildAuditLog(userID *Snowflake, actionType *uint64, before *
 			return nil, errors.New("the limit filter must be >= 1 && <= 100")
 		}
 	}
-
 	// If there's any of the optional qsp present, encode and add to the URL
 	if len(q) != 0 {
 		u.RawQuery = q.Encode()
 	}
 
-	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
-
 	var log AuditLog
-	err = json.NewDecoder(resp.Body).Decode(&log)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &log)
 
-	return &log, nil
+	return &log, err
 }

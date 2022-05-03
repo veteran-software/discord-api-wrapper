@@ -20,13 +20,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
-	"net/http"
 	"net/url"
 	"strconv"
 	"time"
-
-	"github.com/veteran-software/discord-api-wrapper/v10/logging"
 )
 
 // Channel - Represents a guild or DM channel within Discord.
@@ -395,29 +391,12 @@ const (
 //
 // If the channel is a thread, a thread member object is included in the returned result.
 func (c *Channel) GetChannel() (*Channel, error) {
-	u, err := url.Parse(fmt.Sprintf(getChannel, api, c.ID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-
-	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
+	u := parseRoute(fmt.Sprintf(getChannel, api, c.ID.String()))
 
 	var channel Channel
-	err = json.NewDecoder(resp.Body).Decode(&channel)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &channel)
 
-	return &channel, nil
+	return &channel, err
 }
 
 // ModifyGroupDm - Fires a ChannelUpdate Gateway event.
@@ -480,29 +459,12 @@ type ModifyGuildVoiceChannelJSON struct {
 
 // modifyChannel - Update a channel's settings. Returns a channel on success, and a 400 BAD REQUEST on invalid parameters. All JSON parameters are optional.
 func (c *Channel) modifyChannel(payload interface{}, reason *string) (*Channel, error) {
-	u, err := url.Parse(fmt.Sprintf(modifyChannel, api, c.ID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-
-	resp, err := Rest.Request(http.MethodGet, u.String(), &payload, reason)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
+	u := parseRoute(fmt.Sprintf(modifyChannel, api, c.ID.String()))
 
 	var channel Channel
-	err = json.NewDecoder(resp.Body).Decode(&channel)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	err := json.Unmarshal(fireGetRequest(u, &payload, reason), &channel)
 
-	return &channel, nil
+	return &channel, err
 }
 
 // ModifyThreadJSON - When setting archived to false, when locked is also false, only the SEND_MESSAGES permission is required.
@@ -533,22 +495,9 @@ type ModifyThreadJSON struct {
 //
 //     This endpoint supports the `X-Audit-Log-Reason` header.
 func (c *Channel) DeleteChannel(reason *string) error {
-	u, err := url.Parse(fmt.Sprintf(deleteChannel, api, c.ID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
+	u := parseRoute(fmt.Sprintf(deleteChannel, api, c.ID.String()))
 
-	resp, err := Rest.Request(http.MethodDelete, u.String(), nil, reason)
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
-
-	return nil
+	return fireDeleteRequest(u, reason)
 }
 
 // GetChannelMessages - Returns the messages for a channel.
@@ -565,11 +514,7 @@ func (c *Channel) DeleteChannel(reason *string) error {
 //
 // TODO: Check permissions; required ViewChannel and ReadMessageHistory
 func (c *Channel) GetChannelMessages(around *Snowflake, before *Snowflake, after *Snowflake, limit *int) ([]Message, error) {
-	u, err := url.Parse(fmt.Sprintf(getChannelMessages, api, c.ID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	u := parseRoute(fmt.Sprintf(getChannelMessages, api, c.ID.String()))
 
 	q := u.Query()
 	if around != nil {
@@ -588,23 +533,10 @@ func (c *Channel) GetChannelMessages(around *Snowflake, before *Snowflake, after
 		u.RawQuery = q.Encode()
 	}
 
-	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
-
 	var messages []Message
-	err = json.NewDecoder(resp.Body).Decode(&messages)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &messages)
 
-	return messages, nil
+	return messages, err
 }
 
 // GetChannelMessage - Returns a specific message in the channel.
@@ -613,29 +545,12 @@ func (c *Channel) GetChannelMessages(around *Snowflake, before *Snowflake, after
 //
 // Returns a message object on success
 func (c *Channel) GetChannelMessage(messageID string) (*Message, error) {
-	u, err := url.Parse(fmt.Sprintf(getChannelMessage, api, c.ID.String(), messageID))
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-
-	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
+	u := parseRoute(fmt.Sprintf(getChannelMessage, api, c.ID.String(), messageID))
 
 	var message *Message
-	err = json.NewDecoder(resp.Body).Decode(&message)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &message)
 
-	return message, nil
+	return message, err
 }
 
 // CreateMessage - Post a message to a guild text or DM channel. Returns a message object.
@@ -671,29 +586,12 @@ func (c *Channel) GetChannelMessage(messageID string) (*Message, error) {
 //
 // If you supply a payload_json form value, all fields except for file fields will be ignored in the form data.
 func (c *Channel) CreateMessage(payload CreateMessageJSON) (*Message, error) {
-	u, err := url.Parse(fmt.Sprintf(createMessage, api, c.ID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-
-	resp, err := Rest.Request(http.MethodPost, u.String(), payload, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
+	u := parseRoute(fmt.Sprintf(createMessage, api, c.ID.String()))
 
 	var message *Message
-	err = json.NewDecoder(resp.Body).Decode(&message)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	err := json.Unmarshal(firePostRequest(u, payload, nil), &message)
 
-	return message, nil
+	return message, err
 }
 
 // CreateMessageJSON - JSON payload structure
@@ -718,29 +616,12 @@ type CreateMessageJSON struct {
 // Returns a message object.
 //goland:noinspection SpellCheckingInspection
 func (c *Channel) CrosspostMessage(messageID string) (*Message, error) {
-	u, err := url.Parse(fmt.Sprintf(crosspostMessage, api, c.ID.String(), messageID))
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-
-	resp, err := Rest.Request(http.MethodPost, u.String(), nil, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
+	u := parseRoute(fmt.Sprintf(crosspostMessage, api, c.ID.String(), messageID))
 
 	var message *Message
-	err = json.NewDecoder(resp.Body).Decode(&message)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	err := json.Unmarshal(firePostRequest(u, nil, nil), &message)
 
-	return message, nil
+	return message, err
 }
 
 // CreateReaction - Create a reaction for the message.
@@ -754,23 +635,10 @@ func (c *Channel) CrosspostMessage(messageID string) (*Message, error) {
 // The emoji must be URL Encoded or the request will fail with 10014: Unknown Emoji.
 //
 // To use custom emoji, you must encode it in the format name:id with the emoji name and emoji id.
-func (c *Channel) CreateReaction(messageID Snowflake, emoji string) error {
-	u, err := url.Parse(fmt.Sprintf(createReaction, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji)))
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
+func (c *Channel) CreateReaction(messageID Snowflake, emoji string) {
+	u := parseRoute(fmt.Sprintf(createReaction, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji)))
 
-	resp, err := Rest.Request(http.MethodPut, u.String(), nil, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
-
-	return nil
+	_ = firePutRequest(u, nil, nil)
 }
 
 // DeleteOwnReaction - Delete a reaction the current user has made for the message.
@@ -781,22 +649,9 @@ func (c *Channel) CreateReaction(messageID Snowflake, emoji string) error {
 //
 // To use custom emoji, you must encode it in the format name:id with the emoji name and emoji id.
 func (c *Channel) DeleteOwnReaction(messageID Snowflake, emoji string) error {
-	u, err := url.Parse(fmt.Sprintf(deleteOwnReaction, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji)))
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
+	u := parseRoute(fmt.Sprintf(deleteOwnReaction, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji)))
 
-	resp, err := Rest.Request(http.MethodDelete, u.String(), nil, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
-
-	return nil
+	return fireDeleteRequest(u, nil)
 }
 
 // DeleteUserReaction - Deletes another user's reaction.
@@ -807,22 +662,9 @@ func (c *Channel) DeleteOwnReaction(messageID Snowflake, emoji string) error {
 //
 // To use custom emoji, you must encode it in the format name:id with the emoji name and emoji id.
 func (c *Channel) DeleteUserReaction(messageID Snowflake, emoji string, userID Snowflake) error {
-	u, err := url.Parse(fmt.Sprintf(deleteUserReaction, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji), userID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
+	u := parseRoute(fmt.Sprintf(deleteUserReaction, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji), userID.String()))
 
-	resp, err := Rest.Request(http.MethodDelete, u.String(), nil, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
-
-	return nil
+	return fireDeleteRequest(u, nil)
 }
 
 // GetReactions - Get a list of users that reacted with this emoji.
@@ -835,11 +677,7 @@ func (c *Channel) DeleteUserReaction(messageID Snowflake, emoji string, userID S
 //
 // OPTS SUPPORTS: "after : Snowflake"; "limit : int", nil
 func (c *Channel) GetReactions(messageID Snowflake, emoji string, after *Snowflake, limit *int) ([]User, error) {
-	u, err := url.Parse(fmt.Sprintf(getReactions, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji)))
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	u := parseRoute(fmt.Sprintf(getReactions, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji)))
 
 	q := u.Query()
 	if after != nil {
@@ -852,23 +690,10 @@ func (c *Channel) GetReactions(messageID Snowflake, emoji string, after *Snowfla
 		u.RawQuery = q.Encode()
 	}
 
-	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
-
 	var users []User
-	err = json.NewDecoder(resp.Body).Decode(&users)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &users)
 
-	return users, nil
+	return users, err
 }
 
 // DeleteAllReactions - Deletes all reactions on a message.
@@ -877,22 +702,9 @@ func (c *Channel) GetReactions(messageID Snowflake, emoji string, after *Snowfla
 //
 // Fires a Message Reaction Remove All Gateway event.
 func (c *Channel) DeleteAllReactions(messageID Snowflake) error {
-	u, err := url.Parse(fmt.Sprintf(deleteAllReactions, api, c.ID.String(), messageID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
+	u := parseRoute(fmt.Sprintf(deleteAllReactions, api, c.ID.String(), messageID.String()))
 
-	resp, err := Rest.Request(http.MethodDelete, u.String(), nil, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
-
-	return nil
+	return fireDeleteRequest(u, nil)
 }
 
 // DeleteAllReactionsForEmoji - Deletes all the reactions for a given emoji on a message.
@@ -905,22 +717,9 @@ func (c *Channel) DeleteAllReactions(messageID Snowflake) error {
 //
 // To use custom emoji, you must encode it in the format name:id with the emoji name and emoji id.
 func (c *Channel) DeleteAllReactionsForEmoji(messageID Snowflake, emoji string) error {
-	u, err := url.Parse(fmt.Sprintf(deleteAllReactionsForEmoji, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji)))
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
+	u := parseRoute(fmt.Sprintf(deleteAllReactionsForEmoji, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji)))
 
-	resp, err := Rest.Request(http.MethodDelete, u.String(), nil, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
-
-	return nil
+	return fireDeleteRequest(u, nil)
 }
 
 // EditMessage - Edit a previously sent message.
@@ -938,29 +737,12 @@ func (c *Channel) DeleteAllReactionsForEmoji(messageID Snowflake, emoji string) 
 //
 // Fires a Message Update Gateway event.
 func (c *Channel) EditMessage(messageID string, payload EditMessageJSON) (*Message, error) {
-	u, err := url.Parse(fmt.Sprintf(editMessage, api, c.ID.String(), messageID))
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-
-	resp, err := Rest.Request(http.MethodPatch, u.String(), payload, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
+	u := parseRoute(fmt.Sprintf(editMessage, api, c.ID.String(), messageID))
 
 	var message *Message
-	err = json.NewDecoder(resp.Body).Decode(&message)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	err := json.Unmarshal(firePatchRequest(u, payload, nil), &message)
 
-	return message, nil
+	return message, err
 }
 
 // EditMessageJSON - JSON payload structure
@@ -988,22 +770,9 @@ type EditMessageJSON struct {
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
 func (c *Channel) DeleteMessage(messageID string, reason *string) error {
-	u, err := url.Parse(fmt.Sprintf(deleteMessage, api, c.ID.String(), messageID))
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
+	u := parseRoute(fmt.Sprintf(deleteMessage, api, c.ID.String(), messageID))
 
-	resp, err := Rest.Request(http.MethodDelete, u.String(), nil, reason)
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
-
-	return nil
+	return fireDeleteRequest(u, reason)
 }
 
 // BulkDeleteMessages - Delete multiple messages in a single request.
@@ -1028,21 +797,9 @@ func (c *Channel) BulkDeleteMessages(payload BulkDeleteJSON, reason *string) err
 			return errors.New("cannot bulk delete message older than 2 weeks")
 		}
 	}
+	u := parseRoute(fmt.Sprintf(bulkDeleteMessages, api, c.ID.String()))
 
-	u, err := url.Parse(fmt.Sprintf(bulkDeleteMessages, api, c.ID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
-
-	resp, err := Rest.Request(http.MethodPost, u.String(), payload, reason)
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
+	_ = firePostRequest(u, payload, reason)
 
 	return nil
 }
@@ -1065,23 +822,10 @@ type BulkDeleteJSON struct {
 // For more information about permissions, see permissions.
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
-func (c *Channel) EditChannelPermissions(overwriteID Snowflake, payload EditChannelPermissionsJSON, reason *string) error {
-	u, err := url.Parse(fmt.Sprintf(editChannelPermissions, api, c.ID.String(), overwriteID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
+func (c *Channel) EditChannelPermissions(overwriteID Snowflake, payload EditChannelPermissionsJSON, reason *string) {
+	u := parseRoute(fmt.Sprintf(editChannelPermissions, api, c.ID.String(), overwriteID.String()))
 
-	resp, err := Rest.Request(http.MethodPut, u.String(), payload, reason)
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
-
-	return nil
+	_ = firePutRequest(u, payload, reason)
 }
 
 // EditChannelPermissionsJSON - JSON payload structure
@@ -1097,29 +841,12 @@ type EditChannelPermissionsJSON struct {
 //
 // Requires the ManageChannels permission.
 func (c *Channel) GetChannelInvites() ([]Invite, error) {
-	u, err := url.Parse(fmt.Sprintf(getChannelInvites, api, c.ID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-
-	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
+	u := parseRoute(fmt.Sprintf(getChannelInvites, api, c.ID.String()))
 
 	var invites []Invite
-	err = json.NewDecoder(resp.Body).Decode(&invites)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &invites)
 
-	return invites, nil
+	return invites, err
 }
 
 // CreateChannelInvite - Create a new invite object for the channel.
@@ -1136,29 +863,12 @@ func (c *Channel) GetChannelInvites() ([]Invite, error) {
 //
 // This endpoint supports the X-Audit-Log-Reason header.
 func (c *Channel) CreateChannelInvite(payload CreateChannelInviteJSON, reason *string) (*Invite, error) {
-	u, err := url.Parse(fmt.Sprintf(getChannelInvites, api, c.ID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-
-	resp, err := Rest.Request(http.MethodPost, u.String(), payload, reason)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
+	u := parseRoute(fmt.Sprintf(getChannelInvites, api, c.ID.String()))
 
 	var invite *Invite
-	err = json.NewDecoder(resp.Body).Decode(&invite)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	err := json.Unmarshal(firePostRequest(u, payload, reason), &invite)
 
-	return invite, nil
+	return invite, err
 }
 
 // CreateChannelInviteJSON - JSON payload structure
@@ -1184,22 +894,9 @@ type CreateChannelInviteJSON struct {
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
 func (c *Channel) DeleteChannelPermission(overwriteID Snowflake, reason *string) error {
-	u, err := url.Parse(fmt.Sprintf(deleteChannelPermission, api, c.ID.String(), overwriteID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
+	u := parseRoute(fmt.Sprintf(deleteChannelPermission, api, c.ID.String(), overwriteID.String()))
 
-	resp, err := Rest.Request(http.MethodDelete, u.String(), nil, reason)
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
-
-	return nil
+	return fireDeleteRequest(u, reason)
 }
 
 // FollowNewsChannel - Follow a News Channel to send messages to a target channel.
@@ -1208,29 +905,12 @@ func (c *Channel) DeleteChannelPermission(overwriteID Snowflake, reason *string)
 //
 // Returns a followed channel object.
 func (c *Channel) FollowNewsChannel(payload FollowNewsChannelJSON) (*FollowedChannel, error) {
-	u, err := url.Parse(fmt.Sprintf(followNewsChannel, api, c.ID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-
-	resp, err := Rest.Request(http.MethodPost, u.String(), payload, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
+	u := parseRoute(fmt.Sprintf(followNewsChannel, api, c.ID.String()))
 
 	var followedChannel *FollowedChannel
-	err = json.NewDecoder(resp.Body).Decode(&followedChannel)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	err := json.Unmarshal(firePostRequest(u, payload, nil), &followedChannel)
 
-	return followedChannel, nil
+	return followedChannel, err
 }
 
 // FollowNewsChannelJSON - JSON payload structure
@@ -1246,50 +926,20 @@ type FollowNewsChannelJSON struct {
 // Returns a 204 empty response on success.
 //
 // Fires a Typing Start Gateway event.
-func (c *Channel) TriggerTypingIndicator() error {
-	u, err := url.Parse(fmt.Sprintf(triggerTypingIndicator, api, c.ID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
+func (c *Channel) TriggerTypingIndicator() {
+	u := parseRoute(fmt.Sprintf(triggerTypingIndicator, api, c.ID.String()))
 
-	resp, err := Rest.Request(http.MethodPost, u.String(), nil, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
-
-	return nil
+	_ = firePostRequest(u, nil, nil)
 }
 
 // GetPinnedMessages - Returns all pinned messages in the channel as an array of message objects.
 func (c *Channel) GetPinnedMessages() ([]Message, error) {
-	u, err := url.Parse(fmt.Sprintf(getPinnedMessages, api, c.ID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-
-	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
+	u := parseRoute(fmt.Sprintf(getPinnedMessages, api, c.ID.String()))
 
 	var messages []Message
-	err = json.NewDecoder(resp.Body).Decode(&messages)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &messages)
 
-	return messages, nil
+	return messages, err
 }
 
 // PinMessage - Pin a message in a channel.
@@ -1301,23 +951,10 @@ func (c *Channel) GetPinnedMessages() ([]Message, error) {
 //    The max pinned messages is 50.
 //
 //    This endpoint supports the X-Audit-Log-Reason header.
-func (c *Channel) PinMessage(messageID Snowflake, reason *string) error {
-	u, err := url.Parse(fmt.Sprintf(pinMessage, api, c.ID.String(), messageID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
+func (c *Channel) PinMessage(messageID Snowflake, reason *string) {
+	u := parseRoute(fmt.Sprintf(pinMessage, api, c.ID.String(), messageID.String()))
 
-	resp, err := Rest.Request(http.MethodPut, u.String(), nil, reason)
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
-
-	return nil
+	_ = firePutRequest(u, nil, reason)
 }
 
 // UnpinMessage - Unpin a message in a channel.
@@ -1328,44 +965,18 @@ func (c *Channel) PinMessage(messageID Snowflake, reason *string) error {
 //
 //    This endpoint supports the X-Audit-Log-Reason header.
 func (c *Channel) UnpinMessage(messageID Snowflake, reason *string) error {
-	u, err := url.Parse(fmt.Sprintf(unpinMessage, api, c.ID.String(), messageID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
+	u := parseRoute(fmt.Sprintf(unpinMessage, api, c.ID.String(), messageID.String()))
 
-	resp, err := Rest.Request(http.MethodDelete, u.String(), nil, reason)
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
-
-	return nil
+	return fireDeleteRequest(u, reason)
 }
 
 // GroupDmAddRecipient - Adds a recipient to a Group DM using their access token.
 //
 // REQUIRES: gdm.join SCOPE
-func (c *Channel) GroupDmAddRecipient(userID Snowflake, payload GroupDmAddRecipientJSON) error {
-	u, err := url.Parse(fmt.Sprintf(groupDmAddRecipient, api, c.ID.String(), userID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
+func (c *Channel) GroupDmAddRecipient(userID Snowflake, payload GroupDmAddRecipientJSON) {
+	u := parseRoute(fmt.Sprintf(groupDmAddRecipient, api, c.ID.String(), userID.String()))
 
-	resp, err := Rest.Request(http.MethodPut, u.String(), payload, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
-
-	return nil
+	_ = firePutRequest(u, payload, nil)
 }
 
 // GroupDmAddRecipientJSON - JSON payload structure
@@ -1378,22 +989,9 @@ type GroupDmAddRecipientJSON struct {
 
 // GroupDmRemoveRecipient - Removes a recipient from a Group DM.
 func (c *Channel) GroupDmRemoveRecipient(userID Snowflake) error {
-	u, err := url.Parse(fmt.Sprintf(groupDmRemoveRecipient, api, c.ID.String(), userID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
+	u := parseRoute(fmt.Sprintf(groupDmRemoveRecipient, api, c.ID.String(), userID.String()))
 
-	resp, err := Rest.Request(http.MethodDelete, u.String(), nil, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
-
-	return nil
+	return fireDeleteRequest(u, nil)
 }
 
 // StartThreadWithMessage - Creates a new thread from an existing message.
@@ -1410,29 +1008,12 @@ func (c *Channel) GroupDmRemoveRecipient(userID Snowflake) error {
 //
 //    This endpoint supports the X-Audit-Log-Reason header.
 func (c *Channel) StartThreadWithMessage(messageID Snowflake, payload StartThreadWithMessageJSON, reason *string) (*Channel, error) {
-	u, err := url.Parse(fmt.Sprintf(startThreadWithMessage, api, c.ID.String(), messageID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-
-	resp, err := Rest.Request(http.MethodPost, u.String(), payload, reason)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
+	u := parseRoute(fmt.Sprintf(startThreadWithMessage, api, c.ID.String(), messageID.String()))
 
 	var channel Channel
-	err = json.NewDecoder(resp.Body).Decode(&channel)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	err := json.Unmarshal(firePostRequest(u, payload, reason), &channel)
 
-	return &channel, nil
+	return &channel, err
 }
 
 // StartThreadWithMessageJSON - JSON payload structure
@@ -1452,29 +1033,12 @@ type StartThreadWithMessageJSON struct {
 //
 // * Creating a GuildPrivateThread requires the server to be boosted. The GuildFeatures will indicate if that is possible for the guild.
 func (c *Channel) StartThreadWithoutMessage(payload StartThreadWithoutMessageJSON, reason *string) (*Channel, error) {
-	u, err := url.Parse(fmt.Sprintf(startThreadWithoutMessage, api, c.ID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-
-	resp, err := Rest.Request(http.MethodPost, u.String(), payload, reason)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
+	u := parseRoute(fmt.Sprintf(startThreadWithoutMessage, api, c.ID.String()))
 
 	var channel Channel
-	err = json.NewDecoder(resp.Body).Decode(&channel)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	err := json.Unmarshal(firePostRequest(u, payload, reason), &channel)
 
-	return &channel, nil
+	return &channel, err
 }
 
 // StartThreadWithoutMessageJSON - JSON payload structure
@@ -1503,29 +1067,12 @@ type StartThreadWithoutMessageJSON struct {
 //
 //     This endpoint supports the X-Audit-Log-Reason header.
 func (c *Channel) StartThreadInForumChannel(payload StartThreadWithoutMessageJSON, reason *string) (*Channel, error) {
-	u, err := url.Parse(fmt.Sprintf(startThreadInForumChannel, api, c.ID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-
-	resp, err := Rest.Request(http.MethodPost, u.String(), payload, reason)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
+	u := parseRoute(fmt.Sprintf(startThreadInForumChannel, api, c.ID.String()))
 
 	var channel Channel
-	err = json.NewDecoder(resp.Body).Decode(&channel)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	err := json.Unmarshal(firePostRequest(u, payload, reason), &channel)
 
-	return &channel, nil
+	return &channel, err
 }
 
 // StartThreadInForumJSON - JSON payload structure
@@ -1557,23 +1104,10 @@ type ForumThreadMessageParams struct {
 // Returns a 204 empty response on success.
 //
 // Fires a ThreadMembersUpdate Gateway event.
-func (c *Channel) JoinThread() error {
-	u, err := url.Parse(fmt.Sprintf(joinThread, api, c.ID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
+func (c *Channel) JoinThread() {
+	u := parseRoute(fmt.Sprintf(joinThread, api, c.ID.String()))
 
-	resp, err := Rest.Request(http.MethodPut, u.String(), nil, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
-
-	return nil
+	_ = firePutRequest(u, nil, nil)
 }
 
 // AddThreadMember - Adds another member to a thread.
@@ -1585,23 +1119,10 @@ func (c *Channel) JoinThread() error {
 // Returns a 204 empty response if the member is successfully added or was already a member of the thread.
 //
 // Fires a Thread Members Update Gateway event.
-func (c *Channel) AddThreadMember(userID Snowflake) error {
-	u, err := url.Parse(fmt.Sprintf(addThreadMember, api, c.ID.String(), userID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
+func (c *Channel) AddThreadMember(userID Snowflake) {
+	u := parseRoute(fmt.Sprintf(addThreadMember, api, c.ID.String(), userID.String()))
 
-	resp, err := Rest.Request(http.MethodPut, u.String(), nil, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
-
-	return nil
+	_ = firePutRequest(u, nil, nil)
 }
 
 // LeaveThread - Removes the current user from a thread.
@@ -1612,22 +1133,9 @@ func (c *Channel) AddThreadMember(userID Snowflake) error {
 //
 // Fires a ThreadMembersUpdate Gateway event.
 func (c *Channel) LeaveThread() error {
-	u, err := url.Parse(fmt.Sprintf(leaveThread, api, c.ID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
+	u := parseRoute(fmt.Sprintf(leaveThread, api, c.ID.String()))
 
-	resp, err := Rest.Request(http.MethodDelete, u.String(), nil, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
-
-	return nil
+	return fireDeleteRequest(u, nil)
 }
 
 // RemoveThreadMember - Removes another member from a thread.
@@ -1640,82 +1148,31 @@ func (c *Channel) LeaveThread() error {
 //
 // Fires a Thread Members Update Gateway event.
 func (c *Channel) RemoveThreadMember(userID Snowflake) error {
-	u, err := url.Parse(fmt.Sprintf(removeThreadMember, api, c.ID.String(), userID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
+	u := parseRoute(fmt.Sprintf(removeThreadMember, api, c.ID.String(), userID.String()))
 
-	resp, err := Rest.Request(http.MethodDelete, u.String(), nil, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
-
-	return nil
+	return fireDeleteRequest(u, nil)
 }
 
 // GetThreadMember - Returns a thread member object for the specified user if they are a member of the thread, returns a 404 response otherwise.
 func (c *Channel) GetThreadMember(userID Snowflake) (*ThreadMember, error) {
-	u, err := url.Parse(fmt.Sprintf(getThreadMember, api, c.ID.String(), userID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-
-	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
+	u := parseRoute(fmt.Sprintf(getThreadMember, api, c.ID.String(), userID.String()))
 
 	var threadMember *ThreadMember
-	err = json.NewDecoder(resp.Body).Decode(&threadMember)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &threadMember)
 
-	if resp.StatusCode != http.StatusNotFound {
-		return threadMember, nil
-	}
-
-	return nil, errors.New("requested thread member not found in the specified thread")
+	return threadMember, err
 }
 
 // ListThreadMembers - Returns array of thread members objects that are members of the thread.
 //
 // This endpoint is restricted according to whether the GuildMembers Privileged Intent is enabled for your application.
 func (c *Channel) ListThreadMembers() ([]ThreadMember, error) {
-	u, err := url.Parse(fmt.Sprintf(listThreadMembers, api, c.ID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-
-	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
+	u := parseRoute(fmt.Sprintf(listThreadMembers, api, c.ID.String()))
 
 	var threadMembers []ThreadMember
-	err = json.NewDecoder(resp.Body).Decode(&threadMembers)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &threadMembers)
 
-	return threadMembers, nil
+	return threadMembers, err
 }
 
 // ListPublicArchivedThreads - Returns archived threads in the channel that are public.
@@ -1728,11 +1185,7 @@ func (c *Channel) ListThreadMembers() ([]ThreadMember, error) {
 //
 // Requires the ReadMessageHistory permission.
 func (c *Channel) ListPublicArchivedThreads(before *time.Time, limit *int) (*ThreadListResponse, error) {
-	u, err := url.Parse(fmt.Sprintf(listPublicArchivedThreads, api, c.ID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	u := parseRoute(fmt.Sprintf(listPublicArchivedThreads, api, c.ID.String()))
 
 	q := u.Query()
 	if before != nil {
@@ -1745,23 +1198,10 @@ func (c *Channel) ListPublicArchivedThreads(before *time.Time, limit *int) (*Thr
 		u.RawQuery = q.Encode()
 	}
 
-	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
-
 	var threadListResponse *ThreadListResponse
-	err = json.NewDecoder(resp.Body).Decode(&threadListResponse)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &threadListResponse)
 
-	return threadListResponse, nil
+	return threadListResponse, err
 }
 
 type ThreadListResponse struct {
@@ -1776,11 +1216,7 @@ type ThreadListResponse struct {
 //
 // Requires both the READ_MESSAGE_HISTORY and MANAGE_THREADS permissions.
 func (c *Channel) ListPrivateArchivedThreads(before *time.Time, limit *int) (*ThreadListResponse, error) {
-	u, err := url.Parse(fmt.Sprintf(listPrivateArchivedThreads, api, c.ID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	u := parseRoute(fmt.Sprintf(listPrivateArchivedThreads, api, c.ID.String()))
 
 	q := u.Query()
 	if before != nil {
@@ -1793,23 +1229,10 @@ func (c *Channel) ListPrivateArchivedThreads(before *time.Time, limit *int) (*Th
 		u.RawQuery = q.Encode()
 	}
 
-	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
-
 	var threadListResponse *ThreadListResponse
-	err = json.NewDecoder(resp.Body).Decode(&threadListResponse)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &threadListResponse)
 
-	return threadListResponse, nil
+	return threadListResponse, err
 }
 
 // ListJoinedPrivateArchivedThreads - Returns archived threads in the channel that are of type GuildPrivateThread, and the user has joined.
@@ -1818,11 +1241,7 @@ func (c *Channel) ListPrivateArchivedThreads(before *time.Time, limit *int) (*Th
 //
 // Requires the READ_MESSAGE_HISTORY permission.
 func (c *Channel) ListJoinedPrivateArchivedThreads(before *Snowflake, limit *int) (*ThreadListResponse, error) {
-	u, err := url.Parse(fmt.Sprintf(listJoinedPrivateArchivedThreads, api, c.ID.String()))
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	u := parseRoute(fmt.Sprintf(listJoinedPrivateArchivedThreads, api, c.ID.String()))
 
 	q := u.Query()
 	if before != nil {
@@ -1835,21 +1254,8 @@ func (c *Channel) ListJoinedPrivateArchivedThreads(before *Snowflake, limit *int
 		u.RawQuery = q.Encode()
 	}
 
-	resp, err := Rest.Request(http.MethodGet, u.String(), nil, nil)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
-
 	var threadListResponse *ThreadListResponse
-	err = json.NewDecoder(resp.Body).Decode(&threadListResponse)
-	if err != nil {
-		logging.Errorln(err)
-		return nil, err
-	}
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &threadListResponse)
 
-	return threadListResponse, nil
+	return threadListResponse, err
 }

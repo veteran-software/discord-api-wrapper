@@ -21,7 +21,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 
@@ -162,4 +164,103 @@ func handleContextCancel(ctx context.Context, cancel context.CancelFunc) {
 			logging.Traceln("context cancelled; process complete")
 		}
 	}(ctx)
+}
+
+func parseRoute(route string) *url.URL {
+	u, err := url.Parse(route)
+	if err != nil {
+		logging.Errorln(err)
+		return nil
+	}
+
+	return u
+}
+
+func fireGetRequest(u *url.URL, data *interface{}, reason *string) []byte {
+	resp, err := Rest.Request(http.MethodGet, u.String(), data, reason)
+	if err != nil {
+		logging.Errorln(err)
+		return nil
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	b, err := io.ReadAll(resp.Body)
+	if err != nil {
+		logging.Errorln(err)
+		return []byte{} // we return an empty byte slice here to avoid nil pointer problems
+	}
+
+	return b
+}
+
+func firePostRequest(u *url.URL, data interface{}, reason *string) []byte {
+	resp, err := Rest.Request(http.MethodPost, u.String(), data, reason)
+	if err != nil {
+		logging.Errorln(err)
+		return nil
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	b, err := io.ReadAll(resp.Body)
+	if err != nil {
+		logging.Errorln(err)
+		return []byte{} // we return an empty byte slice here to avoid nil pointer problems
+	}
+
+	return b
+}
+
+func firePutRequest(u *url.URL, data interface{}, reason *string) []byte {
+	resp, err := Rest.Request(http.MethodPut, u.String(), data, reason)
+	if err != nil {
+		logging.Errorln(err)
+		return nil
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	b, err := io.ReadAll(resp.Body)
+	if err != nil {
+		logging.Errorln(err)
+		return []byte{} // we return an empty byte slice here to avoid nil pointer problems
+	}
+
+	return b
+}
+
+func firePatchRequest(u *url.URL, data interface{}, reason *string) []byte {
+	resp, err := Rest.Request(http.MethodPatch, u.String(), data, reason)
+	if err != nil {
+		logging.Errorln(err)
+		return nil
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	b, err := io.ReadAll(resp.Body)
+	if err != nil {
+		logging.Errorln(err)
+		return []byte{} // we return an empty byte slice here to avoid nil pointer problems
+	}
+
+	return b
+}
+
+func fireDeleteRequest(u *url.URL, reason *string) error {
+	resp, err := Rest.Request(http.MethodDelete, u.String(), nil, reason)
+	if err != nil {
+		logging.Errorln(err)
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	return nil
 }
