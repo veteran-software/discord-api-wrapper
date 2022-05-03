@@ -110,6 +110,12 @@ const (
 	modifyGuildRolePositions               = createGuildRole
 	modifyGuildRole                        = "%s/guilds/%s/roles/%s"
 	deleteGuildRole                        = modifyGuildRole
+	listGuildScheduledEvents               = "%s/guilds/%s/scheduled-events"
+	createGuildScheduledEvent              = listGuildScheduledEvents
+	getGuildScheduledEvent                 = "%s/guilds/%s/scheduled-events/%s"
+	modifyGuildScheduledEvent              = getGuildScheduledEvent
+	deleteGuildScheduledEvent              = modifyGuildScheduledEvent
+	getGuildScheduledEventUsers            = "%s/guilds/%s/scheduled-events/%s/users"
 	listActiveThreads                      = "%s/guilds/%s/threads/active"
 	removeGuildMemberRole                  = addGuildMemberRole
 	getGuildVanityURL                      = "%s/guilds/%s/vanity-url"
