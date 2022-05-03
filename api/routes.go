@@ -80,6 +80,8 @@ const (
 	modifyGuildEmoji                       = getGuildEmoji
 	deleteGuildEmoji                       = getGuildEmoji
 	createGuild                            = "%s/guilds"
+	getGuildTemplate                       = "%s/guilds/templates/%s"
+	createGuildFromGuildTemplate           = getGuildTemplate
 	getGuild                               = "%s/guilds/%s"
 	modifyGuild                            = getGuild
 	deleteGuild                            = modifyGuild
@@ -116,6 +118,11 @@ const (
 	modifyGuildScheduledEvent              = getGuildScheduledEvent
 	deleteGuildScheduledEvent              = modifyGuildScheduledEvent
 	getGuildScheduledEventUsers            = "%s/guilds/%s/scheduled-events/%s/users"
+	getGuildTemplates                      = "%s/guilds/%s/templates"
+	createGuildTemplate                    = getGuildTemplates
+	syncGuildTemplate                      = "%s/guilds/%s/templates/%s"
+	modifyGuildTemplate                    = syncGuildTemplate
+	deleteGuildTemplate                    = modifyGuildTemplate
 	listActiveThreads                      = "%s/guilds/%s/threads/active"
 	removeGuildMemberRole                  = addGuildMemberRole
 	getGuildVanityURL                      = "%s/guilds/%s/vanity-url"

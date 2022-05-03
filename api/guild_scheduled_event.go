@@ -49,9 +49,9 @@ type GuildScheduledEvent struct {
 // GuildScheduledEventPrivacyLevel - the privacy level of the scheduled event
 type GuildScheduledEventPrivacyLevel int
 
+//goland:noinspection GoUnusedConst
 const (
-	// GuildScheduledEventPrivacyLevelGuildOnly - the scheduled event is only accessible to guild members
-	GuildScheduledEventPrivacyLevelGuildOnly GuildScheduledEventPrivacyLevel = iota + 2
+	GuildScheduledEventPrivacyLevelGuildOnly GuildScheduledEventPrivacyLevel = iota + 2 // the scheduled event is only accessible to guild members
 )
 
 // GuildScheduledEventType - the type of the scheduled event
