@@ -26,7 +26,7 @@ import (
 
 //Invite - Represents a code that when used, adds a user to a guild or group DM channel.
 type Invite struct {
-	Code                     *string             `json:"code"`                                 // the invite code (unique ID)
+	Code                     *string              `json:"code"`                                 // the invite code (unique ID)
 	Guild                    Guild               `json:"guild,omitempty"`                      // the guild this invite is for
 	Channel                  *Channel            `json:"channel"`                              // the channel this invite is for
 	Inviter                  User                `json:"inviter,omitempty"`                    // the user who created the invite
@@ -82,7 +82,7 @@ func (i *Invite) GetInvite(withCounts *bool, withExpiration *bool, guildSchedule
 	if len(qsp) > 0 {
 		q = "?" + strings.Join(qsp, "&")
 	}
-	return http.MethodGet, fmt.Sprintf(getInvite, api, i.Code, q)
+	return http.MethodGet, fmt.Sprintf(getInvite, api, *i.Code, q)
 }
 
 // DeleteInvite - Delete an Invite.
@@ -93,5 +93,5 @@ func (i *Invite) GetInvite(withCounts *bool, withExpiration *bool, guildSchedule
 //
 // Fires an Invite Delete Gateway event.
 func (i *Invite) DeleteInvite() (method, route string) {
-	return http.MethodDelete, fmt.Sprintf(deleteInvite, api, i.Code)
+	return http.MethodDelete, fmt.Sprintf(deleteInvite, api, *i.Code)
 }
