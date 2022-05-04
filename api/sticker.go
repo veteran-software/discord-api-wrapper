@@ -17,8 +17,8 @@
 package api
 
 import (
-	"encoding/json"
 	"fmt"
+	"net/http"
 )
 
 // Sticker - Represents a sticker that can be sent in messages.
@@ -85,7 +85,6 @@ func (s *Sticker) GetSticker() (*Sticker, error) {
 }
 
 // ListNitroStickerPacks - Returns the list of sticker packs available to Nitro subscribers.
-//goland:noinspection GoUnusedExportedFunction
 func ListNitroStickerPacks() (*ListNitroStickerPacksResponse, error) {
 	u := parseRoute(fmt.Sprintf(listNitroStickerPacks, api))
 
@@ -112,7 +111,7 @@ func (g *Guild) ListGuildStickers() ([]Sticker, error) {
 	return stickers, err
 }
 
-// GetGuildSticker - Returns a Sticker object for the given guild and sticker IDs.
+// GetGuildSticker - Returns a sticker object for the given guild and sticker IDs.
 //
 // Includes the `user` field if the bot has the ManageEmojisAndStickers permission.
 func (g *Guild) GetGuildSticker(stickerID Snowflake) (*Sticker, error) {
