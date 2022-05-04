@@ -146,6 +146,14 @@ const (
 	getAvatarUrlPng                        = "avatars/%s/%s.png"
 	getDefaultUserAvatarUrl                = "embed/avatars/%s.png"
 	getCurrentUser                         = "%s/users/@me"
+	modifyCurrentUser                      = getCurrentUser
+	createDM                               = "%s/users/@me/channels"
+	createGroupDM                          = createDM
+	getUserConnections                     = "%s/users/@me/connections"
+	getCurrentUserGuilds                   = "%s/users/@me/guilds"
+	leaveGuild                             = "%s/users/@me/guilds/%s"
+	getCurrentUserGuildMember              = "%s/users/@me/guilds/%s/member"
+	getUser                                = "%s/users/%s"
 	listVoiceRegions                       = "%s/voice/regions"
 	createWebhook                          = "%s/channels/%s/webhooks"
 	getChannelWebhooks                     = createWebhook

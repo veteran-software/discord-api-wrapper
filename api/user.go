@@ -17,8 +17,8 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
-	"net/http"
 	"strconv"
 )
 
@@ -114,25 +114,158 @@ const (
 
 // GetCurrentUser - Returns the user object of the requesters account.
 //
-// For OAuth2, this requires the `identify` scope, which will return the object without an email, and optionally the email scope, which returns the object with an email.
-func GetCurrentUser() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf(getCurrentUser, api)
+// For OAuth2, this requires the `identify` scope, which will return the object without an email, and optionally the `email` scope, which returns the object with an email.
+//goland:noinspection GoUnusedExportedFunction
+func GetCurrentUser() (*User, error) {
+	u := parseRoute(fmt.Sprintf(getCurrentUser, api))
+
+	var user *User
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &user)
+
+	return user, err
+}
+
+// GetUser - Returns a User object for a given user ID.
+//goland:noinspection GoUnusedExportedFunction
+func (u *User) GetUser() (*User, error) {
+	route := parseRoute(fmt.Sprintf(getUser, api, u.ID.String()))
+
+	var user *User
+	err := json.Unmarshal(fireGetRequest(route, nil, nil), &user)
+
+	return user, err
+}
+
+// ModifyCurrentUser - Modify the requesters user account settings. Returns a User object on success.
+//
+//    All parameters to this endpoint are optional.
+//goland:noinspection GoUnusedExportedFunction
+func ModifyCurrentUser(payload ModifyCurrentUserJSON) (*User, error) {
+	u := parseRoute(fmt.Sprintf(modifyCurrentUser, api))
+
+	var user *User
+	err := json.Unmarshal(firePatchRequest(u, payload, nil), &user)
+
+	return user, err
+}
+
+// ModifyCurrentUserJSON - JSON payload
+type ModifyCurrentUserJSON struct {
+	Username string  `json:"username,omitempty"`
+	Avatar   *string `json:"avatar,omitempty"`
+}
+
+// GetCurrentUserGuilds - Returns a list of partial Guild objects the current user is a member of. Requires the `guilds` OAuth2 scope.
+//goland:noinspection GoUnusedExportedFunction
+func GetCurrentUserGuilds(before *Snowflake, after *Snowflake, limit *uint64) ([]Guild, error) {
+	u := parseRoute(fmt.Sprintf(getCurrentUserGuilds, api))
+
+	q := u.Query()
+	if before != nil {
+		q.Set("before", before.String())
+	}
+	if after != nil {
+		q.Set("after", after.String())
+	}
+	if limit != nil {
+		q.Set("limit", strconv.FormatUint(*limit, 10))
+	}
+	if len(q) > 0 {
+		u.RawQuery = q.Encode()
+	}
+
+	var guilds []Guild
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &guilds)
+
+	return guilds, err
+}
+
+// GetCurrentUserGuildMember - Returns a GuildMember object for the current user. Requires the `guilds.members.read` OAuth2 scope.
+func (g *Guild) GetCurrentUserGuildMember() (*GuildMember, error) {
+	u := parseRoute(fmt.Sprintf(getCurrentUserGuildMember, api, g.ID.String()))
+
+	var guildMember *GuildMember
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &guildMember)
+
+	return guildMember, err
+}
+
+// LeaveGuild - Leave a guild. Returns a 204 empty response on success.
+func (g *Guild) LeaveGuild() error {
+	u := parseRoute(fmt.Sprintf(leaveGuild, api, g.ID.String()))
+
+	return fireDeleteRequest(u, nil)
+}
+
+// CreateDM - Create a new DM Channel with a User. Returns a DM Channel object.
+//
+//    You should not use this endpoint to DM everyone in a server about something.
+//
+//    DMs should generally be initiated by a user action.
+//
+//    If you open a significant amount of DMs too quickly, your bot may be rate limited or blocked from opening new ones.
+//goland:noinspection GoUnusedExportedFunction
+func CreateDM(payload CreateDmJSON) (*Channel, error) {
+	u := parseRoute(fmt.Sprintf(createDM, api))
+
+	var channel *Channel
+	err := json.Unmarshal(firePostRequest(u, payload, nil), &channel)
+
+	return channel, err
+}
+
+// CreateDmJSON - JSON payload
+type CreateDmJSON struct {
+	RecipientID Snowflake `json:"recipient_id"` // the recipient to open a DM channel with
+}
+
+// CreateGroupDM - Create a new group DM Channel with multiple users. Returns a DM channel object.
+//
+// This endpoint was intended to be used with the now-deprecated GameBridge SDK.
+//
+// DMs created with this endpoint will not be shown in the Discord client
+//
+//    This endpoint is limited to 10 active group DMs.
+//goland:noinspection GoUnusedExportedFunction
+func CreateGroupDM(payload CreateDmJSON) (*Channel, error) {
+	u := parseRoute(fmt.Sprintf(createGroupDM, api))
+
+	var channel *Channel
+	err := json.Unmarshal(firePostRequest(u, payload, nil), &channel)
+
+	return channel, err
+}
+
+// CreateGroupDmJSON - JSON payload
+type CreateGroupDmJSON struct {
+	AccessTokens []string             `json:"access_tokens"` // access tokens of users that have granted your app the `gdm.join` scope
+	Nicks        map[Snowflake]string `json:"nicks"`         // a dictionary of user ids to their respective nicknames
+}
+
+// GetUserConnections - Returns a list of Connection objects. Requires the `connections` OAuth2 scope.
+func GetUserConnections() ([]Connection, error) {
+	u := parseRoute(fmt.Sprintf(getUserConnections, api))
+
+	var connections []Connection
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &connections)
+
+	return connections, err
 }
 
 // GetAvatarUrl - returns a properly formatted avatar url
-func (user *User) GetAvatarUrl() string {
-	if user.Avatar != nil {
-		if PtrStr(user.Avatar)[:2] == "a_" {
-			return ImageBaseURL + fmt.Sprintf(getAvatarUrlGif, user.ID, PtrStr(user.Avatar))
+func (u *User) GetAvatarUrl() string {
+	if u.Avatar != nil {
+		if PtrStr(u.Avatar)[:2] == "a_" {
+			return ImageBaseURL + fmt.Sprintf(getAvatarUrlGif, u.ID, PtrStr(u.Avatar))
 		}
 	}
 
-	return ImageBaseURL + fmt.Sprintf(getAvatarUrlPng, user.ID, PtrStr(user.Avatar))
+	return ImageBaseURL + fmt.Sprintf(getAvatarUrlPng, u.ID, PtrStr(u.Avatar))
 }
 
 // GetDefaultUserAvatarUrl - returns the default Discord avatar
-func (user *User) GetDefaultUserAvatarUrl() string {
-	discriminator, err := strconv.Atoi(user.Discriminator)
+func (u *User) GetDefaultUserAvatarUrl() string {
+	discriminator, err := strconv.Atoi(u.Discriminator)
 	if err != nil {
 		return ""
 	}
