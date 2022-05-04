@@ -243,6 +243,7 @@ type CreateGroupDmJSON struct {
 }
 
 // GetUserConnections - Returns a list of Connection objects. Requires the `connections` OAuth2 scope.
+//goland:noinspection GoUnusedExportedFunction
 func GetUserConnections() ([]Connection, error) {
 	u := parseRoute(fmt.Sprintf(getUserConnections, api))
 

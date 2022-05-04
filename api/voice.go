@@ -17,15 +17,15 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
-	"net/http"
 	"time"
 )
 
 // VoiceState - Used to represent a user's voice connection status.
 type VoiceState struct {
 	GuildID                 Snowflake   `json:"guild_id,omitempty"`                   // the guild id this voice state is for
-	ChannelID               Snowflake   `json:"channel_id,omitempty"`                 // the channel id this user is connected to
+	ChannelID               *Snowflake  `json:"channel_id,omitempty"`                 // the channel id this user is connected to
 	UserID                  Snowflake   `json:"user_id"`                              // the user id this voice state is for
 	Member                  GuildMember `json:"member,omitempty"`                     // the guild member this voice state is for
 	SessionID               string      `json:"session_id"`                           // the session id for this voice state
@@ -36,7 +36,7 @@ type VoiceState struct {
 	SelfStream              bool        `json:"self_stream,omitempty"`                // whether this user is streaming using "Go Live"
 	SelfVideo               bool        `json:"self_video"`                           // whether this user's camera is enabled
 	Suppress                bool        `json:"suppress"`                             // whether this user is muted by the current user
-	RequestToSpeakTimestamp time.Time   `json:"request_to_speak_timestamp,omitempty"` // the time at which the user requested to speak
+	RequestToSpeakTimestamp *time.Time  `json:"request_to_speak_timestamp,omitempty"` // the time at which the user requested to speak
 }
 
 // VoiceRegion - representation of a geographic voice server
@@ -48,7 +48,13 @@ type VoiceRegion struct {
 	Custom     bool   `json:"custom"`     // whether this is a custom voice region (used for events/etc)
 }
 
-// ListVoiceRegions - Returns an array of voice region objects that can be used when setting a voice or stage channel's rtc_region.
-func ListVoiceRegions() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf(listVoiceRegions, api)
+// ListVoiceRegions - Returns an array of voice region objects that can be used when setting a voice or stage channel's `rtc_region`.
+//goland:noinspection GoUnusedExportedFunction
+func ListVoiceRegions() ([]VoiceRegion, error) {
+	u := parseRoute(fmt.Sprintf(listVoiceRegions, api))
+
+	var voiceRegions []VoiceRegion
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &voiceRegions)
+
+	return voiceRegions, err
 }
