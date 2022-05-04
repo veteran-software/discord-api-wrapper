@@ -17,10 +17,9 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
-	"net/http"
 	"strconv"
-	"strings"
 	"time"
 )
 
@@ -36,7 +35,6 @@ type Invite struct {
 	ApproximatePresenceCount uint64              `json:"approximate_presence_count,omitempty"` // approximate count of online members, returned from the GET /invites/<code> endpoint when with_counts is true
 	ApproximateMemberCount   uint64              `json:"approximate_member_count,omitempty"`   // approximate count of total members, returned from the GET /invites/<code> endpoint when with_counts is true
 	ExpiresAt                *time.Time          `json:"expires_at,omitempty"`                 // the expiration date of this invite, returned from the GET /invites/<code> endpoint when with_expiration is true
-	StageInstance            InviteStageInstance `json:"stage_instance,omitempty"`             // stage instance data if there is a public Stage instance in the Stage channel this invite is for
 	GuildScheduledEvent      GuildScheduledEvent `json:"guild_scheduled_event,omitempty"`      // guild scheduled event data, only included if guild_scheduled_event_id contains a valid guild scheduled event id
 }
 
@@ -58,40 +56,41 @@ type InviteMetadata struct {
 	CreatedAt time.Time `json:"created_at"` // when this invite was created
 }
 
-// InviteStageInstance - stage instance data if there is a public Stage instance in the Stage channel this invite is for
-type InviteStageInstance struct {
-	Members          []GuildMember `json:"members"`
-	ParticipantCount uint64        `json:"participant_count"`
-	SpeakerCount     uint64        `json:"speaker_count"`
-	Topic            string        `json:"topic"`
-}
-
 // GetInvite - Returns an Invite object for the given code.
-func (i *Invite) GetInvite(withCounts *bool, withExpiration *bool, guildScheduleEventID *Snowflake) (method, route string) {
-	var qsp []string
+func (i *Invite) GetInvite(withCounts *bool, withExpiration *bool, guildScheduledEventID *Snowflake) (*Invite, error) {
+	u := parseRoute(fmt.Sprintf(getInvite, api, *i.Code))
+
+	q := u.Query()
 	if withCounts != nil {
-		qsp = append(qsp, "with_counts="+strconv.FormatBool(*withCounts))
+		q.Set("with_counts", strconv.FormatBool(*withCounts))
 	}
 	if withExpiration != nil {
-		qsp = append(qsp, "with_expiration="+strconv.FormatBool(*withExpiration))
+		q.Set("with_expiration", strconv.FormatBool(*withExpiration))
 	}
-	if guildScheduleEventID != nil {
-		qsp = append(qsp, "guild_scheduled_event_id="+(*guildScheduleEventID).String())
+	if guildScheduledEventID != nil {
+		q.Set("guild_scheduled_event_id", guildScheduledEventID.String())
 	}
-	var q string
-	if len(qsp) > 0 {
-		q = "?" + strings.Join(qsp, "&")
+	if len(q) > 0 {
+		u.RawQuery = q.Encode()
 	}
-	return http.MethodGet, fmt.Sprintf(getInvite, api, *i.Code, q)
+
+	var invite *Invite
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &invite)
+
+	return invite, err
 }
 
 // DeleteInvite - Delete an Invite.
 //
-// Requires the MANAGE_CHANNELS permission on the channel this invite belongs to, or MANAGE_GUILD to remove any invite across the guild.
+// Requires the ManageChannels permission on the channel this invite belongs to, or ManageGuild to remove any invite across the guild.
 //
 // Returns an Invite object on success.
 //
-// Fires an Invite Delete Gateway event.
-func (i *Invite) DeleteInvite() (method, route string) {
-	return http.MethodDelete, fmt.Sprintf(deleteInvite, api, *i.Code)
+// Fires an InviteDelete Gateway event.
+//
+//     This endpoint supports the `X-Audit-Log-Reason` header.
+func (i *Invite) DeleteInvite(reason *string) error {
+	u := parseRoute(fmt.Sprintf(deleteInvite, api, *i.Code))
+
+	return fireDeleteRequest(u, reason)
 }

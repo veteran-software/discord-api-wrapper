@@ -134,7 +134,7 @@ const (
 	modifyGuildWidget                      = getGuildWidgetSettings
 	getGuildWidget                         = "%s/guilds/%s/widget.json"
 	deleteInvite                           = "%s/invites/%s"
-	getInvite                              = "%s/invites/%s%s"
+	getInvite                              = "%s/invites/%s"
 	listGuildStickers                      = "%s/guilds/%s/stickers"
 	createGuildSticker                     = listGuildStickers
 	getGuildSticker                        = "%s/guilds/%s/stickers/%s"
