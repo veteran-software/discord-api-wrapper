@@ -18,10 +18,9 @@ package api
 
 import (
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
-	"net/http"
 	"strconv"
-	"strings"
 )
 
 /*
@@ -29,8 +28,6 @@ Webhooks are a low-effort way to post messages to channels in Discord.
 
 They do not require a bot user or authentication to use.
 */
-
-const thrID = "thread_id="
 
 // Webhook - Used to represent a webhook.
 type Webhook struct {
@@ -68,9 +65,14 @@ const (
 //
 // 	* Webhook names cannot be: 'clyde'
 //
-// This endpoint supports the "X-Audit-Log-Reason" header.
-func (c *Channel) CreateWebhook() (string, string) {
-	return http.MethodPost, fmt.Sprintf(createWebhook, api, c.ID.String())
+// This endpoint supports the `X-Audit-Log-Reason` header.
+func (c *Channel) CreateWebhook(payload CreateWebhookJSON, reason *string) (*Webhook, error) {
+	u := parseRoute(fmt.Sprintf(createWebhook, api, c.ID.String()))
+
+	var webhook *Webhook
+	err := json.Unmarshal(firePostRequest(u, payload, reason), &webhook)
+
+	return webhook, err
 }
 
 // CreateWebhookJSON - JSON payload structure
@@ -80,80 +82,119 @@ type CreateWebhookJSON struct {
 }
 
 // GetChannelWebhooks - Returns a list of channel webhook objects. Requires the ManageWebhooks permission.
-func (c *Channel) GetChannelWebhooks() (string, string) {
-	return http.MethodGet, fmt.Sprintf(getChannelWebhooks, api, c.ID.String())
+func (c *Channel) GetChannelWebhooks() ([]Webhook, error) {
+	u := parseRoute(fmt.Sprintf(getChannelWebhooks, api, c.ID.String()))
+
+	var webhooks []Webhook
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &webhooks)
+
+	return webhooks, err
 }
 
 // GetGuildWebhooks - Returns a list of guild webhook objects. Requires the ManageWebhooks permission.
-func (g *Guild) GetGuildWebhooks() (string, string) {
-	return http.MethodGet, fmt.Sprintf(getGuildWebhooks, api, g.ID.String())
+func (g *Guild) GetGuildWebhooks() ([]Webhook, error) {
+	u := parseRoute(fmt.Sprintf(getGuildWebhooks, api, g.ID.String()))
+
+	var webhooks []Webhook
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &webhooks)
+
+	return webhooks, err
 }
 
 // GetWebhook - Returns the new webhook object for the given id.
-func (w *Webhook) GetWebhook() (string, string) {
-	return http.MethodGet, fmt.Sprintf(getWebhook, api, w.ID.String())
+func (w *Webhook) GetWebhook() (*Webhook, error) {
+	u := parseRoute(fmt.Sprintf(getWebhook, api, w.ID.String()))
+
+	var webhook *Webhook
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &webhook)
+
+	return webhook, err
 }
 
 // GetWebhookWithToken - Same as above, except this call does not require authentication and returns no user in the webhook object.
-func (w *Webhook) GetWebhookWithToken() (string, string) {
-	return http.MethodGet, fmt.Sprintf("%s/webhooks/%s/%s", api, w.ID.String(), w.Token)
+func (w *Webhook) GetWebhookWithToken() (*Webhook, error) {
+	u := parseRoute(fmt.Sprintf(getWebhookWithToken, api, w.ID.String(), w.Token))
+
+	var webhook *Webhook
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &webhook)
+
+	return webhook, err
 }
 
 // ModifyWebhook - Modify a webhook. Requires the ManageWebhooks permission. Returns the updated webhook object on success.
 //
-// All parameters to this endpoint are optional
+//     All parameters to this endpoint are optional
 //
-// This endpoint supports the "X-Audit-Log-Reason" header.
-func (w *Webhook) ModifyWebhook() (string, string) {
-	return http.MethodPatch, fmt.Sprintf(modifyWebhook, api, w.ID.String())
+//     This endpoint supports the `X-Audit-Log-Reason` header.
+func (w *Webhook) ModifyWebhook(payload ModifyWebhookJSON, reason *string) (*Webhook, error) {
+	u := parseRoute(fmt.Sprintf(modifyWebhook, api, w.ID.String()))
+
+	var webhook *Webhook
+	err := json.Unmarshal(firePatchRequest(u, payload, reason), &webhook)
+
+	return webhook, err
 }
 
 // ModifyWebhookJSON - JSON payload structure
 type ModifyWebhookJSON struct {
-	Name      string           `json:"name,omitempty"`       // the default name of the webhook
-	Avatar    *base64.Encoding `json:"avatar,omitempty"`     // image for the default webhook avatar
-	ChannelID Snowflake        `json:"channel_id,omitempty"` // the new channel id this webhook should be moved to
+	Name      string    `json:"name,omitempty"`       // the default name of the webhook
+	Avatar    *string   `json:"avatar,omitempty"`     // image for the default webhook avatar
+	ChannelID Snowflake `json:"channel_id,omitempty"` // the new channel id this webhook should be moved to
 }
 
 // ModifyWebhookWithToken - Same as above, except this call does not require authentication, does not accept a channel_id parameter in the body, and does not return a user in the webhook object.
-func (w *Webhook) ModifyWebhookWithToken() (string, string) {
-	return http.MethodPatch, fmt.Sprintf(modifyWebhookWithToken, api, w.ID.String(), w.Token)
+func (w *Webhook) ModifyWebhookWithToken(payload ModifyWebhookJSON, reason *string) (*Webhook, error) {
+	u := parseRoute(fmt.Sprintf(modifyWebhookWithToken, api, w.ID.String(), w.Token))
+
+	var webhook *Webhook
+	err := json.Unmarshal(firePatchRequest(u, payload, reason), &webhook)
+
+	return webhook, err
 }
 
 // DeleteWebhook - Delete a webhook permanently. Requires the ManageWebhooks permission. Returns a 204 No Content response on success.
 //
-// This endpoint supports the "X-Audit-Log-Reason" header.
-func (w *Webhook) DeleteWebhook() (string, string) {
-	return http.MethodDelete, fmt.Sprintf(deleteWebhook, api, w.ID.String())
+// This endpoint supports the `X-Audit-Log-Reason` header.
+func (w *Webhook) DeleteWebhook(reason *string) error {
+	u := parseRoute(fmt.Sprintf(deleteWebhook, api, w.ID.String()))
+
+	return fireDeleteRequest(u, reason)
 }
 
 // DeleteWebhookWithToken - Same as above, except this call does not require authentication.
-func (w *Webhook) DeleteWebhookWithToken() (string, string) {
-	return http.MethodDelete, fmt.Sprintf(deleteWebhookWithToken, api, w.ID.String(), w.Token)
+func (w *Webhook) DeleteWebhookWithToken(reason *string) error {
+	u := parseRoute(fmt.Sprintf(deleteWebhookWithToken, api, w.ID.String(), w.Token))
+
+	return fireDeleteRequest(u, reason)
 }
 
-// ExecuteWebhook - Refer to Uploading Files for details on attachments and multipart/form-data requests.
+// ExecuteWebhook - Refer to Uploading Files for details on attachments and `multipart/form-data` requests.
 //
-// Note that when sending a message, you must provide a value for at least one of content, embeds, or file.
+// Note that when sending a message, you must provide a value for at least one of `content`, `embeds`, or `file`.
 //
-// wait and threadID are optional; pass nil if not needed
-func (w *Webhook) ExecuteWebhook(wait *bool, threadID *Snowflake) (string, string) {
-	var qsp []string
+// `wait` and `threadID` are optional; pass `nil` if not needed
+func (w *Webhook) ExecuteWebhook(wait *bool, threadID *Snowflake, payload ExecuteWebhookJSON) (*Message, error) {
+	u := parseRoute(fmt.Sprintf(executeWebhook, api, w.ID.String(), w.Token))
+
+	q := u.Query()
 	if wait != nil {
-		qsp = append(qsp, "wait="+strconv.FormatBool(*wait))
+		q.Set("wait", strconv.FormatBool(*wait))
 	}
 	if threadID != nil {
-		qsp = append(qsp, thrID+threadID.String())
+		q.Set("thread_id", threadID.String())
 	}
-	var query string
-	if len(qsp) > 0 {
-		query = "?" + strings.Join(qsp, "&")
+	if len(q) > 0 {
+		u.RawQuery = q.Encode()
 	}
 
-	return http.MethodPost, fmt.Sprintf(executeWebhook, api, w.ID.String(), w.Token, query)
+	var message *Message
+	err := json.Unmarshal(firePostRequest(u, payload, nil), &message)
+
+	return message, err
 }
 
 // ExecuteWebhookJSON - JSON payload structure
+// TODO: Implement files[n]
 type ExecuteWebhookJSON struct {
 	Content         string          `json:"content"`                    // the message contents (up to 2000 characters); Required - one of content, file, embeds
 	Username        string          `json:"username,omitempty"`         // override the default username of the webhook; Required - false
@@ -170,20 +211,24 @@ type ExecuteWebhookJSON struct {
 // ExecuteSlackCompatibleWebhook - Refer to Slack's documentation for more information. We do not support Slack's channel, icon_emoji, mrkdwn, or mrkdwn_in properties.
 //
 // wait and threadID are optional; pass nil if not needed
-func (w *Webhook) ExecuteSlackCompatibleWebhook(wait *bool, threadID *Snowflake) (string, string) {
-	var qsp []string
+func (w *Webhook) ExecuteSlackCompatibleWebhook(wait *bool, threadID *Snowflake) (*Message, error) {
+	u := parseRoute(fmt.Sprintf(executeSlackCompatibleWebhook, api, w.ID.String(), w.Token))
+
+	q := u.Query()
 	if wait != nil {
-		qsp = append(qsp, "wait="+strconv.FormatBool(*wait))
+		q.Set("wait", strconv.FormatBool(*wait))
 	}
 	if threadID != nil {
-		qsp = append(qsp, thrID+threadID.String())
+		q.Set("thread_id", threadID.String())
 	}
-	var query string
-	if len(qsp) > 0 {
-		query = "?" + strings.Join(qsp, "&")
+	if len(q) > 0 {
+		u.RawQuery = q.Encode()
 	}
 
-	return http.MethodPost, fmt.Sprintf(executeSlackCompatibleWebhook, api, w.ID.String(), w.Token, query)
+	var message *Message
+	err := json.Unmarshal(firePostRequest(u, nil, nil), &message)
+
+	return message, err
 }
 
 // ExecuteGitHubCompatibleWebhook - Add a new webhook to your GitHub repo (in the repo's settings), and use this endpoint as the "Payload URL."
@@ -191,32 +236,44 @@ func (w *Webhook) ExecuteSlackCompatibleWebhook(wait *bool, threadID *Snowflake)
 // You can choose what events your Discord channel receives by choosing the "Let me select individual events" option and selecting individual events for the new webhook you're configuring.
 //
 // wait and threadID are optional; pass nil if not needed
-func (w *Webhook) ExecuteGitHubCompatibleWebhook(wait *bool, threadID *Snowflake) (string, string) {
-	var qsp []string
+func (w *Webhook) ExecuteGitHubCompatibleWebhook(wait *bool, threadID *Snowflake) (*Message, error) {
+	u := parseRoute(fmt.Sprintf(executeGitHubCompatibleWebhook, api, w.ID.String(), w.Token))
+
+	q := u.Query()
 	if wait != nil {
-		qsp = append(qsp, "wait="+strconv.FormatBool(*wait))
+		q.Set("wait", strconv.FormatBool(*wait))
 	}
 	if threadID != nil {
-		qsp = append(qsp, thrID+threadID.String())
+		q.Set("thread_id", threadID.String())
 	}
-	var query string
-	if len(qsp) > 0 {
-		query = "?" + strings.Join(qsp, "&")
+	if len(q) > 0 {
+		u.RawQuery = q.Encode()
 	}
 
-	return http.MethodPost, fmt.Sprintf(executeGitHubCompatibleWebhook, api, w.ID.String(), w.Token, query)
+	var message *Message
+	err := json.Unmarshal(firePostRequest(u, nil, nil), &message)
+
+	return message, err
 }
 
 // GetWebhookMessage - Returns a previously-sent webhook message from the same token. Returns a message object on success.
 //
 // threadID is optional; pass nil if not needed
-func (w *Webhook) GetWebhookMessage(msgID Snowflake, threadID *Snowflake) (string, string) {
-	var query string
+func (w *Webhook) GetWebhookMessage(msgID Snowflake, threadID *Snowflake) (*Message, error) {
+	u := parseRoute(fmt.Sprintf(getWebhookMessage, api, w.ID.String(), w.Token, msgID.String()))
+
+	q := u.Query()
 	if threadID != nil {
-		query = "?" + thrID + threadID.String()
+		q.Set("thread_id", threadID.String())
+	}
+	if len(q) > 0 {
+		u.RawQuery = q.Encode()
 	}
 
-	return http.MethodGet, fmt.Sprintf(getWebhookMessage, api, w.ID.String(), w.Token, msgID.String(), query)
+	var message *Message
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &message)
+
+	return message, err
 }
 
 // EditWebhookMessage - Edits a previously-sent webhook message from the same token. Returns a message object on success.
@@ -234,16 +291,25 @@ func (w *Webhook) GetWebhookMessage(msgID Snowflake, threadID *Snowflake) (strin
 // All JSON parameters to this endpoint are optional and nullable.
 //
 // threadID is optional; pass nil if not needed
-func (w *Webhook) EditWebhookMessage(msgID Snowflake, threadID *Snowflake) (string, string) {
-	var query string
+func (w *Webhook) EditWebhookMessage(msgID Snowflake, threadID *Snowflake, payload EditWebhookMessageJSON) (*Message, error) {
+	u := parseRoute(fmt.Sprintf(editWebhookMessage, api, w.ID.String(), w.Token, msgID.String()))
+
+	q := u.Query()
 	if threadID != nil {
-		query = "?" + thrID + threadID.String()
+		q.Set("thread_id", threadID.String())
+	}
+	if len(q) > 0 {
+		u.RawQuery = q.Encode()
 	}
 
-	return http.MethodPatch, fmt.Sprintf(editWebhookMessage, api, w.ID.String(), w.Token, msgID.String(), query)
+	var message *Message
+	err := json.Unmarshal(firePatchRequest(u, payload, nil), &message)
+
+	return message, err
 }
 
 // EditWebhookMessageJSON - All parameters to this endpoint are optional and nullable.
+// TODO: Implement files[n]
 type EditWebhookMessageJSON struct {
 	Content         *string          `json:"content,omitempty"`          // the message contents (up to 2000 characters)
 	Embeds          *[]Embed         `json:"embeds,omitempty"`           // embedded rich content
@@ -256,11 +322,16 @@ type EditWebhookMessageJSON struct {
 // DeleteWebhookMessage - Deletes a message that was created by the webhook. Returns a 204 No Content response on success.
 //
 // threadID is optional; pass nil if not needed
-func (w *Webhook) DeleteWebhookMessage(msgID Snowflake, threadID *Snowflake) (string, string) {
-	var query string
+func (w *Webhook) DeleteWebhookMessage(msgID Snowflake, threadID *Snowflake) error {
+	u := parseRoute(fmt.Sprintf(deleteWebhookMessage, api, w.ID.String(), w.Token, msgID.String()))
+
+	q := u.Query()
 	if threadID != nil {
-		query = "?" + thrID + threadID.String()
+		q.Set("thread_id", threadID.String())
+	}
+	if len(q) > 0 {
+		u.RawQuery = q.Encode()
 	}
 
-	return http.MethodDelete, fmt.Sprintf(deleteWebhookMessage, api, w.ID.String(), w.Token, msgID.String(), query)
+	return fireDeleteRequest(u, nil)
 }

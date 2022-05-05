@@ -161,12 +161,13 @@ const (
 	getWebhook                             = "%s/webhooks/%s"
 	modifyWebhook                          = getWebhook
 	deleteWebhook                          = getWebhook
-	createFollowupMessage                  = "%s/webhooks/%s/%s"
+	getWebhookWithToken                    = "%s/webhooks/%s/%s"
+	createFollowupMessage                  = getWebhookWithToken
 	modifyWebhookWithToken                 = createFollowupMessage
 	deleteWebhookWithToken                 = createFollowupMessage
-	executeWebhook                         = "%s/webhooks/%s/%s%s"
-	executeGitHubCompatibleWebhook         = "%s/webhooks/%s/%s/github%s"
-	getWebhookMessage                      = "%s/webhooks/%s/%s/messages/%s%s"
+	executeWebhook                         = "%s/webhooks/%s/%s"
+	executeGitHubCompatibleWebhook         = "%s/webhooks/%s/%s/github"
+	getWebhookMessage                      = "%s/webhooks/%s/%s/messages/%s"
 	editWebhookMessage                     = getWebhookMessage
 	deleteWebhookMessage                   = getWebhookMessage
 	getFollowupMessage                     = "%s/webhooks/%s/%s/messages/%s"
@@ -175,7 +176,7 @@ const (
 	getOriginalInteractionResponse         = "%s/webhooks/%s/%s/messages/@original"
 	editOriginalInteractionResponse        = getOriginalInteractionResponse
 	deleteOriginalInteractionResponse      = getOriginalInteractionResponse
-	executeSlackCompatibleWebhook          = "%s/webhooks/%s/%s/slack%s"
+	executeSlackCompatibleWebhook          = "%s/webhooks/%s/%s/slack"
 	createStageInstance                    = "%s/stage-instances"
 	getStageInstance                       = "%s/stage-instances/%s"
 	modifyStageInstance                    = getStageInstance

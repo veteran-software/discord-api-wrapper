@@ -89,7 +89,7 @@ const (
 type ApplicationCommandOptionChoice struct {
 	Name              string           `json:"name"`                         // 1-100 character choice name
 	NameLocalizations LocalizationDict `json:"name_localizations,omitempty"` // Localization dictionary for the name field. Values follow the same restrictions as name
-	Value             interface{}      `json:"value,string"`                 // value of the choice, up to 100 characters if string
+	Value             interface{}      `json:"value"`                        // value of the choice, up to 100 characters if string
 }
 
 // ApplicationCommandInteractionDataOption - All options have names, and an option can either be a parameter and input value--in which case value will be set--or it can denote a subcommand or group--in which case it will contain a top-level key and another array of options.
