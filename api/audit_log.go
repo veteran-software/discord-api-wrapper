@@ -159,9 +159,9 @@ type OptionalAuditEntry struct {
 
 // AuditLogChange - If new_value is not present in the change object, while old_value is, that means the property that was changed has been reset, or set to null
 type AuditLogChange struct {
-	NewValue interface{} `json:"new_value,omitempty"` // new value of the key
-	OldValue interface{} `json:"old_value,omitempty"` // old value of the key
-	Key      string      `json:"key"`                 // name of audit log change key
+	NewValue any    `json:"new_value,omitempty"` // new value of the key
+	OldValue any    `json:"old_value,omitempty"` // old value of the key
+	Key      string `json:"key"`                 // name of audit log change key
 }
 
 // GetGuildAuditLog - Returns an audit log object for the guild.

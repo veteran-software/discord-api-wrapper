@@ -23,7 +23,7 @@ type Component struct {
 	Type        ComponentType  `json:"type"`                  // ComponentType; valid for all types
 	CustomID    string         `json:"custom_id,omitempty"`   // a developer-defined identifier for the button, max 100 characters
 	Disabled    bool           `json:"disabled,omitempty"`    // whether the button is disabled, default false
-	Style       interface{}    `json:"style,omitempty"`       // one of ButtonStyle
+	Style       any            `json:"style,omitempty"`       // one of ButtonStyle
 	Label       string         `json:"label,omitempty"`       // text that appears on the button, max 80 characters
 	Emoji       *Emoji         `json:"emoji,omitempty"`       // name, id, and animated
 	URL         string         `json:"url,omitempty"`         // a URL for link-style buttons

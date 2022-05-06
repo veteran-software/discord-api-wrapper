@@ -61,15 +61,15 @@ func init() {
 }
 
 // Request - send an HTTP request with rate limiting
-func (r *RateLimiter) Request(method, route string, data interface{}, reason *string) (*http.Response, error) {
+func (r *RateLimiter) Request(method, route string, data any, reason *string) (*http.Response, error) {
 	return r.requestWithBucketID(method, route, strings.SplitN(route, "?", 2)[0], data, reason)
 }
 
-func (r *RateLimiter) requestWithBucketID(method, route, bucketID string, data interface{}, reason *string) (*http.Response, error) {
+func (r *RateLimiter) requestWithBucketID(method, route, bucketID string, data any, reason *string) (*http.Response, error) {
 	return r.request(method, route, "application/json", data, bucketID, 0, reason)
 }
 
-func (r *RateLimiter) request(method, route, contentType string, b interface{}, bucketID string, sequence int, reason *string) (*http.Response, error) {
+func (r *RateLimiter) request(method, route, contentType string, b any, bucketID string, sequence int, reason *string) (*http.Response, error) {
 	if bucketID == "" {
 		bucketID = strings.SplitN(route, "?", 2)[0]
 	}
@@ -77,7 +77,7 @@ func (r *RateLimiter) request(method, route, contentType string, b interface{}, 
 	return r.lockedRequest(method, route, contentType, b, r.lockBucket(bucketID), sequence, reason)
 }
 
-func processBody(b interface{}, bucket *bucket) (*bytes.Buffer, error) {
+func processBody(b any, bucket *bucket) (*bytes.Buffer, error) {
 	var buffer bytes.Buffer
 	if b != nil {
 		encoder := json.NewEncoder(&buffer)
@@ -92,7 +92,7 @@ func processBody(b interface{}, bucket *bucket) (*bytes.Buffer, error) {
 	return &buffer, nil
 }
 
-func (r *RateLimiter) lockedRequest(method, route, contentType string, b interface{}, bucket *bucket, sequence int, reason *string) (*http.Response, error) {
+func (r *RateLimiter) lockedRequest(method, route, contentType string, b any, bucket *bucket, sequence int, reason *string) (*http.Response, error) {
 	buffer, err := processBody(b, bucket)
 	if err != nil {
 		return nil, err
@@ -176,7 +176,7 @@ func parseRoute(route string) *url.URL {
 	return u
 }
 
-func fireGetRequest(u *url.URL, data *interface{}, reason *string) []byte {
+func fireGetRequest(u *url.URL, data any, reason *string) []byte {
 	resp, err := Rest.Request(http.MethodGet, u.String(), data, reason)
 	if err != nil {
 		logging.Errorln(err)
@@ -195,7 +195,7 @@ func fireGetRequest(u *url.URL, data *interface{}, reason *string) []byte {
 	return b
 }
 
-func firePostRequest(u *url.URL, data interface{}, reason *string) []byte {
+func firePostRequest(u *url.URL, data any, reason *string) []byte {
 	resp, err := Rest.Request(http.MethodPost, u.String(), data, reason)
 	if err != nil {
 		logging.Errorln(err)
@@ -214,7 +214,7 @@ func firePostRequest(u *url.URL, data interface{}, reason *string) []byte {
 	return b
 }
 
-func firePutRequest(u *url.URL, data interface{}, reason *string) []byte {
+func firePutRequest(u *url.URL, data any, reason *string) []byte {
 	resp, err := Rest.Request(http.MethodPut, u.String(), data, reason)
 	if err != nil {
 		logging.Errorln(err)
@@ -233,7 +233,7 @@ func firePutRequest(u *url.URL, data interface{}, reason *string) []byte {
 	return b
 }
 
-func firePatchRequest(u *url.URL, data interface{}, reason *string) []byte {
+func firePatchRequest(u *url.URL, data any, reason *string) []byte {
 	resp, err := Rest.Request(http.MethodPatch, u.String(), data, reason)
 	if err != nil {
 		logging.Errorln(err)

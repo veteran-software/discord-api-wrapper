@@ -291,7 +291,7 @@ func TestComponentSetDisabled(t *testing.T) {
 
 func TestComponentGetButtonStyle(t *testing.T) {
 	type fields struct {
-		Style interface{}
+		Style any
 	}
 	tests := []struct {
 		name   string
@@ -338,7 +338,7 @@ func TestComponentGetButtonStyle(t *testing.T) {
 
 func TestComponentSetButtonStyle(t *testing.T) {
 	type fields struct {
-		Style interface{}
+		Style any
 	}
 	type args struct {
 		s ButtonStyle
@@ -404,7 +404,7 @@ func TestComponentSetButtonStyle(t *testing.T) {
 
 func TestComponentGetTextInputStyle(t *testing.T) {
 	type fields struct {
-		Style interface{}
+		Style any
 	}
 	tests := []struct {
 		name   string
@@ -436,7 +436,7 @@ func TestComponentGetTextInputStyle(t *testing.T) {
 
 func TestComponentSetTextInputStyle(t *testing.T) {
 	type fields struct {
-		Style interface{}
+		Style any
 	}
 	type args struct {
 		s TextInputStyle

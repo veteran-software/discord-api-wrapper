@@ -24,10 +24,10 @@ const (
 
 // GatewayPayload - S and T are null when Op is not 0 (Gateway Dispatch Opcode).
 type GatewayPayload struct {
-	Op int          `json:"op"` // opcode for the payload
-	D  *interface{} `json:"d"`  // event data
-	S  *int         `json:"s"`  // sequence number, used for resuming sessions and heartbeats
-	T  *string      `json:"t"`  // the event name for this payload
+	Op int     `json:"op"` // opcode for the payload
+	D  *any    `json:"d"`  // event data
+	S  *int    `json:"s"`  // sequence number, used for resuming sessions and heartbeats
+	T  *string `json:"t"`  // the event name for this payload
 }
 
 // GatewayIntents - Maintaining a stateful application can be difficult when it comes to the amount of data you're expected to process, especially at scale.

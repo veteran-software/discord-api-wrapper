@@ -197,9 +197,23 @@ func (i *Interaction) BuildResponse(embeds []*Embed) *InteractionResponseMessage
 	return ir
 }
 
+// TODO: Find the best way to handle these; overloads?
+
 // CreateInteractionResponse Create a response to an Interaction from the gateway.
-func (i *Interaction) CreateInteractionResponse() (method string, route string) {
-	return http.MethodPost, fmt.Sprintf(createInteractionResponse, api, i.ID.String(), i.Token)
+func (i *Interaction) CreateInteractionResponse(payload any) {
+	// verify that we only accept the payload that we want
+	// maybe future language version will make this easier/cleaner
+	switch payload.(type) {
+	case InteractionResponseMessages:
+	case InteractionResponseAutocomplete:
+	case InteractionResponseModal:
+	default:
+		return
+	}
+
+	u := parseRoute(fmt.Sprintf(createInteractionResponse, api, i.ID.String(), i.Token))
+
+	_ = firePostRequest(u, payload, nil)
 }
 
 // GetOriginalInteractionResponse Returns the initial Interaction response.
