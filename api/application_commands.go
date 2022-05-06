@@ -98,7 +98,7 @@ const (
 type ApplicationCommandOptionChoice struct {
 	Name              string            `json:"name"`                         // 1-100 character choice name
 	NameLocalizations *LocalizationDict `json:"name_localizations,omitempty"` // Localization dictionary for the name field. Values follow the same restrictions as name
-	Value             any               `json:"value,string"`                 // value of the choice, up to 100 characters if string
+	Value             any               `json:"value"`                        // value of the choice, up to 100 characters if string
 }
 
 // ApplicationCommandInteractionDataOption - All options have names, and an option can either be a parameter and input value--in which case value will be set--or it can denote a subcommand or group--in which case it will contain a top-level key and another array of options.
@@ -165,7 +165,10 @@ func PermissionsConstantsAllChannels(guildID Snowflake) *Snowflake {
 //goland:noinspection GoUnusedExportedFunction
 func GetGlobalApplicationCommands(applicationID Snowflake, withLocalizations bool) ([]ApplicationCommand, error) {
 	u := parseRoute(fmt.Sprintf(getGlobalApplicationCommands, api, applicationID.String()))
-	u.Query().Set("with_localizations", strconv.FormatBool(withLocalizations))
+
+	q := u.Query()
+	q.Set("with_localizations", strconv.FormatBool(withLocalizations))
+	u.RawQuery = q.Encode()
 
 	var commands []ApplicationCommand
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &commands)
@@ -271,7 +274,10 @@ func BulkOverwriteGlobalApplicationCommands(applicationID Snowflake, payload []A
 // Returns an array of application command objects.
 func (i *Interaction) GetGuildApplicationCommands(withLocalizations bool) ([]ApplicationCommand, error) {
 	u := parseRoute(fmt.Sprintf(getGuildApplicationCommands, api, i.ApplicationID.String(), i.GuildID.String()))
-	u.Query().Set("with_localizations", strconv.FormatBool(withLocalizations))
+
+	q := u.Query()
+	q.Set("with_localizations", strconv.FormatBool(withLocalizations))
+	u.RawQuery = q.Encode()
 
 	var commands []ApplicationCommand
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &commands)
@@ -285,7 +291,10 @@ func (i *Interaction) GetGuildApplicationCommands(withLocalizations bool) ([]App
 //goland:noinspection GoUnusedExportedFunction
 func GetGuildApplicationCommands(applicationID Snowflake, guildID Snowflake, withLocalizations bool) ([]ApplicationCommand, error) {
 	u := parseRoute(fmt.Sprintf(getGuildApplicationCommands, api, applicationID.String(), guildID.String()))
-	u.Query().Set("with_localizations", strconv.FormatBool(withLocalizations))
+
+	q := u.Query()
+	q.Set("with_localizations", strconv.FormatBool(withLocalizations))
+	u.RawQuery = q.Encode()
 
 	var commands []ApplicationCommand
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &commands)

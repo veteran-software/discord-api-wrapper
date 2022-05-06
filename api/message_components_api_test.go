@@ -61,8 +61,8 @@ func TestComponentGetType(t *testing.T) {
 			c := &Component{
 				Type: tt.fields.Type,
 			}
-			if got := c.GetType(); got != tt.want {
-				t.Errorf("GetType() = %v, want %v", got, tt.want)
+			if got := c.Type; got != tt.want {
+				t.Errorf("Type = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -427,8 +427,8 @@ func TestComponentGetTextInputStyle(t *testing.T) {
 			c := &Component{
 				Style: tt.fields.Style,
 			}
-			if got := c.GetTextInputStyle(); got != tt.want {
-				t.Errorf("GetTextInputStyle() = %v, want %v", got, tt.want)
+			if got := c.Style.(TextInputStyle); got != tt.want {
+				t.Errorf("Style.(TextInputStyle) = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -536,8 +536,8 @@ func TestComponentGetEmoji(t *testing.T) {
 			c := &Component{
 				Emoji: tt.fields.Emoji,
 			}
-			if got := c.GetEmoji(); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetEmoji() = %v, want %v", got, tt.want)
+			if got := c.Emoji; !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Emoji = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -629,8 +629,8 @@ func TestComponentGetURL(t *testing.T) {
 			c := &Component{
 				URL: tt.fields.URL,
 			}
-			if got := c.GetURL(); got != tt.want {
-				t.Errorf("GetURL() = %v, want %v", got, tt.want)
+			if got := c.URL; got != tt.want {
+				t.Errorf("URL = %v, want %v", got, tt.want)
 			}
 		})
 	}
