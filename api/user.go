@@ -24,15 +24,15 @@ import (
 
 // User - Discord enforces the following restrictions for usernames and nicknames:
 //
-//    Names can contain most valid unicode characters. We limit some zero-width and non-rendering characters.
-//    Usernames must be between 2 and 32 characters long.
-//    Nicknames must be between 1 and 32 characters long.
-//    Names are sanitized and trimmed of leading, trailing, and excessive internal whitespace.
+//	Names can contain most valid unicode characters. We limit some zero-width and non-rendering characters.
+//	Usernames must be between 2 and 32 characters long.
+//	Nicknames must be between 1 and 32 characters long.
+//	Names are sanitized and trimmed of leading, trailing, and excessive internal whitespace.
 //
 // The following restrictions are additionally enforced for usernames:
 //
-//    Names cannot contain the following substrings: '@', '#', ':', '```'.
-//    Names cannot be: 'discordtag', 'everyone', 'here'.
+//	Names cannot contain the following substrings: '@', '#', ':', '```', 'discord'.
+//	Names cannot be: 'everyone', 'here'.
 //
 // There are other rules and restrictions not shared here for the sake of spam and abuse mitigation, but the majority of users won't encounter them.
 //
@@ -78,6 +78,7 @@ const (
 	VerifiedDeveloper     UserFlags = 1 << 17 // Early Verified Bot Developer
 	CertifiedModerator    UserFlags = 1 << 18 // Discord Certified Moderator
 	BotHttpInteractions   UserFlags = 1 << 19 // Bot uses only HTTP interactions and is shown in the online member list
+	ActiveDeveloper       UserFlags = 1 << 22 // User is an Active Developer
 )
 
 // PremiumType - Premium types denote the level of premium a user has. Visit the Nitro page to learn more about the premium plans we currently offer.
@@ -88,20 +89,45 @@ const (
 	None         PremiumType = iota // None
 	NitroClassic                    // Nitro Classic
 	Nitro                           // Nitro
+	NitroBasic                      // Nitro Basic
 )
 
 // Connection - The connection object that the user has attached.
 type Connection struct {
 	ID           string                   `json:"id"`                     // id of the connection account
 	Name         string                   `json:"name"`                   // the username of the connection account
-	Type         string                   `json:"type"`                   // the service of the connection (Twitch, YouTube)
+	Type         Service                  `json:"type"`                   // the service of the connection (Twitch, YouTube)
 	Revoked      bool                     `json:"revoked,omitempty"`      // whether the connection is revoked
 	Integrations []Integration            `json:"integrations,omitempty"` // an array of partial server integrations
 	Verified     bool                     `json:"verified"`               // whether the connection is verified
 	FriendSync   bool                     `json:"friend_sync"`            // whether friend sync is enabled for this connection
 	ShowActivity bool                     `json:"show_activity"`          // whether activities related to this connection will be shown in presence updates
+	TwoWayLink   bool                     `json:"two_way_link"`           // whether this connection has a corresponding third party OAuth2 token
 	Visibility   ConnectionVisibilityType `json:"visibility"`             // visibility of this connection
 }
+
+type Service string
+
+//goland:noinspection SpellCheckingInspection,GoUnusedConst
+const (
+	BattleNet       Service = "battlenet"
+	Ebay            Service = "ebay"
+	EpicGames       Service = "epicgames"
+	Facebook        Service = "facebook"
+	GitHub          Service = "github"
+	LeagueOfLegends Service = "leagueoflegends"
+	PayPal          Service = "paypal"
+	PlayStation     Service = "playstation"
+	Reddit          Service = "reddit"
+	RiotGames       Service = "riotgames"
+	Spotify         Service = "spotify"
+	Skype           Service = "skype"
+	Steam           Service = "steam"
+	Twitch          Service = "twitch"
+	Twitter         Service = "twitter"
+	XBox            Service = "xbox"
+	YouTube         Service = "youtube"
+)
 
 // ConnectionVisibilityType - visibility of this connection
 type ConnectionVisibilityType int
@@ -115,6 +141,8 @@ const (
 // GetCurrentUser - Returns the user object of the requesters account.
 //
 // For OAuth2, this requires the `identify` scope, which will return the object without an email, and optionally the email scope, which returns the object with an email.
+//
+//goland:noinspection GoUnusedExportedFunction
 func GetCurrentUser() (method string, route string) {
 	return http.MethodGet, fmt.Sprintf(getCurrentUser, api)
 }

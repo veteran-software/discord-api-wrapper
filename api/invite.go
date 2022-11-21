@@ -24,7 +24,9 @@ import (
 	"time"
 )
 
-//Invite - Represents a code that when used, adds a user to a guild or group DM channel.
+// Invite - Represents a code that when used, adds a user to a guild or group DM channel.
+//
+//goland:noinspection GoDeprecation
 type Invite struct {
 	Code                     string              `json:"code"`                                 // the invite code (unique ID)
 	Guild                    Guild               `json:"guild,omitempty"`                      // the guild this invite is for
@@ -59,6 +61,9 @@ type InviteMetadata struct {
 }
 
 // InviteStageInstance - stage instance data if there is a public Stage instance in the Stage channel this invite is for
+// Deprecated
+//
+//goland:noinspection GoDeprecation
 type InviteStageInstance struct {
 	Members          []GuildMember `json:"members"`
 	ParticipantCount uint64        `json:"participant_count"`

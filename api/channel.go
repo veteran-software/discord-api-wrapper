@@ -39,38 +39,45 @@ const (
 
 // Channel - Represents a guild or DM channel within Discord.
 type Channel struct {
-	ID                         Snowflake      `json:"id"`                                      // the id of this channel
-	Type                       ChannelType    `json:"type"`                                    // the ChannelType
-	GuildID                    Snowflake      `json:"guild_id,omitempty"`                      // the id of the guild (may be missing for some channel objects received over gateway guild dispatches)
-	Position                   int            `json:"position,omitempty"`                      // sorting position of the channel
-	PermissionOverwrites       []Overwrite    `json:"permission_overwrites,omitempty"`         // explicit permission overwrites for members and roles
-	Name                       string         `json:"name,omitempty"`                          // the name of the channel (1-100 characters)
-	Topic                      *string        `json:"topic,omitempty"`                         // the channel topic (0-1024 characters)
-	Nsfw                       bool           `json:"nsfw,omitempty"`                          // whether the channel is nsfw
-	LastMessageID              *Snowflake     `json:"last_message_id,omitempty"`               // the id of the last message sent in this channel (may not point to an existing or valid message)
-	Bitrate                    int64          `json:"bitrate,omitempty"`                       // the bitrate (in bits) of the voice channel
-	UserLimit                  int64          `json:"user_limit,omitempty"`                    // the user limit of the voice channel
-	RateLimitPerUser           int64          `json:"rate_limit_per_user,omitempty"`           // amount of seconds a user has to wait before sending another Message (0-21600); bots, as well as users with the permission ManageMessages or ManageChannels, are unaffected
-	Recipients                 []User         `json:"recipients,omitempty"`                    // the recipients of the DM
-	Icon                       *string        `json:"icon,omitempty"`                          // icon hash of the group DM
-	OwnerID                    Snowflake      `json:"owner_id,omitempty"`                      // id of the creator of the group DM or thread
-	ApplicationID              Snowflake      `json:"application_id,omitempty"`                // application id of the group DM creator if it is bot-created
-	ParentID                   *Snowflake     `json:"parent_id,omitempty"`                     // for guild channels: id of the parent category for a channel (each parent category can contain up to 50 channels), for threads: id of the text channel this thread was created
-	LastPinTimestamp           *time.Time     `json:"last_pin_timestamp,omitempty"`            // when the last pinned message was pinned. This may be null in events such as GUILD_CREATE when a message is not pinned.
-	RtcRegion                  *string        `json:"rtc_region,omitempty"`                    // voice region id for the voice channel, automatic when set to null
-	VideoQualityMode           int64          `json:"video_quality_mode,omitempty"`            // the camera video quality mode of the voice channel, 1 when not present
-	MessageCount               int64          `json:"message_count,omitempty"`                 // an approximate count of messages in a thread, stops counting at 50
-	MemberCount                int64          `json:"member_count,omitempty"`                  // an approximate count of users in a thread, stops counting at 50
-	ThreadMetadata             ThreadMetadata `json:"thread_metadata,omitempty"`               // thread-specific fields not needed by other channels
-	Member                     ThreadMember   `json:"member,omitempty"`                        // ThreadMember for the current User, if they have joined the thread, only included on certain API endpoints
-	DefaultAutoArchiveDuration int            `json:"default_auto_archive_duration,omitempty"` // default duration that the clients (not the API) will use for newly created threads, in minutes, to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080
-	Permissions                string         `json:"permissions"`                             // computed permissions for the invoking user in the channel, including overwrites, only included when part of the resolved data received on a slash command interaction
+	ID                            Snowflake        `json:"id"`                                      // the id of this channel
+	Type                          ChannelType      `json:"type"`                                    // the ChannelType
+	GuildID                       Snowflake        `json:"guild_id,omitempty"`                      // the id of the guild (may be missing for some channel objects received over gateway guild dispatches)
+	Position                      int              `json:"position,omitempty"`                      // sorting position of the channel
+	PermissionOverwrites          []Overwrite      `json:"permission_overwrites,omitempty"`         // explicit permission overwrites for members and roles
+	Name                          string           `json:"name,omitempty"`                          // the name of the channel (1-100 characters)
+	Topic                         *string          `json:"topic,omitempty"`                         // the channel topic (0-1024 characters)
+	Nsfw                          bool             `json:"nsfw,omitempty"`                          // whether the channel is nsfw
+	LastMessageID                 *Snowflake       `json:"last_message_id,omitempty"`               // the id of the last message sent in this channel (may not point to an existing or valid message)
+	Bitrate                       int64            `json:"bitrate,omitempty"`                       // the bitrate (in bits) of the voice channel
+	UserLimit                     int64            `json:"user_limit,omitempty"`                    // the user limit of the voice channel
+	RateLimitPerUser              int64            `json:"rate_limit_per_user,omitempty"`           // amount of seconds a user has to wait before sending another Message (0-21600); bots, as well as users with the permission ManageMessages or ManageChannels, are unaffected
+	Recipients                    []User           `json:"recipients,omitempty"`                    // the recipients of the DM
+	Icon                          *string          `json:"icon,omitempty"`                          // icon hash of the group DM
+	OwnerID                       Snowflake        `json:"owner_id,omitempty"`                      // id of the creator of the group DM or thread
+	ApplicationID                 Snowflake        `json:"application_id,omitempty"`                // application id of the group DM creator if it is bot-created
+	ParentID                      *Snowflake       `json:"parent_id,omitempty"`                     // for guild channels: id of the parent category for a channel (each parent category can contain up to 50 channels), for threads: id of the text channel this thread was created
+	LastPinTimestamp              *time.Time       `json:"last_pin_timestamp,omitempty"`            // when the last pinned message was pinned. This may be null in events such as GUILD_CREATE when a message is not pinned.
+	RtcRegion                     *string          `json:"rtc_region,omitempty"`                    // voice region id for the voice channel, automatic when set to null
+	VideoQualityMode              int64            `json:"video_quality_mode,omitempty"`            // the camera video quality mode of the voice channel, 1 when not present
+	MessageCount                  int64            `json:"message_count,omitempty"`                 // an approximate count of messages in a thread, stops counting at 50
+	MemberCount                   int64            `json:"member_count,omitempty"`                  // an approximate count of users in a thread, stops counting at 50
+	ThreadMetadata                ThreadMetadata   `json:"thread_metadata,omitempty"`               // thread-specific fields not needed by other channels
+	Member                        ThreadMember     `json:"member,omitempty"`                        // ThreadMember for the current User, if they have joined the thread, only included on certain API endpoints
+	DefaultAutoArchiveDuration    int              `json:"default_auto_archive_duration,omitempty"` // default duration that the clients (not the API) will use for newly created threads, in minutes, to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080
+	Permissions                   string           `json:"permissions"`                             // computed permissions for the invoking user in the channel, including overwrites, only included when part of the resolved data received on a slash command interaction
+	Flags                         int              `json:"flags,omitempty"`
+	TotalMessageSent              int              `json:"total_message_sent"`
+	AvailableTags                 []string         `json:"available_tags"`
+	AppliedTags                   []Snowflake      `json:"applied_tags"`
+	DefaultReactionEmoji          *DefaultReaction `json:"default_reaction_emoji"`
+	DefaultThreadRateLimitPerUser int              `json:"default_thread_rate_lmit_per_user"`
+	DefaultSortOrder              *int             `json:"default_sort_order,omitempty"`
 }
 
 // ChannelType - the type of channel
 type ChannelType int
 
-//goland:noinspection SpellCheckingInspection
+//goland:noinspection SpellCheckingInspection,GoUnusedConst
 const (
 	GuildText          ChannelType = iota     // a text channel within a server
 	DM                                        // a direct message between users
@@ -83,6 +90,8 @@ const (
 	GuildPublicThread                         // a temporary sub-channel within a GuildText channel
 	GuildPrivateThread                        // a temporary sub-channel within a GuildText channel that is only viewable by those invited and those with the ManageThreads permission
 	GuildStageVoice                           // a voice channel for hosting events with an audience
+	GuildDirectory                            // the channel in a hub containing the listed servers
+	GuildForum                                // Channel that can only contain threads
 )
 
 // VideoQualityMode - the camera video quality mode of the voice channel, 1 when not present
@@ -94,7 +103,24 @@ const (
 	Full                             // 720p
 )
 
+type ChannelFlag int
+
+//goland:noinspection GoUnusedConst
+const (
+	Pinned     ChannelFlag = 1 << 1 // this thread is pinned to the top of its parent GuildForum channel
+	RequireTag ChannelFlag = 1 << 4 // whether a tag is required to be specified when creating a thread in a GuildForum channel. Tags are specified in the applied_tags field.
+)
+
+type SortOrderType int
+
+//goland:noinspection GoUnusedConst
+const (
+	LatestActivity SortOrderType = iota // Sort forum posts by activity
+	CreationDate                        // Sort forum posts by creation time (from most recent to oldest)
+)
+
 // Message - Represents a message sent in a channel within Discord.
+//
 //goland:noinspection SpellCheckingInspection
 type Message struct {
 	ID                Snowflake          `json:"id,omitempty"`                 // id of the message
@@ -128,6 +154,7 @@ type Message struct {
 	Components        []Component        `json:"components,omitempty"`         // sent if the message contains components like buttons, action rows, or other interactive components
 	StickerItems      []string           `json:"sticker_items,omitempty"`      // sent if the message contains stickers
 	Stickers          []string           `json:"stickers,omitempty"`           // Deprecated: the stickers sent with the message
+	Position          int                `json:"position,omitempty"`           // 	A generally increasing integer (there may be gaps or duplicates) that represents the approximate position of the message in a thread, it can be used to estimate the relative position of the message in a thread in company with total_message_sent on parent thread
 }
 
 // MessageType - type of message
@@ -143,10 +170,10 @@ const (
 	ChannelIconChange                                              // CHANNEL_ICON_CHANGE
 	ChannelPinnedMessage                                           // CHANNEL_PINNED_MESSAGE
 	GuildMemberJoin                                                // GUILD_MEMBER_JOIN
-	UserPremiumGuildSubscription                                   // USER_PREMIUM_GUILD_SUBSCRIPTION
-	UserPremiumGuildSubscriptionTier1                              // USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_1
-	UserPremiumGuildSubscriptionTier2                              // USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_2
-	UserPremiumGuildSubscriptionTier3                              // USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_3
+	GuildBoost                                                     // GUILD_BOOST
+	GuildBoostTier1                                                // GUILD_BOOST_TIER_1
+	GuildBoostTier2                                                // GUILD_BOOST_TIER_2
+	GuildBoostTier3                                                // GUILD_BOOST_TIER_3
 	ChannelFollowAdd                                               // CHANNEL_FOLLOW_ADD
 	GuildDiscoveryDisqualified              MessageType = iota + 1 // GUILD_DISCOVERY_DISQUALIFIED
 	GuildDiscoveryRequalified                                      // GUILD_DISCOVERY_REQUALIFIED
@@ -158,6 +185,7 @@ const (
 	ThreadStarterMessage                                           // THREAD_STARTER_MESSAGE
 	GuildInviteReminder                                            // GUILD_INVITE_REMINDER
 	ContextMenuCommand                                             // CONTEXT_MENU_COMMAND
+	AutoModerationAction                                           // AUTO_MODERATION_ACTION
 )
 
 // MessageActivity - sent with Rich Presence-related chat embeds
@@ -232,6 +260,7 @@ const (
 )
 
 // ThreadMetadata - The thread metadata object contains a number of thread-specific channel fields that are not needed by other channel types.
+//
 //goland:noinspection SpellCheckingInspection
 type ThreadMetadata struct {
 	Archived            bool       `json:"archived"`                   // whether the thread is archived
@@ -248,6 +277,25 @@ type ThreadMember struct {
 	UserID        Snowflake `json:"user_id,omitempty"` // the id of the User
 	JoinTimestamp time.Time `json:"join_timestamp"`    // the time the current user last joined the thread
 	Flags         int64     `json:"flags"`             // any user-thread settings, currently only used for notifications
+}
+
+// DefaultReaction - An object that specifies the emoji to use as the default way to react to a forum post. Exactly one of emoji_id and emoji_name must be set.
+type DefaultReaction struct {
+	EmojiID   *Snowflake `json:"emoji_id"`   // the id of a guild's custom emoji
+	EmojiName *string    `json:"emoji_name"` // the unicode character of the emoji
+}
+
+// ForumTag - An object that represents a tag that is able to be applied to a thread in a GuildForum channel.
+//
+// When updating a GuildForum channel, tag objects in available_tags only require the Name field.
+//
+// At most one of EmojiID and EmojiName may be set.
+type ForumTag struct {
+	ID        Snowflake `json:"id"`         // the id of the tag
+	Name      string    `json:"name"`       // the name of the tag (0-20 characters)
+	Moderated bool      `json:"moderated"`  // whether this tag can only be added to or removed from threads by a member with the ManageThreads permission
+	EmojiID   Snowflake `json:"emoji_id"`   // the id of a guild's custom emoji
+	EmojiName *string   `json:"emoji_name"` // the unicode character of the emoji
 }
 
 // Embed - contains rich content
@@ -332,6 +380,7 @@ type Field struct {
 }
 
 // Attachment - For the attachments array in Message Create/Edit requests, only the id is required.
+//
 //goland:noinspection SpellCheckingInspection
 type Attachment struct {
 	ID          Snowflake `json:"id"`                     // attachment id
@@ -416,10 +465,11 @@ func (c *Channel) GetChannel() *Channel {
 //
 // Returns a channel on success, and a 400 BAD REQUEST on invalid parameters.
 //
-//   All JSON parameters are optional.
+//	All JSON parameters are optional.
 //
-//   This endpoint supports the "X-Audit-Log-Reason" header.
-//goland:noinspection SpellCheckingInspection
+//	This endpoint supports the "X-Audit-Log-Reason" header.
+//
+//goland:noinspection SpellCheckingInspection,GoUnusedParameter
 func (c *Channel) ModifyChannel(dm *map[string]interface{}, guildChannel *map[string]interface{}, name *string, icon *base64.Encoding, reason *string) *Channel {
 	var payload interface{}
 
@@ -515,6 +565,7 @@ type ModifyGuildChannelJSON struct {
 //
 // Otherwise, requires the MANAGE_THREADS permission. Fires a Thread Update Gateway event.
 // Requires the thread to have archived set to false or be set to false in the request.
+//
 //goland:noinspection SpellCheckingInspection
 type ModifyThreadJSON struct {
 	Name                string `json:"name"`                  // 1-100 character channel name
@@ -589,13 +640,13 @@ func (c *Channel) GetChannelMessage(messageID string) (method, route string) {
 // See message formatting for more information on how to properly format messages.
 //
 // Limitations
-//   * When operating on a guild channel, the current user must have the SEND_MESSAGES permission.
-//   * When sending a message with tts (text-to-speech) set to true, the current user must have the SEND_TTS_MESSAGES permission.
-//   * When creating a message as a reply to another message, the current user must have the READ_MESSAGE_HISTORY permission.
-//       * The referenced message must exist and cannot be a system message.
-//   * The maximum request size when sending a message is 8 MB
-//   * For the embed object, you can set every field except type (it will be rich regardless of if you try to set it), provider, video, and any height, width, or proxy_url values for images.
-//   * Files can only be uploaded when using the multipart/form-data content type.
+//   - When operating on a guild channel, the current user must have the SEND_MESSAGES permission.
+//   - When sending a message with tts (text-to-speech) set to true, the current user must have the SEND_TTS_MESSAGES permission.
+//   - When creating a message as a reply to another message, the current user must have the READ_MESSAGE_HISTORY permission.
+//   - The referenced message must exist and cannot be a system message.
+//   - The maximum request size when sending a message is 8 MB
+//   - For the embed object, you can set every field except type (it will be rich regardless of if you try to set it), provider, video, and any height, width, or proxy_url values for images.
+//   - Files can only be uploaded when using the multipart/form-data content type.
 //
 // You may create a message as a reply to another message.
 //
@@ -639,6 +690,7 @@ type CreateMessageJSON struct {
 // This endpoint requires the 'SEND_MESSAGES' permission, if the current user sent the message, or additionally the 'MANAGE_MESSAGES' permission, for all other messages, to be present for the current user.
 //
 // Returns a message object.
+//
 //goland:noinspection SpellCheckingInspection
 func (c *Channel) CrosspostMessage(messageID string) (method, route string) {
 	return http.MethodPost, fmt.Sprintf(crosspostMessage, api, c.ID.String(), messageID)
@@ -859,7 +911,7 @@ type CreateChannelJSON struct {
 //
 // Returns a 204 empty response on success.
 //
-// For more information about permissions, see permissions
+// # For more information about permissions, see permissions
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
 func (c *Channel) DeleteChannelPermission(overwriteID Snowflake) (method, route string) {
@@ -903,9 +955,9 @@ func (c *Channel) GetPinnedMessages() (method, route string) {
 //
 // Returns a 204 empty response on success.
 //
-//    The max pinned messages is 50.
+//	The max pinned messages is 50.
 //
-//    This endpoint supports the X-Audit-Log-Reason header.
+//	This endpoint supports the X-Audit-Log-Reason header.
 func (c *Channel) PinMessage(messageID Snowflake) (method, route string) {
 	return http.MethodPut, fmt.Sprintf(pinMessage, api, c.ID.String(), messageID.String())
 }
@@ -916,7 +968,7 @@ func (c *Channel) PinMessage(messageID Snowflake) (method, route string) {
 //
 // Returns a 204 empty response on success.
 //
-//    This endpoint supports the X-Audit-Log-Reason header.
+//	This endpoint supports the X-Audit-Log-Reason header.
 func (c *Channel) UnpinMessage(messageID Snowflake) (method, route string) {
 	return http.MethodDelete, fmt.Sprintf(unpinMessage, api, c.ID.String(), messageID.String())
 }
@@ -951,7 +1003,7 @@ func (c *Channel) GroupDmRemoveRecipient(userID Snowflake) (method, route string
 //
 // The id of the created thread will be the same as the id of the message, and as such a message can only have a single thread created from it.
 //
-//    This endpoint supports the X-Audit-Log-Reason header.
+//	This endpoint supports the X-Audit-Log-Reason header.
 func (c *Channel) StartThreadWithMessage(messageID Snowflake) (method, route string) {
 	return http.MethodPost, fmt.Sprintf(startThreadWithMessage, api, c.ID.String(), messageID.String())
 }
@@ -971,7 +1023,7 @@ type StartThreadWithMessageJSON struct {
 //
 // Fires a Thread Create Gateway event.
 //
-//    This endpoint supports the X-Audit-Log-Reason header.
+//	This endpoint supports the X-Audit-Log-Reason header.
 //
 // * Creating a private thread requires the server to be boosted. The guild features will indicate if that is possible for the guild.
 func (c *Channel) StartThreadWithoutMessage() (method, route string) {

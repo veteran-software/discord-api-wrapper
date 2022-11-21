@@ -20,7 +20,7 @@ import "time"
 
 // GuildScheduledEvent - A representation of a scheduled event in a guild.
 //
-//   creator_id will be null and creator will not be included for events created before October 25th, 2021, when the concept of creator_id was introduced and tracked.
+//	creator_id will be null and creator will not be included for events created before October 25th, 2021, when the concept of creator_id was introduced and tracked.
 type GuildScheduledEvent struct {
 	ID                 Snowflake                          `json:"id"`                    // the id of the scheduled event
 	GuildID            Snowflake                          `json:"guild_id"`              // the guild id which the scheduled event belongs to
@@ -43,6 +43,7 @@ type GuildScheduledEvent struct {
 // GuildScheduledEventPrivacyLevel - the privacy level of the scheduled event
 type GuildScheduledEventPrivacyLevel int
 
+//goland:noinspection GoUnusedConst
 const (
 	// GuildScheduledEventPrivacyLevelGuildOnly - the scheduled event is only accessible to guild members
 	GuildScheduledEventPrivacyLevelGuildOnly GuildScheduledEventPrivacyLevel = iota + 2
@@ -80,3 +81,5 @@ type GuildScheduledEventUser struct {
 	User                  User        `json:"user"`                     // user which subscribed to an event
 	Member                GuildMember `json:"member"`                   // guild member data for this user for the guild which this event belongs to, if any
 }
+
+// TODO: Endpoints

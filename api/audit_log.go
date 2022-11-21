@@ -32,12 +32,14 @@ This header supports url encoded utf8 characters.
 //
 // This header supports url encoded utf8 characters.
 type AuditLog struct {
-	AuditLogEntries      []AuditLogEntry       `json:"audit_log_entries"`      // list of audit log entries
-	GuildScheduledEvents []GuildScheduledEvent `json:"guild_scheduled_events"` // list of GuildScheduledEvent found in the audit log
-	Integrations         []Integration         `json:"integrations"`           // list of partial integration objects
-	Threads              []Channel             `json:"threads"`                // list of threads found in the audit log
-	Users                []User                `json:"users"`                  // list of users found in the audit log
-	Webhooks             []Webhook             `json:"webhooks"`               // list of webhooks found in the audit log
+	ApplicationCommands  []ApplicationCommand  `json:"application_commands"`   // List of ApplicationCommands referenced in the audit log
+	AuditLogEntries      []AuditLogEntry       `json:"audit_log_entries"`      // List of AuditLog entries, sorted from most to least recent
+	AutoModerationRules  []string              `json:"auto_moderation_rules"`  // List of auto moderation rules referenced in the audit log
+	GuildScheduledEvents []GuildScheduledEvent `json:"guild_scheduled_events"` // List of GuildScheduledEvents referenced in the audit log
+	Integrations         []Integration         `json:"integrations"`           // List of partial Integration objects
+	Threads              []Channel             `json:"threads"`                // List of Threads referenced in the audit log
+	Users                []User                `json:"users"`                  // List of Users referenced in the audit log
+	Webhooks             []Webhook             `json:"webhooks"`               // List of Webhooks referenced in the audit log
 }
 
 // AuditLogEntry - Representation of a single Audit Log
@@ -137,18 +139,34 @@ const (
 	ThreadCreate AuditLogEvent = iota + 66
 	ThreadUpdate
 	ThreadDelete
+
+	/* Command Permission Events */
+
+	ApplicationCommandPermissionUpdate = iota + 74
+
+	/* Auto Moderation Rule Updates */
+
+	AutoModerationRuleCreate = iota + 92
+	AutoModerationRuleUpdate
+	AutoModerationRuleDelete
+	AutoModerationBlockMessage
+	AutoModerationFlagToChannel
+	AutoModerationUserCommunicationDisabled
 )
 
 // OptionalAuditEntry - Information that is specific to certain events
 type OptionalAuditEntry struct {
-	ChannelID        Snowflake `json:"channel_id"`         // channel in which the entities were targeted
-	Count            string    `json:"count"`              // number of entities that were targeted
-	DeleteMemberDays string    `json:"delete_member_days"` // number of days after which inactive members were kicked
-	ID               Snowflake `json:"id"`                 // id of the overwritten entity
-	MembersRemoved   string    `json:"members_removed"`    // number of members removed by the prune
-	MessageID        Snowflake `json:"message_id"`         // id of the message that was targeted
-	RoleName         string    `json:"role_name"`          // name of the role if type is "0" (not present if type is "1")
-	Type             string    `json:"type"`               // type of overwritten entity - "0" for "role" or "1" for "member"
+	ApplicationID                 Snowflake ` json:"application_id"`                   // ID of the app whose permissions were targeted
+	AutoModerationRuleName        string    `json:"auto_moderation_rule_name"`         // Name of the Auto Moderation rule that was triggered
+	AutoModerationRuleTriggerType string    `json:"auto_moderation_rule_trigger_type"` // Trigger type of the Auto Moderation rule that was triggered
+	ChannelID                     Snowflake `json:"channel_id"`                        // channel in which the entities were targeted
+	Count                         string    `json:"count"`                             // number of entities that were targeted
+	DeleteMemberDays              string    `json:"delete_member_days"`                // number of days after which inactive members were kicked
+	ID                            Snowflake `json:"id"`                                // id of the overwritten entity
+	MembersRemoved                string    `json:"members_removed"`                   // number of members removed by the prune
+	MessageID                     Snowflake `json:"message_id"`                        // id of the message that was targeted
+	RoleName                      string    `json:"role_name"`                         // name of the role if type is "0" (not present if type is "1")
+	Type                          string    `json:"type"`                              // type of overwritten entity - "0" for "role" or "1" for "member"
 }
 
 // AuditLogChange - If new_value is not present in the change object, while old_value is, that means the property that was changed has been reset, or set to null

@@ -32,7 +32,7 @@ type Guild struct {
 	DiscoverySplash             *string                         `json:"discovery_splash"`                     // discovery splash hash; only present for guilds with the "DISCOVERABLE" feature
 	OwnerID                     Snowflake                       `json:"owner_id"`                             // id of owner
 	AfkChannelID                Snowflake                       `json:"afk_channel_id,omitempty"`             // id of afk channel
-	AfkTimeout                  int64                           `json:"afk_timeout"`                          // afk timeout in seconds
+	AfkTimeout                  int                             `json:"afk_timeout"`                          // afk timeout in seconds
 	WidgetEnabled               bool                            `json:"widget_enabled,omitempty"`             // true if the server widget is enabled
 	WidgetChannelID             *Snowflake                      `json:"widget_channel_id,omitempty"`          // the channel id that the widget will generate an "invite" to, or null if set to no invite
 	VerificationLevel           VerificationLevel               `json:"verification_level"`                   // verification level required for the guild
@@ -63,7 +63,7 @@ type Guild struct {
 	Stickers                    []Sticker                       `json:"stickers,omitempty"`                   // custom guild stickers
 	PremiumProgressBarEnabled   bool                            `json:"premium_progress_bar_enabled"`         // whether the guild has the boost progress bar enabled
 
-	// These fields are only sent within the GUILD_CREATE event
+	// TODO: These fields are only sent within the GUILD_CREATE event; move to Gateway.go
 
 	JoinedAt             time.Time             `json:"joined_at,omitempty"`              // when this guild was joined at
 	Large                bool                  `json:"large,omitempty"`                  // true if this is considered a large guild
@@ -164,9 +164,10 @@ const (
 	AnimatedIcon                  GuildFeatures = "ANIMATED_ICON"                    // guild has access to set an animated guild icon
 	Banner                        GuildFeatures = "BANNER"                           // guild has access to set a guild banner image
 	Commerce                      GuildFeatures = "COMMERCE"                         // guild has access to use commerce features (i.e. create store channels)
-	Community                     GuildFeatures = "COMMUNITY"                        // guild can enable welcome screen, Membership Screening, stage channels and discovery, and receives community updates
-	Discoverable                  GuildFeatures = "DISCOVERABLE"                     // guild is able to be discovered in the directory
+	Community                     GuildFeatures = "COMMUNITY"                        // Mutable; guild can enable welcome screen, Membership Screening, stage channels and discovery, and receives community updates
+	Discoverable                  GuildFeatures = "DISCOVERABLE"                     // Mutable; guild is able to be discovered in the directory
 	Featurable                    GuildFeatures = "FEATURABLE"                       // guild is able to be featured in the directory
+	InvitesDisabled               GuildFeatures = "INVITES_DISABLED"                 // Mutable; Pauses all invites/access to the server
 	InviteSplash                  GuildFeatures = "INVITE_SPLASH"                    // guild has access to set an invite splash background
 	MemberVerificationGateEnabled GuildFeatures = "MEMBER_VERIFICATION_GATE_ENABLED" // guild has enabled Membership Screening
 	MonetizationEnabled           GuildFeatures = "MONETIZATION_ENABLED"             // guild has enabled monetization
@@ -215,6 +216,8 @@ type GuildWidget struct {
 }
 
 // GetGuildWidget - the guild widget
+//
+// The Members fields ID, discriminator and avatar are anonymized to prevent abuse.
 type GetGuildWidget struct {
 	ID            Snowflake     `json:"id"`             // guild id
 	Name          string        `json:"name"`           // guild name (2-100 characters)
@@ -226,10 +229,10 @@ type GetGuildWidget struct {
 
 // GuildMember - Represents a member of a Guild
 //
-//   The field user won't be included in the member object attached to MESSAGE_CREATE and MESSAGE_UPDATE gateway events.
+//	The field user won't be included in the member object attached to MESSAGE_CREATE and MESSAGE_UPDATE gateway events.
 //
-//   In GUILD_ events, pending will always be included as true or false.
-//   In non GUILD_ events which can only be triggered by non-pending users, pending will not be included.
+//	In GUILD_ events, pending will always be included as true or false.
+//	In non GUILD_ events which can only be triggered by non-pending users, pending will not be included.
 type GuildMember struct {
 	User                       User        `json:"user,omitempty"`                         // User - the user this guild member represents
 	Nick                       *string     `json:"nick,omitempty"`                         // Nick - the users' guild nickname
@@ -261,6 +264,7 @@ type Integration struct {
 	SubscriberCount   int                       `json:"subscriber_count,omitempty"`    // how many subscribers this integration has
 	Revoked           bool                      `json:"revoked,omitempty"`             // has this integration been revoked
 	Application       IntegrationApplication    `json:"application,omitempty"`         // The bot/OAuth2 application for discord integrations
+	Scopes            []string                  `json:"scopes,omitempty"`              // the scopes the application has been authorized for
 }
 
 // IntegrationExpireBehavior - the behavior of expiring subscribers
