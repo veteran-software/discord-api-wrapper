@@ -37,7 +37,8 @@ type ApplicationCommand struct {
 	Description              string                     `json:"description"`                         // 1-100 character description for CHAT_INPUT command, empty string for USER and MESSAGE command
 	DescriptionLocalizations LocalizationDict           `json:"description_localizations,omitempty"` // Localization dictionary for the description field. Values follow the same restrictions as description
 	Options                  []ApplicationCommandOption `json:"options,omitempty"`                   // the parameters for the command, max 25; CHAT_INPUT
-	DefaultPermissions       bool                       `json:"default_permissions,omitempty"`       // default true; whether the command is enabled by default when added to a guild
+	DefaultMemberPermission  *string                    `json:"default_member_permission"`           // Set of permissions represented as a bit set
+	DmPermission             bool                       `json:"dm_permission,omitempty"`             // Indicates whether the command is available in DMs with the app, only for globally-scoped commands. By default, commands are visible.
 	Version                  Snowflake                  `json:"version"`                             // autoincrementing version identifier updated during substantial record changes
 }
 
@@ -64,7 +65,9 @@ type ApplicationCommandOption struct {
 	ChannelTypes             []ChannelType                    `json:"channel_types,omitempty"`             // if the option is a channel type, the channels shown will be restricted to these types
 	MinValue                 interface{}                      `json:"min_value,omitempty"`                 // if the option is an INTEGER or NUMBER type, the minimum value permitted; integer for INTEGER options, double for NUMBER options
 	MaxValue                 interface{}                      `json:"max_value,omitempty"`                 // if the option is an INTEGER or NUMBER type, the maximum value permitted; integer for INTEGER options, double for NUMBER options
-	Autocomplete             bool                             `json:"autocomplete,omitempty"`              // enable autocomplete interactions for this option
+	MinLength                int                              `json:"min_length,omitempty"`                // For option type STRING, the minimum allowed length (minimum of 0, maximum of 6000)
+	MaxLength                int                              `json:"max_length,omitempty"`                // For option type STRING, the maximum allowed length (minimum of 1, maximum of 6000)
+	Autocomplete             bool                             `json:"autocomplete,omitempty"`              // If autocomplete interactions are enabled for this STRING, INTEGER, or NUMBER type option
 }
 
 // ApplicationCommandOptionType - The option type of the command
@@ -123,8 +126,9 @@ type ApplicationCommandPermissionType int
 
 //goland:noinspection GoUnusedConst
 const (
-	PermissionTypeRole ApplicationCommandPermissionType = iota + 1 // ROLE
-	PermissionTypeUser                                             // USER
+	PermissionTypeRole    ApplicationCommandPermissionType = iota + 1 // ROLE
+	PermissionTypeUser                                                // USER
+	PermissionTypeChannel                                             // CHANNEL
 )
 
 // GetGlobalApplicationCommands - Fetch all the global commands for your application.
