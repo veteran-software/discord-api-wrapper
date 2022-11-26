@@ -17,8 +17,6 @@
 package api
 
 import (
-	"fmt"
-	"net/http"
 	"time"
 )
 
@@ -46,9 +44,4 @@ type VoiceRegion struct {
 	Optimal    bool   `json:"optimal"`    // true for a single server that is closest to the current user's client
 	Deprecated bool   `json:"deprecated"` // whether this is a deprecated voice region (avoid switching to these)
 	Custom     bool   `json:"custom"`     // whether this is a custom voice region (used for events/etc)
-}
-
-// ListVoiceRegions - Returns an array of voice region objects that can be used when setting a voice or stage channel's rtc_region.
-func ListVoiceRegions() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf(listVoiceRegions, api)
 }
