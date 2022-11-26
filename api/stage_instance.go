@@ -4,8 +4,7 @@
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- * version.
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -44,7 +43,8 @@ const (
 //
 // Requires the user to be a moderator of the Stage channel.
 //
-//    This endpoint supports the X-Audit-Log-Reason header.
+//	This endpoint supports the X-Audit-Log-Reason header.
+//
 //goland:noinspection GoUnusedExportedFunction
 func CreateStageInstance() (string, string) {
 	return http.MethodPost, fmt.Sprintf(createStageInstance, api)
@@ -64,9 +64,9 @@ func (s *StageInstance) GetStageInstance() (string, string) {
 
 // ModifyStageInstance - Updates fields of an existing Stage instance.
 //
-//  Requires the user to be a moderator of the Stage channel.
+//	Requires the user to be a moderator of the Stage channel.
 //
-//    This endpoint supports the X-Audit-Log-Reason header.
+//	  This endpoint supports the X-Audit-Log-Reason header.
 func (s *StageInstance) ModifyStageInstance() (string, string) {
 	return http.MethodPatch, fmt.Sprintf(modifyStageInstance, api, s.ChannelID.String())
 }

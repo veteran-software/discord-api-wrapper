@@ -4,8 +4,7 @@
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- * version.
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -230,7 +229,7 @@ func (i *Interaction) CreateFollowupMessage() (method string, route string) {
 //
 // Functions the same as Get Webhook Message.
 //
-//   Does not support ephemeral followups.
+//	Does not support ephemeral followups.
 func (i *Interaction) GetFollowupMessage() (method string, route string) {
 	return http.MethodGet, fmt.Sprintf(getFollowupMessage, api, i.ApplicationID.String(), i.Token, i.Message.ID)
 }
@@ -239,7 +238,7 @@ func (i *Interaction) GetFollowupMessage() (method string, route string) {
 //
 // Functions the same as Edit Webhook Message.
 //
-//   Does not support ephemeral followups.
+//	Does not support ephemeral followups.
 func (i *Interaction) EditFollowupMessage() (method string, route string) {
 	return http.MethodPatch, fmt.Sprintf(editFollowupMessage, api, i.ApplicationID, i.Token, i.Message.ID)
 }
@@ -248,7 +247,7 @@ func (i *Interaction) EditFollowupMessage() (method string, route string) {
 //
 // Returns 204 No Content on success.
 //
-//   Does not support ephemeral followups.
+//	Does not support ephemeral followups.
 func (i *Interaction) DeleteFollowupMessage() (method string, route string) {
 	return http.MethodDelete, fmt.Sprintf(deleteFollowupMessage, api, i.ApplicationID, i.Token, i.Message.ID)
 }

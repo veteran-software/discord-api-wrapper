@@ -4,8 +4,7 @@
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- * version.
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -104,6 +103,7 @@ func (c *Component) SetURL(u string) *Component {
 }
 
 // NewModalResponse - Build a new response containing a modal
+//
 //goland:noinspection GoUnusedExportedFunction
 func NewModalResponse() *InteractionResponseModal {
 	return &InteractionResponseModal{
@@ -131,6 +131,7 @@ func (i *InteractionResponseModal) AddComponent(c *Component) *InteractionRespon
 }
 
 // NewMessageResponse - Build a new response containing a message
+//
 //goland:noinspection GoUnusedExportedFunction
 func NewMessageResponse() *InteractionResponseMessages {
 	return &InteractionResponseMessages{
@@ -209,6 +210,7 @@ func (i *InteractionResponseMessages) GetType() InteractionCallbackType {
 }
 
 // NewAutocompleteResponse - Build a new response containing a modal
+//
 //goland:noinspection GoUnusedExportedFunction
 func NewAutocompleteResponse() *InteractionResponseAutocomplete {
 	return &InteractionResponseAutocomplete{
