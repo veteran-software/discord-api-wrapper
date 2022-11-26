@@ -4,8 +4,7 @@
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- * version.
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -24,6 +23,7 @@ import (
 	easy "github.com/t-tomalak/logrus-easy-formatter"
 )
 
+//goland:noinspection GoUnusedConst
 const (
 	// LogPrefixDiscord - log output format for logs sent from this package
 	LogPrefixDiscord = "[DISCORD  ]"
@@ -44,7 +44,8 @@ var (
 var LogLevel int
 
 func init() {
-	if runtime.GOOS == "windows" {
+	if //goland:noinspection GoBoolExpressions
+	runtime.GOOS == "windows" {
 		log.SetLevel(logrus.DebugLevel)
 
 	} else {
@@ -53,6 +54,7 @@ func init() {
 }
 
 // Traceln - Logs the event at the Trace level
+//
 //goland:noinspection SpellCheckingInspection
 func Traceln(args ...interface{}) {
 	if LogLevel == 0 {
@@ -61,6 +63,8 @@ func Traceln(args ...interface{}) {
 }
 
 // Tracef - Logs the event at the Traceln level with formatting
+//
+//goland:noinspection GoUnusedExportedFunction
 func Tracef(format string, args ...interface{}) {
 	if LogLevel == 0 {
 		log.Tracef(format, args...)
@@ -68,6 +72,8 @@ func Tracef(format string, args ...interface{}) {
 }
 
 // Debugln - Logs the event at the Debug level
+//
+//goland:noinspection GoUnusedExportedFunction
 func Debugln(args ...interface{}) {
 	if LogLevel <= 1 {
 		log.Debugln(args...)
@@ -75,6 +81,8 @@ func Debugln(args ...interface{}) {
 }
 
 // Debugf - Logs the event at the Debug level
+//
+//goland:noinspection GoUnusedExportedFunction
 func Debugf(format string, args ...interface{}) {
 	if LogLevel <= 1 {
 		log.Debugf(format, args...)
@@ -96,6 +104,8 @@ func Warnln(args ...interface{}) {
 }
 
 // Warnf - Logs the event at the Warning level with formatting
+//
+//goland:noinspection GoUnusedExportedFunction
 func Warnf(format string, args ...interface{}) {
 	if LogLevel == 0 {
 		log.Warnf(format, args...)
@@ -110,6 +120,8 @@ func Errorln(args ...interface{}) {
 }
 
 // Fatalln - Logs the event at the Fatal level
+//
+//goland:noinspection GoUnusedExportedFunction
 func Fatalln(args ...interface{}) {
 	if LogLevel <= 5 {
 		log.Fatalln(args...)

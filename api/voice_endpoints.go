@@ -16,13 +16,32 @@
 package api
 
 import (
-	"github.com/sirupsen/logrus"
+	"encoding/json"
+	"fmt"
+	"github.com/veteran-software/discord-api-wrapper/v10/logging"
+	"io"
+	"net/http"
 )
 
-//goland:noinspection GoUnusedGlobalVariable
-var (
-	ApplicationID Snowflake // ApplicationID -  The Snowflake of the application
-	DefaultColor  int64     = 16711680
-	LogLevel      logrus.Level
-	Token         string // Token - The application's token
-)
+// ListVoiceRegions - Returns an array of voice region objects that can be used when setting a voice or stage channel's rtc_region.
+//
+//goland:noinspection GoUnusedExportedFunction
+func ListVoiceRegions() *[]VoiceRegion {
+	resp, err := Rest.Request(http.MethodGet, fmt.Sprintf(listVoiceRegions, api), nil, nil)
+	if err != nil {
+		logging.Errorln(err)
+		return nil
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	var voiceRegions *[]VoiceRegion
+	err = json.NewDecoder(resp.Body).Decode(&voiceRegions)
+	if err != nil {
+		logging.Errorln(err)
+		return nil
+	}
+
+	return voiceRegions
+}

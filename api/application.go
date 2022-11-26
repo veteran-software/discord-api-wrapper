@@ -4,8 +4,7 @@
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- * version.
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -16,9 +15,8 @@
 
 package api
 
-import "github.com/veteran-software/discord-api-wrapper/v10/oauth2"
-
 // Application - an application which operates on Discord, commonly referred to as bots
+//
 //goland:noinspection SpellCheckingInspection
 type Application struct {
 	ID                  Snowflake        `json:"id"`                             // the id of the app
@@ -60,6 +58,6 @@ const (
 
 // InstallParams - settings for the application's default in-app authorization link, if enabled
 type InstallParams struct {
-	Scopes      []oauth2.Scopes `json:"scopes"`      // the scopes to add the application to the server with
-	Permissions string          `json:"permissions"` // the permissions to request for the bot role
+	Scopes      []string `json:"scopes"`      // the scopes to add the application to the server with
+	Permissions string   `json:"permissions"` // the permissions to request for the bot role
 }

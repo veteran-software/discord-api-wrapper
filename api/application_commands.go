@@ -4,8 +4,7 @@
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- * version.
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -26,6 +25,7 @@ import (
 // An application command is the base "command" model that belongs to an application. This is what you are creating when you POST a new command.
 //
 // Required options must be listed before optional options
+//
 //goland:noinspection SpellCheckingInspection
 type ApplicationCommand struct {
 	ID                       Snowflake                  `json:"id,omitempty"`                        // unique id of the command
@@ -37,7 +37,8 @@ type ApplicationCommand struct {
 	Description              string                     `json:"description"`                         // 1-100 character description for CHAT_INPUT command, empty string for USER and MESSAGE command
 	DescriptionLocalizations LocalizationDict           `json:"description_localizations,omitempty"` // Localization dictionary for the description field. Values follow the same restrictions as description
 	Options                  []ApplicationCommandOption `json:"options,omitempty"`                   // the parameters for the command, max 25; CHAT_INPUT
-	DefaultPermissions       bool                       `json:"default_permissions,omitempty"`       // default true; whether the command is enabled by default when added to a guild
+	DefaultMemberPermission  *string                    `json:"default_member_permission"`           // Set of permissions represented as a bit set
+	DmPermission             bool                       `json:"dm_permission,omitempty"`             // Indicates whether the command is available in DMs with the app, only for globally-scoped commands. By default, commands are visible.
 	Version                  Snowflake                  `json:"version"`                             // autoincrementing version identifier updated during substantial record changes
 }
 
@@ -64,7 +65,9 @@ type ApplicationCommandOption struct {
 	ChannelTypes             []ChannelType                    `json:"channel_types,omitempty"`             // if the option is a channel type, the channels shown will be restricted to these types
 	MinValue                 interface{}                      `json:"min_value,omitempty"`                 // if the option is an INTEGER or NUMBER type, the minimum value permitted; integer for INTEGER options, double for NUMBER options
 	MaxValue                 interface{}                      `json:"max_value,omitempty"`                 // if the option is an INTEGER or NUMBER type, the maximum value permitted; integer for INTEGER options, double for NUMBER options
-	Autocomplete             bool                             `json:"autocomplete,omitempty"`              // enable autocomplete interactions for this option
+	MinLength                int                              `json:"min_length,omitempty"`                // For option type STRING, the minimum allowed length (minimum of 0, maximum of 6000)
+	MaxLength                int                              `json:"max_length,omitempty"`                // For option type STRING, the maximum allowed length (minimum of 1, maximum of 6000)
+	Autocomplete             bool                             `json:"autocomplete,omitempty"`              // If autocomplete interactions are enabled for this STRING, INTEGER, or NUMBER type option
 }
 
 // ApplicationCommandOptionType - The option type of the command
@@ -94,7 +97,7 @@ type ApplicationCommandOptionChoice struct {
 
 // ApplicationCommandInteractionDataOption - All options have names, and an option can either be a parameter and input value--in which case value will be set--or it can denote a subcommand or group--in which case it will contain a top-level key and another array of options.
 //
-//     value and options are mutually exclusive.
+//	value and options are mutually exclusive.
 type ApplicationCommandInteractionDataOption struct {
 	Name    string                                     `json:"name"`              // the name of the parameter
 	Type    ApplicationCommandOptionType               `json:"type"`              // value of application command option type
@@ -123,13 +126,15 @@ type ApplicationCommandPermissionType int
 
 //goland:noinspection GoUnusedConst
 const (
-	PermissionTypeRole ApplicationCommandPermissionType = iota + 1 // ROLE
-	PermissionTypeUser                                             // USER
+	PermissionTypeRole    ApplicationCommandPermissionType = iota + 1 // ROLE
+	PermissionTypeUser                                                // USER
+	PermissionTypeChannel                                             // CHANNEL
 )
 
 // GetGlobalApplicationCommands - Fetch all the global commands for your application.
 //
 // Returns an array of application command objects.
+//
 //goland:noinspection GoUnusedExportedFunction
 func GetGlobalApplicationCommands(applicationID Snowflake) (method string, route string) {
 	return http.MethodGet, fmt.Sprintf(getGlobalApplicationCommands, api, applicationID.String())
@@ -139,7 +144,8 @@ func GetGlobalApplicationCommands(applicationID Snowflake) (method string, route
 //
 // New global commands will be available in all guilds after 1 hour. Returns 201 and an application command object.
 //
-//    Creating a command with the same name as an existing command for your application will overwrite the old command.
+//	Creating a command with the same name as an existing command for your application will overwrite the old command.
+//
 //goland:noinspection GoUnusedExportedFunction
 func CreateGlobalApplicationCommand(applicationID Snowflake) (method string, route string) {
 	return http.MethodPost, fmt.Sprintf(createGlobalApplicationCommand, api, applicationID.String())
@@ -165,7 +171,7 @@ func (i *Interaction) GetGlobalApplicationCommand() (method string, route string
 //
 // Returns 200 and an application command object.
 //
-//    All JSON parameters for this endpoint are optional.
+//	All JSON parameters for this endpoint are optional.
 func (i *Interaction) EditGlobalApplicationCommand() (method string, route string) {
 	return http.MethodPatch, fmt.Sprintf(editGlobalApplicationCommand, api, i.ApplicationID.String(), i.Data.ID.String())
 }
@@ -179,6 +185,7 @@ type EditApplicationCommandJSON struct {
 }
 
 // DeleteGlobalApplicationCommand - Deletes a global command. Returns 204 No Content on success.
+//
 //goland:noinspection GoUnusedExportedFunction
 func DeleteGlobalApplicationCommand(applicationID Snowflake, commandID string) (method string, route string) {
 	return http.MethodDelete, fmt.Sprintf(deleteGlobalApplicationCommand, api, applicationID.String(), commandID)
@@ -205,6 +212,7 @@ func (i *Interaction) GetGuildApplicationCommands() (method string, route string
 // GetGuildApplicationCommands - Fetch all the guild commands for your application for a specific guild.
 //
 // Returns an array of application command objects.
+//
 //goland:noinspection GoUnusedExportedFunction
 func GetGuildApplicationCommands(applicationID Snowflake, guildID Snowflake) (method string, route string) {
 	return http.MethodGet, fmt.Sprintf(getGuildApplicationCommands, api, applicationID.String(), guildID.String())
@@ -217,6 +225,7 @@ func GetGuildApplicationCommands(applicationID Snowflake, guildID Snowflake) (me
 // Returns 201 and an application command object.
 //
 // If the command did not already exist, it will count toward daily application command create limits.
+//
 //goland:noinspection GoUnusedExportedFunction
 func CreateGuildApplicationCommand(applicationID Snowflake, guildID Snowflake) (method string, route string) {
 	return http.MethodPost, fmt.Sprintf(createGuildApplicationCommand, api, applicationID.String(), guildID.String())
@@ -240,7 +249,7 @@ func (i *Interaction) GetGuildApplicationCommand() (method string, route string)
 //
 // Returns 200 and an application command object.
 //
-//    All parameters for this endpoint are optional.
+//	All parameters for this endpoint are optional.
 func (i *Interaction) EditGuildApplicationCommand() (method string, route string) {
 	return http.MethodPatch, fmt.Sprintf(editGuildApplicationCommand, api, i.ApplicationID.String(), i.GuildID.String(), i.Data.ID.String())
 }
@@ -254,6 +263,7 @@ type EditGuildApplicationCommandJSON struct {
 }
 
 // DeleteGuildApplicationCommand - Delete a guild command. Returns 204 No Content on success.
+//
 //goland:noinspection GoUnusedExportedFunction
 func DeleteGuildApplicationCommand(applicationID Snowflake, guildID Snowflake, commandID string) (method string, route string) {
 	return http.MethodDelete, fmt.Sprintf(deleteGuildApplicationCommand, api, applicationID.String(), guildID.String(), commandID)
@@ -286,8 +296,8 @@ func (i *Interaction) GetApplicationCommandPermissions() (method string, route s
 //
 // Returns a GuildApplicationCommandPermissions object.
 //
-//   This endpoint will overwrite existing permissions for the command in that guild
-//   Deleting or renaming a command will permanently delete all permissions for that command
+//	This endpoint will overwrite existing permissions for the command in that guild
+//	Deleting or renaming a command will permanently delete all permissions for that command
 func (i *Interaction) EditApplicationCommandPermissions() (method string, route string) {
 	return http.MethodPut, fmt.Sprintf(editApplicationCommandPermissions, api, i.ApplicationID.String(), i.GuildID.String(), i.Data.ID.String())
 }
@@ -305,7 +315,7 @@ type EditApplicationCommandPermissionsJSON struct {
 //
 // Returns an array of GuildApplicationCommandPermissions objects.
 //
-//   This endpoint will overwrite all existing permissions for all commands in a guild, including slash commands, user commands, and message commands.
+//	This endpoint will overwrite all existing permissions for all commands in a guild, including slash commands, user commands, and message commands.
 func (i *Interaction) BatchEditApplicationCommandPermissions() (method string, route string) {
 	return http.MethodPut, fmt.Sprintf(batchEditApplicationCommandPermissions, api, i.ApplicationID.String(), i.GuildID.String())
 }

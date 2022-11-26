@@ -13,16 +13,14 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-package api
+package utilities
 
-import (
-	"github.com/sirupsen/logrus"
-)
+func Contains[T comparable](slice []T, e T) bool {
+	for _, v := range slice {
+		if v == e {
+			return true
+		}
+	}
 
-//goland:noinspection GoUnusedGlobalVariable
-var (
-	ApplicationID Snowflake // ApplicationID -  The Snowflake of the application
-	DefaultColor  int64     = 16711680
-	LogLevel      logrus.Level
-	Token         string // Token - The application's token
-)
+	return false
+}

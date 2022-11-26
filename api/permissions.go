@@ -4,8 +4,7 @@
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- * version.
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -77,26 +76,36 @@ const (
 )
 
 // HasAdmin checks to see if the bot has admin on the channel in question
+//
+//goland:noinspection GoUnusedExportedFunction
 func HasAdmin(p Permission) bool {
 	return p&Administrator == Administrator
 }
 
 // CanManageWebhooks - checks for this permission
+//
+//goland:noinspection GoUnusedExportedFunction
 func CanManageWebhooks(channel *Channel) bool {
 	return rawPerms(channel)&ManageWebhooks == ManageWebhooks
 }
 
 // CanManageRoles - checks for this permission
+//
+//goland:noinspection GoUnusedExportedFunction
 func CanManageRoles(channel *Channel) bool {
 	return rawPerms(channel)&ManageRoles == ManageRoles
 }
 
 // CanUseExternalEmojis - checks for this permission
+//
+//goland:noinspection GoUnusedExportedFunction
 func CanUseExternalEmojis(channel *Channel) bool {
 	return rawPerms(channel)&UseExternalEmojis == UseExternalEmojis
 }
 
 // CanMentionEveryone - checks for this permission
+//
+//goland:noinspection GoUnusedExportedFunction
 func CanMentionEveryone(channel *Channel) bool {
 	return rawPerms(channel)&MentionEveryone == MentionEveryone
 }
@@ -137,6 +146,8 @@ func rawPerms(channel *Channel) Permission {
 
 // CanAnnounce
 // Deprecated: helper function for checking bas permissions for sending announcements
+//
+//goland:noinspection GoUnusedExportedFunction
 func CanAnnounce(c *Channel) bool {
 	if CanEmbedLinks(c) && CanManageMessages(c) && CanSendMessages(c) && CanReadMessageHistory(c) && CanViewChannel(c) {
 		return true

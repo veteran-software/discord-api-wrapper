@@ -4,8 +4,7 @@
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- * version.
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -61,7 +60,7 @@ func TestComponentGetType(t *testing.T) {
 			c := &Component{
 				Type: tt.fields.Type,
 			}
-			if got := c.GetType(); got != tt.want {
+			if got := c.Type; got != tt.want {
 				t.Errorf("GetType() = %v, want %v", got, tt.want)
 			}
 		})
@@ -427,7 +426,7 @@ func TestComponentGetTextInputStyle(t *testing.T) {
 			c := &Component{
 				Style: tt.fields.Style,
 			}
-			if got := c.GetTextInputStyle(); got != tt.want {
+			if got := c.Style.(TextInputStyle); got != tt.want {
 				t.Errorf("GetTextInputStyle() = %v, want %v", got, tt.want)
 			}
 		})
@@ -536,7 +535,7 @@ func TestComponentGetEmoji(t *testing.T) {
 			c := &Component{
 				Emoji: tt.fields.Emoji,
 			}
-			if got := c.GetEmoji(); !reflect.DeepEqual(got, tt.want) {
+			if got := c.Emoji; !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("GetEmoji() = %v, want %v", got, tt.want)
 			}
 		})
@@ -629,7 +628,7 @@ func TestComponentGetURL(t *testing.T) {
 			c := &Component{
 				URL: tt.fields.URL,
 			}
-			if got := c.GetURL(); got != tt.want {
+			if got := c.URL; got != tt.want {
 				t.Errorf("GetURL() = %v, want %v", got, tt.want)
 			}
 		})
