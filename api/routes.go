@@ -95,6 +95,8 @@ const (
 	getAvatarUrlPng                        = "avatars/%s/%s.png"
 	getDefaultUserAvatarUrl                = "embed/avatars/%s.png"
 	getCurrentUser                         = "%s/users/@me"
+	modifyCurrentUser                      = getCurrentUser
+	getUser                                = "%s/users/%s"
 	listVoiceRegions                       = "%s/voice/regions"
 	createWebhook                          = "%s/channels/%s/webhooks"
 	getChannelWebhooks                     = createWebhook

@@ -16,12 +16,6 @@
 
 package api
 
-import (
-	"fmt"
-	"net/http"
-	"strconv"
-)
-
 // User - Discord enforces the following restrictions for usernames and nicknames:
 //
 //	Names can contain most valid unicode characters. We limit some zero-width and non-rendering characters.
@@ -137,33 +131,3 @@ const (
 	ConnectionVisibilityTypeNone     ConnectionVisibilityType = iota // invisible to everyone except the user themselves
 	ConnectionVisibilityTypeEveryone                                 // visible to everyone
 )
-
-// GetCurrentUser - Returns the user object of the requesters account.
-//
-// For OAuth2, this requires the `identify` scope, which will return the object without an email, and optionally the email scope, which returns the object with an email.
-//
-//goland:noinspection GoUnusedExportedFunction
-func GetCurrentUser() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf(getCurrentUser, api)
-}
-
-// GetAvatarUrl - returns a properly formatted avatar url
-func (user *User) GetAvatarUrl() string {
-	if user.Avatar != nil {
-		if PtrStr(user.Avatar)[:2] == "a_" {
-			return ImageBaseURL + fmt.Sprintf(getAvatarUrlGif, user.ID, PtrStr(user.Avatar))
-		}
-	}
-
-	return ImageBaseURL + fmt.Sprintf(getAvatarUrlPng, user.ID, PtrStr(user.Avatar))
-}
-
-// GetDefaultUserAvatarUrl - returns the default Discord avatar
-func (user *User) GetDefaultUserAvatarUrl() string {
-	discriminator, err := strconv.Atoi(user.Discriminator)
-	if err != nil {
-		return ""
-	}
-
-	return ImageBaseURL + fmt.Sprintf(getDefaultUserAvatarUrl, strconv.Itoa(discriminator%5))
-}
