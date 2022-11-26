@@ -2356,40 +2356,6 @@
                 ]
               },
               {
-                "id": "GoPrintFunctions",
-                "shortDescription": {
-                  "text": "Incorrect usage of 'fmt.Printf' and 'fmt.Println' functions"
-                },
-                "fullDescription": {
-                  "text": "Reports incorrect usages of 'fmt.Printf', 'fmt.Println', and similar formatting and printing functions. In their format strings, formatting functions use formatting verbs, like '%s', '%d', '%v', and others. If formatting verbs are used incorrectly, the result of a formatting function will contain an error. For more information about formatting verbs, see Package fmt at golang.org. Example: 'fmt.Printf(\"id: %s\", 42)' The output of this function is 'id: %!s(int=42)'. It might be not what you really want. The following function uses the '%d' formatting verb. The output with the '%d' formatting verb will be 'id: 42'. 'fmt.Printf(\"id: %d\", 42)'",
-                  "markdown": "Reports incorrect usages of `fmt.Printf`, `fmt.Println`, and similar formatting and printing functions.\n\nIn their format strings, formatting functions use formatting verbs, like `%s`, `%d`, `%v`, and others.\nIf formatting verbs are used incorrectly, the result of a formatting function will contain an error.\nFor more information about formatting verbs, see [Package fmt at golang.org](https://golang.org/pkg/fmt/).\n\nExample:\n\n    fmt.Printf(\"id: %s\", 42)\n\nThe output of this function is `id: %!s(int=42)`. It might be not what you really want.\nThe following function uses the `%d` formatting verb.\nThe output with the `%d` formatting verb will be `id: 42`.\n\n    fmt.Printf(\"id: %d\", 42)\n"
-                },
-                "defaultConfiguration": {
-                  "enabled": true,
-                  "level": "note",
-                  "parameters": {
-                    "ideaSeverity": "WEAK WARNING",
-                    "tags": [
-                      "ideaSeverity"
-                    ]
-                  }
-                },
-                "relationships": [
-                  {
-                    "target": {
-                      "id": "Go/Probable bugs",
-                      "index": 3,
-                      "toolComponent": {
-                        "name": "QDGO"
-                      }
-                    },
-                    "kinds": [
-                      "superset"
-                    ]
-                  }
-                ]
-              },
-              {
                 "id": "GoDeferInLoop",
                 "shortDescription": {
                   "text": "'defer' in the loop"
@@ -2413,6 +2379,40 @@
                     "target": {
                       "id": "Go/Control flow issues",
                       "index": 23,
+                      "toolComponent": {
+                        "name": "QDGO"
+                      }
+                    },
+                    "kinds": [
+                      "superset"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "GoPrintFunctions",
+                "shortDescription": {
+                  "text": "Incorrect usage of 'fmt.Printf' and 'fmt.Println' functions"
+                },
+                "fullDescription": {
+                  "text": "Reports incorrect usages of 'fmt.Printf', 'fmt.Println', and similar formatting and printing functions. In their format strings, formatting functions use formatting verbs, like '%s', '%d', '%v', and others. If formatting verbs are used incorrectly, the result of a formatting function will contain an error. For more information about formatting verbs, see Package fmt at golang.org. Example: 'fmt.Printf(\"id: %s\", 42)' The output of this function is 'id: %!s(int=42)'. It might be not what you really want. The following function uses the '%d' formatting verb. The output with the '%d' formatting verb will be 'id: 42'. 'fmt.Printf(\"id: %d\", 42)'",
+                  "markdown": "Reports incorrect usages of `fmt.Printf`, `fmt.Println`, and similar formatting and printing functions.\n\nIn their format strings, formatting functions use formatting verbs, like `%s`, `%d`, `%v`, and others.\nIf formatting verbs are used incorrectly, the result of a formatting function will contain an error.\nFor more information about formatting verbs, see [Package fmt at golang.org](https://golang.org/pkg/fmt/).\n\nExample:\n\n    fmt.Printf(\"id: %s\", 42)\n\nThe output of this function is `id: %!s(int=42)`. It might be not what you really want.\nThe following function uses the `%d` formatting verb.\nThe output with the `%d` formatting verb will be `id: 42`.\n\n    fmt.Printf(\"id: %d\", 42)\n"
+                },
+                "defaultConfiguration": {
+                  "enabled": true,
+                  "level": "note",
+                  "parameters": {
+                    "ideaSeverity": "WEAK WARNING",
+                    "tags": [
+                      "ideaSeverity"
+                    ]
+                  }
+                },
+                "relationships": [
+                  {
+                    "target": {
+                      "id": "Go/Probable bugs",
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2866,40 +2866,6 @@
                 ]
               },
               {
-                "id": "GoCommentStart",
-                "shortDescription": {
-                  "text": "Comment of exported element starts with the incorrect name"
-                },
-                "fullDescription": {
-                  "text": "Reports comments that do not start with the name of the exported element. According to Comment Sentences at golang.org, this is a convention to begin a comment with the name of the exported element. Example: '// represents a request to run a command.\ntype Request struct {}' The comment starts with the struct description, not with the struct name. To stick to the convention rules, you can apply the Add prefix to comment quick-fix. After the quick-fix is applied, the comment looks as follows: // Request represents a request to run a command.\ntype Request struct {} // better",
-                  "markdown": "Reports comments that do not start with the name of the exported element.\n\nAccording to\n[Comment Sentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences), this is a convention to begin\na comment with the name of the exported element.\n\nExample:\n\n    // represents a request to run a command.\n    type Request struct {}\n\nThe comment starts with the struct description, not with the struct name. To stick to the convention rules, you can apply the **Add\nprefix to comment** quick-fix. After the quick-fix is applied, the comment looks as follows:\n\n```\n// Request represents a request to run a command.\ntype Request struct {} // better\n```"
-                },
-                "defaultConfiguration": {
-                  "enabled": true,
-                  "level": "note",
-                  "parameters": {
-                    "ideaSeverity": "WEAK WARNING",
-                    "tags": [
-                      "ideaSeverity"
-                    ]
-                  }
-                },
-                "relationships": [
-                  {
-                    "target": {
-                      "id": "Go/Code style issues",
-                      "index": 16,
-                      "toolComponent": {
-                        "name": "QDGO"
-                      }
-                    },
-                    "kinds": [
-                      "superset"
-                    ]
-                  }
-                ]
-              },
-              {
                 "id": "GoRedundantBlankArgInRange",
                 "shortDescription": {
                   "text": "Redundant blank argument in range"
@@ -2923,6 +2889,40 @@
                     "target": {
                       "id": "Go/Declaration redundancy",
                       "index": 4,
+                      "toolComponent": {
+                        "name": "QDGO"
+                      }
+                    },
+                    "kinds": [
+                      "superset"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "GoCommentStart",
+                "shortDescription": {
+                  "text": "Comment of exported element starts with the incorrect name"
+                },
+                "fullDescription": {
+                  "text": "Reports comments that do not start with the name of the exported element. According to Comment Sentences at golang.org, this is a convention to begin a comment with the name of the exported element. Example: '// represents a request to run a command.\ntype Request struct {}' The comment starts with the struct description, not with the struct name. To stick to the convention rules, you can apply the Add prefix to comment quick-fix. After the quick-fix is applied, the comment looks as follows: // Request represents a request to run a command.\ntype Request struct {} // better",
+                  "markdown": "Reports comments that do not start with the name of the exported element.\n\nAccording to\n[Comment Sentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences), this is a convention to begin\na comment with the name of the exported element.\n\nExample:\n\n    // represents a request to run a command.\n    type Request struct {}\n\nThe comment starts with the struct description, not with the struct name. To stick to the convention rules, you can apply the **Add\nprefix to comment** quick-fix. After the quick-fix is applied, the comment looks as follows:\n\n```\n// Request represents a request to run a command.\ntype Request struct {} // better\n```"
+                },
+                "defaultConfiguration": {
+                  "enabled": true,
+                  "level": "note",
+                  "parameters": {
+                    "ideaSeverity": "WEAK WARNING",
+                    "tags": [
+                      "ideaSeverity"
+                    ]
+                  }
+                },
+                "relationships": [
+                  {
+                    "target": {
+                      "id": "Go/Code style issues",
+                      "index": 16,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -3002,40 +3002,6 @@
                 ]
               },
               {
-                "id": "GoMissingTrailingComma",
-                "shortDescription": {
-                  "text": "Missing trailing comma before a newline in a composite literal"
-                },
-                "fullDescription": {
-                  "text": "Reports a missing trailing comma before a newline in composite literals, function call arguments, and function parameter lists. Example: 'func f(f int) (\n int,\n bool   // missing a trailing comma\n){\n println(1, 2  // missing a trailing comma\n )\n}'",
-                  "markdown": "Reports a missing trailing comma before a newline in composite literals, function call arguments, and function parameter lists.\n\nExample:\n\n    func f(f int) (\n     int,\n     bool   // missing a trailing comma\n    ){\n     println(1, 2  // missing a trailing comma\n     )\n    }\n"
-                },
-                "defaultConfiguration": {
-                  "enabled": false,
-                  "level": "error",
-                  "parameters": {
-                    "ideaSeverity": "ERROR",
-                    "tags": [
-                      "ideaSeverity"
-                    ]
-                  }
-                },
-                "relationships": [
-                  {
-                    "target": {
-                      "id": "Go/General",
-                      "index": 2,
-                      "toolComponent": {
-                        "name": "QDGO"
-                      }
-                    },
-                    "kinds": [
-                      "superset"
-                    ]
-                  }
-                ]
-              },
-              {
                 "id": "GoEmptyDeclaration",
                 "shortDescription": {
                   "text": "Empty declaration"
@@ -3059,6 +3025,40 @@
                     "target": {
                       "id": "Go/Declaration redundancy",
                       "index": 4,
+                      "toolComponent": {
+                        "name": "QDGO"
+                      }
+                    },
+                    "kinds": [
+                      "superset"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "GoMissingTrailingComma",
+                "shortDescription": {
+                  "text": "Missing trailing comma before a newline in a composite literal"
+                },
+                "fullDescription": {
+                  "text": "Reports a missing trailing comma before a newline in composite literals, function call arguments, and function parameter lists. Example: 'func f(f int) (\n int,\n bool   // missing a trailing comma\n){\n println(1, 2  // missing a trailing comma\n )\n}'",
+                  "markdown": "Reports a missing trailing comma before a newline in composite literals, function call arguments, and function parameter lists.\n\nExample:\n\n    func f(f int) (\n     int,\n     bool   // missing a trailing comma\n    ){\n     println(1, 2  // missing a trailing comma\n     )\n    }\n"
+                },
+                "defaultConfiguration": {
+                  "enabled": false,
+                  "level": "error",
+                  "parameters": {
+                    "ideaSeverity": "ERROR",
+                    "tags": [
+                      "ideaSeverity"
+                    ]
+                  }
+                },
+                "relationships": [
+                  {
+                    "target": {
+                      "id": "Go/General",
+                      "index": 2,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -3648,40 +3648,6 @@
                 ]
               },
               {
-                "id": "GoVetAtomic",
-                "shortDescription": {
-                  "text": "Incorrect usage of the 'sync/atomic' package"
-                },
-                "fullDescription": {
-                  "text": "Reports assignment statements of the form 'x = atomic.AddUint64(&x, 1)'. Such operations are not atomic, and is a common misuse of the 'sync/atomic' API. To make them atomic, one need to remove the assignment to use a direct call: 'atomic.AddUint64(&x, 1)'. In that case, the value of 'x' will be updated atomically by address. Example: 'import (\n \"sync/atomic\"\n)\n\ntype Counter uint64\n\nfunc AtomicTests() {\n x := uint64(1)\n x = atomic.AddUint64(&x, 1)         // ERROR \"direct assignment to atomic value\"\n _, x = 10, atomic.AddUint64(&x, 1)  // ERROR \"direct assignment to atomic value\"\n x, _ = atomic.AddUint64(&x, 1), 10  // ERROR \"direct assignment to atomic value\"\n}'",
-                  "markdown": "Reports assignment statements of the form `x = atomic.AddUint64(&x, 1)`.\n\nSuch operations are not atomic,\nand is a common misuse of the `sync/atomic` API. To make them atomic, one need to remove the assignment\nto use a direct call: `atomic.AddUint64(&x, 1)`. In that case, the value of `x` will be updated\natomically by address.\n\nExample:\n\n    import (\n     \"sync/atomic\"\n    )\n\n    type Counter uint64\n\n    func AtomicTests() {\n     x := uint64(1)\n     x = atomic.AddUint64(&x, 1)         // ERROR \"direct assignment to atomic value\"\n     _, x = 10, atomic.AddUint64(&x, 1)  // ERROR \"direct assignment to atomic value\"\n     x, _ = atomic.AddUint64(&x, 1), 10  // ERROR \"direct assignment to atomic value\"\n    }\n"
-                },
-                "defaultConfiguration": {
-                  "enabled": true,
-                  "level": "warning",
-                  "parameters": {
-                    "ideaSeverity": "WARNING",
-                    "tags": [
-                      "ideaSeverity"
-                    ]
-                  }
-                },
-                "relationships": [
-                  {
-                    "target": {
-                      "id": "Go/Probable bugs",
-                      "index": 3,
-                      "toolComponent": {
-                        "name": "QDGO"
-                      }
-                    },
-                    "kinds": [
-                      "superset"
-                    ]
-                  }
-                ]
-              },
-              {
                 "id": "GoAssignmentToReceiver",
                 "shortDescription": {
                   "text": "Assignment to a receiver"
@@ -3705,6 +3671,40 @@
                     "target": {
                       "id": "Go/Control flow issues",
                       "index": 23,
+                      "toolComponent": {
+                        "name": "QDGO"
+                      }
+                    },
+                    "kinds": [
+                      "superset"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "GoVetAtomic",
+                "shortDescription": {
+                  "text": "Incorrect usage of the 'sync/atomic' package"
+                },
+                "fullDescription": {
+                  "text": "Reports assignment statements of the form 'x = atomic.AddUint64(&x, 1)'. Such operations are not atomic, and is a common misuse of the 'sync/atomic' API. To make them atomic, one need to remove the assignment to use a direct call: 'atomic.AddUint64(&x, 1)'. In that case, the value of 'x' will be updated atomically by address. Example: 'import (\n \"sync/atomic\"\n)\n\ntype Counter uint64\n\nfunc AtomicTests() {\n x := uint64(1)\n x = atomic.AddUint64(&x, 1)         // ERROR \"direct assignment to atomic value\"\n _, x = 10, atomic.AddUint64(&x, 1)  // ERROR \"direct assignment to atomic value\"\n x, _ = atomic.AddUint64(&x, 1), 10  // ERROR \"direct assignment to atomic value\"\n}'",
+                  "markdown": "Reports assignment statements of the form `x = atomic.AddUint64(&x, 1)`.\n\nSuch operations are not atomic,\nand is a common misuse of the `sync/atomic` API. To make them atomic, one need to remove the assignment\nto use a direct call: `atomic.AddUint64(&x, 1)`. In that case, the value of `x` will be updated\natomically by address.\n\nExample:\n\n    import (\n     \"sync/atomic\"\n    )\n\n    type Counter uint64\n\n    func AtomicTests() {\n     x := uint64(1)\n     x = atomic.AddUint64(&x, 1)         // ERROR \"direct assignment to atomic value\"\n     _, x = 10, atomic.AddUint64(&x, 1)  // ERROR \"direct assignment to atomic value\"\n     x, _ = atomic.AddUint64(&x, 1), 10  // ERROR \"direct assignment to atomic value\"\n    }\n"
+                },
+                "defaultConfiguration": {
+                  "enabled": true,
+                  "level": "warning",
+                  "parameters": {
+                    "ideaSeverity": "WARNING",
+                    "tags": [
+                      "ideaSeverity"
+                    ]
+                  }
+                },
+                "relationships": [
+                  {
+                    "target": {
+                      "id": "Go/Probable bugs",
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -4068,40 +4068,6 @@
                 ]
               },
               {
-                "id": "DuplicatedCode",
-                "shortDescription": {
-                  "text": "Duplicated code fragment"
-                },
-                "fullDescription": {
-                  "text": "Reports duplicated blocks of code from the selected scope: the same file or the entire project. The inspection features quick-fixes that help you to set the size of detected duplicates, navigate to repetitive code fragments, and compare them in a tool window. The inspection options allow you to select the scope of the reported duplicated fragments and set the initial size for the duplicated language constructs. You can also configure the constructs that you want to anonymize in File | Settings | Editor | Duplicates.",
-                  "markdown": "Reports duplicated blocks of code from the selected scope: the same file or the entire project. The inspection features quick-fixes that help you to set the size of detected duplicates, navigate to repetitive code fragments, and compare them in a tool window. The inspection options allow you to select the scope of the reported duplicated fragments and set the initial size for the duplicated language constructs. You can also configure the constructs that you want to anonymize in [File \\| Settings \\| Editor \\| Duplicates](settings://duplicates.index)."
-                },
-                "defaultConfiguration": {
-                  "enabled": false,
-                  "level": "note",
-                  "parameters": {
-                    "ideaSeverity": "WEAK WARNING",
-                    "tags": [
-                      "ideaSeverity"
-                    ]
-                  }
-                },
-                "relationships": [
-                  {
-                    "target": {
-                      "id": "General",
-                      "index": 12,
-                      "toolComponent": {
-                        "name": "QDGO"
-                      }
-                    },
-                    "kinds": [
-                      "superset"
-                    ]
-                  }
-                ]
-              },
-              {
                 "id": "RequiredAttributes",
                 "shortDescription": {
                   "text": "Missing required attribute"
@@ -4125,6 +4091,40 @@
                     "target": {
                       "id": "HTML",
                       "index": 10,
+                      "toolComponent": {
+                        "name": "QDGO"
+                      }
+                    },
+                    "kinds": [
+                      "superset"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "DuplicatedCode",
+                "shortDescription": {
+                  "text": "Duplicated code fragment"
+                },
+                "fullDescription": {
+                  "text": "Reports duplicated blocks of code from the selected scope: the same file or the entire project. The inspection features quick-fixes that help you to set the size of detected duplicates, navigate to repetitive code fragments, and compare them in a tool window. The inspection options allow you to select the scope of the reported duplicated fragments and set the initial size for the duplicated language constructs. You can also configure the constructs that you want to anonymize in File | Settings | Editor | Duplicates.",
+                  "markdown": "Reports duplicated blocks of code from the selected scope: the same file or the entire project. The inspection features quick-fixes that help you to set the size of detected duplicates, navigate to repetitive code fragments, and compare them in a tool window. The inspection options allow you to select the scope of the reported duplicated fragments and set the initial size for the duplicated language constructs. You can also configure the constructs that you want to anonymize in [File \\| Settings \\| Editor \\| Duplicates](settings://duplicates.index)."
+                },
+                "defaultConfiguration": {
+                  "enabled": false,
+                  "level": "note",
+                  "parameters": {
+                    "ideaSeverity": "WEAK WARNING",
+                    "tags": [
+                      "ideaSeverity"
+                    ]
+                  }
+                },
+                "relationships": [
+                  {
+                    "target": {
+                      "id": "General",
+                      "index": 12,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -5088,40 +5088,6 @@
                 ]
               },
               {
-                "id": "XmlDeprecatedElement",
-                "shortDescription": {
-                  "text": "Deprecated symbol"
-                },
-                "fullDescription": {
-                  "text": "Reports a deprecated XML element or attribute. Symbols can be marked by XML comment or documentation tag with text 'deprecated'.",
-                  "markdown": "Reports a deprecated XML element or attribute.\n\nSymbols can be marked by XML comment or documentation tag with text 'deprecated'."
-                },
-                "defaultConfiguration": {
-                  "enabled": false,
-                  "level": "warning",
-                  "parameters": {
-                    "ideaSeverity": "WARNING",
-                    "tags": [
-                      "ideaSeverity"
-                    ]
-                  }
-                },
-                "relationships": [
-                  {
-                    "target": {
-                      "id": "XML",
-                      "index": 5,
-                      "toolComponent": {
-                        "name": "QDGO"
-                      }
-                    },
-                    "kinds": [
-                      "superset"
-                    ]
-                  }
-                ]
-              },
-              {
                 "id": "RegExpRedundantNestedCharacterClass",
                 "shortDescription": {
                   "text": "Redundant nested character class"
@@ -5145,6 +5111,40 @@
                     "target": {
                       "id": "RegExp",
                       "index": 8,
+                      "toolComponent": {
+                        "name": "QDGO"
+                      }
+                    },
+                    "kinds": [
+                      "superset"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "XmlDeprecatedElement",
+                "shortDescription": {
+                  "text": "Deprecated symbol"
+                },
+                "fullDescription": {
+                  "text": "Reports a deprecated XML element or attribute. Symbols can be marked by XML comment or documentation tag with text 'deprecated'.",
+                  "markdown": "Reports a deprecated XML element or attribute.\n\nSymbols can be marked by XML comment or documentation tag with text 'deprecated'."
+                },
+                "defaultConfiguration": {
+                  "enabled": false,
+                  "level": "warning",
+                  "parameters": {
+                    "ideaSeverity": "WARNING",
+                    "tags": [
+                      "ideaSeverity"
+                    ]
+                  }
+                },
+                "relationships": [
+                  {
+                    "target": {
+                      "id": "XML",
+                      "index": 5,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -5326,40 +5326,6 @@
                 ]
               },
               {
-                "id": "UnusedDefine",
-                "shortDescription": {
-                  "text": "Unused define"
-                },
-                "fullDescription": {
-                  "text": "Reports an unused named pattern ('define') in a RELAX-NG file (XML or Compact Syntax). 'define' elements that are used through an include in another file are ignored.",
-                  "markdown": "Reports an unused named pattern (`define`) in a RELAX-NG file (XML or Compact Syntax). `define` elements that are used through an include in another file are ignored."
-                },
-                "defaultConfiguration": {
-                  "enabled": false,
-                  "level": "warning",
-                  "parameters": {
-                    "ideaSeverity": "WARNING",
-                    "tags": [
-                      "ideaSeverity"
-                    ]
-                  }
-                },
-                "relationships": [
-                  {
-                    "target": {
-                      "id": "RELAX NG",
-                      "index": 22,
-                      "toolComponent": {
-                        "name": "QDGO"
-                      }
-                    },
-                    "kinds": [
-                      "superset"
-                    ]
-                  }
-                ]
-              },
-              {
                 "id": "HtmlUnknownAnchorTarget",
                 "shortDescription": {
                   "text": "Unresolved fragment in a link"
@@ -5383,6 +5349,40 @@
                     "target": {
                       "id": "HTML",
                       "index": 10,
+                      "toolComponent": {
+                        "name": "QDGO"
+                      }
+                    },
+                    "kinds": [
+                      "superset"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "UnusedDefine",
+                "shortDescription": {
+                  "text": "Unused define"
+                },
+                "fullDescription": {
+                  "text": "Reports an unused named pattern ('define') in a RELAX-NG file (XML or Compact Syntax). 'define' elements that are used through an include in another file are ignored.",
+                  "markdown": "Reports an unused named pattern (`define`) in a RELAX-NG file (XML or Compact Syntax). `define` elements that are used through an include in another file are ignored."
+                },
+                "defaultConfiguration": {
+                  "enabled": false,
+                  "level": "warning",
+                  "parameters": {
+                    "ideaSeverity": "WARNING",
+                    "tags": [
+                      "ideaSeverity"
+                    ]
+                  }
+                },
+                "relationships": [
+                  {
+                    "target": {
+                      "id": "RELAX NG",
+                      "index": 22,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -5734,40 +5734,6 @@
                 ]
               },
               {
-                "id": "LossyEncoding",
-                "shortDescription": {
-                  "text": "Lossy encoding"
-                },
-                "fullDescription": {
-                  "text": "Reports characters that cannot be displayed because of the current document encoding. Examples: If you type international characters in a document with the US-ASCII charset, some characters will be lost on save. If you load a UTF-8-encoded file using the ISO-8859-1 one-byte charset, some characters will be displayed incorrectly. You can fix this by changing the file encoding either by specifying the encoding directly in the file, e.g. by editing 'encoding=' attribute in the XML prolog of XML file, or by changing the corresponding options in Settings | Editor | File Encodings.",
-                  "markdown": "Reports characters that cannot be displayed because of the current document encoding.\n\nExamples:\n\n* If you type international characters in a document with the **US-ASCII** charset, some characters will be lost on save.\n* If you load a **UTF-8** -encoded file using the **ISO-8859-1** one-byte charset, some characters will be displayed incorrectly.\n\nYou can fix this by changing the file encoding\neither by specifying the encoding directly in the file, e.g. by editing `encoding=` attribute in the XML prolog of XML file,\nor by changing the corresponding options in **Settings \\| Editor \\| File Encodings**."
-                },
-                "defaultConfiguration": {
-                  "enabled": false,
-                  "level": "warning",
-                  "parameters": {
-                    "ideaSeverity": "WARNING",
-                    "tags": [
-                      "ideaSeverity"
-                    ]
-                  }
-                },
-                "relationships": [
-                  {
-                    "target": {
-                      "id": "Internationalization",
-                      "index": 25,
-                      "toolComponent": {
-                        "name": "QDGO"
-                      }
-                    },
-                    "kinds": [
-                      "superset"
-                    ]
-                  }
-                ]
-              },
-              {
                 "id": "RegExpEscapedMetaCharacter",
                 "shortDescription": {
                   "text": "Escaped meta character"
@@ -5802,13 +5768,47 @@
                 ]
               },
               {
-                "id": "RegExpDuplicateAlternationBranch",
+                "id": "LossyEncoding",
                 "shortDescription": {
-                  "text": "Duplicate branch in alternation"
+                  "text": "Lossy encoding"
                 },
                 "fullDescription": {
-                  "text": "Reports duplicate branches in a RegExp alternation. Duplicate branches slow down matching and obscure the intent of the expression. Example: '(alpha|bravo|charlie|alpha)' After the quick-fix is applied: '(alpha|bravo|charlie)' New in 2017.1",
-                  "markdown": "Reports duplicate branches in a RegExp alternation. Duplicate branches slow down matching and obscure the intent of the expression.\n\n**Example:**\n\n\n      (alpha|bravo|charlie|alpha)\n\nAfter the quick-fix is applied:\n\n\n      (alpha|bravo|charlie)\n\nNew in 2017.1"
+                  "text": "Reports characters that cannot be displayed because of the current document encoding. Examples: If you type international characters in a document with the US-ASCII charset, some characters will be lost on save. If you load a UTF-8-encoded file using the ISO-8859-1 one-byte charset, some characters will be displayed incorrectly. You can fix this by changing the file encoding either by specifying the encoding directly in the file, e.g. by editing 'encoding=' attribute in the XML prolog of XML file, or by changing the corresponding options in Settings | Editor | File Encodings.",
+                  "markdown": "Reports characters that cannot be displayed because of the current document encoding.\n\nExamples:\n\n* If you type international characters in a document with the **US-ASCII** charset, some characters will be lost on save.\n* If you load a **UTF-8** -encoded file using the **ISO-8859-1** one-byte charset, some characters will be displayed incorrectly.\n\nYou can fix this by changing the file encoding\neither by specifying the encoding directly in the file, e.g. by editing `encoding=` attribute in the XML prolog of XML file,\nor by changing the corresponding options in **Settings \\| Editor \\| File Encodings**."
+                },
+                "defaultConfiguration": {
+                  "enabled": false,
+                  "level": "warning",
+                  "parameters": {
+                    "ideaSeverity": "WARNING",
+                    "tags": [
+                      "ideaSeverity"
+                    ]
+                  }
+                },
+                "relationships": [
+                  {
+                    "target": {
+                      "id": "Internationalization",
+                      "index": 25,
+                      "toolComponent": {
+                        "name": "QDGO"
+                      }
+                    },
+                    "kinds": [
+                      "superset"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "RegExpRepeatedSpace",
+                "shortDescription": {
+                  "text": "Consecutive spaces"
+                },
+                "fullDescription": {
+                  "text": "Reports multiple consecutive spaces in a RegExp. Because spaces are not visible by default, it can be hard to see how many spaces are required. The RegExp can be made more clear by replacing the consecutive spaces with a single space and a counted quantifier. Example: '(     )' After the quick-fix is applied: '( {5})' New in 2017.1",
+                  "markdown": "Reports multiple consecutive spaces in a RegExp. Because spaces are not visible by default, it can be hard to see how many spaces are required. The RegExp can be made more clear by replacing the consecutive spaces with a single space and a counted quantifier.\n\n**Example:**\n\n\n      (     )\n\nAfter the quick-fix is applied:\n\n\n      ( {5})\n\n\nNew in 2017.1"
                 },
                 "defaultConfiguration": {
                   "enabled": true,
@@ -5836,13 +5836,13 @@
                 ]
               },
               {
-                "id": "RegExpRepeatedSpace",
+                "id": "RegExpDuplicateAlternationBranch",
                 "shortDescription": {
-                  "text": "Consecutive spaces"
+                  "text": "Duplicate branch in alternation"
                 },
                 "fullDescription": {
-                  "text": "Reports multiple consecutive spaces in a RegExp. Because spaces are not visible by default, it can be hard to see how many spaces are required. The RegExp can be made more clear by replacing the consecutive spaces with a single space and a counted quantifier. Example: '(     )' After the quick-fix is applied: '( {5})' New in 2017.1",
-                  "markdown": "Reports multiple consecutive spaces in a RegExp. Because spaces are not visible by default, it can be hard to see how many spaces are required. The RegExp can be made more clear by replacing the consecutive spaces with a single space and a counted quantifier.\n\n**Example:**\n\n\n      (     )\n\nAfter the quick-fix is applied:\n\n\n      ( {5})\n\n\nNew in 2017.1"
+                  "text": "Reports duplicate branches in a RegExp alternation. Duplicate branches slow down matching and obscure the intent of the expression. Example: '(alpha|bravo|charlie|alpha)' After the quick-fix is applied: '(alpha|bravo|charlie)' New in 2017.1",
+                  "markdown": "Reports duplicate branches in a RegExp alternation. Duplicate branches slow down matching and obscure the intent of the expression.\n\n**Example:**\n\n\n      (alpha|bravo|charlie|alpha)\n\nAfter the quick-fix is applied:\n\n\n      (alpha|bravo|charlie)\n\nNew in 2017.1"
                 },
                 "defaultConfiguration": {
                   "enabled": true,
@@ -7739,12 +7739,2046 @@
         }
       ],
       "language": "en-US",
-      "results": [],
+      "versionControlProvenance": [
+        {
+          "repositoryUri": "https://github.com/veteran-software/discord-api-wrapper",
+          "revisionId": "275ff01dc695877c3368d5dd1c582587e4516d34",
+          "branch": "main",
+          "properties": {
+            "repoUrl": "https://github.com/veteran-software/discord-api-wrapper",
+            "lastAuthorName": "Keith Russo",
+            "vcsType": "Git",
+            "lastAuthorEmail": "keith.russo@veteransoftware.us",
+            "tags": [
+              "repoUrl",
+              "lastAuthorEmail",
+              "lastAuthorName",
+              "vcsType"
+            ]
+          }
+        }
+      ],
+      "results": [
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported type 'OpCode' should have a comment or be unexported",
+            "markdown": "Exported type `OpCode` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/gateway.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 32,
+                  "startColumn": 6,
+                  "charOffset": 1331,
+                  "charLength": 6,
+                  "snippet": {
+                    "text": "OpCode"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 30,
+                  "startColumn": 1,
+                  "charOffset": 1323,
+                  "charLength": 55,
+                  "snippet": {
+                    "text": "}\n\ntype OpCode int\n\n//goland:noinspection GoUnusedConst"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "68f85e13b740a200dd22482051f0dca770d741b06b43e5595ec51b5052a5991c"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported type 'Service' should have a comment or be unexported",
+            "markdown": "Exported type `Service` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/user.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 102,
+                  "startColumn": 6,
+                  "charOffset": 6372,
+                  "charLength": 7,
+                  "snippet": {
+                    "text": "Service"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 100,
+                  "startColumn": 1,
+                  "charOffset": 6364,
+                  "charLength": 83,
+                  "snippet": {
+                    "text": "}\n\ntype Service string\n\n//goland:noinspection SpellCheckingInspection,GoUnusedConst"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "e5d08ba66f3fe54cac2f73458c474c424c0483332f5f7f0614eb0a02adeaa87e"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported type 'LocalizationDict' should have a comment or be unexported",
+            "markdown": "Exported type `LocalizationDict` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/reference.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 136,
+                  "startColumn": 6,
+                  "charOffset": 4943,
+                  "charLength": 16,
+                  "snippet": {
+                    "text": "LocalizationDict"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 134,
+                  "startColumn": 1,
+                  "charOffset": 4935,
+                  "charLength": 133,
+                  "snippet": {
+                    "text": "}\n\ntype LocalizationDict struct {\n\tDanish              string `json:\"da,omitempty\"`\n\tGerman              string `json:\"de,omitempty\"`"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "0a96f4b1f239228667e5cba5645f89d53dce0b0fb97b1e42777faa4efcbae2da"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported type 'AutoModerationRule' should have a comment or be unexported",
+            "markdown": "Exported type `AutoModerationRule` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/auto_moderation.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 18,
+                  "startColumn": 6,
+                  "charOffset": 809,
+                  "charLength": 18,
+                  "snippet": {
+                    "text": "AutoModerationRule"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 16,
+                  "startColumn": 1,
+                  "charOffset": 791,
+                  "charLength": 236,
+                  "snippet": {
+                    "text": "package api\n\ntype AutoModerationRule struct {\n\tID              Snowflake       `json:\"id\"`               // the id of this rule\n\tGuildID         Snowflake       `json:\"guild_id\"`         // the id of the guild which this rule belongs to"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "0eb9d6af33f987b71d614cc39e2fd3f4739038c92d57988d4f2f5c36561c1291"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported type 'KeyWordPresetType' should have a comment or be unexported",
+            "markdown": "Exported type `KeyWordPresetType` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/auto_moderation.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 52,
+                  "startColumn": 6,
+                  "charOffset": 3431,
+                  "charLength": 17,
+                  "snippet": {
+                    "text": "KeyWordPresetType"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 50,
+                  "startColumn": 1,
+                  "charOffset": 3423,
+                  "charLength": 66,
+                  "snippet": {
+                    "text": "}\n\ntype KeyWordPresetType int\n\n//goland:noinspection GoUnusedConst"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "7a1ced17bbec4022a15e554bb2d4db8e0838f5aab0866846f8efd41f7f641b0e"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported type 'AutoModerationActionType' should have a comment or be unexported",
+            "markdown": "Exported type `AutoModerationActionType` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/auto_moderation.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 75,
+                  "startColumn": 6,
+                  "charOffset": 4368,
+                  "charLength": 24,
+                  "snippet": {
+                    "text": "AutoModerationActionType"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 73,
+                  "startColumn": 1,
+                  "charOffset": 4360,
+                  "charLength": 73,
+                  "snippet": {
+                    "text": "}\n\ntype AutoModerationActionType int\n\n//goland:noinspection GoUnusedConst"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "eae2a4a85519028685c69b8f00245703f06beb8795538dc69dd05bc266347338"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported method 'SetType' should have a comment or be unexported",
+            "markdown": "Exported method `SetType` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components_api.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 29,
+                  "startColumn": 21,
+                  "charOffset": 1044,
+                  "charLength": 7,
+                  "snippet": {
+                    "text": "SetType"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 27,
+                  "startColumn": 1,
+                  "charOffset": 1021,
+                  "charLength": 73,
+                  "snippet": {
+                    "text": "}\n\nfunc (c *Component) SetType(t ComponentType) *Component {\n\tc.Type = t\n"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "c4027d025693ee27b6a05c1c58bd0f224ba0e0b8d7ce3e3e115fb9299c60f9b0"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported method 'SetCustomID' should have a comment or be unexported",
+            "markdown": "Exported method `SetCustomID` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components_api.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 41,
+                  "startColumn": 21,
+                  "charOffset": 1256,
+                  "charLength": 11,
+                  "snippet": {
+                    "text": "SetCustomID"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 39,
+                  "startColumn": 1,
+                  "charOffset": 1233,
+                  "charLength": 74,
+                  "snippet": {
+                    "text": "}\n\nfunc (c *Component) SetCustomID(t string) *Component {\n\tc.CustomID = t\n"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "a1288b2ae142b17e5a27a644c297ce3652b5bdd795f1b6ded82680f3890be77c"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported method 'IsDisabled' should have a comment or be unexported",
+            "markdown": "Exported method `IsDisabled` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components_api.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 47,
+                  "startColumn": 21,
+                  "charOffset": 1341,
+                  "charLength": 10,
+                  "snippet": {
+                    "text": "IsDisabled"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 45,
+                  "startColumn": 1,
+                  "charOffset": 1318,
+                  "charLength": 63,
+                  "snippet": {
+                    "text": "}\n\nfunc (c *Component) IsDisabled() bool {\n\treturn c.Disabled\n}"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "ed2df4268721c022173f56392a52d4117f31762fed3608b2e0245a813546eb49"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported method 'SetDisabled' should have a comment or be unexported",
+            "markdown": "Exported method `SetDisabled` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components_api.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 51,
+                  "startColumn": 21,
+                  "charOffset": 1403,
+                  "charLength": 11,
+                  "snippet": {
+                    "text": "SetDisabled"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 49,
+                  "startColumn": 1,
+                  "charOffset": 1380,
+                  "charLength": 72,
+                  "snippet": {
+                    "text": "}\n\nfunc (c *Component) SetDisabled(d bool) *Component {\n\tc.Disabled = d\n"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "a953194b70692ab2f983271b558027e5fa1d403780b72f5f0a7f581da47bf0b6"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported method 'SetButtonStyle' should have a comment or be unexported",
+            "markdown": "Exported method `SetButtonStyle` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components_api.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 63,
+                  "startColumn": 21,
+                  "charOffset": 1636,
+                  "charLength": 14,
+                  "snippet": {
+                    "text": "SetButtonStyle"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 61,
+                  "startColumn": 1,
+                  "charOffset": 1613,
+                  "charLength": 79,
+                  "snippet": {
+                    "text": "}\n\nfunc (c *Component) SetButtonStyle(s ButtonStyle) *Component {\n\tc.Style = s\n"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "f8aea3eebfd764a90427a14baadbf3c38684cc06b3ac74db4d82d687629c8800"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported method 'SetTextInputStyle' should have a comment or be unexported",
+            "markdown": "Exported method `SetTextInputStyle` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components_api.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 75,
+                  "startColumn": 21,
+                  "charOffset": 1888,
+                  "charLength": 17,
+                  "snippet": {
+                    "text": "SetTextInputStyle"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 73,
+                  "startColumn": 1,
+                  "charOffset": 1865,
+                  "charLength": 85,
+                  "snippet": {
+                    "text": "}\n\nfunc (c *Component) SetTextInputStyle(s TextInputStyle) *Component {\n\tc.Style = s\n"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "a397d2d6aaa229f811459178be83ffe299f53c01677c218e3dffcab92766c4f3"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported method 'SetEmoji' should have a comment or be unexported",
+            "markdown": "Exported method `SetEmoji` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components_api.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 87,
+                  "startColumn": 21,
+                  "charOffset": 2103,
+                  "charLength": 8,
+                  "snippet": {
+                    "text": "SetEmoji"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 85,
+                  "startColumn": 1,
+                  "charOffset": 2080,
+                  "charLength": 68,
+                  "snippet": {
+                    "text": "}\n\nfunc (c *Component) SetEmoji(e *Emoji) *Component {\n\tc.Emoji = e\n"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "35cf1de6fbcc89cb3367e60ed87ca7db3b85f8fba4d35730e144de9e54937315"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported method 'SetURL' should have a comment or be unexported",
+            "markdown": "Exported method `SetURL` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components_api.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 99,
+                  "startColumn": 21,
+                  "charOffset": 2295,
+                  "charLength": 6,
+                  "snippet": {
+                    "text": "SetURL"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 97,
+                  "startColumn": 1,
+                  "charOffset": 2272,
+                  "charLength": 64,
+                  "snippet": {
+                    "text": "}\n\nfunc (c *Component) SetURL(u string) *Component {\n\tc.URL = u\n"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "4ab820a1db1d76c1b2cbecbfb16c70ab130fe3a3edb8313f0b38c097722611d3"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported method 'SetCustomID' should have a comment or be unexported",
+            "markdown": "Exported method `SetCustomID` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components_api.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 115,
+                  "startColumn": 36,
+                  "charOffset": 2662,
+                  "charLength": 11,
+                  "snippet": {
+                    "text": "SetCustomID"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 113,
+                  "startColumn": 1,
+                  "charOffset": 2624,
+                  "charLength": 109,
+                  "snippet": {
+                    "text": "}\n\nfunc (i *InteractionResponseModal) SetCustomID(c string) *InteractionResponseModal {\n\ti.Data.CustomID = c\n"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "7b9467c6c5cad4f35db07f5caba710bada12440e243afb5bf6229719a8a2b34a"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported method 'SetTitle' should have a comment or be unexported",
+            "markdown": "Exported method `SetTitle` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components_api.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 121,
+                  "startColumn": 36,
+                  "charOffset": 2782,
+                  "charLength": 8,
+                  "snippet": {
+                    "text": "SetTitle"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 119,
+                  "startColumn": 1,
+                  "charOffset": 2744,
+                  "charLength": 103,
+                  "snippet": {
+                    "text": "}\n\nfunc (i *InteractionResponseModal) SetTitle(t string) *InteractionResponseModal {\n\ti.Data.Title = t\n"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "b4417a1d1959892b687f3bb72a5e9e0b4859134deffc3d75414ac3712c8b699a"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported method 'AddComponent' should have a comment or be unexported",
+            "markdown": "Exported method `AddComponent` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components_api.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 127,
+                  "startColumn": 36,
+                  "charOffset": 2896,
+                  "charLength": 12,
+                  "snippet": {
+                    "text": "AddComponent"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 125,
+                  "startColumn": 1,
+                  "charOffset": 2858,
+                  "charLength": 144,
+                  "snippet": {
+                    "text": "}\n\nfunc (i *InteractionResponseModal) AddComponent(c *Component) *InteractionResponseModal {\n\ti.Data.Components = append(i.Data.Components, *c)\n"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "60aaad4d7c7a54722b1135523119dcee878f14a7541700b2330e3277e5ae9077"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported method 'SetType' should have a comment or be unexported",
+            "markdown": "Exported method `SetType` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components_api.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 142,
+                  "startColumn": 39,
+                  "charOffset": 3315,
+                  "charLength": 7,
+                  "snippet": {
+                    "text": "SetType"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 140,
+                  "startColumn": 1,
+                  "charOffset": 3274,
+                  "charLength": 119,
+                  "snippet": {
+                    "text": "}\n\nfunc (i *InteractionResponseMessages) SetType(t InteractionCallbackType) *InteractionResponseMessages {\n\ti.Type = t\n"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "f326c17558887f75dbb174f056bf407a74323205f1ec255aac63a60eb916d176"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported method 'SetTts' should have a comment or be unexported",
+            "markdown": "Exported method `SetTts` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components_api.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 148,
+                  "startColumn": 39,
+                  "charOffset": 3445,
+                  "charLength": 6,
+                  "snippet": {
+                    "text": "SetTts"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 146,
+                  "startColumn": 1,
+                  "charOffset": 3404,
+                  "charLength": 107,
+                  "snippet": {
+                    "text": "}\n\nfunc (i *InteractionResponseMessages) SetTts(tts bool) *InteractionResponseMessages {\n\ti.Data.TTS = tts\n"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "db01061872d7d7a659dbbb0d44a6a210c085043029569bcab240f7e511ed51ba"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported method 'SetContent' should have a comment or be unexported",
+            "markdown": "Exported method `SetContent` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components_api.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 154,
+                  "startColumn": 39,
+                  "charOffset": 3563,
+                  "charLength": 10,
+                  "snippet": {
+                    "text": "SetContent"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 152,
+                  "startColumn": 1,
+                  "charOffset": 3522,
+                  "charLength": 125,
+                  "snippet": {
+                    "text": "}\n\nfunc (i *InteractionResponseMessages) SetContent(content string) *InteractionResponseMessages {\n\ti.Data.Content = content\n"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "ef7de38e1830e68a34250c3962a1f9fd4f7b3267a578d4328530b8c658c9c38c"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported method 'AddEmbed' should have a comment or be unexported",
+            "markdown": "Exported method `AddEmbed` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components_api.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 160,
+                  "startColumn": 39,
+                  "charOffset": 3699,
+                  "charLength": 8,
+                  "snippet": {
+                    "text": "AddEmbed"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 158,
+                  "startColumn": 1,
+                  "charOffset": 3658,
+                  "charLength": 134,
+                  "snippet": {
+                    "text": "}\n\nfunc (i *InteractionResponseMessages) AddEmbed(e *Embed) *InteractionResponseMessages {\n\ti.Data.Embeds = append(i.Data.Embeds, *e)\n"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "1757b29f629e2b3101e13f7ed12d7c761c69e1347c05fd62ef234dc4436c05af"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported method 'AddEmbeds' should have a comment or be unexported",
+            "markdown": "Exported method `AddEmbeds` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components_api.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 166,
+                  "startColumn": 39,
+                  "charOffset": 3844,
+                  "charLength": 9,
+                  "snippet": {
+                    "text": "AddEmbeds"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 164,
+                  "startColumn": 1,
+                  "charOffset": 3803,
+                  "charLength": 138,
+                  "snippet": {
+                    "text": "}\n\nfunc (i *InteractionResponseMessages) AddEmbeds(e []Embed) *InteractionResponseMessages {\n\ti.Data.Embeds = append(i.Data.Embeds, e...)\n"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "2002c0ba21e921c7ae0d316790e92cd94ee4e9ed07f5c5ede3a983f0e3f8e634"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported method 'SetEphemeral' should have a comment or be unexported",
+            "markdown": "Exported method `SetEphemeral` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components_api.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 172,
+                  "startColumn": 39,
+                  "charOffset": 3993,
+                  "charLength": 12,
+                  "snippet": {
+                    "text": "SetEphemeral"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 170,
+                  "startColumn": 1,
+                  "charOffset": 3952,
+                  "charLength": 128,
+                  "snippet": {
+                    "text": "}\n\nfunc (i *InteractionResponseMessages) SetEphemeral() *InteractionResponseMessages {\n\ti.Data.Flags = i.Data.Flags | Ephemeral\n"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "b7f4e5c6b4ae4a4357099fba0286ec965463af30987407d866bdddc05915a335"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported method 'AddFlag' should have a comment or be unexported",
+            "markdown": "Exported method `AddFlag` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components_api.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 178,
+                  "startColumn": 39,
+                  "charOffset": 4132,
+                  "charLength": 7,
+                  "snippet": {
+                    "text": "AddFlag"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 176,
+                  "startColumn": 1,
+                  "charOffset": 4091,
+                  "charLength": 173,
+                  "snippet": {
+                    "text": "}\n\nfunc (i *InteractionResponseMessages) AddFlag(f MessageFlags) *InteractionResponseMessages {\n\tif f == SuppressEmbeds || f == Ephemeral {\n\t\ti.Data.Flags = i.Data.Flags | f"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "8c885f8c0613bf56d32c4e5e237b5086cbf590d7680fe1f222fad49d223a281a"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported method 'AddComponent' should have a comment or be unexported",
+            "markdown": "Exported method `AddComponent` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components_api.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 188,
+                  "startColumn": 39,
+                  "charOffset": 4332,
+                  "charLength": 12,
+                  "snippet": {
+                    "text": "AddComponent"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 186,
+                  "startColumn": 1,
+                  "charOffset": 4291,
+                  "charLength": 150,
+                  "snippet": {
+                    "text": "}\n\nfunc (i *InteractionResponseMessages) AddComponent(c *Component) *InteractionResponseMessages {\n\ti.Data.Components = append(i.Data.Components, *c)\n"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "62cce814ed378e554a5b4419e860b65205874303eb7ebc636955a347e34d1dee"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported method 'AddAttachment' should have a comment or be unexported",
+            "markdown": "Exported method `AddAttachment` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components_api.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 194,
+                  "startColumn": 39,
+                  "charOffset": 4493,
+                  "charLength": 13,
+                  "snippet": {
+                    "text": "AddAttachment"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 192,
+                  "startColumn": 1,
+                  "charOffset": 4452,
+                  "charLength": 154,
+                  "snippet": {
+                    "text": "}\n\nfunc (i *InteractionResponseMessages) AddAttachment(a *Attachment) *InteractionResponseMessages {\n\ti.Data.Attachments = append(i.Data.Attachments, *a)\n"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "96a38c7ccf358c318ef633fbe604f9d17b55230f91eb922ed2476a2035eb508b"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported method 'AddChoice' should have a comment or be unexported",
+            "markdown": "Exported method `AddChoice` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components_api.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 222,
+                  "startColumn": 43,
+                  "charOffset": 5268,
+                  "charLength": 9,
+                  "snippet": {
+                    "text": "AddChoice"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 220,
+                  "startColumn": 1,
+                  "charOffset": 5223,
+                  "charLength": 169,
+                  "snippet": {
+                    "text": "}\n\nfunc (i *InteractionResponseAutocomplete) AddChoice(c *ApplicationCommandOptionChoice) *InteractionResponseAutocomplete {\n\ti.Data.Choices = append(i.Data.Choices, c)\n"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "f97fd9b3d3b4bbaf2fcd9afc3df76c6ddc0d0d3b0158b5a5fb7d3cd9bce760a9"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported method 'AddChoices' should have a comment or be unexported",
+            "markdown": "Exported method `AddChoices` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components_api.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 228,
+                  "startColumn": 43,
+                  "charOffset": 5448,
+                  "charLength": 10,
+                  "snippet": {
+                    "text": "AddChoices"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 226,
+                  "startColumn": 1,
+                  "charOffset": 5403,
+                  "charLength": 175,
+                  "snippet": {
+                    "text": "}\n\nfunc (i *InteractionResponseAutocomplete) AddChoices(c []*ApplicationCommandOptionChoice) *InteractionResponseAutocomplete {\n\ti.Data.Choices = append(i.Data.Choices, c...)\n"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "a175f1c96d615d6be725deaba79bf1b1976acac3a70c393e6195c7af4e692e72"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported type 'ChannelFlag' should have a comment or be unexported",
+            "markdown": "Exported type `ChannelFlag` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/channel.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 105,
+                  "startColumn": 6,
+                  "charOffset": 7965,
+                  "charLength": 11,
+                  "snippet": {
+                    "text": "ChannelFlag"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 103,
+                  "startColumn": 1,
+                  "charOffset": 7957,
+                  "charLength": 60,
+                  "snippet": {
+                    "text": ")\n\ntype ChannelFlag int\n\n//goland:noinspection GoUnusedConst"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "2de60675a68d5a38b41904a12ebdfe7a47f616fe9fa75eb0b0f13f67ec729a9b"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported type 'SortOrderType' should have a comment or be unexported",
+            "markdown": "Exported type `SortOrderType` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/channel.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 113,
+                  "startColumn": 6,
+                  "charOffset": 8308,
+                  "charLength": 13,
+                  "snippet": {
+                    "text": "SortOrderType"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 111,
+                  "startColumn": 1,
+                  "charOffset": 8300,
+                  "charLength": 62,
+                  "snippet": {
+                    "text": ")\n\ntype SortOrderType int\n\n//goland:noinspection GoUnusedConst"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "bf0f5afceb3d6efc51634d73bb902534ebe50d2d4a5d37bdbe182b5792177852"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported function 'Contains' should have a comment or be unexported",
+            "markdown": "Exported function `Contains` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "utilities/utils.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 18,
+                  "startColumn": 6,
+                  "charOffset": 815,
+                  "charLength": 8,
+                  "snippet": {
+                    "text": "Contains"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 16,
+                  "startColumn": 1,
+                  "charOffset": 791,
+                  "charLength": 110,
+                  "snippet": {
+                    "text": "package utilities\n\nfunc Contains[T comparable](slice []T, e T) bool {\n\tfor _, v := range slice {\n\t\tif v == e {"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "e906febfc77b08f13f03d53de2369f1e861adf452ed8cc33b181d5d5dd4fc05c"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported constant 'ComponentTypeActionRow' should have a comment or be unexported",
+            "markdown": "Exported constant `ComponentTypeActionRow` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 44,
+                  "startColumn": 2,
+                  "charOffset": 2852,
+                  "charLength": 22,
+                  "snippet": {
+                    "text": "ComponentTypeActionRow"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 42,
+                  "startColumn": 1,
+                  "charOffset": 2842,
+                  "charLength": 258,
+                  "snippet": {
+                    "text": "\nconst (\n\tComponentTypeActionRow  ComponentType = iota + 1 // A container for other components\n\tComponentTypeButton                              // A clickable button\n\tComponentTypeSelectMenu                          // A select menu for picking from choices"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "6e44e63ecb75e9670ee82ad7672e0674adecd0e274f6c14c6dbaf0d12019d839"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported constant 'ComponentTypeButton' should have a comment or be unexported",
+            "markdown": "Exported constant `ComponentTypeButton` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 45,
+                  "startColumn": 2,
+                  "charOffset": 2938,
+                  "charLength": 19,
+                  "snippet": {
+                    "text": "ComponentTypeButton"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 43,
+                  "startColumn": 1,
+                  "charOffset": 2843,
+                  "charLength": 330,
+                  "snippet": {
+                    "text": "const (\n\tComponentTypeActionRow  ComponentType = iota + 1 // A container for other components\n\tComponentTypeButton                              // A clickable button\n\tComponentTypeSelectMenu                          // A select menu for picking from choices\n\tComponentTypeTextInput                           // A text input object"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "cac3e97b96ffd448c51f9411e1c4f44e1eb6351f119b2d91bb064ac21aab6484"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported constant 'ComponentTypeSelectMenu' should have a comment or be unexported",
+            "markdown": "Exported constant `ComponentTypeSelectMenu` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 46,
+                  "startColumn": 2,
+                  "charOffset": 3010,
+                  "charLength": 23,
+                  "snippet": {
+                    "text": "ComponentTypeSelectMenu"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 44,
+                  "startColumn": 1,
+                  "charOffset": 2851,
+                  "charLength": 324,
+                  "snippet": {
+                    "text": "\tComponentTypeActionRow  ComponentType = iota + 1 // A container for other components\n\tComponentTypeButton                              // A clickable button\n\tComponentTypeSelectMenu                          // A select menu for picking from choices\n\tComponentTypeTextInput                           // A text input object\n)"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "604e110e89e50804767b1ef9a3488e5309bf9c5fbf07809a3815604050f085be"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported constant 'ComponentTypeTextInput' should have a comment or be unexported",
+            "markdown": "Exported constant `ComponentTypeTextInput` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 47,
+                  "startColumn": 2,
+                  "charOffset": 3102,
+                  "charLength": 22,
+                  "snippet": {
+                    "text": "ComponentTypeTextInput"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 45,
+                  "startColumn": 1,
+                  "charOffset": 2937,
+                  "charLength": 239,
+                  "snippet": {
+                    "text": "\tComponentTypeButton                              // A clickable button\n\tComponentTypeSelectMenu                          // A select menu for picking from choices\n\tComponentTypeTextInput                           // A text input object\n)\n"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "b1fdd85ec5fe8054a388e6859b684e24665740ff9ec39c013ec74f99c927c559"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported constant 'TextInputShort' should have a comment or be unexported",
+            "markdown": "Exported constant `TextInputShort` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 127,
+                  "startColumn": 2,
+                  "charOffset": 8183,
+                  "charLength": 14,
+                  "snippet": {
+                    "text": "TextInputShort"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 125,
+                  "startColumn": 1,
+                  "charOffset": 8173,
+                  "charLength": 147,
+                  "snippet": {
+                    "text": "\nconst (\n\tTextInputShort     TextInputStyle = iota + 1 // A single-line input\n\tTextInputParagraph                           // A multi-line input\n)"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "308b96dfe499ef18745d162ddc3280a57f8e8f59df67a41b76020d2863e1e281"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoExportedElementShouldHaveComment",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Exported constant 'TextInputParagraph' should have a comment or be unexported",
+            "markdown": "Exported constant `TextInputParagraph` should have a comment or be unexported"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/message_components.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 128,
+                  "startColumn": 2,
+                  "charOffset": 8252,
+                  "charLength": 18,
+                  "snippet": {
+                    "text": "TextInputParagraph"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 126,
+                  "startColumn": 1,
+                  "charOffset": 8174,
+                  "charLength": 147,
+                  "snippet": {
+                    "text": "const (\n\tTextInputShort     TextInputStyle = iota + 1 // A single-line input\n\tTextInputParagraph                           // A multi-line input\n)\n"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "eaadc830e704868ff0e543dca3b7e397107f2fb6023e4b33ed3e0fffcba5c7d4"
+          },
+          "properties": {
+            "ideaSeverity": "WEAK WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        },
+        {
+          "ruleId": "GoUnusedFunction",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Unused function 'firePutRequest'",
+            "markdown": "Unused function `firePutRequest`"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "api/rest.go",
+                  "uriBaseId": "SRCROOT"
+                },
+                "region": {
+                  "startLine": 216,
+                  "startColumn": 6,
+                  "charOffset": 5595,
+                  "charLength": 14,
+                  "snippet": {
+                    "text": "firePutRequest"
+                  },
+                  "sourceLanguage": "go"
+                },
+                "contextRegion": {
+                  "startLine": 214,
+                  "startColumn": 1,
+                  "charOffset": 5587,
+                  "charLength": 163,
+                  "snippet": {
+                    "text": "}\n\nfunc firePutRequest(u *url.URL, data interface{}, reason *string) []byte {\n\tresp, err := Rest.Request(http.MethodPut, u.String(), data, reason)\n\tif err != nil {"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "project",
+                  "kind": "module"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "equalIndicator/v1": "22001185055e43fb2098e75fa9daa0064a8b869482be9a0c2d0bac4888d1c169"
+          },
+          "properties": {
+            "ideaSeverity": "WARNING",
+            "tags": [
+              "ideaSeverity"
+            ]
+          }
+        }
+      ],
       "automationDetails": {
         "id": "project/qodana/2022-11-26",
-        "guid": "cd7c367e-4d8f-4ac0-9808-a5d8d4e5c134",
+        "guid": "faf9c01e-ca22-48b0-9ad7-b715bab6c556",
         "properties": {
-          "jobUrl": "https://github.com/veteran-software/discord-api-wrapper/actions/runs/3554194770",
+          "jobUrl": "https://github.com/veteran-software/discord-api-wrapper/actions/runs/3554222983",
           "tags": [
             "jobUrl"
           ]
@@ -7755,9 +9789,662 @@
         "\n"
       ],
       "properties": {
+        "qodana.promo.results": [
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported type 'GuildTemplate'",
+              "markdown": "Unnecessarily exported type `GuildTemplate`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/guild_template.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 21,
+                    "startColumn": 6,
+                    "charOffset": 935,
+                    "charLength": 13,
+                    "snippet": {
+                      "text": "GuildTemplate"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 19,
+                    "startColumn": 1,
+                    "charOffset": 818,
+                    "charLength": 233,
+                    "snippet": {
+                      "text": "\n// GuildTemplate - Represents a code that when used, creates a guild based on a snapshot of an existing guild.\ntype GuildTemplate struct {\n\tCode                  string    `json:\"code\"`\n\tName                  string    `json:\"name\"`"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "9f00bdfc135f3a8ef8f71a68586907ae44063811ccb8f2fa5f76cabc6ef5a093"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported type 'Webhook'",
+              "markdown": "Unnecessarily exported type `Webhook`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/webhook.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 27,
+                    "startColumn": 6,
+                    "charOffset": 1015,
+                    "charLength": 7,
+                    "snippet": {
+                      "text": "Webhook"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 25,
+                    "startColumn": 1,
+                    "charOffset": 967,
+                    "charLength": 238,
+                    "snippet": {
+                      "text": "\n// Webhook - Used to represent a webhook.\ntype Webhook struct {\n\tID            Snowflake   `json:\"id\"`                       // the id of the webhook\n\tType          WebhookType `json:\"type\"`                     // the type of the webhook"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "d22061ff629becb00541d75b8556f8360f32949aaf371adf9c0556f710fa4df4"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported type 'WebhookType'",
+              "markdown": "Unnecessarily exported type `WebhookType`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/webhook.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 43,
+                    "startColumn": 6,
+                    "charOffset": 2522,
+                    "charLength": 11,
+                    "snippet": {
+                      "text": "WebhookType"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 41,
+                    "startColumn": 1,
+                    "charOffset": 2475,
+                    "charLength": 99,
+                    "snippet": {
+                      "text": "\n// WebhookType - the type of the webhook\ntype WebhookType int\n\n//goland:noinspection GoUnusedConst"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "e61af7a45f341705812b4dd113eea16099bd6764f1eab9f357782eb6b3fb4bbb"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported constant 'WebhookTypeIncoming'",
+              "markdown": "Unnecessarily exported constant `WebhookTypeIncoming`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/webhook.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 47,
+                    "startColumn": 2,
+                    "charOffset": 2584,
+                    "charLength": 19,
+                    "snippet": {
+                      "text": "WebhookTypeIncoming"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 45,
+                    "startColumn": 1,
+                    "charOffset": 2539,
+                    "charLength": 444,
+                    "snippet": {
+                      "text": "//goland:noinspection GoUnusedConst\nconst (\n\tWebhookTypeIncoming        WebhookType = iota + 1 // Incoming Webhooks can post messages to channels with a generated token\n\tWebhookTypeChannelFollower                        // Channel Follower Webhooks are internal webhooks used with Channel Following to post new messages into channels\n\tWebhookTypeApplication                            // Application webhooks are webhooks used with Interactions"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "3c4da4808b42f49dd0257d72223700b72d3e6bc7d2f179904ffb5b30531742d0"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported constant 'WebhookTypeChannelFollower'",
+              "markdown": "Unnecessarily exported constant `WebhookTypeChannelFollower`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/webhook.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 48,
+                    "startColumn": 2,
+                    "charOffset": 2709,
+                    "charLength": 26,
+                    "snippet": {
+                      "text": "WebhookTypeChannelFollower"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 46,
+                    "startColumn": 1,
+                    "charOffset": 2575,
+                    "charLength": 410,
+                    "snippet": {
+                      "text": "const (\n\tWebhookTypeIncoming        WebhookType = iota + 1 // Incoming Webhooks can post messages to channels with a generated token\n\tWebhookTypeChannelFollower                        // Channel Follower Webhooks are internal webhooks used with Channel Following to post new messages into channels\n\tWebhookTypeApplication                            // Application webhooks are webhooks used with Interactions\n)"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "6a4316b72dc08456606df86b2730f44d0d20ceca69c275ef29f0cd4b6881a760"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported constant 'WebhookTypeApplication'",
+              "markdown": "Unnecessarily exported constant `WebhookTypeApplication`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/webhook.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 49,
+                    "startColumn": 2,
+                    "charOffset": 2874,
+                    "charLength": 22,
+                    "snippet": {
+                      "text": "WebhookTypeApplication"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 47,
+                    "startColumn": 1,
+                    "charOffset": 2583,
+                    "charLength": 403,
+                    "snippet": {
+                      "text": "\tWebhookTypeIncoming        WebhookType = iota + 1 // Incoming Webhooks can post messages to channels with a generated token\n\tWebhookTypeChannelFollower                        // Channel Follower Webhooks are internal webhooks used with Channel Following to post new messages into channels\n\tWebhookTypeApplication                            // Application webhooks are webhooks used with Interactions\n)\n"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "7607c2b61f1fa644d884fa45401a2ee2a2cc2a4bd0fd624849e20349215ec6de"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported variable 'Rest'",
+              "markdown": "Unnecessarily exported variable `Rest`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/rest.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 55,
+                    "startColumn": 2,
+                    "charOffset": 1658,
+                    "charLength": 4,
+                    "snippet": {
+                      "text": "Rest"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 53,
+                    "startColumn": 1,
+                    "charOffset": 1611,
+                    "charLength": 67,
+                    "snippet": {
+                      "text": "var (\n\t// Rest - Holds the rate limit buckets\n\tRest *RateLimiter\n)\n"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "40f61a4b1132fa5a5e5166d9554b72f4395e92091584da60293654a55a885fef"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported method 'Request'",
+              "markdown": "Unnecessarily exported method `Request`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/rest.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 63,
+                    "startColumn": 23,
+                    "charOffset": 1796,
+                    "charLength": 7,
+                    "snippet": {
+                      "text": "Request"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 61,
+                    "startColumn": 1,
+                    "charOffset": 1720,
+                    "charLength": 260,
+                    "snippet": {
+                      "text": "\n// Request - send an HTTP request with rate limiting\nfunc (r *RateLimiter) Request(method, route string, data interface{}, reason *string) (*http.Response, error) {\n\treturn r.requestWithBucketID(method, route, strings.SplitN(route, \"?\", 2)[0], data, reason)\n}"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "d6abae6c4d316094ec4ce176161fd73b246c36ec825a221f00149d22936f92bc"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported function 'GetCurrentUser'",
+              "markdown": "Unnecessarily exported function `GetCurrentUser`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/user_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 34,
+                    "startColumn": 6,
+                    "charOffset": 1336,
+                    "charLength": 14,
+                    "snippet": {
+                      "text": "GetCurrentUser"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 32,
+                    "startColumn": 1,
+                    "charOffset": 1281,
+                    "charLength": 231,
+                    "snippet": {
+                      "text": "//\n//goland:noinspection GoUnusedExportedFunction\nfunc GetCurrentUser(scopes []string) *User {\n\t// we have to have at least the `identify` scope to use this endpoint\n\tif len(scopes) == 0 || !utilities.Contains(scopes, \"identify\") {"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "0c234982ebed2e15c00ba5f195594e928680d64f58c4041422c7a96602f862a1"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported method 'GetUser'",
+              "markdown": "Unnecessarily exported method `GetUser`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/user_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 60,
+                    "startColumn": 16,
+                    "charOffset": 1949,
+                    "charLength": 7,
+                    "snippet": {
+                      "text": "GetUser"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 58,
+                    "startColumn": 1,
+                    "charOffset": 1877,
+                    "charLength": 192,
+                    "snippet": {
+                      "text": "\n// GetUser - Returns a User object for a given user ID.\nfunc (u *User) GetUser() *User {\n\tresp, err := Rest.Request(http.MethodGet, fmt.Sprintf(getUser, api, u.ID), nil, nil)\n\tif err != nil {"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "f037b56948c020e453809139e3030679e8f9dc2cd9427d40a7c909fc3dbcd906"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported function 'ModifyCurrentUser'",
+              "markdown": "Unnecessarily exported function `ModifyCurrentUser`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/user_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 85,
+                    "startColumn": 6,
+                    "charOffset": 2558,
+                    "charLength": 17,
+                    "snippet": {
+                      "text": "ModifyCurrentUser"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 83,
+                    "startColumn": 1,
+                    "charOffset": 2503,
+                    "charLength": 190,
+                    "snippet": {
+                      "text": "//\n//goland:noinspection GoUnusedExportedFunction\nfunc ModifyCurrentUser(username *string, avatar *dataurl.DataURL) *User {\n\tpayload := struct {\n\t\tUsername string `json:\"username,omitempty\"`"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "84ca0281d8661298f08f0784f292417d41363aeb65f0a5d9987aac64381f9eb5"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported method 'GetAvatarUrl'",
+              "markdown": "Unnecessarily exported method `GetAvatarUrl`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/user_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 118,
+                    "startColumn": 16,
+                    "charOffset": 3287,
+                    "charLength": 12,
+                    "snippet": {
+                      "text": "GetAvatarUrl"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 116,
+                    "startColumn": 1,
+                    "charOffset": 3213,
+                    "charLength": 155,
+                    "snippet": {
+                      "text": "\n// GetAvatarUrl - returns a properly formatted avatar url\nfunc (u *User) GetAvatarUrl() string {\n\tif u.Avatar != nil {\n\t\tif PtrStr(u.Avatar)[:2] == \"a_\" {"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "18aec9ca8b936ca1285e888aa19a2fe0d69d7a1f6be8c7bf6625336a39538ae7"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported method 'GetDefaultUserAvatarUrl'",
+              "markdown": "Unnecessarily exported method `GetDefaultUserAvatarUrl`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/user_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 129,
+                    "startColumn": 16,
+                    "charOffset": 3613,
+                    "charLength": 23,
+                    "snippet": {
+                      "text": "GetDefaultUserAvatarUrl"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 127,
+                    "startColumn": 1,
+                    "charOffset": 3533,
+                    "charLength": 184,
+                    "snippet": {
+                      "text": "\n// GetDefaultUserAvatarUrl - returns the default Discord avatar\nfunc (u *User) GetDefaultUserAvatarUrl() string {\n\tdiscriminator, err := strconv.Atoi(u.Discriminator)\n\tif err != nil {"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "36298edb41ac5e645dd81370aa40a3358b96a06c80d8a131d6066c4f4aaffa50"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          }
+        ],
         "configProfile": "absent",
         "deviceId": "200820300000000-bb6d-3bba-1831-ac4c93d548d4",
         "tags": [
+          "qodana.promo.results",
           "configProfile",
           "deviceId"
         ]
