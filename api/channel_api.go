@@ -88,12 +88,6 @@ func (e *Embed) SetTitle(title string) *Embed {
 	return e
 }
 
-// GetTitle - Get the Embed title
-// Deprecated: Access the struct field directly
-func (e *Embed) GetTitle() string {
-	return e.Title
-}
-
 // SetDescription - Set the Embed description
 func (e *Embed) SetDescription(description string) *Embed {
 	if len(description) > descriptionLimit {
@@ -102,12 +96,6 @@ func (e *Embed) SetDescription(description string) *Embed {
 	e.Description = description
 
 	return e
-}
-
-// GetDescription - Get the Embed description
-// Deprecated: Access the struct field directly
-func (e *Embed) GetDescription() string {
-	return e.Description
 }
 
 // SetURL - Set the Embed URL
@@ -121,23 +109,11 @@ func (e *Embed) SetURL(u string) *Embed {
 	return e
 }
 
-// GetURL - Get the Embed URL
-// Deprecated: Access the struct field directly
-func (e *Embed) GetURL() string {
-	return e.URL
-}
-
 // SetTimestamp - Set the Embed timestamp
 func (e *Embed) SetTimestamp(ts time.Time) *Embed {
 	e.Timestamp = ts.UTC().Format(time.RFC3339)
 
 	return e
-}
-
-// GetTimestamp - Get the Embed timestamp
-// Deprecated: Access the struct field directly
-func (e *Embed) GetTimestamp() (time.Time, error) {
-	return time.Parse(time.RFC3339, e.Timestamp)
 }
 
 // SetColor - Set the Embed color
@@ -147,23 +123,11 @@ func (e *Embed) SetColor(c int64) *Embed {
 	return e
 }
 
-// GetColor - Get the Embed color
-// Deprecated: Access the struct field directly
-func (e *Embed) GetColor() int64 {
-	return e.Color
-}
-
 // SetFooter - Set the Footer
 func (e *Embed) SetFooter(text string, iconURL string) *Embed {
 	e.Footer = newFooter().SetText(text).SetIconURL(iconURL)
 
 	return e
-}
-
-// GetFooter - Get the Embed footer
-// Deprecated: Access the struct field directly
-func (e *Embed) GetFooter() *Footer {
-	return e.Footer
 }
 
 // SetImage - Set the Image
@@ -173,12 +137,6 @@ func (e *Embed) SetImage(imageURL string) *Embed {
 	return e
 }
 
-// GetImage - Get the Embed image
-// Deprecated: Access the struct field directly
-func (e *Embed) GetImage() *Image {
-	return e.Image
-}
-
 // SetThumbnail - Set the Thumbnail
 func (e *Embed) SetThumbnail(thumbnailURL string) *Embed {
 	e.Thumbnail = newThumbnail().SetURL(thumbnailURL)
@@ -186,23 +144,11 @@ func (e *Embed) SetThumbnail(thumbnailURL string) *Embed {
 	return e
 }
 
-// GetThumbnail - Get the Embed thumbnail
-// Deprecated: Access the struct field directly
-func (e *Embed) GetThumbnail() string {
-	return e.Thumbnail.URL
-}
-
 // SetAuthor - Set the Author
 func (e *Embed) SetAuthor(name, url string, iconURL *string) *Embed {
 	e.Author = newAuthor().SetName(name).SetURL(url).SetIconURL(iconURL)
 
 	return e
-}
-
-// GetAuthor - Get the Embed author
-// Deprecated: Access the struct field directly
-func (e *Embed) GetAuthor() *Author {
-	return e.Author
 }
 
 // AddField - Add a singular Field
@@ -223,12 +169,6 @@ func (e *Embed) AddFields(fields ...*Field) *Embed {
 	return e
 }
 
-// GetFields - Get the Embed fields
-// Deprecated: Access the struct field directly
-func (e *Embed) GetFields() []*Field {
-	return e.Fields
-}
-
 /* EMBED FOOTER */
 
 func newFooter() *Footer {
@@ -245,12 +185,6 @@ func (f *Footer) SetText(text string) *Footer {
 	return f
 }
 
-// GetText - Get the Footer text
-// Deprecated: Access the struct field directly
-func (f *Footer) GetText() string {
-	return f.Text
-}
-
 // SetIconURL - set the Footer IconURL
 func (f *Footer) SetIconURL(iconURL string) *Footer {
 	if _, err := url.Parse(iconURL); err != nil {
@@ -259,12 +193,6 @@ func (f *Footer) SetIconURL(iconURL string) *Footer {
 	f.IconURL = iconURL
 
 	return f
-}
-
-// GetIconURL - Get the Footer icon URL
-// Deprecated: Access the struct field directly
-func (f *Footer) GetIconURL() string {
-	return f.IconURL
 }
 
 /* EMBED IMAGE */
@@ -283,12 +211,6 @@ func (i *Image) SetURL(u string) *Image {
 	return i
 }
 
-// GetURL - Get the Image URL
-// Deprecated: Access the struct field directly
-func (i *Image) GetURL() string {
-	return i.URL
-}
-
 /* EMBED THUMBNAIL */
 
 func newThumbnail() *Thumbnail {
@@ -303,12 +225,6 @@ func (t *Thumbnail) SetURL(u string) *Thumbnail {
 	t.URL = u
 
 	return t
-}
-
-// GetURL - Get the Thumbnail URL
-// Deprecated: Access the struct field directly
-func (t *Thumbnail) GetURL() string {
-	return t.URL
 }
 
 /* EMBED AUTHOR */
@@ -327,12 +243,6 @@ func (a *Author) SetName(name string) *Author {
 	return a
 }
 
-// GetName - Get the Author name
-// Deprecated: Access the struct field directly
-func (a *Author) GetName() string {
-	return a.Name
-}
-
 // SetURL - set the Author URL
 func (a *Author) SetURL(u string) *Author {
 	if _, err := url.Parse(u); err != nil {
@@ -341,12 +251,6 @@ func (a *Author) SetURL(u string) *Author {
 	a.URL = u
 
 	return a
-}
-
-// GetURL - Get the Author URL
-// Deprecated: Access the struct field directly
-func (a *Author) GetURL() string {
-	return a.URL
 }
 
 // SetIconURL - set the Author IconURL
@@ -378,12 +282,6 @@ func (f *Field) SetName(name string) *Field {
 	return f
 }
 
-// GetName - Get the Field name
-// Deprecated: Access the struct field directly
-func (f *Field) GetName() string {
-	return f.Name
-}
-
 // SetValue - set the Field Value
 func (f *Field) SetValue(value string) *Field {
 	if len(value) > fieldValueLimit {
@@ -392,12 +290,6 @@ func (f *Field) SetValue(value string) *Field {
 	f.Value = value
 
 	return f
-}
-
-// GetValue - Get the Field value
-// Deprecated: Access the struct field directly
-func (f *Field) GetValue() string {
-	return f.Value
 }
 
 // SetInline - set the Field Inline
