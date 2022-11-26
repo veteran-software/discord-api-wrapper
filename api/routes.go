@@ -100,13 +100,13 @@ const (
 	getChannelWebhooks                     = createWebhook
 	getGuildWebhooks                       = "%s/guilds/%s/webhooks"
 	getWebhook                             = "%s/webhooks/%s"
+	getWebhookWithToken                    = "%s/webhooks/%s/%s"
 	modifyWebhook                          = getWebhook
 	deleteWebhook                          = getWebhook
 	createFollowupMessage                  = "%s/webhooks/%s/%s"
 	modifyWebhookWithToken                 = createFollowupMessage
 	deleteWebhookWithToken                 = createFollowupMessage
 	executeWebhook                         = "%s/webhooks/%s/%s%s"
-	executeGitHubCompatibleWebhook         = "%s/webhooks/%s/%s/github%s"
 	getWebhookMessage                      = "%s/webhooks/%s/%s/messages/%s%s"
 	editWebhookMessage                     = getWebhookMessage
 	deleteWebhookMessage                   = getWebhookMessage
@@ -116,7 +116,6 @@ const (
 	getOriginalInteractionResponse         = "%s/webhooks/%s/%s/messages/@original"
 	editOriginalInteractionResponse        = getOriginalInteractionResponse
 	deleteOriginalInteractionResponse      = getOriginalInteractionResponse
-	executeSlackCompatibleWebhook          = "%s/webhooks/%s/%s/slack%s"
 	createStageInstance                    = "%s/stage-instances"
 	getStageInstance                       = "%s/stage-instances/%s"
 	modifyStageInstance                    = getStageInstance
