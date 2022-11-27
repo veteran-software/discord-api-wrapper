@@ -15,6 +15,7 @@
 
 package utilities
 
+// Contains - helper function to determine if a slice contains a particular value
 func Contains[T comparable](slice []T, e T) bool {
 	for _, v := range slice {
 		if v == e {

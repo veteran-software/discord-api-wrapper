@@ -20,82 +20,54 @@ func NewComponent() *Component {
 	return &Component{}
 }
 
-// GetType
-// Deprecated: access the struct field directly
-func (c *Component) GetType() ComponentType {
-	return c.Type
-}
-
+// SetType - sets the Component type
 func (c *Component) SetType(t ComponentType) *Component {
 	c.Type = t
 
 	return c
 }
 
-// GetCustomID
-// Deprecated: access the struct field directly
-func (c *Component) GetCustomID() string {
-	return c.CustomID
-}
-
+// SetCustomID - sets the CustomID of the component
 func (c *Component) SetCustomID(t string) *Component {
 	c.CustomID = t
 
 	return c
 }
 
+// IsDisabled - is the Component disabled
 func (c *Component) IsDisabled() bool {
 	return c.Disabled
 }
 
+// SetDisabled - sets the Disabled state of the Component
 func (c *Component) SetDisabled(d bool) *Component {
 	c.Disabled = d
 
 	return c
 }
 
-// GetButtonStyle
-// Deprecated: access the struct field directly
-func (c *Component) GetButtonStyle() ButtonStyle {
-	return c.Style.(ButtonStyle)
-}
-
+// SetButtonStyle - sets the style of the Button
 func (c *Component) SetButtonStyle(s ButtonStyle) *Component {
 	c.Style = s
 
 	return c
 }
 
-// GetTextInputStyle
-// Deprecated: access the struct field directly
-func (c *Component) GetTextInputStyle() TextInputStyle {
-	return c.Style.(TextInputStyle)
-}
-
+// SetTextInputStyle - sets the style of the TextInput
 func (c *Component) SetTextInputStyle(s TextInputStyle) *Component {
 	c.Style = s
 
 	return c
 }
 
-// GetEmoji
-// Deprecated: access the struct field directly
-func (c *Component) GetEmoji() *Emoji {
-	return c.Emoji
-}
-
+// SetEmoji - sets the Emoji for the Button
 func (c *Component) SetEmoji(e *Emoji) *Component {
 	c.Emoji = e
 
 	return c
 }
 
-// GetURL
-// Deprecated: access the struct field directly
-func (c *Component) GetURL() string {
-	return c.URL
-}
-
+// SetURL - sets the URL for the Button
 func (c *Component) SetURL(u string) *Component {
 	c.URL = u
 
@@ -112,18 +84,21 @@ func NewModalResponse() *InteractionResponseModal {
 	}
 }
 
+// SetCustomID - sets the CustomID of the InteractionResponseModal
 func (i *InteractionResponseModal) SetCustomID(c string) *InteractionResponseModal {
 	i.Data.CustomID = c
 
 	return i
 }
 
+// SetTitle - sets the Title of the InteractionResponseModal
 func (i *InteractionResponseModal) SetTitle(t string) *InteractionResponseModal {
 	i.Data.Title = t
 
 	return i
 }
 
+// AddComponent - adds a single Component to the InteractionResponseModal
 func (i *InteractionResponseModal) AddComponent(c *Component) *InteractionResponseModal {
 	i.Data.Components = append(i.Data.Components, *c)
 
@@ -139,42 +114,49 @@ func NewMessageResponse() *InteractionResponseMessages {
 	}
 }
 
+// SetType - sets the Type of the InteractionResponseMessages object
 func (i *InteractionResponseMessages) SetType(t InteractionCallbackType) *InteractionResponseMessages {
 	i.Type = t
 
 	return i
 }
 
+// SetTts - sets the TTS flag
 func (i *InteractionResponseMessages) SetTts(tts bool) *InteractionResponseMessages {
 	i.Data.TTS = tts
 
 	return i
 }
 
+// SetContent - sets the content of the response message
 func (i *InteractionResponseMessages) SetContent(content string) *InteractionResponseMessages {
 	i.Data.Content = content
 
 	return i
 }
 
+// AddEmbed - adds a single Embed to the response
 func (i *InteractionResponseMessages) AddEmbed(e *Embed) *InteractionResponseMessages {
 	i.Data.Embeds = append(i.Data.Embeds, *e)
 
 	return i
 }
 
+// AddEmbeds - add multiple Embed objects (max 10) to the response
 func (i *InteractionResponseMessages) AddEmbeds(e []Embed) *InteractionResponseMessages {
 	i.Data.Embeds = append(i.Data.Embeds, e...)
 
 	return i
 }
 
+// SetEphemeral - sets the Ephemeral flag to the response message
 func (i *InteractionResponseMessages) SetEphemeral() *InteractionResponseMessages {
 	i.Data.Flags = i.Data.Flags | Ephemeral
 
 	return i
 }
 
+// AddFlag - bit shifts a new flag into the flags of the response message
 func (i *InteractionResponseMessages) AddFlag(f MessageFlags) *InteractionResponseMessages {
 	if f == SuppressEmbeds || f == Ephemeral {
 		i.Data.Flags = i.Data.Flags | f
@@ -185,28 +167,18 @@ func (i *InteractionResponseMessages) AddFlag(f MessageFlags) *InteractionRespon
 	return i
 }
 
+// AddComponent - adds a single Component to the response message
 func (i *InteractionResponseMessages) AddComponent(c *Component) *InteractionResponseMessages {
 	i.Data.Components = append(i.Data.Components, *c)
 
 	return i
 }
 
+// AddAttachment - adds a single attachment to the response message
 func (i *InteractionResponseMessages) AddAttachment(a *Attachment) *InteractionResponseMessages {
 	i.Data.Attachments = append(i.Data.Attachments, *a)
 
 	return i
-}
-
-// GetEmbeds
-// Deprecated: access the struct field directly
-func (i *InteractionResponseMessages) GetEmbeds() []Embed {
-	return i.Data.Embeds
-}
-
-// GetType
-// Deprecated: access the struct field directly
-func (i *InteractionResponseMessages) GetType() InteractionCallbackType {
-	return i.Type
 }
 
 // NewAutocompleteResponse - Build a new response containing a modal
@@ -219,12 +191,14 @@ func NewAutocompleteResponse() *InteractionResponseAutocomplete {
 	}
 }
 
+// AddChoice - adds a single choice to the autocomplete response
 func (i *InteractionResponseAutocomplete) AddChoice(c *ApplicationCommandOptionChoice) *InteractionResponseAutocomplete {
 	i.Data.Choices = append(i.Data.Choices, c)
 
 	return i
 }
 
+// AddChoices - adds multiple choices to the autocomplete response
 func (i *InteractionResponseAutocomplete) AddChoices(c []*ApplicationCommandOptionChoice) *InteractionResponseAutocomplete {
 	i.Data.Choices = append(i.Data.Choices, c...)
 

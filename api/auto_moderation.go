@@ -15,6 +15,11 @@
 
 package api
 
+// AutoModerationRule - Auto Moderation is a feature which allows each guild to set up rules that trigger based on some criteria.
+// For example, a rule can trigger whenever a message contains a specific keyword.
+//
+// Rules can be configured to automatically execute actions whenever they trigger.
+// For example, if a user tries to send a message which contains a certain keyword, a rule can trigger and block the message before it is sent.
 type AutoModerationRule struct {
 	ID              Snowflake       `json:"id"`               // the id of this rule
 	GuildID         Snowflake       `json:"guild_id"`         // the id of the guild which this rule belongs to
@@ -49,6 +54,7 @@ type TriggerMetadata struct {
 	MentionTotalLimit int                 `json:"mention_total_limit"` // total number of unique role and user mentions allowed per message (Maximum of 50)
 }
 
+// KeyWordPresetType - the internally pre-defined wordsets which will be searched for in content
 type KeyWordPresetType int
 
 //goland:noinspection GoUnusedConst
@@ -72,6 +78,7 @@ type AutoModAction struct {
 	Metadata string                   `json:"metadata"` // additional metadata needed during execution for this specific action type
 }
 
+// AutoModerationActionType - the type of action
 type AutoModerationActionType int
 
 //goland:noinspection GoUnusedConst
