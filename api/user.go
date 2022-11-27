@@ -99,6 +99,7 @@ type Connection struct {
 	Visibility   ConnectionVisibilityType `json:"visibility"`             // visibility of this connection
 }
 
+// Service - the service of the connection
 type Service string
 
 //goland:noinspection SpellCheckingInspection,GoUnusedConst

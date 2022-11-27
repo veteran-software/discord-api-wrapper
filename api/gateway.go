@@ -29,6 +29,11 @@ type GatewayPayload struct {
 	T  *string      `json:"t"`  // the event name for this payload
 }
 
+// OpCode
+//
+// All gateway events in Discord are tagged with an opcode that denotes the payload type.
+// Your connection to our gateway may also sometimes close.
+// When it does, you will receive a close code that tells you what happened.
 type OpCode int
 
 //goland:noinspection GoUnusedConst

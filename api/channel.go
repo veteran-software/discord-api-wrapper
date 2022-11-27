@@ -102,6 +102,7 @@ const (
 	Full                             // 720p
 )
 
+// ChannelFlag - channel flags combined as a bitfield
 type ChannelFlag int
 
 //goland:noinspection GoUnusedConst
@@ -110,6 +111,7 @@ const (
 	RequireTag ChannelFlag = 1 << 4 // whether a tag is required to be specified when creating a thread in a GuildForum channel. Tags are specified in the applied_tags field.
 )
 
+// SortOrderType - the default sort order type used to order posts in GuildForum channels.
 type SortOrderType int
 
 //goland:noinspection GoUnusedConst

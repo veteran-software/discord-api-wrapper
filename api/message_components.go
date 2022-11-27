@@ -40,6 +40,7 @@ type Component struct {
 // ComponentType - The type of component
 type ComponentType int
 
+//goland:noinspection GoExportedElementShouldHaveComment
 const (
 	ComponentTypeActionRow  ComponentType = iota + 1 // A container for other components
 	ComponentTypeButton                              // A clickable button
@@ -52,7 +53,7 @@ const (
 // They can be clicked by users, and send an interaction to your app when clicked.
 //
 //   - Buttons must be sent inside an ComponentTypeActionRow
-//   - An ComponentTypeActionRow can contain up to 5 buttons
+//   - A ComponentTypeActionRow can contain up to 5 buttons
 type Button struct {
 	Type     ComponentType `json:"type"`                // ComponentType for a button
 	Style    ButtonStyle   `json:"style"`               // one of ButtonStyle
@@ -123,6 +124,7 @@ type TextInput struct {
 // TextInputStyle - Denotes if a text input is short form or paragraph form
 type TextInputStyle int
 
+//goland:noinspection GoExportedElementShouldHaveComment
 const (
 	TextInputShort     TextInputStyle = iota + 1 // A single-line input
 	TextInputParagraph                           // A multi-line input
