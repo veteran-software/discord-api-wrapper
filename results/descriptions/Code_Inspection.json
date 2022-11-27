@@ -180,7 +180,7 @@
         {
           "shortName": "GoUnnecessarilyExportedIdentifiers",
           "displayName": "Unnecessarily exported identifier",
-          "enabled": false,
+          "enabled": true,
           "description": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package."
         },
         {
@@ -602,16 +602,16 @@
           "description": "Reports optional blank variables in range loops.\n\nWhen you use the `range` loop to iterate over a slice, two values are returned for each iteration. The first is the index\nnumber, and the second is a copy of the element at that index. If you do not need the second value, you can skip this element instead of\nusing a blank identifier.\n\nExample:\n\n    for a, _ = range v {} // `for a, _ =` is the same as `for a =`\n\nTo remove the blank identifier, you can use the **Delete blank argument** quick-fix. After the quick-fix is applied, the code will\nlook as follows:\n\n    for a = range v {}\n"
         },
         {
-          "shortName": "GoUnusedFunction",
-          "displayName": "Unused function",
-          "enabled": true,
-          "description": "Reports unused unexported functions.\n\nIn Go, a function is unexported if it begins with a small letter. Names of unexported functions that were defined but never used are\ngrayed out.\n\n    // Unused unexported function\n    func unExportedUnusedFunc()  {\n\n    }\n\n    func main() {\n     fmt.Println(\"Hello\")\n    }\n"
-        },
-        {
           "shortName": "GoUnusedConst",
           "displayName": "Unused constant",
           "enabled": true,
           "description": "Reports constants that are defined but are never used in code.\n\n    func main() {\n     const i = 100\n    }\n\nUnlike unused variables and imports, this code will compile. Unused constants might increase your code base and\nslow down program compilation. To delete the unused constant, consider using the **Delete constant** quick-fix."
+        },
+        {
+          "shortName": "GoUnusedFunction",
+          "displayName": "Unused function",
+          "enabled": true,
+          "description": "Reports unused unexported functions.\n\nIn Go, a function is unexported if it begins with a small letter. Names of unexported functions that were defined but never used are\ngrayed out.\n\n    // Unused unexported function\n    func unExportedUnusedFunc()  {\n\n    }\n\n    func main() {\n     fmt.Println(\"Hello\")\n    }\n"
         },
         {
           "shortName": "GoEmptyDeclaration",
