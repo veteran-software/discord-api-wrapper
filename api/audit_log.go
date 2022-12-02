@@ -4,7 +4,8 @@
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -16,8 +17,10 @@
 package api
 
 import (
+	"encoding/json"
+	"errors"
 	"fmt"
-	"net/http"
+	"strconv"
 )
 
 /* Whenever an admin action is performed on the API, an entry is added to the respective guild's audit log.
@@ -170,14 +173,42 @@ type OptionalAuditEntry struct {
 
 // AuditLogChange - If new_value is not present in the change object, while old_value is, that means the property that was changed has been reset, or set to null
 type AuditLogChange struct {
-	NewValue interface{} `json:"new_value,omitempty"` // new value of the key
-	OldValue interface{} `json:"old_value,omitempty"` // old value of the key
-	Key      string      `json:"key"`                 // name of audit log change key
+	NewValue any    `json:"new_value,omitempty"` // new value of the key
+	OldValue any    `json:"old_value,omitempty"` // old value of the key
+	Key      string `json:"key"`                 // name of audit log change key
 }
 
 // GetGuildAuditLog - Returns an audit log object for the guild.
 //
 // Requires the ViewAuditLog permission.
-func (g *Guild) GetGuildAuditLog() (method string, route string) {
-	return http.MethodGet, fmt.Sprintf(getGuildAuditLog, api, g.ID.String())
+func (g *Guild) GetGuildAuditLog(userID *Snowflake, actionType *uint64, before *Snowflake, limit *uint64) (*AuditLog, error) {
+	u := parseRoute(fmt.Sprintf(getGuildAuditLog, api, g.ID.String()))
+
+	// Set the optional qsp
+	q := u.Query()
+	if userID != nil {
+		q.Set("user_id", userID.String())
+	}
+	if actionType != nil {
+		q.Set("action_type", strconv.FormatUint(*actionType, 10))
+	}
+	if before != nil {
+		q.Set("before", before.String())
+	}
+	if limit != nil {
+		if *limit >= 1 && *limit <= 100 {
+			q.Set("limit", strconv.FormatUint(*limit, 10))
+		} else {
+			return nil, errors.New("the limit filter must be >= 1 && <= 100")
+		}
+	}
+	// If there's any of the optional qsp present, encode and add to the URL
+	if len(q) != 0 {
+		u.RawQuery = q.Encode()
+	}
+
+	var log AuditLog
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &log)
+
+	return &log, err
 }

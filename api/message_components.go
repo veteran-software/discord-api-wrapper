@@ -4,7 +4,8 @@
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -22,7 +23,7 @@ type Component struct {
 	Type        ComponentType  `json:"type"`                  // ComponentType; valid for all types
 	CustomID    string         `json:"custom_id,omitempty"`   // a developer-defined identifier for the button, max 100 characters
 	Disabled    bool           `json:"disabled,omitempty"`    // whether the button is disabled, default false
-	Style       interface{}    `json:"style,omitempty"`       // one of ButtonStyle
+	Style       any            `json:"style,omitempty"`       // one of ButtonStyle
 	Label       string         `json:"label,omitempty"`       // text that appears on the button, max 80 characters
 	Emoji       *Emoji         `json:"emoji,omitempty"`       // name, id, and animated
 	URL         string         `json:"url,omitempty"`         // a URL for link-style buttons

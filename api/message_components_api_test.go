@@ -4,7 +4,8 @@
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -61,7 +62,7 @@ func TestComponentGetType(t *testing.T) {
 				Type: tt.fields.Type,
 			}
 			if got := c.Type; got != tt.want {
-				t.Errorf("GetType() = %v, want %v", got, tt.want)
+				t.Errorf("Type = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -290,7 +291,7 @@ func TestComponentSetDisabled(t *testing.T) {
 
 func TestComponentGetButtonStyle(t *testing.T) {
 	type fields struct {
-		Style interface{}
+		Style any
 	}
 	tests := []struct {
 		name   string
@@ -337,7 +338,7 @@ func TestComponentGetButtonStyle(t *testing.T) {
 
 func TestComponentSetButtonStyle(t *testing.T) {
 	type fields struct {
-		Style interface{}
+		Style any
 	}
 	type args struct {
 		s ButtonStyle
@@ -403,7 +404,7 @@ func TestComponentSetButtonStyle(t *testing.T) {
 
 func TestComponentGetTextInputStyle(t *testing.T) {
 	type fields struct {
-		Style interface{}
+		Style any
 	}
 	tests := []struct {
 		name   string
@@ -427,7 +428,7 @@ func TestComponentGetTextInputStyle(t *testing.T) {
 				Style: tt.fields.Style,
 			}
 			if got := c.Style.(TextInputStyle); got != tt.want {
-				t.Errorf("GetTextInputStyle() = %v, want %v", got, tt.want)
+				t.Errorf("Style.(TextInputStyle) = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -435,7 +436,7 @@ func TestComponentGetTextInputStyle(t *testing.T) {
 
 func TestComponentSetTextInputStyle(t *testing.T) {
 	type fields struct {
-		Style interface{}
+		Style any
 	}
 	type args struct {
 		s TextInputStyle
@@ -536,7 +537,7 @@ func TestComponentGetEmoji(t *testing.T) {
 				Emoji: tt.fields.Emoji,
 			}
 			if got := c.Emoji; !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetEmoji() = %v, want %v", got, tt.want)
+				t.Errorf("Emoji = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -629,7 +630,7 @@ func TestComponentGetURL(t *testing.T) {
 				URL: tt.fields.URL,
 			}
 			if got := c.URL; got != tt.want {
-				t.Errorf("GetURL() = %v, want %v", got, tt.want)
+				t.Errorf("URL = %v, want %v", got, tt.want)
 			}
 		})
 	}

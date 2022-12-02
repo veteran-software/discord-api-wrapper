@@ -4,7 +4,8 @@
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -23,10 +24,10 @@ const (
 
 // GatewayPayload - S and T are null when Op is not 0 (Gateway Dispatch Opcode).
 type GatewayPayload struct {
-	Op int          `json:"op"` // opcode for the payload
-	D  *interface{} `json:"d"`  // event data
-	S  *int         `json:"s"`  // sequence number, used for resuming sessions and heartbeats
-	T  *string      `json:"t"`  // the event name for this payload
+	Op int     `json:"op"` // opcode for the payload
+	D  *any    `json:"d"`  // event data
+	S  *int    `json:"s"`  // sequence number, used for resuming sessions and heartbeats
+	T  *string `json:"t"`  // the event name for this payload
 }
 
 // OpCode
@@ -88,7 +89,7 @@ const (
 // Identify - Used to trigger the initial handshake with the gateway.
 type Identify struct {
 	Token          string                `json:"token"`                     // authentication token
-	Properties     string                `json:"properties"`                // IdentifyConnection properties
+	Properties     IdentifyConnection    `json:"properties"`                // IdentifyConnection properties
 	Compress       bool                  `json:"compress,omitempty"`        // whether this connection supports compression of packets
 	LargeThreshold int                   `json:"large_threshold,omitempty"` // value between 50 and 250, total number of members where the gateway will stop sending offline members in the guild member list
 	Shard          [2]int                `json:"shard,omitempty"`           // used for Guild Sharding

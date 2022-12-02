@@ -1,6 +1,6 @@
 module github.com/veteran-software/discord-api-wrapper/v10
 
-go 1.18
+go 1.19
 
 require (
 	github.com/gojek/heimdall/v7 v7.0.2
