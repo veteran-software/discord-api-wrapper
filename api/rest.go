@@ -214,6 +214,7 @@ func firePostRequest(u *url.URL, data any, reason *string) []byte {
 	return b
 }
 
+//goland:noinspection GoUnusedFunction
 func firePutRequest(u *url.URL, data any, reason *string) []byte {
 	resp, err := Rest.Request(http.MethodPut, u.String(), data, reason)
 	if err != nil {

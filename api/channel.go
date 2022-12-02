@@ -73,7 +73,7 @@ const (
 	GuildPrivateThread                        // a temporary sub-channel within a GuildText channel that is only viewable by those invited and those with the ManageThreads permission
 	GuildStageVoice                           // a voice channel for hosting events with an audience
 	GuildDirectory                            // the channel in a hub containing the listed servers
-	GuildForum                                // (still in development) a channel that can only contain threads
+	GuildForum                                // Channel that can only contain threads
 )
 
 // VideoQualityMode - the camera video quality mode of the voice channel, 1 when not present
@@ -85,14 +85,26 @@ const (
 	Full                             // 720p
 )
 
-type ChannelFlag uint64
+// ChannelFlag - channel flags combined as a bitfield
+type ChannelFlag int
 
 //goland:noinspection GoUnusedConst
 const (
-	Pinned ChannelFlag = 1 << 1
+	Pinned     ChannelFlag = 1 << 1 // this thread is pinned to the top of its parent GuildForum channel
+	RequireTag ChannelFlag = 1 << 4 // whether a tag is required to be specified when creating a thread in a GuildForum channel. Tags are specified in the applied_tags field.
+)
+
+// SortOrderType - the default sort order type used to order posts in GuildForum channels.
+type SortOrderType int
+
+//goland:noinspection GoUnusedConst
+const (
+	LatestActivity SortOrderType = iota // Sort forum posts by activity
+	CreationDate                        // Sort forum posts by creation time (from most recent to oldest)
 )
 
 // Message - Represents a message sent in a channel within Discord.
+//
 //goland:noinspection SpellCheckingInspection
 type Message struct {
 	ID                Snowflake          `json:"id,omitempty"`                 // id of the message
@@ -126,6 +138,7 @@ type Message struct {
 	Components        []Component        `json:"components,omitempty"`         // sent if the message contains components like buttons, action rows, or other interactive components
 	StickerItems      []string           `json:"sticker_items,omitempty"`      // sent if the message contains stickers
 	Stickers          []string           `json:"stickers,omitempty"`           // Deprecated: the stickers sent with the message
+	Position          int                `json:"position,omitempty"`           // 	A generally increasing integer (there may be gaps or duplicates) that represents the approximate position of the message in a thread, it can be used to estimate the relative position of the message in a thread in company with total_message_sent on parent thread
 }
 
 // MessageType - type of message
@@ -141,10 +154,10 @@ const (
 	ChannelIconChange                                              // CHANNEL_ICON_CHANGE
 	ChannelPinnedMessage                                           // CHANNEL_PINNED_MESSAGE
 	GuildMemberJoin                                                // GUILD_MEMBER_JOIN
-	UserPremiumGuildSubscription                                   // USER_PREMIUM_GUILD_SUBSCRIPTION
-	UserPremiumGuildSubscriptionTier1                              // USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_1
-	UserPremiumGuildSubscriptionTier2                              // USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_2
-	UserPremiumGuildSubscriptionTier3                              // USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_3
+	GuildBoost                                                     // GUILD_BOOST
+	GuildBoostTier1                                                // GUILD_BOOST_TIER_1
+	GuildBoostTier2                                                // GUILD_BOOST_TIER_2
+	GuildBoostTier3                                                // GUILD_BOOST_TIER_3
 	ChannelFollowAdd                                               // CHANNEL_FOLLOW_ADD
 	GuildDiscoveryDisqualified              MessageType = iota + 1 // GUILD_DISCOVERY_DISQUALIFIED
 	GuildDiscoveryRequalified                                      // GUILD_DISCOVERY_REQUALIFIED
@@ -156,6 +169,7 @@ const (
 	ThreadStarterMessage                                           // THREAD_STARTER_MESSAGE
 	GuildInviteReminder                                            // GUILD_INVITE_REMINDER
 	ContextMenuCommand                                             // CONTEXT_MENU_COMMAND
+	AutoModerationAction                                           // AUTO_MODERATION_ACTION
 )
 
 // MessageActivity - sent with Rich Presence-related chat embeds
@@ -230,6 +244,7 @@ const (
 )
 
 // ThreadMetadata - The thread metadata object contains a number of thread-specific channel fields that are not needed by other channel types.
+//
 //goland:noinspection SpellCheckingInspection
 type ThreadMetadata struct {
 	Archived            bool       `json:"archived"`                   // whether the thread is archived
@@ -246,6 +261,25 @@ type ThreadMember struct {
 	UserID        Snowflake `json:"user_id,omitempty"` // the id of the User
 	JoinTimestamp time.Time `json:"join_timestamp"`    // the time the current user last joined the thread
 	Flags         int64     `json:"flags"`             // any user-thread settings, currently only used for notifications
+}
+
+// DefaultReaction - An object that specifies the emoji to use as the default way to react to a forum post. Exactly one of emoji_id and emoji_name must be set.
+type DefaultReaction struct {
+	EmojiID   *Snowflake `json:"emoji_id"`   // the id of a guild's custom emoji
+	EmojiName *string    `json:"emoji_name"` // the unicode character of the emoji
+}
+
+// ForumTag - An object that represents a tag that is able to be applied to a thread in a GuildForum channel.
+//
+// When updating a GuildForum channel, tag objects in available_tags only require the Name field.
+//
+// At most one of EmojiID and EmojiName may be set.
+type ForumTag struct {
+	ID        Snowflake `json:"id"`         // the id of the tag
+	Name      string    `json:"name"`       // the name of the tag (0-20 characters)
+	Moderated bool      `json:"moderated"`  // whether this tag can only be added to or removed from threads by a member with the ManageThreads permission
+	EmojiID   Snowflake `json:"emoji_id"`   // the id of a guild's custom emoji
+	EmojiName *string   `json:"emoji_name"` // the unicode character of the emoji
 }
 
 // Embed - contains rich content
@@ -330,17 +364,18 @@ type Field struct {
 }
 
 // Attachment - For the attachments array in Message Create/Edit requests, only the id is required.
+//
 //goland:noinspection SpellCheckingInspection
 type Attachment struct {
 	ID          Snowflake `json:"id"`                     // attachment id
 	Filename    string    `json:"filename"`               // name of file attached
 	Description string    `json:"description,omitempty"`  // description for the file
 	ContentType string    `json:"content_type,omitempty"` // the attachment's media type
-	Size        uint64    `json:"size"`                   // size of file in bytes
+	Size        int       `json:"size"`                   // size of file in bytes
 	URL         string    `json:"url"`                    // source url of file
 	ProxyURL    string    `json:"proxy_url"`              // a proxied url of file
-	Height      *int64    `json:"height,omitempty"`       // height of file (if image)
-	Width       *int64    `json:"width,omitempty"`        // width of file (if image)
+	Height      *int      `json:"height,omitempty"`       // height of file (if image)
+	Width       *int      `json:"width,omitempty"`        // width of file (if image)
 	Ephemeral   bool      `json:"ephemeral,omitempty"`    // whether this attachment is ephemeral
 }
 
@@ -472,6 +507,7 @@ func (c *Channel) modifyChannel(payload any, reason *string) (*Channel, error) {
 //
 // Otherwise, requires the MANAGE_THREADS permission. Fires a Thread Update Gateway event.
 // Requires the thread to have archived set to false or be set to false in the request.
+//
 //goland:noinspection SpellCheckingInspection
 type ModifyThreadJSON struct {
 	Name                string `json:"name"`                  // 1-100 character channel name
@@ -490,11 +526,11 @@ type ModifyThreadJSON struct {
 //
 // Returns a channel object on success. Fires a ChannelDelete Gateway event (or ThreadDelete if the channel was a thread).
 //
-//     Deleting a guild channel cannot be undone. Use this with caution, as it is impossible to undo this action when performed on a guild channel. In contrast, when used with a private message, it is possible to undo the action by opening a private message with the recipient again.
+//	Deleting a guild channel cannot be undone. Use this with caution, as it is impossible to undo this action when performed on a guild channel. In contrast, when used with a private message, it is possible to undo the action by opening a private message with the recipient again.
 //
-//     For Community guilds, the Rules or Guidelines channel and the Community Updates channel cannot be deleted.
+//	For Community guilds, the Rules or Guidelines channel and the Community Updates channel cannot be deleted.
 //
-//     This endpoint supports the `X-Audit-Log-Reason` header.
+//	This endpoint supports the `X-Audit-Log-Reason` header.
 func (c *Channel) DeleteChannel(reason *string) error {
 	u := parseRoute(fmt.Sprintf(deleteChannel, api, c.ID.String()))
 
@@ -511,7 +547,7 @@ func (c *Channel) DeleteChannel(reason *string) error {
 //
 // SUPPORTS: "around : Snowflake"; "before : Snowflake"; "after : Snowflake"; "limit : int" ; nil
 //
-//      The before, after, and around keys are mutually exclusive, only one may be passed at a time.
+//	The before, after, and around keys are mutually exclusive, only one may be passed at a time.
 //
 // TODO: Check permissions; required ViewChannel and ReadMessageHistory
 func (c *Channel) GetChannelMessages(around *Snowflake, before *Snowflake, after *Snowflake, limit *int) ([]Message, error) {
@@ -556,24 +592,24 @@ func (c *Channel) GetChannelMessage(messageID string) (*Message, error) {
 
 // CreateMessage - Post a message to a guild text or DM channel. Returns a message object.
 //
-//      Discord may strip certain characters from message content, like invalid unicode characters or characters which cause unexpected message formatting. If you are passing user-generated strings into message content, consider sanitizing the data to prevent unexpected behavior and utilizing allowed_mentions to prevent unexpected mentions.
+//	Discord may strip certain characters from message content, like invalid unicode characters or characters which cause unexpected message formatting. If you are passing user-generated strings into message content, consider sanitizing the data to prevent unexpected behavior and utilizing allowed_mentions to prevent unexpected mentions.
 //
 // Fires a Message Create Gateway event.
 //
 // See message formatting for more information on how to properly format messages.
 //
 // Limitations
-//   * When operating on a guild channel, the current user must have the SendMessages permission.
-//   * When sending a message with tts (text-to-speech) set to true, the current user must have the SendTtsMessages permission.
-//   * When creating a message as a reply to another message, the current user must have the ReadMessageHistory permission.
-//       * The referenced message must exist and cannot be a system message.
-//   * The maximum request size when sending a message is 8 MB
-//   * For the embed object, you can set every field except type (it will be rich regardless of if you try to set it), provider, video, and any height, width, or proxy_url values for images.
-//   * Files can only be uploaded when using the multipart/form-data content type.
+//   - When operating on a guild channel, the current user must have the SendMessages permission.
+//   - When sending a message with tts (text-to-speech) set to true, the current user must have the SendTtsMessages permission.
+//   - When creating a message as a reply to another message, the current user must have the ReadMessageHistory permission.
+//   - The referenced message must exist and cannot be a system message.
+//   - The maximum request size when sending a message is 8 MB
+//   - For the embed object, you can set every field except type (it will be rich regardless of if you try to set it), provider, video, and any height, width, or proxy_url values for images.
+//   - Files can only be uploaded when using the multipart/form-data content type.
 //
 // You may create a message as a reply to another message. To do so, include a `message_reference` with a `message_id`. The `channel_id` and `guild_id` in the `message_reference` are optional, but will be validated if provided.
 //
-//     Note that when sending a message, you must provide a value for at least one of content, embeds, or file.
+//	Note that when sending a message, you must provide a value for at least one of content, embeds, or file.
 //
 // For a file attachment, the Content-Disposition subpart header MUST contain a filename parameter.
 //
@@ -615,6 +651,7 @@ type CreateMessageJSON struct {
 // This endpoint requires the 'SEND_MESSAGES' permission, if the current user sent the message, or additionally the 'MANAGE_MESSAGES' permission, for all other messages, to be present for the current user.
 //
 // Returns a message object.
+//
 //goland:noinspection SpellCheckingInspection
 func (c *Channel) CrosspostMessage(messageID string) (*Message, error) {
 	u := parseRoute(fmt.Sprintf(crosspostMessage, api, c.ID.String(), messageID))
@@ -891,7 +928,7 @@ type CreateChannelInviteJSON struct {
 //
 // Returns a 204 empty response on success.
 //
-// For more information about permissions, see permissions
+// # For more information about permissions, see permissions
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
 func (c *Channel) DeleteChannelPermission(overwriteID Snowflake, reason *string) error {
@@ -949,9 +986,9 @@ func (c *Channel) GetPinnedMessages() ([]Message, error) {
 //
 // Returns a 204 empty response on success.
 //
-//    The max pinned messages is 50.
+//	The max pinned messages is 50.
 //
-//    This endpoint supports the X-Audit-Log-Reason header.
+//	This endpoint supports the X-Audit-Log-Reason header.
 func (c *Channel) PinMessage(messageID Snowflake, reason *string) {
 	u := parseRoute(fmt.Sprintf(pinMessage, api, c.ID.String(), messageID.String()))
 
@@ -964,7 +1001,7 @@ func (c *Channel) PinMessage(messageID Snowflake, reason *string) {
 //
 // Returns a 204 empty response on success.
 //
-//    This endpoint supports the X-Audit-Log-Reason header.
+//	This endpoint supports the X-Audit-Log-Reason header.
 func (c *Channel) UnpinMessage(messageID Snowflake, reason *string) error {
 	u := parseRoute(fmt.Sprintf(unpinMessage, api, c.ID.String(), messageID.String()))
 
@@ -1007,7 +1044,7 @@ func (c *Channel) GroupDmRemoveRecipient(userID Snowflake) error {
 //
 // The id of the created thread will be the same as the id of the source message, and as such a message can only have a single thread created from it.
 //
-//    This endpoint supports the X-Audit-Log-Reason header.
+//	This endpoint supports the X-Audit-Log-Reason header.
 func (c *Channel) StartThreadWithMessage(messageID Snowflake, payload StartThreadWithMessageJSON, reason *string) (*Channel, error) {
 	u := parseRoute(fmt.Sprintf(startThreadWithMessage, api, c.ID.String(), messageID.String()))
 
@@ -1026,11 +1063,13 @@ type StartThreadWithMessageJSON struct {
 
 // StartThreadWithoutMessage - Creates a new thread that is not connected to an existing message.
 //
+// The created thread defaults to a GuildPrivateThread.
+//
 // Returns a channel on success, and a 400 BAD REQUEST on invalid parameters.
 //
 // Fires a ThreadCreate Gateway event.
 //
-//    This endpoint supports the X-Audit-Log-Reason header.
+//	This endpoint supports the X-Audit-Log-Reason header.
 //
 // * Creating a GuildPrivateThread requires the server to be boosted. The GuildFeatures will indicate if that is possible for the guild.
 func (c *Channel) StartThreadWithoutMessage(payload StartThreadWithoutMessageJSON, reason *string) (*Channel, error) {
@@ -1055,18 +1094,18 @@ type StartThreadWithoutMessageJSON struct {
 //
 // Creates a new thread in a forum channel, and sends a message within the created thread. Returns a Channel, with a nested Message object, on success, and a 400 BAD REQUEST on invalid parameters. Fires a ThreadCreate and Message Create Gateway event.
 //
-//     The type of the created thread is GuildPublicThread.
-//     See message formatting for more information on how to properly format messages.
-//     The current user must have the SendMessages permission (CreatePublicThreads is ignored).
-//     The maximum request size when sending a message is 8MiB.
-//     For the embed object, you can set every field except type (it will be rich regardless of if you try to set it), provider, video, and any height, width, or proxy_url values for images.
-//     Examples for file uploads are available in Uploading Files.
-//     Files must be attached using a multipart/form-data body as described in Uploading Files.
-//     Note that when sending a message, you must provide a value for at least one of content, embeds, or files[n].
+//	The type of the created thread is GuildPublicThread.
+//	See message formatting for more information on how to properly format messages.
+//	The current user must have the SendMessages permission (CreatePublicThreads is ignored).
+//	The maximum request size when sending a message is 8MiB.
+//	For the embed object, you can set every field except type (it will be rich regardless of if you try to set it), provider, video, and any height, width, or proxy_url values for images.
+//	Examples for file uploads are available in Uploading Files.
+//	Files must be attached using a multipart/form-data body as described in Uploading Files.
+//	Note that when sending a message, you must provide a value for at least one of content, embeds, or files[n].
 //
-//     Discord may strip certain characters from message content, like invalid unicode characters or characters which cause unexpected message formatting. If you are passing user-generated strings into message content, consider sanitizing the data to prevent unexpected behavior and utilizing allowed_mentions to prevent unexpected mentions.
+//	Discord may strip certain characters from message content, like invalid unicode characters or characters which cause unexpected message formatting. If you are passing user-generated strings into message content, consider sanitizing the data to prevent unexpected behavior and utilizing allowed_mentions to prevent unexpected mentions.
 //
-//     This endpoint supports the X-Audit-Log-Reason header.
+//	This endpoint supports the X-Audit-Log-Reason header.
 func (c *Channel) StartThreadInForumChannel(payload StartThreadWithoutMessageJSON, reason *string) (*Channel, error) {
 	u := parseRoute(fmt.Sprintf(startThreadInForumChannel, api, c.ID.String()))
 

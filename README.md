@@ -13,6 +13,8 @@
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=veteran-software_discord-api-wrapper&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=veteran-software_discord-api-wrapper)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=veteran-software_discord-api-wrapper&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=veteran-software_discord-api-wrapper)
 
+[![Qodana](https://github.com/veteran-software/discord-api-wrapper/actions/workflows/code_quality.yml/badge.svg?branch=v10)](https://github.com/veteran-software/discord-api-wrapper/actions/workflows/code_quality.yml)
+
 ## Purpose
 
 This wrapper is rather incomplete vs other popular wrappers for Discord's REST API. It was developed for a proprietary

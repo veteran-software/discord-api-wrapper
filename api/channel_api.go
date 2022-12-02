@@ -60,7 +60,8 @@ func (c *Channel) String() string {
 	return chanType + c.Name + "(" + c.ID.String() + ")"
 }
 
-//NewEmbed - Instantiates a new Embed object with the color defaulted to red and the timestamp defaulted to time.Now()
+// NewEmbed - Instantiates a new Embed object with the color defaulted to red and the timestamp defaulted to time.Now()
+//
 //goland:noinspection GoUnusedExportedFunction
 func NewEmbed() *Embed {
 	return &Embed{

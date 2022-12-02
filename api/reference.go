@@ -134,6 +134,7 @@ func PtrStr(s *string) string {
 	return *s
 }
 
+// LocalizationDict - officially supported languages by Discord
 type LocalizationDict struct {
 	Danish              string `json:"da,omitempty"`
 	German              string `json:"de,omitempty"`

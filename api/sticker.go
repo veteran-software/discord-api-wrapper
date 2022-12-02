@@ -85,6 +85,7 @@ func (s *Sticker) GetSticker() (*Sticker, error) {
 }
 
 // ListNitroStickerPacks - Returns the list of sticker packs available to Nitro subscribers.
+//
 //goland:noinspection GoUnusedExportedFunction
 func ListNitroStickerPacks() (*ListNitroStickerPacksResponse, error) {
 	u := parseRoute(fmt.Sprintf(listNitroStickerPacks, api))

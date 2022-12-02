@@ -28,6 +28,7 @@ type Team struct {
 }
 
 // TeamMember - representation of a team member
+//
 //goland:noinspection GrazieInspection
 type TeamMember struct {
 	MembershipState MembershipState `json:"membership_state"` // the user's membership state on the team

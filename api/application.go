@@ -19,6 +19,7 @@ package api
 import "github.com/veteran-software/discord-api-wrapper/v10/oauth2"
 
 // Application - an application which operates on Discord, commonly referred to as bots
+//
 //goland:noinspection SpellCheckingInspection
 type Application struct {
 	ID                  Snowflake        `json:"id"`                             // the id of the app

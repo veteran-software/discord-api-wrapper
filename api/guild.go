@@ -34,7 +34,7 @@ type Guild struct {
 	DiscoverySplash             *string                         `json:"discovery_splash"`                     // discovery splash hash; only present for guilds with the "DISCOVERABLE" feature
 	OwnerID                     Snowflake                       `json:"owner_id"`                             // id of owner
 	AfkChannelID                Snowflake                       `json:"afk_channel_id,omitempty"`             // id of afk channel
-	AfkTimeout                  int64                           `json:"afk_timeout"`                          // afk timeout in seconds
+	AfkTimeout                  int                             `json:"afk_timeout"`                          // afk timeout in seconds
 	WidgetEnabled               bool                            `json:"widget_enabled,omitempty"`             // true if the server widget is enabled
 	WidgetChannelID             *Snowflake                      `json:"widget_channel_id,omitempty"`          // the channel id that the widget will generate an "invite" to, or null if set to no invite
 	VerificationLevel           VerificationLevel               `json:"verification_level"`                   // verification level required for the guild
@@ -65,7 +65,7 @@ type Guild struct {
 	Stickers                    []Sticker                       `json:"stickers,omitempty"`                   // custom guild stickers
 	PremiumProgressBarEnabled   bool                            `json:"premium_progress_bar_enabled"`         // whether the guild has the boost progress bar enabled
 
-	// These fields are only sent within the GUILD_CREATE event
+	// TODO: These fields are only sent within the GUILD_CREATE event; move to Gateway.go
 
 	JoinedAt             time.Time             `json:"joined_at,omitempty"`              // when this guild was joined at
 	Large                bool                  `json:"large,omitempty"`                  // true if this is considered a large guild
@@ -163,29 +163,29 @@ type GuildFeatures string
 
 //goland:noinspection SpellCheckingInspection,GrazieInspection,GoUnusedConst
 const (
-	AnimatedBanner                GuildFeatures = "ANIMATED_BANNER"                  // guild has access to set an animated guild banner image
-	AnimatedIcon                  GuildFeatures = "ANIMATED_ICON"                    // guild has access to set an animated guild icon
-	Banner                        GuildFeatures = "BANNER"                           // guild has access to set a guild banner image
-	Commerce                      GuildFeatures = "COMMERCE"                         // guild has access to use commerce features (i.e. create store channels)
-	Community                     GuildFeatures = "COMMUNITY"                        // guild can enable welcome screen, Membership Screening, stage channels and discovery, and receives community updates
-	Discoverable                  GuildFeatures = "DISCOVERABLE"                     // guild is able to be discovered in the directory
-	Featurable                    GuildFeatures = "FEATURABLE"                       // guild is able to be featured in the directory
-	InviteSplash                  GuildFeatures = "INVITE_SPLASH"                    // guild has access to set an invite splash background
-	MemberVerificationGateEnabled GuildFeatures = "MEMBER_VERIFICATION_GATE_ENABLED" // guild has enabled Membership Screening
-	MonetizationEnabled           GuildFeatures = "MONETIZATION_ENABLED"             // guild has enabled monetization
-	MoreStickers                  GuildFeatures = "MORE_STICKERS"                    // guild has increased custom sticker slots
-	News                          GuildFeatures = "NEWS"                             // guild has access to create news channels
-	Partnered                     GuildFeatures = "PARTNERED"                        // guild is partnered
-	PreviewEnabled                GuildFeatures = "PREVIEW_ENABLED"                  // guild can be previewed before joining via Membership Screening or the directory
-	PrivateThreads                GuildFeatures = "PRIVATE_THREADS"                  // guild has access to create private threads
-	RoleIcons                     GuildFeatures = "ROLE_ICONS"                       // guild is able to set role icons
-	SevenDayThreadArchive         GuildFeatures = "SEVEN_DAY_THREAD_ARCHIVE"         // guild has access to the seven day archive time for threads
-	ThreeDayThreadArchive         GuildFeatures = "THREE_DAY_THREAD_ARCHIVE"         // guild has access to the three day archive time for threads
-	TicketedEventsEnabled         GuildFeatures = "TICKETED_EVENTS_ENABLED"          // guild has enabled ticketed events
-	VanityURL                     GuildFeatures = "VANITY_URL"                       // guild has access to set a vanity URL
-	Verified                      GuildFeatures = "VERIFIED"                         // guild is verified
-	VipRegions                    GuildFeatures = "VIP_REGIONS"                      // guild has access to set 384kbps bitrate in voice (previously VIP voice servers)
-	WelcomeScreenEnabled          GuildFeatures = "WELCOME_SCREEN_ENABLED"           // guild has enabled the welcome screen
+	AnimatedBanner                  GuildFeatures = "ANIMATED_BANNER"                    // guild has access to set an animated guild banner image
+	AnimatedIcon                    GuildFeatures = "ANIMATED_ICON"                      // guild has access to set an animated guild icon
+	ApplicationCommandPermissionsV2 GuildFeatures = "APPLICATION_COMMAND_PERMISSIONS_V2" // guild is using the old permissions configuration behavior
+	AutoModeration                  GuildFeatures = "AUTO_MODERATION"                    // guild has set up auto moderation rules
+	Banner                          GuildFeatures = "BANNER"                             // guild has access to set a guild banner image
+	Community                       GuildFeatures = "COMMUNITY"                          // guild can enable welcome screen, Membership Screening, stage channels and discovery, and receives community updates
+	DeveloperSupportServer          GuildFeatures = "DEVELOPER_SUPPORT_SERVER"           // 	guild has been set as a support server on the App Directory
+	Discoverable                    GuildFeatures = "DISCOVERABLE"                       // guild is able to be discovered in the directory
+	Featurable                      GuildFeatures = "FEATURABLE"                         // guild is able to be featured in the directory
+	InvitesDisabled                 GuildFeatures = "INVITES_DISABLED"                   // Mutable; Pauses all invites/access to the server
+	InviteSplash                    GuildFeatures = "INVITE_SPLASH"                      // guild has access to set an invite splash background
+	MemberVerificationGateEnabled   GuildFeatures = "MEMBER_VERIFICATION_GATE_ENABLED"   // guild has enabled Membership Screening
+	MonetizationEnabled             GuildFeatures = "MONETIZATION_ENABLED"               // guild has enabled monetization
+	MoreStickers                    GuildFeatures = "MORE_STICKERS"                      // guild has increased custom sticker slots
+	News                            GuildFeatures = "NEWS"                               // guild has access to create news channels
+	Partnered                       GuildFeatures = "PARTNERED"                          // guild is partnered
+	PreviewEnabled                  GuildFeatures = "PREVIEW_ENABLED"                    // guild can be previewed before joining via Membership Screening or the directory
+	RoleIcons                       GuildFeatures = "ROLE_ICONS"                         // guild is able to set role icons
+	TicketedEventsEnabled           GuildFeatures = "TICKETED_EVENTS_ENABLED"            // guild has enabled ticketed events
+	VanityURL                       GuildFeatures = "VANITY_URL"                         // guild has access to set a vanity URL
+	Verified                        GuildFeatures = "VERIFIED"                           // guild is verified
+	VipRegions                      GuildFeatures = "VIP_REGIONS"                        // guild has access to set 384kbps bitrate in voice (previously VIP voice servers)
+	WelcomeScreenEnabled            GuildFeatures = "WELCOME_SCREEN_ENABLED"             // guild has enabled the welcome screen
 )
 
 // UnavailableGuild - A partial guild object.
@@ -231,10 +231,10 @@ type GetGuildWidget struct {
 
 // GuildMember - Represents a member of a Guild
 //
-//   The field `user` won't be included in the member object attached to MessageCreate and MessageUpdate gateway events.
+//	The field `user` won't be included in the member object attached to MessageCreate and MessageUpdate gateway events.
 //
-//   In GUILD_ events, pending will always be included as true or false.
-//   In non GUILD_ events which can only be triggered by non-pending users, pending will not be included.
+//	In GUILD_ events, pending will always be included as true or false.
+//	In non GUILD_ events which can only be triggered by non-pending users, pending will not be included.
 type GuildMember struct {
 	User                       User        `json:"user,omitempty"`                         // User - the user this guild member represents
 	Nick                       *string     `json:"nick,omitempty"`                         // Nick - the users' guild nickname
@@ -266,6 +266,7 @@ type Integration struct {
 	SubscriberCount   int                       `json:"subscriber_count,omitempty"`    // how many subscribers this integration has
 	Revoked           bool                      `json:"revoked,omitempty"`             // has this integration been revoked
 	Application       IntegrationApplication    `json:"application,omitempty"`         // The bot/OAuth2 application for discord integrations
+	Scopes            []string                  `json:"scopes,omitempty"`              // the scopes the application has been authorized for
 }
 
 // IntegrationExpireBehavior - the behavior of expiring subscribers
@@ -322,15 +323,16 @@ func (g *Guild) String() string {
 //
 // Create a new guild. Returns a guild object on success. Fires a GuildCreate Gateway event.
 //
-//    This endpoint can be used only by bots in less than 10 guilds.
+//	This endpoint can be used only by bots in less than 10 guilds.
 //
-//    When using the roles parameter, the first member of the array is used to change properties of the guild's @everyone role. If you are trying to bootstrap a guild with additional roles, keep this in mind.
+//	When using the roles parameter, the first member of the array is used to change properties of the guild's @everyone role. If you are trying to bootstrap a guild with additional roles, keep this in mind.
 //
-//    When using the roles parameter, the required id field within each role object is an integer placeholder, and will be replaced by the API upon consumption. Its purpose is to allow you to overwrite a role's permissions in a channel when also passing in channels with the channels array.
+//	When using the roles parameter, the required id field within each role object is an integer placeholder, and will be replaced by the API upon consumption. Its purpose is to allow you to overwrite a role's permissions in a channel when also passing in channels with the channels array.
 //
-//    When using the channels parameter, the position field is ignored, and none of the default channels are created.
+//	When using the channels parameter, the position field is ignored, and none of the default channels are created.
 //
-//    When using the channels parameter, the id field within each channel object may be set to an integer placeholder, and will be replaced by the API upon consumption. Its purpose is to allow you to create GUILD_CATEGORY channels by setting the parent_id field on any children to the category's id field. Category channels must be listed before any children.
+//	When using the channels parameter, the id field within each channel object may be set to an integer placeholder, and will be replaced by the API upon consumption. Its purpose is to allow you to create GUILD_CATEGORY channels by setting the parent_id field on any children to the category's id field. Category channels must be listed before any children.
+//
 //goland:noinspection GoUnusedExportedFunction
 func CreateGuild(payload CreateGuildJSON) (*Guild, error) {
 	u := parseRoute(fmt.Sprintf(createGuild, api))
@@ -393,11 +395,11 @@ func (g *Guild) GetGuildPreview() (*GuildPreview, error) {
 //
 // Fires a GuildUpdate Gateway event.
 //
-//    All parameters to this endpoint are optional
+//	All parameters to this endpoint are optional
 //
-//    This endpoint supports the X-Audit-Log-Reason header.
+//	This endpoint supports the X-Audit-Log-Reason header.
 //
-//    Attempting to add or remove the Community guild feature requires the Administrator permission.
+//	Attempting to add or remove the Community guild feature requires the Administrator permission.
 func (g *Guild) ModifyGuild(payload ModifyGuildJSON, reason *string) (*Guild, error) {
 	u := parseRoute(fmt.Sprintf(modifyGuild, api, g.ID.String()))
 
@@ -456,9 +458,9 @@ func (g *Guild) GetGuildChannels() ([]Channel, error) {
 //
 // Returns the new channel object on success. Fires a Channel Create Gateway event.
 //
-//    All parameters to this endpoint are optional excluding name
+//	All parameters to this endpoint are optional excluding name
 //
-//    This endpoint supports the X-Audit-Log-Reason header.
+//	This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) CreateGuildChannel(payload CreateGuildChannelJSON, reason *string) (*Channel, error) {
 	u := parseRoute(fmt.Sprintf(createGuildChannel, api, g.ID.String()))
 
@@ -486,9 +488,9 @@ type CreateGuildChannelJSON struct {
 //
 // Requires ManageChannels permission. Returns a 204 empty response on success. Fires multiple ChannelUpdate Gateway events.
 //
-//    Only channels to be modified are required.
+//	Only channels to be modified are required.
 //
-//    This endpoint supports the X-Audit-Log-Reason header.
+//	This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) ModifyGuildChannelPositions(payload ModifyGuildChannelPositionsJSON, reason *string) {
 	u := parseRoute(fmt.Sprintf(modifyGuildChannelPositions, api, g.ID.String()))
 
@@ -526,9 +528,7 @@ func (g *Guild) GetGuildMember(userID Snowflake) (*GuildMember, error) {
 // ListGuildMembers - Returns a list of guild member objects that are members of the guild.
 //
 // This endpoint is restricted according to whether the GuildMembers Privileged Intent is enabled for your application.
-//
-//     All parameters to this endpoint are optional
-func (g *Guild) ListGuildMembers(limit *uint64, after *Snowflake) ([]GuildMember, error) {
+func (g *Guild) ListGuildMembers(limit *uint64, after *Snowflake) (*[]GuildMember, error) {
 	u := parseRoute(fmt.Sprintf(listGuildMembers, api, g.ID.String()))
 
 	q := u.Query()
@@ -542,7 +542,7 @@ func (g *Guild) ListGuildMembers(limit *uint64, after *Snowflake) ([]GuildMember
 		u.RawQuery = q.Encode()
 	}
 
-	var guildMembers []GuildMember
+	var guildMembers *[]GuildMember
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &guildMembers)
 
 	return guildMembers, err
@@ -550,7 +550,7 @@ func (g *Guild) ListGuildMembers(limit *uint64, after *Snowflake) ([]GuildMember
 
 // SearchGuildMembers - Returns a list of GuildMember objects whose username or nickname starts with a provided string.
 //
-//    All parameters to this endpoint except for `query` are optional
+//	All parameters to this endpoint except for `query` are optional
 func (g *Guild) SearchGuildMembers(query string, limit *uint64) ([]GuildMember, error) {
 	u := parseRoute(fmt.Sprintf(searchGuildMembers, api, g.ID.String()))
 
@@ -573,13 +573,13 @@ func (g *Guild) SearchGuildMembers(query string, limit *uint64) ([]GuildMember, 
 //
 // Fires a GuildMemberAdd Gateway event.
 //
-//  For guilds with MembershipScreening enabled, this endpoint will default to adding new members as pending in the guild member object.
+//	For guilds with MembershipScreening enabled, this endpoint will default to adding new members as pending in the guild member object.
 //
 // Members that are pending will have to complete membership screening before they become full members that can talk.
 //
-//    All parameters to this endpoint except for access_token are optional.
+//	All parameters to this endpoint except for access_token are optional.
 //
-//    The Authorization header must be a Bot token (belonging to the same application used for authorization), and the bot must be a member of the guild with CreateInstantInvite permission.
+//	The Authorization header must be a Bot token (belonging to the same application used for authorization), and the bot must be a member of the guild with CreateInstantInvite permission.
 //
 // For guilds with Membership Screening enabled, assigning a role using the `roles` parameter will add the user to the guild as a full member (pending is false in the member object).
 //
@@ -610,9 +610,9 @@ type AddGuildMemberJSON struct {
 //
 // If the channel_id is set to null, this will force the target user to be disconnected from voice.
 //
-//    All parameters to this endpoint are optional and nullable. When moving members to channels, the API user must have permissions to both connect to the channel and have the MoveMembers permission.
+//	All parameters to this endpoint are optional and nullable. When moving members to channels, the API user must have permissions to both connect to the channel and have the MoveMembers permission.
 //
-//    This endpoint supports the X-Audit-Log-Reason header.
+//	This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) ModifyGuildMember(userID Snowflake, payload ModifyGuildMemberJSON, reason *string) (*GuildMember, error) {
 	u := parseRoute(fmt.Sprintf(modifyGuildMember, api, g.ID.String(), userID.String()))
 
@@ -634,7 +634,7 @@ type ModifyGuildMemberJSON struct {
 
 // ModifyCurrentMember - Modifies the current member in a guild. Returns a 200 with the updated member object on success. Fires a Guild Member Update Gateway event.
 //
-//    This endpoint supports the X-Audit-Log-Reason header.
+//	This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) ModifyCurrentMember(payload ModifyCurrentMemberJSON, reason *string) (*GuildMember, error) {
 	u := parseRoute(fmt.Sprintf(modifyCurrentMember, api, g.ID.String()))
 
@@ -687,7 +687,7 @@ func (g *Guild) RemoveGuildMemberRole(user *User, role *Snowflake, reason *strin
 //
 // Fires a GuildMemberRemove Gateway event.
 //
-//    This endpoint supports the X-Audit-Log-Reason header.
+//	This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) RemoveGuildMember(user *User, reason *string) error {
 	u := parseRoute(fmt.Sprintf(removeGuildMember, api, g.ID.String(), user.ID.String()))
 
@@ -730,7 +730,7 @@ func (g *Guild) GetGuildBan(userID Snowflake) (*Ban, error) {
 
 // CreateGuildBan - Create a guild ban, and optionally delete previous messages sent by the banned user. Requires the BanMembers permission. Returns a 204 empty response on success. Fires a GuildBanAdd Gateway event.
 //
-//    This endpoint supports the X-Audit-Log-Reason header.
+//	This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) CreateGuildBan(userID Snowflake, payload CreateGuildBanJSON, reason *string) {
 	u := parseRoute(fmt.Sprintf(createGuildBan, api, g.ID.String(), userID.String()))
 
@@ -744,7 +744,7 @@ type CreateGuildBanJSON struct {
 
 // RemoveGuildBan - Remove the ban for a user. Requires the BanMembers permissions. Returns a 204 empty response on success. Fires a GuildBanRemove Gateway event.
 //
-//    This endpoint supports the X-Audit-Log-Reason header.
+//	This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) RemoveGuildBan(userID Snowflake, reason *string) error {
 	u := parseRoute(fmt.Sprintf(removeGuildBan, api, g.ID.String(), userID.String()))
 
@@ -789,7 +789,7 @@ type CreateGuildRoleJSON struct {
 //
 // Fires multiple Guild Role Update Gateway events.
 //
-//    This endpoint supports the X-Audit-Log-Reason header.
+//	This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) ModifyGuildRolePositions(payload ModifyGuildRolePositionsJSON, reason *string) ([]Role, error) {
 	u := parseRoute(fmt.Sprintf(modifyGuildRolePositions, api, g.ID.String()))
 
@@ -813,9 +813,9 @@ type ModifyGuildRolePositionsJSON struct {
 //
 // Fires a GuildRoleUpdate Gateway event.
 //
-//    All parameters to this endpoint are optional and nullable.
+//	All parameters to this endpoint are optional and nullable.
 //
-//    This endpoint supports the X-Audit-Log-Reason header.
+//	This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) ModifyGuildRole(roleID Snowflake, payload ModifyGuildRoleJSON, reason *string) (*Role, error) {
 	u := parseRoute(fmt.Sprintf(modifyGuildRole, api, g.ID.String(), roleID.String()))
 
@@ -844,7 +844,7 @@ type ModifyGuildRoleJSON struct {
 //
 // Fires a GuildRoleDelete Gateway event.
 //
-//    This endpoint supports the X-Audit-Log-Reason header.
+//	This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) DeleteGuildRole(roleID Snowflake, reason *string) error {
 	u := parseRoute(fmt.Sprintf(deleteGuildRole, api, g.ID.String(), roleID.String()))
 
@@ -902,7 +902,7 @@ type GetGuildPruneCountResponse struct {
 //
 // Any inactive user that has a subset of the provided role(s) will be included in the prune and users with additional roles will not.
 //
-//    This endpoint supports the X-Audit-Log-Reason header.
+//	This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) BeginGuildPrune(payload BeginGuildPruneJSON, reason *string) (*GetGuildPruneCountResponse, error) {
 	if payload.Days < 1 || payload.Days > 30 {
 		return nil, errors.New("the number of days to prune must be >= 1 && <= 30")
@@ -969,7 +969,7 @@ func (g *Guild) GetGuildIntegrations() ([]Integration, error) {
 //
 // Fires a GuildIntegrationsUpdate Gateway event.
 //
-//    This endpoint supports the X-Audit-Log-Reason header.
+//	This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) DeleteGuildIntegration(integrationID Snowflake, reason *string) error {
 	u := parseRoute(fmt.Sprintf(deleteGuildIntegration, api, g.ID.String(), integrationID.String()))
 
@@ -996,7 +996,7 @@ func (g *Guild) GetGuildWidgetSettings() (*GuildWidgetSettings, error) {
 //
 // Returns the updated GuildWidgetSettings object.
 //
-//    This endpoint supports the X-Audit-Log-Reason header.
+//	This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) ModifyGuildWidget(payload GuildWidgetSettings, reason *string) (*GuildWidgetSettings, error) {
 	u := parseRoute(fmt.Sprintf(modifyGuildWidget, api, g.ID.String()))
 
@@ -1044,9 +1044,9 @@ func (g *Guild) GetGuildWelcomeScreen() (*WelcomeScreen, error) {
 
 // ModifyGuildWelcomeScreen - Modify the guild's Welcome Screen. Requires the ManageGuild permission. Returns the updated WelcomeScreen object.
 //
-//    All parameters to this endpoint are optional and nullable
+//	All parameters to this endpoint are optional and nullable
 //
-//    This endpoint supports the `X-Audit-Log-Reason` header.
+//	This endpoint supports the `X-Audit-Log-Reason` header.
 func (g *Guild) ModifyGuildWelcomeScreen(payload ModifyGuildWelcomeScreenJSON, reason *string) (*WelcomeScreen, error) {
 	u := parseRoute(fmt.Sprintf(modifyGuildWelcomeScreen, api, g.ID.String()))
 
@@ -1067,11 +1067,11 @@ type ModifyGuildWelcomeScreenJSON struct {
 //
 // There are currently several caveats for this endpoint:
 //
-//    * `channel_id` must currently point to a stage channel.
-//    * current user must already have joined `channel_id`.
-//    * You must have the MuteMembers permission to unsuppress yourself. You can always suppress yourself.
-//    * You must have the RequestToSpeak permission to request to speak. You can always clear your own request to speak.
-//    * You are able to set `request_to_speak_timestamp` to any present or future time.
+//   - `channel_id` must currently point to a stage channel.
+//   - current user must already have joined `channel_id`.
+//   - You must have the MuteMembers permission to unsuppress yourself. You can always suppress yourself.
+//   - You must have the RequestToSpeak permission to request to speak. You can always clear your own request to speak.
+//   - You are able to set `request_to_speak_timestamp` to any present or future time.
 func (g *Guild) ModifyCurrentUserVoiceState(payload ModifyCurrentUserVoiceStateJSON) {
 	u := parseRoute(fmt.Sprintf(modifyCurrentUserVoiceState, api, g.ID.String()))
 
@@ -1087,13 +1087,13 @@ type ModifyCurrentUserVoiceStateJSON struct {
 
 // ModifyUserVoiceState - Updates another user's voice state.
 //
-//There are currently several caveats for this endpoint:
+// There are currently several caveats for this endpoint:
 //
-//    `channel_id` must currently point to a stage channel.
-//    User must already have joined `channel_id`.
-//    You must have the MuteMembers permission. (Since suppression is the only thing that is available currently.)
-//    When unsuppressed, non-bot users will have their `request_to_speak_timestamp` set to the current time. Bot users will not.
-//    When suppressed, the user will have their `request_to_speak_timestamp` removed.
+//	`channel_id` must currently point to a stage channel.
+//	User must already have joined `channel_id`.
+//	You must have the MuteMembers permission. (Since suppression is the only thing that is available currently.)
+//	When unsuppressed, non-bot users will have their `request_to_speak_timestamp` set to the current time. Bot users will not.
+//	When suppressed, the user will have their `request_to_speak_timestamp` removed.
 func (g *Guild) ModifyUserVoiceState(userID Snowflake, payload ModifyUserVoiceStateJSON) {
 	u := parseRoute(fmt.Sprintf(modifyUserVoiceState, api, g.ID.String(), userID.String()))
 

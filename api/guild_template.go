@@ -27,7 +27,7 @@ type GuildTemplate struct {
 	Code                  string    `json:"code"`
 	Name                  string    `json:"name"`
 	Description           *string   `json:"description"`
-	UsageCount            uint64    `json:"usage_count"`
+	UsageCount            int       `json:"usage_count"`
 	CreatorID             Snowflake `json:"creator_id"`
 	Creator               User      `json:"creator"`
 	CreatedAt             time.Time `json:"created_at"`
@@ -38,6 +38,7 @@ type GuildTemplate struct {
 }
 
 // GetGuildTemplate - Returns a GuildTemplate object for the given code.
+//
 //goland:noinspection GoUnusedExportedFunction
 func GetGuildTemplate(templateCode string) (*GuildTemplate, error) {
 	u := parseRoute(fmt.Sprintf(getGuildTemplate, api, templateCode))
@@ -50,7 +51,8 @@ func GetGuildTemplate(templateCode string) (*GuildTemplate, error) {
 
 // CreateGuildFromGuildTemplate - Create a new guild based on a template. Returns a guild object on success. Fires a GuildCreate Gateway event.
 //
-//    This endpoint can be used only by bots in less than 10 guilds.
+//	This endpoint can be used only by bots in less than 10 guilds.
+//
 //goland:noinspection GoUnusedExportedFunction
 func CreateGuildFromGuildTemplate(templateCode string, payload CreateGuildFromGuildTemplateJSON) (*Guild, error) {
 	u := parseRoute(fmt.Sprintf(createGuildFromGuildTemplate, api, templateCode))

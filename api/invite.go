@@ -23,7 +23,7 @@ import (
 	"time"
 )
 
-//Invite - Represents a code that when used, adds a user to a guild or group DM channel.
+// Invite - Represents a code that when used, adds a user to a guild or group DM channel.
 type Invite struct {
 	Code                     *string             `json:"code"`                                 // the invite code (unique ID)
 	Guild                    Guild               `json:"guild,omitempty"`                      // the guild this invite is for
@@ -88,7 +88,7 @@ func (i *Invite) GetInvite(withCounts *bool, withExpiration *bool, guildSchedule
 //
 // Fires an InviteDelete Gateway event.
 //
-//     This endpoint supports the `X-Audit-Log-Reason` header.
+//	This endpoint supports the `X-Audit-Log-Reason` header.
 func (i *Invite) DeleteInvite(reason *string) error {
 	u := parseRoute(fmt.Sprintf(deleteInvite, api, *i.Code))
 

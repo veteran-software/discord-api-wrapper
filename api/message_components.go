@@ -41,6 +41,7 @@ type Component struct {
 // ComponentType - The type of component
 type ComponentType int
 
+//goland:noinspection GoExportedElementShouldHaveComment
 const (
 	ComponentTypeActionRow  ComponentType = iota + 1 // A container for other components
 	ComponentTypeButton                              // A clickable button
@@ -52,8 +53,8 @@ const (
 //
 // They can be clicked by users, and send an interaction to your app when clicked.
 //
-//    * Buttons must be sent inside an ComponentTypeActionRow
-//    * An ComponentTypeActionRow can contain up to 5 buttons
+//   - Buttons must be sent inside an ComponentTypeActionRow
+//   - A ComponentTypeActionRow can contain up to 5 buttons
 type Button struct {
 	Type     ComponentType `json:"type"`                // ComponentType for a button
 	Style    ButtonStyle   `json:"style"`               // one of ButtonStyle
@@ -68,9 +69,9 @@ type Button struct {
 //
 // These styles also define what fields are valid for a button.
 //
-//    Non-link buttons must have a custom_id, and cannot have a URL
-//    Link buttons must have a URL, and cannot have a custom_id
-//    Link buttons do not send an interaction to your app when clicked
+//	Non-link buttons must have a custom_id, and cannot have a URL
+//	Link buttons must have a URL, and cannot have a custom_id
+//	Link buttons do not send an interaction to your app when clicked
 type ButtonStyle int
 
 //goland:noinspection SpellCheckingInspection
@@ -86,9 +87,9 @@ const (
 //
 // When a user finishes making their choice by clicking out of the dropdown or closing the half-sheet, your app will receive an interaction.
 //
-//    Select menus must be sent inside an Action Row
-//    An Action Row can contain only one select menu
-//    An Action Row containing a select menu cannot also contain buttons
+//	Select menus must be sent inside an Action Row
+//	An Action Row can contain only one select menu
+//	An Action Row containing a select menu cannot also contain buttons
 type SelectMenu struct {
 	Type        ComponentType  `json:"type"`                  // ComponentTypeSelectMenu for a select menu
 	CustomID    string         `json:"custom_id"`             // a developer-defined identifier for the button, max 100 characters
@@ -124,6 +125,7 @@ type TextInput struct {
 // TextInputStyle - Denotes if a text input is short form or paragraph form
 type TextInputStyle int
 
+//goland:noinspection GoExportedElementShouldHaveComment
 const (
 	TextInputShort     TextInputStyle = iota + 1 // A single-line input
 	TextInputParagraph                           // A multi-line input

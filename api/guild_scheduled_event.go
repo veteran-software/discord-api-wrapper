@@ -26,7 +26,7 @@ import (
 
 // GuildScheduledEvent - A representation of a scheduled event in a guild.
 //
-//   creator_id will be null and creator will not be included for events created before October 25th, 2021, when the concept of creator_id was introduced and tracked.
+//	creator_id will be null and creator will not be included for events created before October 25th, 2021, when the concept of creator_id was introduced and tracked.
 type GuildScheduledEvent struct {
 	ID                 Snowflake                          `json:"id"`                    // the id of the scheduled event
 	GuildID            Snowflake                          `json:"guild_id"`              // the guild id which the scheduled event belongs to
@@ -49,6 +49,8 @@ type GuildScheduledEvent struct {
 // GuildScheduledEventPrivacyLevel - the privacy level of the scheduled event
 type GuildScheduledEventPrivacyLevel int
 
+// GuildScheduledEventPrivacyLevelGuildOnly - the scheduled event is only accessible to guild members
+//
 //goland:noinspection GoUnusedConst
 const (
 	GuildScheduledEventPrivacyLevelGuildOnly GuildScheduledEventPrivacyLevel = iota + 2 // the scheduled event is only accessible to guild members
@@ -107,9 +109,9 @@ func (g *Guild) ListGuildScheduledEvents(withUserCount *bool) ([]GuildScheduledE
 
 // CreateGuildScheduledEvent - Create a GuildScheduledEvent in the Guild. Returns a guild scheduled event object on success.
 //
-//    A guild can have a maximum of 100 events with Scheduled or Active status at any time.
+//	A guild can have a maximum of 100 events with Scheduled or Active status at any time.
 //
-//    This endpoint supports the `X-Audit-Log-Reason` header.
+//	This endpoint supports the `X-Audit-Log-Reason` header.
 func (g *Guild) CreateGuildScheduledEvent(payload CreateGuildScheduledEventJSON, reason *string) (*GuildScheduledEvent, error) {
 	u := parseRoute(fmt.Sprintf(createGuildScheduledEvent, api, g.ID.String()))
 
@@ -152,17 +154,17 @@ func (g *Guild) GetGuildScheduledEvent(guildScheduledEventID Snowflake, withUser
 
 // ModifyGuildScheduledEvent - Modify a guild scheduled event. Returns the modified guild scheduled event object on success.
 //
-//    To start or end an event, use this endpoint to modify the event's status field.
+//	To start or end an event, use this endpoint to modify the event's status field.
 //
-//    This endpoint supports the `X-Audit-Log-Reason` header.
+//	This endpoint supports the `X-Audit-Log-Reason` header.
 //
-//    This endpoint silently discards `entity_metadata` for non-EXTERNAL events.
+//	This endpoint silently discards `entity_metadata` for non-EXTERNAL events.
 //
 // If updating entity_type to EXTERNAL:
 //
-//    `channel_id` is required and must be set to null
-//    `entity_metadata` with a location field must be provided
-//    `scheduled_end_time` must be provided
+//	`channel_id` is required and must be set to null
+//	`entity_metadata` with a location field must be provided
+//	`scheduled_end_time` must be provided
 func (g *Guild) ModifyGuildScheduledEvent(guildScheduledEventID Snowflake, payload ModifyGuildScheduledEventJSON, reason *string) (*GuildScheduledEvent, error) {
 	u := parseRoute(fmt.Sprintf(modifyGuildScheduledEvent, api, g.ID.String(), guildScheduledEventID.String()))
 

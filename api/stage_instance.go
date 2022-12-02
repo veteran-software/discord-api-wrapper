@@ -43,7 +43,8 @@ const (
 //
 // Requires the user to be a moderator of the Stage channel.
 //
-//    This endpoint supports the X-Audit-Log-Reason header.
+//	This endpoint supports the X-Audit-Log-Reason header.
+//
 //goland:noinspection GoUnusedExportedFunction
 func CreateStageInstance(payload CreateStageInstanceJSON, reason *string) (*StageInstance, error) {
 	u := parseRoute(fmt.Sprintf(createStageInstance, api))
@@ -74,9 +75,9 @@ func (s *StageInstance) GetStageInstance() (*StageInstance, error) {
 
 // ModifyStageInstance - Updates fields of an existing Stage instance.
 //
-//  Requires the user to be a moderator of the Stage channel.
+//	Requires the user to be a moderator of the Stage channel.
 //
-//    This endpoint supports the `X-Audit-Log-Reason` header.
+//	  This endpoint supports the `X-Audit-Log-Reason` header.
 func (s *StageInstance) ModifyStageInstance(payload ModifyStageInstanceJSON, reason *string) (*StageInstance, error) {
 	u := parseRoute(fmt.Sprintf(modifyStageInstance, api, s.ChannelID.String()))
 
@@ -96,7 +97,7 @@ type ModifyStageInstanceJSON struct {
 //
 // Requires the user to be a moderator of the Stage channel.
 //
-//    This endpoint supports the `X-Audit-Log-Reason` header.
+//	This endpoint supports the `X-Audit-Log-Reason` header.
 func (s *StageInstance) DeleteStageInstance(reason *string) error {
 	u := parseRoute(fmt.Sprintf(deleteStageInstance, api, s.ChannelID.String()))
 

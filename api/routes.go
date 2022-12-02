@@ -16,7 +16,7 @@
 
 package api
 
-//goland:noinspection SpellCheckingInspection
+//goland:noinspection SpellCheckingInspection,GoUnusedConst
 const (
 	getGlobalApplicationCommands           = "%s/applications/%s/commands"
 	createGlobalApplicationCommand         = getGlobalApplicationCommands
@@ -166,7 +166,6 @@ const (
 	modifyWebhookWithToken                 = createFollowupMessage
 	deleteWebhookWithToken                 = createFollowupMessage
 	executeWebhook                         = "%s/webhooks/%s/%s"
-	executeGitHubCompatibleWebhook         = "%s/webhooks/%s/%s/github"
 	getWebhookMessage                      = "%s/webhooks/%s/%s/messages/%s"
 	editWebhookMessage                     = getWebhookMessage
 	deleteWebhookMessage                   = getWebhookMessage
@@ -176,7 +175,6 @@ const (
 	getOriginalInteractionResponse         = "%s/webhooks/%s/%s/messages/@original"
 	editOriginalInteractionResponse        = getOriginalInteractionResponse
 	deleteOriginalInteractionResponse      = getOriginalInteractionResponse
-	executeSlackCompatibleWebhook          = "%s/webhooks/%s/%s/slack"
 	createStageInstance                    = "%s/stage-instances"
 	getStageInstance                       = "%s/stage-instances/%s"
 	modifyStageInstance                    = getStageInstance

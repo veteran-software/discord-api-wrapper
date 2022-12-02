@@ -77,26 +77,36 @@ const (
 )
 
 // HasAdmin checks to see if the bot has admin on the channel in question
+//
+//goland:noinspection GoUnusedExportedFunction
 func HasAdmin(p Permission) bool {
 	return p&Administrator == Administrator
 }
 
 // CanManageWebhooks - checks for this permission
+//
+//goland:noinspection GoUnusedExportedFunction
 func CanManageWebhooks(channel *Channel) bool {
 	return rawPerms(channel)&ManageWebhooks == ManageWebhooks
 }
 
 // CanManageRoles - checks for this permission
+//
+//goland:noinspection GoUnusedExportedFunction
 func CanManageRoles(channel *Channel) bool {
 	return rawPerms(channel)&ManageRoles == ManageRoles
 }
 
 // CanUseExternalEmojis - checks for this permission
+//
+//goland:noinspection GoUnusedExportedFunction
 func CanUseExternalEmojis(channel *Channel) bool {
 	return rawPerms(channel)&UseExternalEmojis == UseExternalEmojis
 }
 
 // CanMentionEveryone - checks for this permission
+//
+//goland:noinspection GoUnusedExportedFunction
 func CanMentionEveryone(channel *Channel) bool {
 	return rawPerms(channel)&MentionEveryone == MentionEveryone
 }
@@ -137,6 +147,8 @@ func rawPerms(channel *Channel) Permission {
 
 // CanAnnounce
 // Deprecated: helper function for checking bas permissions for sending announcements
+//
+//goland:noinspection GoUnusedExportedFunction
 func CanAnnounce(c *Channel) bool {
 	if CanEmbedLinks(c) && CanManageMessages(c) && CanSendMessages(c) && CanReadMessageHistory(c) && CanViewChannel(c) {
 		return true

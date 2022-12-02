@@ -61,6 +61,7 @@ type bucket struct {
 }
 
 // NewRatelimiter returns a new RateLimiter
+//
 //goland:noinspection SpellCheckingInspection
 func NewRatelimiter() *RateLimiter {
 	return &RateLimiter{

@@ -244,7 +244,7 @@ func (i *Interaction) CreateFollowupMessage() (method string, route string) {
 //
 // Functions the same as Get Webhook Message.
 //
-//   Does not support ephemeral followups.
+//	Does not support ephemeral followups.
 func (i *Interaction) GetFollowupMessage() (method string, route string) {
 	return http.MethodGet, fmt.Sprintf(getFollowupMessage, api, i.ApplicationID.String(), i.Token, i.Message.ID)
 }
@@ -253,7 +253,7 @@ func (i *Interaction) GetFollowupMessage() (method string, route string) {
 //
 // Functions the same as Edit Webhook Message.
 //
-//   Does not support ephemeral followups.
+//	Does not support ephemeral followups.
 func (i *Interaction) EditFollowupMessage() (method string, route string) {
 	return http.MethodPatch, fmt.Sprintf(editFollowupMessage, api, i.ApplicationID, i.Token, i.Message.ID)
 }
@@ -262,7 +262,7 @@ func (i *Interaction) EditFollowupMessage() (method string, route string) {
 //
 // Returns 204 No Content on success.
 //
-//   Does not support ephemeral followups.
+//	Does not support ephemeral followups.
 func (i *Interaction) DeleteFollowupMessage() (method string, route string) {
 	return http.MethodDelete, fmt.Sprintf(deleteFollowupMessage, api, i.ApplicationID, i.Token, i.Message.ID)
 }

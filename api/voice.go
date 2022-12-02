@@ -17,8 +17,6 @@
 package api
 
 import (
-	"encoding/json"
-	"fmt"
 	"time"
 )
 
@@ -46,15 +44,4 @@ type VoiceRegion struct {
 	Optimal    bool   `json:"optimal"`    // true for a single server that is closest to the current user's client
 	Deprecated bool   `json:"deprecated"` // whether this is a deprecated voice region (avoid switching to these)
 	Custom     bool   `json:"custom"`     // whether this is a custom voice region (used for events/etc)
-}
-
-// ListVoiceRegions - Returns an array of voice region objects that can be used when setting a voice or stage channel's `rtc_region`.
-//goland:noinspection GoUnusedExportedFunction
-func ListVoiceRegions() ([]VoiceRegion, error) {
-	u := parseRoute(fmt.Sprintf(listVoiceRegions, api))
-
-	var voiceRegions []VoiceRegion
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &voiceRegions)
-
-	return voiceRegions, err
 }

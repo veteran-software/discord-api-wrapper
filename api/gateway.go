@@ -30,6 +30,30 @@ type GatewayPayload struct {
 	T  *string `json:"t"`  // the event name for this payload
 }
 
+// OpCode
+//
+// All gateway events in Discord are tagged with an opcode that denotes the payload type.
+// Your connection to our gateway may also sometimes close.
+// When it does, you will receive a close code that tells you what happened.
+type OpCode int
+
+//goland:noinspection GoUnusedConst
+const (
+	OpDispatch OpCode = iota
+	OpHeartbeat
+	OpIdentify
+	OpPresenceUpdate
+	OpVoiceStateUpdate
+	OpResume OpCode = iota + 1
+	OpReconnect
+	OpRequestGuildMembers
+	OpInvalidSession
+	OpHello
+	OpHeartbeatAck
+)
+
+// TODO: Gateway Close Event Codes
+
 // GatewayIntents - Maintaining a stateful application can be difficult when it comes to the amount of data you're expected to process, especially at scale.
 //
 // Gateway Intents are a system to help you lower that computational burden.
@@ -41,23 +65,25 @@ type GatewayIntents int64
 
 //goland:noinspection GoUnusedConst
 const (
-	Guilds                 GatewayIntents = 1 << 0
-	GuildMembers           GatewayIntents = 1 << 1
-	GuildBans              GatewayIntents = 1 << 2
-	GuildEmojisAndStickers GatewayIntents = 1 << 3
-	GuildIntegrations      GatewayIntents = 1 << 4
-	GuildWebhooks          GatewayIntents = 1 << 5
-	GuildInvites           GatewayIntents = 1 << 6
-	GuildVoiceStates       GatewayIntents = 1 << 7
-	GuildPresences         GatewayIntents = 1 << 8
-	GuildMessages          GatewayIntents = 1 << 9
-	GuildMessageReactions  GatewayIntents = 1 << 10
-	GuildMessageTyping     GatewayIntents = 1 << 11
-	DirectMessages         GatewayIntents = 1 << 12
-	DirectMessageReactions GatewayIntents = 1 << 13
-	DirectMessageTyping    GatewayIntents = 1 << 14
-	MessageContent         GatewayIntents = 1 << 15 // Not documented as of May 1, 2022
-	GuildScheduleEvents    GatewayIntents = 1 << 16
+	Guilds                      GatewayIntents = 1 << 0
+	GuildMembers                GatewayIntents = 1 << 1
+	GuildBans                   GatewayIntents = 1 << 2
+	GuildEmojisAndStickers      GatewayIntents = 1 << 3
+	GuildIntegrations           GatewayIntents = 1 << 4
+	GuildWebhooks               GatewayIntents = 1 << 5
+	GuildInvites                GatewayIntents = 1 << 6
+	GuildVoiceStates            GatewayIntents = 1 << 7
+	GuildPresences              GatewayIntents = 1 << 8
+	GuildMessages               GatewayIntents = 1 << 9
+	GuildMessageReactions       GatewayIntents = 1 << 10
+	GuildMessageTyping          GatewayIntents = 1 << 11
+	DirectMessages              GatewayIntents = 1 << 12
+	DirectMessageReactions      GatewayIntents = 1 << 13
+	DirectMessageTyping         GatewayIntents = 1 << 14
+	MessageContent              GatewayIntents = 1 << 15
+	GuildScheduleEvents         GatewayIntents = 1 << 16
+	AutoModerationConfiguration GatewayIntents = 1 << 20
+	AutoModerationExecution     GatewayIntents = 1 << 21
 )
 
 // Identify - Used to trigger the initial handshake with the gateway.
@@ -73,9 +99,9 @@ type Identify struct {
 
 // IdentifyConnection - properties
 type IdentifyConnection struct {
-	OS      string `json:"$os"`      // your operating system
-	Browser string `json:"$browser"` // your library name
-	Device  string `json:"$device"`  // your library name
+	OS      string `json:"os"`      // your operating system
+	Browser string `json:"browser"` // your library name
+	Device  string `json:"device"`  // your library name
 }
 
 // Resume - Used to replay missed events when a disconnected client resumes.
@@ -97,11 +123,11 @@ type Resume struct {
 //
 // Due to our privacy and infrastructural concerns with this feature, there are some limitations that apply:
 //
-//    GuildPresences intent is required to set presences = true. Otherwise, it will always be false
-//    GuildMembers intent is required to request the entire member list—(query=‘’, limit=0<=n)
-//    You will be limited to requesting 1 guild_id per request
-//    Requesting a prefix (query parameter) will return a maximum of 100 members
-//    Requesting user_ids will continue to be limited to returning 100 members
+//	GuildPresences intent is required to set presences = true. Otherwise, it will always be false
+//	GuildMembers intent is required to request the entire member list—(query=‘’, limit=0<=n)
+//	You will be limited to requesting 1 guild_id per request
+//	Requesting a prefix (query parameter) will return a maximum of 100 members
+//	Requesting user_ids will continue to be limited to returning 100 members
 type GuildRequestMembers struct {
 	GuildID   Snowflake   `json:"guild_id"`            // id of the guild to get members for
 	Query     string      `json:"query,omitempty"`     // string that username starts with, or an empty string to return all members
@@ -142,12 +168,13 @@ type Hello struct {
 //
 // As they become available, your bot will be notified via Guild Create events.
 type Ready struct {
-	V           int                `json:"v"`               // gateway version
-	User        User               `json:"user"`            // information about the user including email
-	Guilds      []UnavailableGuild `json:"guilds"`          // the guilds the user is in
-	SessionID   string             `json:"session_id"`      // used for resuming connections
-	Shard       [2]int             `json:"shard,omitempty"` // the shard information associated with this session, if sent when identifying
-	Application Application        `json:"application"`     // contains id and flags
+	V                int                `json:"v"`                  // gateway version
+	User             User               `json:"user"`               // information about the user including email
+	Guilds           []UnavailableGuild `json:"guilds"`             // the guilds the user is in
+	SessionID        string             `json:"session_id"`         // used for resuming connections
+	ResumeGatewayURL string             `json:"resume_gateway_url"` // Gateway URL for resuming connections
+	Shard            [2]int             `json:"shard,omitempty"`    // the shard information associated with this session, if sent when identifying
+	Application      Application        `json:"application"`        // contains id and flags
 }
 
 // StatusType - a user's current activity status
@@ -240,7 +267,7 @@ const (
 
 // ActivityButtons - When received over the gateway, the buttons field is an array of strings, which are the button labels.
 //
-//   Bots cannot access a user's activity button URLs.
+//	Bots cannot access a user's activity button URLs.
 //
 // When sending, the buttons field must be an array
 type ActivityButtons struct {
@@ -282,9 +309,9 @@ type ClientStatus struct {
 //
 // This event is sent when a user's presence or info, such as name or avatar, is updated.
 //
-//   The user object within this event can be partial, the only field which must be sent is the id field, everything else is optional.
-//   Along with this limitation, no fields are required, and the types of the fields are not validated.
-//   Your client should expect any combination of fields and types within this event.
+//	The user object within this event can be partial, the only field which must be sent is the id field, everything else is optional.
+//	Along with this limitation, no fields are required, and the types of the fields are not validated.
+//	Your client should expect any combination of fields and types within this event.
 type PresenceUpdateEvent struct {
 	User         User           `json:"user"`          // the user presence is being updated for
 	GuildID      Snowflake      `json:"guild_id"`      // id of the guild
