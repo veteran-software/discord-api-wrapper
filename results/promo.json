@@ -1,0 +1,617 @@
+{"version":"3","listProblem":[{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'ListGuildEmojis'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/emoji_endpoints.go",
+      "language": "go",
+      "line": 26,
+      "offset": 17,
+      "length": 15,
+      "code": {
+        "startLine": 24,
+        "length": 15,
+        "offset": 91,
+        "surroundingCode": "\n// ListGuildEmojis - Returns a list of emoji objects for the given guild.\nfunc (g *Guild) ListGuildEmojis() ([]Emoji, error) {\n\tu := parseRoute(fmt.Sprintf(listGuildEmojis, api, g.ID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "5797a75be26cfc04026448a0d3e447f62caaefc70ca3f3d767712f15204474cd"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'GetGuildEmoji'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/emoji_endpoints.go",
+      "language": "go",
+      "line": 36,
+      "offset": 17,
+      "length": 13,
+      "code": {
+        "startLine": 34,
+        "length": 13,
+        "offset": 95,
+        "surroundingCode": "\n// GetGuildEmoji - Returns an emoji object for the given guild and emoji IDs.\nfunc (g *Guild) GetGuildEmoji(emoji Emoji) (*Emoji, error) {\n\tu := parseRoute(fmt.Sprintf(getGuildEmoji, api, g.ID.String(), emoji.ID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "d7ee98251fd04e406ee17583be6695768b0c2f0d494d5b1991dcd3c20325d7fb"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'CreateGuildEmoji'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/emoji_endpoints.go",
+      "language": "go",
+      "line": 58,
+      "offset": 17,
+      "length": 16,
+      "code": {
+        "startLine": 56,
+        "length": 16,
+        "offset": 78,
+        "surroundingCode": "//\n// This endpoint supports the \"X-Audit-Log-Reason\" header.\nfunc (g *Guild) CreateGuildEmoji(payload CreateEmojiJSON, reason *string) (*Emoji, error) {\n\tu := parseRoute(fmt.Sprintf(createGuildEmoji, api, g.ID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "e450e9930ff39af5a9436c5256017f67554fa41361126f5b0215569ddf5651a6"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'CreateEmojiJSON'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/emoji_endpoints.go",
+      "language": "go",
+      "line": 70,
+      "offset": 6,
+      "length": 15,
+      "code": {
+        "startLine": 68,
+        "length": 15,
+        "offset": 46,
+        "surroundingCode": "//\n// TODO: Validate the base64.Encoding\ntype CreateEmojiJSON struct {\n\tName  string          `json:\"name\"`  // Name - name of the emoji\n\tImage base64.Encoding `json:\"image\"` // Image - the 128x128 emoji image"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "9b9110fa8bf3e191beba7f81bdab8145978182f2125ef09ca46902a82daec6ec"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'ModifyGuildEmoji'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/emoji_endpoints.go",
+      "language": "go",
+      "line": 87,
+      "offset": 17,
+      "length": 16,
+      "code": {
+        "startLine": 85,
+        "length": 16,
+        "offset": 76,
+        "surroundingCode": "//\n// This endpoint supports the X-Audit-Log-Reason header.\nfunc (g *Guild) ModifyGuildEmoji(emoji Emoji, payload ModifyGuildEmojiJSON, reason *string) (*Emoji, error) {\n\tu := parseRoute(fmt.Sprintf(modifyGuildEmoji, api, g.ID.String(), emoji.ID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "0cb5d0fccf7b11f6a2a2d16d7a75befefcf46b6e2778c79d8d55aa6e1f8662fc"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'ModifyGuildEmojiJSON'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/emoji_endpoints.go",
+      "language": "go",
+      "line": 97,
+      "offset": 6,
+      "length": 20,
+      "code": {
+        "startLine": 95,
+        "length": 20,
+        "offset": 71,
+        "surroundingCode": "\n// ModifyGuildEmojiJSON - Parameters to pass in the JSON payload\ntype ModifyGuildEmojiJSON struct {\n\tName  string       `json:\"name,omitempty\"`  // Name - name of the emoji\n\tRoles []*Snowflake `json:\"roles,omitempty\"` // Roles - roles allowed to use this emoji"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "babe3107d28b96e0a8a1790f1979f92f1d5420d115dcd9de83203a20b8b43dcf"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'DeleteGuildEmoji'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/emoji_endpoints.go",
+      "language": "go",
+      "line": 111,
+      "offset": 17,
+      "length": 16,
+      "code": {
+        "startLine": 109,
+        "length": 16,
+        "offset": 78,
+        "surroundingCode": "//\n// This endpoint supports the \"X-Audit-Log-Reason\" header.\nfunc (g *Guild) DeleteGuildEmoji(emoji Emoji, reason *string) error {\n\tu := parseRoute(fmt.Sprintf(deleteGuildEmoji, api, g.ID.String(), emoji.ID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "4fac1cae9abab196bfb1fc254eaba53ddbbf98c941c0a9274873befc53d8fafa"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported function 'GetCurrentUser'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/user_endpoints.go",
+      "language": "go",
+      "line": 30,
+      "offset": 6,
+      "length": 14,
+      "code": {
+        "startLine": 28,
+        "length": 14,
+        "offset": 55,
+        "surroundingCode": "//\n//goland:noinspection GoUnusedExportedFunction\nfunc GetCurrentUser() (*User, error) {\n\tu := parseRoute(fmt.Sprintf(getCurrentUser, api))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "c2d71a9fc45fd04a7958d0f61fedb5ca59592f778c856bcf4438f44137b04e70"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'GetUser'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/user_endpoints.go",
+      "language": "go",
+      "line": 42,
+      "offset": 16,
+      "length": 7,
+      "code": {
+        "startLine": 40,
+        "length": 7,
+        "offset": 65,
+        "surroundingCode": "//\n//goland:noinspection GoUnusedExportedFunction\nfunc (u *User) GetUser() (*User, error) {\n\troute := parseRoute(fmt.Sprintf(getUser, api, u.ID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "f06abdba852d41d053e430b26be22130ce2a7979c1c6f7757051c819a3f14ca0"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported function 'ModifyCurrentUser'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/user_endpoints.go",
+      "language": "go",
+      "line": 56,
+      "offset": 6,
+      "length": 17,
+      "code": {
+        "startLine": 54,
+        "length": 17,
+        "offset": 55,
+        "surroundingCode": "//\n//goland:noinspection GoUnusedExportedFunction\nfunc ModifyCurrentUser(payload ModifyCurrentUserJSON) (*User, error) {\n\tu := parseRoute(fmt.Sprintf(modifyCurrentUser, api))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "cd4b433388b93d942f62241e111ee9ea380d6928fa82d617e1e668a63da6c0d1"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported function 'GetCurrentUserGuilds'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/user_endpoints.go",
+      "language": "go",
+      "line": 74,
+      "offset": 6,
+      "length": 20,
+      "code": {
+        "startLine": 72,
+        "length": 20,
+        "offset": 55,
+        "surroundingCode": "//\n//goland:noinspection GoUnusedExportedFunction\nfunc GetCurrentUserGuilds(before *Snowflake, after *Snowflake, limit *uint64) ([]Guild, error) {\n\tu := parseRoute(fmt.Sprintf(getCurrentUserGuilds, api))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "0a99b1cee9f922ff0665461a086d875810a12aad50583eec41b160cee8a63b2d"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'GetCurrentUserGuildMember'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/user_endpoints.go",
+      "language": "go",
+      "line": 98,
+      "offset": 17,
+      "length": 25,
+      "code": {
+        "startLine": 96,
+        "length": 25,
+        "offset": 148,
+        "surroundingCode": "\n// GetCurrentUserGuildMember - Returns a GuildMember object for the current user. Requires the `guilds.members.read` OAuth2 scope.\nfunc (g *Guild) GetCurrentUserGuildMember() (*GuildMember, error) {\n\tu := parseRoute(fmt.Sprintf(getCurrentUserGuildMember, api, g.ID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "65ed8d2faad87519005f614b2307691569e8836f3f7fd9c41a2e563e843b76da"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'LeaveGuild'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/user_endpoints.go",
+      "language": "go",
+      "line": 108,
+      "offset": 17,
+      "length": 10,
+      "code": {
+        "startLine": 106,
+        "length": 10,
+        "offset": 89,
+        "surroundingCode": "\n// LeaveGuild - Leave a guild. Returns a 204 empty response on success.\nfunc (g *Guild) LeaveGuild() error {\n\tu := parseRoute(fmt.Sprintf(leaveGuild, api, g.ID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "b718ac28cecd6eef108177a15dc1296e2122602de05c76daa6ec9b670b73039b"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported function 'CreateDM'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/user_endpoints.go",
+      "language": "go",
+      "line": 123,
+      "offset": 6,
+      "length": 8,
+      "code": {
+        "startLine": 121,
+        "length": 8,
+        "offset": 55,
+        "surroundingCode": "//\n//goland:noinspection GoUnusedExportedFunction\nfunc CreateDM(payload CreateDmJSON) (*Channel, error) {\n\tu := parseRoute(fmt.Sprintf(createDM, api))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "a5f2df4feef15d5831d6ec1c37e054638f74e98a57c2eb5bc7c615b0042e2322"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported function 'CreateGroupDM'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/user_endpoints.go",
+      "language": "go",
+      "line": 146,
+      "offset": 6,
+      "length": 13,
+      "code": {
+        "startLine": 144,
+        "length": 13,
+        "offset": 55,
+        "surroundingCode": "//\n//goland:noinspection GoUnusedExportedFunction\nfunc CreateGroupDM(payload CreateDmJSON) (*Channel, error) {\n\tu := parseRoute(fmt.Sprintf(createGroupDM, api))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "4aa85a1d7ba69c63913fae5eb45c52c66286da83a90ca709057db84e01e21f74"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'CreateGroupDmJSON'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/user_endpoints.go",
+      "language": "go",
+      "line": 156,
+      "offset": 6,
+      "length": 17,
+      "code": {
+        "startLine": 154,
+        "length": 17,
+        "offset": 42,
+        "surroundingCode": "\n// CreateGroupDmJSON - JSON payload\ntype CreateGroupDmJSON struct {\n\tAccessTokens []string             `json:\"access_tokens\"` // access tokens of users that have granted your app the `gdm.join` scope\n\tNicks        map[Snowflake]string `json:\"nicks\"`         // a dictionary of user ids to their respective nicknames"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "ba1409516f080d2a56cc1bfcadd9caf61123b0447d423bf4925f01dcf252deca"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported function 'GetUserConnections'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/user_endpoints.go",
+      "language": "go",
+      "line": 164,
+      "offset": 6,
+      "length": 18,
+      "code": {
+        "startLine": 162,
+        "length": 18,
+        "offset": 55,
+        "surroundingCode": "//\n//goland:noinspection GoUnusedExportedFunction\nfunc GetUserConnections() ([]Connection, error) {\n\tu := parseRoute(fmt.Sprintf(getUserConnections, api))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "82b8ef60059ebcad6a5fd9f139d333ff9001c171a66bad9fc3b9b35b0e78c30a"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'GetAvatarUrl'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/user_endpoints.go",
+      "language": "go",
+      "line": 174,
+      "offset": 16,
+      "length": 12,
+      "code": {
+        "startLine": 172,
+        "length": 12,
+        "offset": 74,
+        "surroundingCode": "\n// GetAvatarUrl - returns a properly formatted avatar url\nfunc (u *User) GetAvatarUrl() string {\n\tif u.Avatar != nil {\n\t\tif PtrStr(u.Avatar)[:2] == \"a_\" {"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "3316425d4eda07168a3497c673f99d9db02ce0a710403e152f4a34b1b1ea01d5"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'GetDefaultUserAvatarUrl'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/user_endpoints.go",
+      "language": "go",
+      "line": 185,
+      "offset": 16,
+      "length": 23,
+      "code": {
+        "startLine": 183,
+        "length": 23,
+        "offset": 80,
+        "surroundingCode": "\n// GetDefaultUserAvatarUrl - returns the default Discord avatar\nfunc (u *User) GetDefaultUserAvatarUrl() string {\n\tdiscriminator, err := strconv.Atoi(u.Discriminator)\n\tif err != nil {"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "218cd1530aa09975c125a6a6e4ae0666e65ff19f9c82285aae28b62b5b8ccca4"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'GetGuildAuditLog'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/audit_log_endpoints.go",
+      "language": "go",
+      "line": 29,
+      "offset": 17,
+      "length": 16,
+      "code": {
+        "startLine": 27,
+        "length": 16,
+        "offset": 60,
+        "surroundingCode": "//\n// Requires the ViewAuditLog permission.\nfunc (g *Guild) GetGuildAuditLog(userID *Snowflake, actionType *uint64, before *Snowflake, limit *uint64) (*AuditLog, error) {\n\tu := parseRoute(fmt.Sprintf(getGuildAuditLog, api, g.ID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "e32a003088d6f6227490ea1ffbf048dd34ee2d49e9284dbf3fe538771867ce5d"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'GetInvite'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/invite_endpoints.go",
+      "language": "go",
+      "line": 26,
+      "offset": 18,
+      "length": 9,
+      "code": {
+        "startLine": 24,
+        "length": 9,
+        "offset": 78,
+        "surroundingCode": "\n// GetInvite - Returns an Invite object for the given code.\nfunc (i *Invite) GetInvite(withCounts *bool, withExpiration *bool, guildScheduledEventID *Snowflake) (*Invite, error) {\n\tu := parseRoute(fmt.Sprintf(getInvite, api, *i.Code))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "d6ade0719015e5efaa640f69271dc7b360738427712885db493b7bbebc37b210"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'DeleteInvite'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/invite_endpoints.go",
+      "language": "go",
+      "line": 58,
+      "offset": 18,
+      "length": 12,
+      "code": {
+        "startLine": 56,
+        "length": 12,
+        "offset": 79,
+        "surroundingCode": "//\n//\tThis endpoint supports the `X-Audit-Log-Reason` header.\nfunc (i *Invite) DeleteInvite(reason *string) error {\n\tu := parseRoute(fmt.Sprintf(deleteInvite, api, *i.Code))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "e7bcbe5d413c694ba7f6226951b131905d57571d6f20811d5548731746d9b35a"
+}]}

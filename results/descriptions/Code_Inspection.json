@@ -175,6 +175,185 @@
       ]
     },
     {
+      "name": "Probable bugs",
+      "inspections": [
+        {
+          "shortName": "GoVetCopyLock",
+          "displayName": "Locks mistakenly passed by value",
+          "enabled": true,
+          "description": "Reports locks that are mistakenly passed by values.\n\nAccidentally copying a value containing a lock may cause both copies to work incorrectly. Generally, such values should be\nreferred to through a pointer. A lock here means a type implementing `sync.Locker`, such as `sync.Mutex`\nor `sync.WaitGroup`.\n\nExample:\n\n    type SafeInt struct {\n      m sync.Mutex\n      i int\n    }\n\n    func (s SafeInt) Inc() { // mutex is copied\n      s.m.Lock()\n      s.i++\n      s.m.Unlock()\n    }\n\nAfter the **Add pointer** quick-fix is applied:\n\n    type SafeInt struct {\n      m sync.Mutex\n      i int\n    }\n\n    func (s *SafeInt) Inc() {\n      s.m.Lock()\n      s.i++\n      s.m.Unlock()\n    }\n"
+        },
+        {
+          "shortName": "GoVetImpossibleInterfaceToInterfaceAssertion",
+          "displayName": "Impossible interface type assertion",
+          "enabled": true,
+          "description": "Reports impossible interface-to-interface type assertions.\n\nChecks for type assertions `v.(T)` and corresponding type-switch cases\nin which the static type `V` of `v` is the interface that\ncannot possibly implement the target interface `T`. This occurs when\n`V` and `T` contain methods with the same name but\ndifferent signatures.\n\nExample:\n\n    var v interface {\n      Read()\n    }\n    _ = v.(io.Reader)\n\nThe `Read` method in `v` has a different signature than\nthe `Read` method in `io.Reader`, so this assertion\ncannot succeed.\n\nThis inspection only reports if the language version is 1.15 or higher."
+        },
+        {
+          "shortName": "GoIrregularIota",
+          "displayName": "Irregular usage of 'iota'",
+          "enabled": true,
+          "description": "Reports irregular usage of `iota` within a constant declaration.\n\nThe `iota` identifier is reset for every constant declaration and automatically incremented for every constant specification.\nWithin one constant specification, the identifier keeps its value. Explicitly referring to `iota` does not reset the counter.\n\nFor details, see [Iota](https://go.dev/ref/spec#Iota) in the Go specification.\n\nThis inspection is triggered if two constant specifications have a textually identical expression list containing at least one reference to `iota`\nand there are exclusively constant specifications without an expression list in between them.\n\nConsider omitting the redundant expression list or writing out the expression list every time.\n\nExample:\n\n    const (\n      a = iota  // 0\n      b         // 1\n      c = iota  // 2\n    )\n\nTriggers the inspection as the `iota` in the definition of `c` is redundant.\n\nExample:\n\n    const (\n      a, aa = iota, iota       // 0, 0\n      b, bb                    // 1, 1\n      c, cc = iota + 40, iota  // 42, 2\n    )\n\nDoes not trigger the inspection as none of the expression lists is redundant."
+        },
+        {
+          "shortName": "GoVetStructTag",
+          "displayName": "Malformed struct tag",
+          "enabled": true,
+          "description": "Reports struct tags that do not conform to [Go conventions for struct tags](https://golang.org/pkg/reflect/#StructTag).\n\nAccording to these conventions, tag strings are a concatenation of optionally space-separated `key:\"value\"` pairs. Each\nkey is a non-empty string consisting of non-control characters other than `space (U+0020 ' ')`, `quote (U+0022 '\"')`,\nand\n`colon (U+003A ':')`. Each value is quoted using `U+0022 '\"'` characters and Go string literal syntax.\n\nAlso, the inspection checks that fields with tags are exported.\n\nExample of a valid tag:\n\n    type Example struct {\n      Field int `json:\"field\" xml:\"demo\"`\n    }\n"
+        },
+        {
+          "shortName": "GoShadowedVar",
+          "displayName": "Shadowing variable",
+          "enabled": true,
+          "description": "Reports declarations of variables that overlap with the declarations in the outer scope.\n\nAs the meaning of the variable depends on the scope in that case, it may create confusion and lead to unintended consequences.\n\nExample:\n\n    for i := 0; i < len(nums); i++ {\n        for i := 0; i < len(nums); i++ {\n        }\n      }\n\nThe `i` variable in the embedded loop is shadowed. To get rid of shadowing, consider renaming the variable\nin the embedded loop.\n\n    for i := 0; i < len(nums); i++ {\n        for j := 0; j < len(nums); j++ {\n        }\n      }\n"
+        },
+        {
+          "shortName": "GoVetFailNowInNotTestGoroutine",
+          "displayName": "'FailNow' in a non-test goroutine",
+          "enabled": true,
+          "description": "Reports calls to `testing.T.FailNow` and similar methods located in goroutines in test files.\n\nMethods like `FailNow` call `runtime.Goexit` and stop the calling goroutine, not the test.\nTherefore, they must only be called from the goroutine that runs the test or benchmark.\n\nFor more information about `FailNow`, see [func (\\*T) FailNow at\ngolang.org](https://golang.org/pkg/testing/#T.FailNow).\n\nExample:\n\n    func TestFoo(t *testing.T) {\n      go func() {\n        t.Fatal(\"oops\") //exits goroutine, not TestFoo\n      }()\n    }\n\nAfter the **Replace with 'Error' and 'return'** quick-fix is applied:\n\n    func TestFoo(t *testing.T) {\n      go func() {\n        t.Error(\"oops\")\n        return\n      }()\n    }\n"
+        },
+        {
+          "shortName": "GoShift",
+          "displayName": "Exceeded shift expression",
+          "enabled": true,
+          "description": "Reports shift expressions that equal or exceed the width of the integer.\n\nAll the bits of the left operand are shifted in such expression resulting in a constant value. The constant value\nindicates that either the shift offset is incorrect or the shift expression is redundant.\n\nExample:\n\n\n      func shift(i int8) {\n        fmt.Println(i << 8) // always prints 0\n      }\n"
+        },
+        {
+          "shortName": "GoVetIntToStringConversion",
+          "displayName": "Integer to string type conversion",
+          "enabled": true,
+          "description": "Reports conversions of `string(x)`-alike expressions where `x` is an integer but not byte or rune.\n\nSuch conversions are discouraged because they return the UTF-8 representation\nof the Unicode code point `x`, and not a decimal string representation\nof `x` as one might expect. Furthermore, if `x` denotes\nan invalid code point, the conversion cannot be statically rejected.\n\nFor conversions that intend on using the code point, consider replacing them\nwith `string(rune(x))`. Otherwise, `strconv.Itoa`\nand its equivalents return the string representation of the value in the desired\nbase.\n\nExample:\n\n    func main() {\n     a := 1\n     _ = string(a)\n    }\n\nAfter the **Convert integer to rune** quick-fix is applied:\n\n    func main() {\n     a := 1\n     _ = string(rune(a))\n    }\n"
+        },
+        {
+          "shortName": "GoImportUsedAsName",
+          "displayName": "Imported package name as a name identifier",
+          "enabled": true,
+          "description": "Reports declarations of variables, arguments or functions that overlap with the used import.\n\nWhile legal, such declarations will make using the package exported identifiers impossible after the declaration or create\nconfusion when reading the code.\n\nExample:\n\n    import \"fmt\"\n    import _ \"fmt\"\n    import iio \"io\"\n\n    func _() {\n     fmt.Println(\"demo\")\n     demo := true\n     _, _ = iio.EOF, demo\n    }\n\n    func demo() (int, int) {\n     return 1, 2\n    }\n\n    func _() {\n     _, _ = iio.EOF, demo\n     fmt := \"demo\"\n     iio := 1\n     _, _ = iio, fmt\n     a, _ := demo()\n     _ = a\n    }\n\nVariable names `fmt` and `iio` clash with names of import packages. Not to confuse them later in code, it is better\nto rename these variables."
+        },
+        {
+          "shortName": "GoNilness",
+          "displayName": "Nilness analyzer",
+          "enabled": false,
+          "description": "Reports problems caused by incorrect usage of the `nil` value.\n\nThe IDE analyses data flow to determine if variables could have `nil` or not `nil` values.\nBased on this, the IDE reports potential issues in code. Consider the following list of situations that might lead to unintended\nconsequences:\n\n* Method calls with the `nil` receiver might lead to 'nil pointer dereference'.\n* The `nil` slice indexing might cause panics.\n* Comparisons like `v == nil` might be meaningless if `v` is known to be always `nil` or not `nil`.\n* Variables with corresponding errors are not checked on not to be `nil`. An error corresponds to a variable when they are defined or assigned together in statements like `v, err := foo()`."
+        },
+        {
+          "shortName": "GoPrintFunctions",
+          "displayName": "Incorrect usage of 'fmt.Printf' and 'fmt.Println' functions",
+          "enabled": true,
+          "description": "Reports incorrect usages of `fmt.Printf`, `fmt.Println`, and similar formatting and printing functions.\n\nIn their format strings, formatting functions use formatting verbs, like `%s`, `%d`, `%v`, and others.\nIf formatting verbs are used incorrectly, the result of a formatting function will contain an error.\nFor more information about formatting verbs, see [Package fmt at golang.org](https://golang.org/pkg/fmt/).\n\nExample:\n\n    fmt.Printf(\"id: %s\", 42)\n\nThe output of this function is `id: %!s(int=42)`. It might be not what you really want.\nThe following function uses the `%d` formatting verb.\nThe output with the `%d` formatting verb will be `id: 42`.\n\n    fmt.Printf(\"id: %d\", 42)\n"
+        },
+        {
+          "shortName": "GoDeferGo",
+          "displayName": "Defer/go statement calls 'recover' or 'panic' directly",
+          "enabled": true,
+          "description": "Reports `defer` and `go` statements that call `panic()` or `recover()` directly.\n\nSuch statements are rarely useful and might indicate a misuse of the `panic()` and `recover()` mechanism.\nIn particular:\n\n* `go panic()`: a newly-started goroutine will panic immediately.\n* `defer panic()`: a function with this statement will always panic on exit.\n* `go recover()`: has no effect as newly-started goroutine cannot panic.\n* `defer recover()`: function with this statement will silently stop panicking. This could be a valid usage, but an idiomatic way is to inspect the value returned by `recover()`:\n\n      defer func() {\n        if r := recover(); r != nil {\n          fmt.Println(\"Recovered from: \", r)\n        }\n      }()\n\nFor more information about go statements and panics handling, see [Handling\npanics](https://golang.org/ref/spec#Handling_panics) and\n[Go statements](https://golang.org/ref/spec#Go_statements) in the Go Language Specification."
+        },
+        {
+          "shortName": "GoErrorsAs",
+          "displayName": "Incorrect usage of the 'errors.As' function",
+          "enabled": true,
+          "description": "Reports calls of the `errors.As` function when the second argument is not a pointer to an interface or to a type that implements an error.\n\nSuch calls panic at runtime.\n\nFor more information about the `As` function, see [func As at golang.org](https://golang.org/pkg/errors/#As).\n\nExample:\n\n    _, err := os.Open(\"non-existing\")\n    var pathError *fs.PathError\n    if errors.As(err, pathError) { // a pointer to *fs.PathError is required\n    }\n\nAfter the **Prepend '\\&'** quick-fix is applied:\n\n    _, err := os.Open(\"non-existing\")\n    var pathError *fs.PathError\n    if errors.As(err, &pathError) {\n    }\n\nThis inspection only reports if the language version is 1.13 or higher."
+        },
+        {
+          "shortName": "GoVetUnsafePointer",
+          "displayName": "Invalid conversions of 'uintptr' to 'unsafe.Pointer'",
+          "enabled": true,
+          "description": "Reports possibly incorrect conversions of `uintptr` to `unsafe.Pointer`.\n\nA conversion from\n`uintptr` to `unsafe.Pointer` is invalid if it implies that there is a `uintptr`-typed word\nin memory that holds a pointer value, because that word will be invisible to stack copying and to the garbage collector.\n\nExample of invalid usage:\n\n    nums := []int8{42, 24}\n    ptr := unsafe.Pointer(&nums[0])\n    addr := uintptr(ptr) // address is stored to a local variable\n    ptr = unsafe.Pointer(addr + uintptr(1))\n\nExample of valid usage:\n\n    nums := []int8{42, 24}\n    ptr := unsafe.Pointer(&nums[0])\n    ptr = unsafe.Pointer(uintptr(ptr) + uintptr(1))\n"
+        },
+        {
+          "shortName": "GoUnhandledErrorResult",
+          "displayName": "Unhandled error",
+          "enabled": true,
+          "description": "Reports calls to functions and methods that do not handle the call result of the `error` type.\n\nAn API of such functions imply that their execution might finish unsuccessfully and they would return an error.\nCalls that do not handle the error result could be an indication of the API misuse.\n\nExample:\n\n\n    os.Remove(\"non-existing\") // error is ignored\n\nAfter the **Handle error** quick-fix is applied:\n\n    err := os.Remove(\"non-existing\") // error is handled\n    if err != nil {\n      return err\n    }\n"
+        },
+        {
+          "shortName": "GoReservedWordUsedAsName",
+          "displayName": "Reserved word used as name",
+          "enabled": true,
+          "description": "Reports declarations of variables, arguments or functions that overlap with the built-in or reserved keyword.\n\nIf you receive this error then your code might not be as explicit as possible and might confuse other users.\n\nExample:\n\n    type byte struct{}\n    type string interface{}\n\nTypes `byte` and `string` collide with the built-in type aliases. Therefore, they will be highlighted.\nConsider renaming such declarations."
+        },
+        {
+          "shortName": "GoVetLostCancel",
+          "displayName": "'context.CancelFunc' is not called",
+          "enabled": true,
+          "description": "Reports execution paths that do not call the `cancel` function returned by `context.WithCancel` and similar functions.\n\nThe `WithCancel`, `WithDeadline`, and `WithTimeout` functions take a `Context` (the parent)\nand return a\nderived `Context` (the child) and a `CancelFunc`.\nCalling the `CancelFunc` cancels the child and its children, removes the parent's reference to the child, and stops any\nassociated timers.\nFailing to call the CancelFunc leaks the child and its children until the parent is canceled or the timer fires.\n\nFor more information about the `context` package, see [Package context at\ngolang.org](https://golang.org/pkg/context/).\n\nExample:\n\n    func _(ctx context.Context, cancel func()) {\n     var ctx2 context.Context\n     ctx2, cancel = context.WithCancel(ctx)\n     _ = ctx2\n    }\n"
+        },
+        {
+          "shortName": "GoStandardMethods",
+          "displayName": "Non-standard signature for well-known function names",
+          "enabled": true,
+          "description": "Reports methods with certain names in the following cases:\n\n* the method's name matches the name of several well-known interface methods from the standard library\n* the signature does not match the signature of the corresponding interface method\n\nSuch methods might indicate that the receiver type is intended to satisfy an interface from the standard library,\nbut fails to do so because of the mistake in the method's signature.\n\nExample:\n\n    type MyReader []byte\n\n    func (r MyReader) ReadByte(data []byte) (byte, error) {\n    }\n\nThe usage is suspicious because it looks like an attempt to implement `io.ByteReader` but the signature is wrong.\nMore correct version will be as follows:\n\n    type MyReader []byte\n\n    func (r MyReader) ReadByte() (byte, error) {\n    }\n"
+        },
+        {
+          "shortName": "GoStringsReplaceCount",
+          "displayName": "Incorrect 'strings.Replace' count argument",
+          "enabled": true,
+          "description": "Reports `strings.Replace` calls with the replace count `0` instead of `-1`.\n\nThe count argument for how many times a string should be replaced should not be `0`\nas it will not replace anything and make the function call redundant. Use `-1` instead.\n\nExample:\n\n    a := strings.Replace(\"SSS\", \"S\", \"H\", 0) // replaces nothing\n    b := strings.Replace(\"SSS\", \"S\", \"H\", -1) // replaces all S occurrences with H\n"
+        },
+        {
+          "shortName": "GoUnusedCallResult",
+          "displayName": "Unused function or method call result",
+          "enabled": true,
+          "description": "Reports calls to certain functions and methods that do not handle a call result.\n\nAn API of such functions imply that users\nshould call them mostly to get a return value and process it, not for side effects. Calls that do not handle the result\ncould be an indication of a misuse of the API.\n\nExample:\n\n    fmt.Errorf(\"error: %s\", reason) // constructed error is ignored\n\nAfter the **Introduce local variable** quick-fix is applied:\n\n    err := fmt.Errorf(\"error: %s\", reason)\n"
+        },
+        {
+          "shortName": "GoDivisionByZero",
+          "displayName": "Division by zero",
+          "enabled": true,
+          "description": "Reports division by zero.\n\nDivision by zero will lead to a runtime panic.\n\nExample:\n\n    s := 3 / 0\n"
+        },
+        {
+          "shortName": "GoMixedReceiverTypes",
+          "displayName": "Mixed value and pointer receivers",
+          "enabled": true,
+          "description": "Reports structures with methods that use a mixture of types: value and pointer receivers. Such usage is not recommended by the Go Documentation.\n\nFor details, see [Should I define methods on values or pointers?](https://go.dev/doc/faq#methods_on_values_or_pointers) in the Go FAQ.\n\nExample:\n\n    type S struct{\n    }\n\n    func (s *S) fun() {}\n    func (s S) fun2() {}\n"
+        },
+        {
+          "shortName": "GoVetAtomic",
+          "displayName": "Incorrect usage of the 'sync/atomic' package",
+          "enabled": true,
+          "description": "Reports assignment statements of the form `x = atomic.AddUint64(&x, 1)`.\n\nSuch operations are not atomic,\nand is a common misuse of the `sync/atomic` API. To make them atomic, one need to remove the assignment\nto use a direct call: `atomic.AddUint64(&x, 1)`. In that case, the value of `x` will be updated\natomically by address.\n\nExample:\n\n    import (\n     \"sync/atomic\"\n    )\n\n    type Counter uint64\n\n    func AtomicTests() {\n     x := uint64(1)\n     x = atomic.AddUint64(&x, 1)         // ERROR \"direct assignment to atomic value\"\n     _, x = 10, atomic.AddUint64(&x, 1)  // ERROR \"direct assignment to atomic value\"\n     x, _ = atomic.AddUint64(&x, 1), 10  // ERROR \"direct assignment to atomic value\"\n    }\n"
+        },
+        {
+          "shortName": "GoLoopClosure",
+          "displayName": "Loop variables captured by the func literal",
+          "enabled": true,
+          "description": "Reports references to loop variables from within `func` literals in `defer` and `go` statements. Such variables might have unexpected values because they are not copied to `func` literals, and the `func` literals in `defer` and `go` are not executed immediately.\n\nFor more information about closures and goroutines, see [What happens\nwith closures running as goroutines? at golang.org](https://golang.org/doc/go_faq.html#closures_and_goroutines).\n\nExample:\n\n    for _, v := range []string{\"a\", \"b\", \"c\"} {\n      go func() {\n        fmt.Println(v) // output will likely be `c c c`, not `a b c`\n      }()\n    }\n\nAfter the quick-fix is applied:\n\n    for _, v := range []string{\"a\", \"b\", \"c\"} {\n      v := v // `v` is copied now\n      go func() {\n        fmt.Println(v)\n      }()\n    }\n\nNote the analyzer only checks `defer` and `go` statements when they are the last statement in the loop body.\nOtherwise, the analysis might produce false detections."
+        },
+        {
+          "shortName": "GoBuildTag",
+          "displayName": "Malformed build tag",
+          "enabled": true,
+          "description": "Reports malformed build tags and build tags in the incorrect location. The `go` tool expects build tags to be located in particular places and follow a special syntax. If these requirements are not followed, build tags could either be ignored or the files could be incorrectly excluded from the build.\n\nSee [Build Constraints at golang.org](https://golang.org/pkg/go/build/#hdr-Build_Constraints).\n\nExample:\n\n    package main\n\n    // +build ignore\n\n    func main() {}\n\nThe `// +build ignore` part should be before the package declaration. To fix that, you can apply\nthe **Place build tag before package** quick-fix. After the quick-fix is applied:\n\n    // +build ignore\n\n    package main\n\n    import \"fmt\"\n"
+        },
+        {
+          "shortName": "GoVetUnmarshal",
+          "displayName": "'Unmarshal' is called with the incorrect argument",
+          "enabled": true,
+          "description": "Reports calls to `json.Unmarshal` and similar functions if the argument that is passed to store the result is not a pointer or an interface.\n\nThese calls will fail and return an error.\n\nFor more information about `Unmarshal`, see [func Unmarshal at\ngolang.org](https://golang.org/pkg/encoding/json/#Unmarshal).\n\nExample:\n\n    var animals []Animal\n    err := json.Unmarshal(jsonData, animals) // always returns an error\n\nAfter the **Prepend '\\&'** quick-fix is applied:\n\n    var animals []Animal\n    err := json.Unmarshal(jsonData, &animals)\n"
+        },
+        {
+          "shortName": "CssNonIntegerLengthInPixels",
+          "displayName": "Non-integer length in pixels",
+          "enabled": false,
+          "description": "Reports a non-integer length in pixels.\n\n**Example:**\n\n     width: 3.14px\n"
+        },
+        {
+          "shortName": "CssNoGenericFontName",
+          "displayName": "Missing generic font family name",
+          "enabled": false,
+          "description": "Verifies that the [font-family](https://developer.mozilla.org/en-US/docs/Web/CSS/font-family) property contains a generic font family name as a fallback alternative.\n\n\nGeneric font family names are: `serif`, `sans-serif`, `cursive`, `fantasy`,\nand `monospace`."
+        },
+        {
+          "shortName": "CssMissingComma",
+          "displayName": "Missing comma in selector list",
+          "enabled": false,
+          "description": "Reports a multi-line selector. Most likely this means that several single-line selectors are actually intended but a comma is missing at the end of one or several lines.\n\n**Example:**\n\n\n    input /* comma has probably been forgotten */\n    .button {\n      margin: 1px;\n    }\n"
+        }
+      ]
+    },
+    {
       "name": "General",
       "inspections": [
         {
@@ -332,185 +511,6 @@
           "displayName": "Duplicate variable",
           "enabled": false,
           "description": "Reports duplicate Go Template variables that are declared in the same scope.\n\nDuplicating a variable reassigns the existing variable with the same name. This operation might lead to different\nunpredicatable issues.\n\nExample:\n\n    {{$v := 0}}{{$v := 1}}{{$v}} is 0. {{/* evaluates to '1 is 0' */}}\n    {{$v := 0}}{{$w := 1}}{{$v}} is 0. {{/* works as expected */}}\n"
-        }
-      ]
-    },
-    {
-      "name": "Probable bugs",
-      "inspections": [
-        {
-          "shortName": "GoVetCopyLock",
-          "displayName": "Locks mistakenly passed by value",
-          "enabled": true,
-          "description": "Reports locks that are mistakenly passed by values.\n\nAccidentally copying a value containing a lock may cause both copies to work incorrectly. Generally, such values should be\nreferred to through a pointer. A lock here means a type implementing `sync.Locker`, such as `sync.Mutex`\nor `sync.WaitGroup`.\n\nExample:\n\n    type SafeInt struct {\n      m sync.Mutex\n      i int\n    }\n\n    func (s SafeInt) Inc() { // mutex is copied\n      s.m.Lock()\n      s.i++\n      s.m.Unlock()\n    }\n\nAfter the **Add pointer** quick-fix is applied:\n\n    type SafeInt struct {\n      m sync.Mutex\n      i int\n    }\n\n    func (s *SafeInt) Inc() {\n      s.m.Lock()\n      s.i++\n      s.m.Unlock()\n    }\n"
-        },
-        {
-          "shortName": "GoVetImpossibleInterfaceToInterfaceAssertion",
-          "displayName": "Impossible interface type assertion",
-          "enabled": true,
-          "description": "Reports impossible interface-to-interface type assertions.\n\nChecks for type assertions `v.(T)` and corresponding type-switch cases\nin which the static type `V` of `v` is the interface that\ncannot possibly implement the target interface `T`. This occurs when\n`V` and `T` contain methods with the same name but\ndifferent signatures.\n\nExample:\n\n    var v interface {\n      Read()\n    }\n    _ = v.(io.Reader)\n\nThe `Read` method in `v` has a different signature than\nthe `Read` method in `io.Reader`, so this assertion\ncannot succeed.\n\nThis inspection only reports if the language version is 1.15 or higher."
-        },
-        {
-          "shortName": "GoIrregularIota",
-          "displayName": "Irregular usage of 'iota'",
-          "enabled": true,
-          "description": "Reports irregular usage of `iota` within a constant declaration.\n\nThe `iota` identifier is reset for every constant declaration and automatically incremented for every constant specification.\nWithin one constant specification, the identifier keeps its value. Explicitly referring to `iota` does not reset the counter.\n\nFor details, see [Iota](https://go.dev/ref/spec#Iota) in the Go specification.\n\nThis inspection is triggered if two constant specifications have a textually identical expression list containing at least one reference to `iota`\nand there are exclusively constant specifications without an expression list in between them.\n\nConsider omitting the redundant expression list or writing out the expression list every time.\n\nExample:\n\n    const (\n      a = iota  // 0\n      b         // 1\n      c = iota  // 2\n    )\n\nTriggers the inspection as the `iota` in the definition of `c` is redundant.\n\nExample:\n\n    const (\n      a, aa = iota, iota       // 0, 0\n      b, bb                    // 1, 1\n      c, cc = iota + 40, iota  // 42, 2\n    )\n\nDoes not trigger the inspection as none of the expression lists is redundant."
-        },
-        {
-          "shortName": "GoVetStructTag",
-          "displayName": "Malformed struct tag",
-          "enabled": true,
-          "description": "Reports struct tags that do not conform to [Go conventions for struct tags](https://golang.org/pkg/reflect/#StructTag).\n\nAccording to these conventions, tag strings are a concatenation of optionally space-separated `key:\"value\"` pairs. Each\nkey is a non-empty string consisting of non-control characters other than `space (U+0020 ' ')`, `quote (U+0022 '\"')`,\nand\n`colon (U+003A ':')`. Each value is quoted using `U+0022 '\"'` characters and Go string literal syntax.\n\nAlso, the inspection checks that fields with tags are exported.\n\nExample of a valid tag:\n\n    type Example struct {\n      Field int `json:\"field\" xml:\"demo\"`\n    }\n"
-        },
-        {
-          "shortName": "GoShadowedVar",
-          "displayName": "Shadowing variable",
-          "enabled": true,
-          "description": "Reports declarations of variables that overlap with the declarations in the outer scope.\n\nAs the meaning of the variable depends on the scope in that case, it may create confusion and lead to unintended consequences.\n\nExample:\n\n    for i := 0; i < len(nums); i++ {\n        for i := 0; i < len(nums); i++ {\n        }\n      }\n\nThe `i` variable in the embedded loop is shadowed. To get rid of shadowing, consider renaming the variable\nin the embedded loop.\n\n    for i := 0; i < len(nums); i++ {\n        for j := 0; j < len(nums); j++ {\n        }\n      }\n"
-        },
-        {
-          "shortName": "GoVetFailNowInNotTestGoroutine",
-          "displayName": "'FailNow' in a non-test goroutine",
-          "enabled": true,
-          "description": "Reports calls to `testing.T.FailNow` and similar methods located in goroutines in test files.\n\nMethods like `FailNow` call `runtime.Goexit` and stop the calling goroutine, not the test.\nTherefore, they must only be called from the goroutine that runs the test or benchmark.\n\nFor more information about `FailNow`, see [func (\\*T) FailNow at\ngolang.org](https://golang.org/pkg/testing/#T.FailNow).\n\nExample:\n\n    func TestFoo(t *testing.T) {\n      go func() {\n        t.Fatal(\"oops\") //exits goroutine, not TestFoo\n      }()\n    }\n\nAfter the **Replace with 'Error' and 'return'** quick-fix is applied:\n\n    func TestFoo(t *testing.T) {\n      go func() {\n        t.Error(\"oops\")\n        return\n      }()\n    }\n"
-        },
-        {
-          "shortName": "GoShift",
-          "displayName": "Exceeded shift expression",
-          "enabled": true,
-          "description": "Reports shift expressions that equal or exceed the width of the integer.\n\nAll the bits of the left operand are shifted in such expression resulting in a constant value. The constant value\nindicates that either the shift offset is incorrect or the shift expression is redundant.\n\nExample:\n\n\n      func shift(i int8) {\n        fmt.Println(i << 8) // always prints 0\n      }\n"
-        },
-        {
-          "shortName": "GoVetIntToStringConversion",
-          "displayName": "Integer to string type conversion",
-          "enabled": true,
-          "description": "Reports conversions of `string(x)`-alike expressions where `x` is an integer but not byte or rune.\n\nSuch conversions are discouraged because they return the UTF-8 representation\nof the Unicode code point `x`, and not a decimal string representation\nof `x` as one might expect. Furthermore, if `x` denotes\nan invalid code point, the conversion cannot be statically rejected.\n\nFor conversions that intend on using the code point, consider replacing them\nwith `string(rune(x))`. Otherwise, `strconv.Itoa`\nand its equivalents return the string representation of the value in the desired\nbase.\n\nExample:\n\n    func main() {\n     a := 1\n     _ = string(a)\n    }\n\nAfter the **Convert integer to rune** quick-fix is applied:\n\n    func main() {\n     a := 1\n     _ = string(rune(a))\n    }\n"
-        },
-        {
-          "shortName": "GoImportUsedAsName",
-          "displayName": "Imported package name as a name identifier",
-          "enabled": true,
-          "description": "Reports declarations of variables, arguments or functions that overlap with the used import.\n\nWhile legal, such declarations will make using the package exported identifiers impossible after the declaration or create\nconfusion when reading the code.\n\nExample:\n\n    import \"fmt\"\n    import _ \"fmt\"\n    import iio \"io\"\n\n    func _() {\n     fmt.Println(\"demo\")\n     demo := true\n     _, _ = iio.EOF, demo\n    }\n\n    func demo() (int, int) {\n     return 1, 2\n    }\n\n    func _() {\n     _, _ = iio.EOF, demo\n     fmt := \"demo\"\n     iio := 1\n     _, _ = iio, fmt\n     a, _ := demo()\n     _ = a\n    }\n\nVariable names `fmt` and `iio` clash with names of import packages. Not to confuse them later in code, it is better\nto rename these variables."
-        },
-        {
-          "shortName": "GoNilness",
-          "displayName": "Nilness analyzer",
-          "enabled": false,
-          "description": "Reports problems caused by incorrect usage of the `nil` value.\n\nThe IDE analyses data flow to determine if variables could have `nil` or not `nil` values.\nBased on this, the IDE reports potential issues in code. Consider the following list of situations that might lead to unintended\nconsequences:\n\n* Method calls with the `nil` receiver might lead to 'nil pointer dereference'.\n* The `nil` slice indexing might cause panics.\n* Comparisons like `v == nil` might be meaningless if `v` is known to be always `nil` or not `nil`.\n* Variables with corresponding errors are not checked on not to be `nil`. An error corresponds to a variable when they are defined or assigned together in statements like `v, err := foo()`."
-        },
-        {
-          "shortName": "GoPrintFunctions",
-          "displayName": "Incorrect usage of 'fmt.Printf' and 'fmt.Println' functions",
-          "enabled": true,
-          "description": "Reports incorrect usages of `fmt.Printf`, `fmt.Println`, and similar formatting and printing functions.\n\nIn their format strings, formatting functions use formatting verbs, like `%s`, `%d`, `%v`, and others.\nIf formatting verbs are used incorrectly, the result of a formatting function will contain an error.\nFor more information about formatting verbs, see [Package fmt at golang.org](https://golang.org/pkg/fmt/).\n\nExample:\n\n    fmt.Printf(\"id: %s\", 42)\n\nThe output of this function is `id: %!s(int=42)`. It might be not what you really want.\nThe following function uses the `%d` formatting verb.\nThe output with the `%d` formatting verb will be `id: 42`.\n\n    fmt.Printf(\"id: %d\", 42)\n"
-        },
-        {
-          "shortName": "GoErrorsAs",
-          "displayName": "Incorrect usage of the 'errors.As' function",
-          "enabled": true,
-          "description": "Reports calls of the `errors.As` function when the second argument is not a pointer to an interface or to a type that implements an error.\n\nSuch calls panic at runtime.\n\nFor more information about the `As` function, see [func As at golang.org](https://golang.org/pkg/errors/#As).\n\nExample:\n\n    _, err := os.Open(\"non-existing\")\n    var pathError *fs.PathError\n    if errors.As(err, pathError) { // a pointer to *fs.PathError is required\n    }\n\nAfter the **Prepend '\\&'** quick-fix is applied:\n\n    _, err := os.Open(\"non-existing\")\n    var pathError *fs.PathError\n    if errors.As(err, &pathError) {\n    }\n\nThis inspection only reports if the language version is 1.13 or higher."
-        },
-        {
-          "shortName": "GoDeferGo",
-          "displayName": "Defer/go statement calls 'recover' or 'panic' directly",
-          "enabled": true,
-          "description": "Reports `defer` and `go` statements that call `panic()` or `recover()` directly.\n\nSuch statements are rarely useful and might indicate a misuse of the `panic()` and `recover()` mechanism.\nIn particular:\n\n* `go panic()`: a newly-started goroutine will panic immediately.\n* `defer panic()`: a function with this statement will always panic on exit.\n* `go recover()`: has no effect as newly-started goroutine cannot panic.\n* `defer recover()`: function with this statement will silently stop panicking. This could be a valid usage, but an idiomatic way is to inspect the value returned by `recover()`:\n\n      defer func() {\n        if r := recover(); r != nil {\n          fmt.Println(\"Recovered from: \", r)\n        }\n      }()\n\nFor more information about go statements and panics handling, see [Handling\npanics](https://golang.org/ref/spec#Handling_panics) and\n[Go statements](https://golang.org/ref/spec#Go_statements) in the Go Language Specification."
-        },
-        {
-          "shortName": "GoVetUnsafePointer",
-          "displayName": "Invalid conversions of 'uintptr' to 'unsafe.Pointer'",
-          "enabled": true,
-          "description": "Reports possibly incorrect conversions of `uintptr` to `unsafe.Pointer`.\n\nA conversion from\n`uintptr` to `unsafe.Pointer` is invalid if it implies that there is a `uintptr`-typed word\nin memory that holds a pointer value, because that word will be invisible to stack copying and to the garbage collector.\n\nExample of invalid usage:\n\n    nums := []int8{42, 24}\n    ptr := unsafe.Pointer(&nums[0])\n    addr := uintptr(ptr) // address is stored to a local variable\n    ptr = unsafe.Pointer(addr + uintptr(1))\n\nExample of valid usage:\n\n    nums := []int8{42, 24}\n    ptr := unsafe.Pointer(&nums[0])\n    ptr = unsafe.Pointer(uintptr(ptr) + uintptr(1))\n"
-        },
-        {
-          "shortName": "GoUnhandledErrorResult",
-          "displayName": "Unhandled error",
-          "enabled": true,
-          "description": "Reports calls to functions and methods that do not handle the call result of the `error` type.\n\nAn API of such functions imply that their execution might finish unsuccessfully and they would return an error.\nCalls that do not handle the error result could be an indication of the API misuse.\n\nExample:\n\n\n    os.Remove(\"non-existing\") // error is ignored\n\nAfter the **Handle error** quick-fix is applied:\n\n    err := os.Remove(\"non-existing\") // error is handled\n    if err != nil {\n      return err\n    }\n"
-        },
-        {
-          "shortName": "GoReservedWordUsedAsName",
-          "displayName": "Reserved word used as name",
-          "enabled": true,
-          "description": "Reports declarations of variables, arguments or functions that overlap with the built-in or reserved keyword.\n\nIf you receive this error then your code might not be as explicit as possible and might confuse other users.\n\nExample:\n\n    type byte struct{}\n    type string interface{}\n\nTypes `byte` and `string` collide with the built-in type aliases. Therefore, they will be highlighted.\nConsider renaming such declarations."
-        },
-        {
-          "shortName": "GoVetLostCancel",
-          "displayName": "'context.CancelFunc' is not called",
-          "enabled": true,
-          "description": "Reports execution paths that do not call the `cancel` function returned by `context.WithCancel` and similar functions.\n\nThe `WithCancel`, `WithDeadline`, and `WithTimeout` functions take a `Context` (the parent)\nand return a\nderived `Context` (the child) and a `CancelFunc`.\nCalling the `CancelFunc` cancels the child and its children, removes the parent's reference to the child, and stops any\nassociated timers.\nFailing to call the CancelFunc leaks the child and its children until the parent is canceled or the timer fires.\n\nFor more information about the `context` package, see [Package context at\ngolang.org](https://golang.org/pkg/context/).\n\nExample:\n\n    func _(ctx context.Context, cancel func()) {\n     var ctx2 context.Context\n     ctx2, cancel = context.WithCancel(ctx)\n     _ = ctx2\n    }\n"
-        },
-        {
-          "shortName": "GoStandardMethods",
-          "displayName": "Non-standard signature for well-known function names",
-          "enabled": true,
-          "description": "Reports methods with certain names in the following cases:\n\n* the method's name matches the name of several well-known interface methods from the standard library\n* the signature does not match the signature of the corresponding interface method\n\nSuch methods might indicate that the receiver type is intended to satisfy an interface from the standard library,\nbut fails to do so because of the mistake in the method's signature.\n\nExample:\n\n    type MyReader []byte\n\n    func (r MyReader) ReadByte(data []byte) (byte, error) {\n    }\n\nThe usage is suspicious because it looks like an attempt to implement `io.ByteReader` but the signature is wrong.\nMore correct version will be as follows:\n\n    type MyReader []byte\n\n    func (r MyReader) ReadByte() (byte, error) {\n    }\n"
-        },
-        {
-          "shortName": "GoStringsReplaceCount",
-          "displayName": "Incorrect 'strings.Replace' count argument",
-          "enabled": true,
-          "description": "Reports `strings.Replace` calls with the replace count `0` instead of `-1`.\n\nThe count argument for how many times a string should be replaced should not be `0`\nas it will not replace anything and make the function call redundant. Use `-1` instead.\n\nExample:\n\n    a := strings.Replace(\"SSS\", \"S\", \"H\", 0) // replaces nothing\n    b := strings.Replace(\"SSS\", \"S\", \"H\", -1) // replaces all S occurrences with H\n"
-        },
-        {
-          "shortName": "GoUnusedCallResult",
-          "displayName": "Unused function or method call result",
-          "enabled": true,
-          "description": "Reports calls to certain functions and methods that do not handle a call result.\n\nAn API of such functions imply that users\nshould call them mostly to get a return value and process it, not for side effects. Calls that do not handle the result\ncould be an indication of a misuse of the API.\n\nExample:\n\n    fmt.Errorf(\"error: %s\", reason) // constructed error is ignored\n\nAfter the **Introduce local variable** quick-fix is applied:\n\n    err := fmt.Errorf(\"error: %s\", reason)\n"
-        },
-        {
-          "shortName": "GoDivisionByZero",
-          "displayName": "Division by zero",
-          "enabled": true,
-          "description": "Reports division by zero.\n\nDivision by zero will lead to a runtime panic.\n\nExample:\n\n    s := 3 / 0\n"
-        },
-        {
-          "shortName": "GoMixedReceiverTypes",
-          "displayName": "Mixed value and pointer receivers",
-          "enabled": true,
-          "description": "Reports structures with methods that use a mixture of types: value and pointer receivers. Such usage is not recommended by the Go Documentation.\n\nFor details, see [Should I define methods on values or pointers?](https://go.dev/doc/faq#methods_on_values_or_pointers) in the Go FAQ.\n\nExample:\n\n    type S struct{\n    }\n\n    func (s *S) fun() {}\n    func (s S) fun2() {}\n"
-        },
-        {
-          "shortName": "GoLoopClosure",
-          "displayName": "Loop variables captured by the func literal",
-          "enabled": true,
-          "description": "Reports references to loop variables from within `func` literals in `defer` and `go` statements. Such variables might have unexpected values because they are not copied to `func` literals, and the `func` literals in `defer` and `go` are not executed immediately.\n\nFor more information about closures and goroutines, see [What happens\nwith closures running as goroutines? at golang.org](https://golang.org/doc/go_faq.html#closures_and_goroutines).\n\nExample:\n\n    for _, v := range []string{\"a\", \"b\", \"c\"} {\n      go func() {\n        fmt.Println(v) // output will likely be `c c c`, not `a b c`\n      }()\n    }\n\nAfter the quick-fix is applied:\n\n    for _, v := range []string{\"a\", \"b\", \"c\"} {\n      v := v // `v` is copied now\n      go func() {\n        fmt.Println(v)\n      }()\n    }\n\nNote the analyzer only checks `defer` and `go` statements when they are the last statement in the loop body.\nOtherwise, the analysis might produce false detections."
-        },
-        {
-          "shortName": "GoVetAtomic",
-          "displayName": "Incorrect usage of the 'sync/atomic' package",
-          "enabled": true,
-          "description": "Reports assignment statements of the form `x = atomic.AddUint64(&x, 1)`.\n\nSuch operations are not atomic,\nand is a common misuse of the `sync/atomic` API. To make them atomic, one need to remove the assignment\nto use a direct call: `atomic.AddUint64(&x, 1)`. In that case, the value of `x` will be updated\natomically by address.\n\nExample:\n\n    import (\n     \"sync/atomic\"\n    )\n\n    type Counter uint64\n\n    func AtomicTests() {\n     x := uint64(1)\n     x = atomic.AddUint64(&x, 1)         // ERROR \"direct assignment to atomic value\"\n     _, x = 10, atomic.AddUint64(&x, 1)  // ERROR \"direct assignment to atomic value\"\n     x, _ = atomic.AddUint64(&x, 1), 10  // ERROR \"direct assignment to atomic value\"\n    }\n"
-        },
-        {
-          "shortName": "GoBuildTag",
-          "displayName": "Malformed build tag",
-          "enabled": true,
-          "description": "Reports malformed build tags and build tags in the incorrect location. The `go` tool expects build tags to be located in particular places and follow a special syntax. If these requirements are not followed, build tags could either be ignored or the files could be incorrectly excluded from the build.\n\nSee [Build Constraints at golang.org](https://golang.org/pkg/go/build/#hdr-Build_Constraints).\n\nExample:\n\n    package main\n\n    // +build ignore\n\n    func main() {}\n\nThe `// +build ignore` part should be before the package declaration. To fix that, you can apply\nthe **Place build tag before package** quick-fix. After the quick-fix is applied:\n\n    // +build ignore\n\n    package main\n\n    import \"fmt\"\n"
-        },
-        {
-          "shortName": "GoVetUnmarshal",
-          "displayName": "'Unmarshal' is called with the incorrect argument",
-          "enabled": true,
-          "description": "Reports calls to `json.Unmarshal` and similar functions if the argument that is passed to store the result is not a pointer or an interface.\n\nThese calls will fail and return an error.\n\nFor more information about `Unmarshal`, see [func Unmarshal at\ngolang.org](https://golang.org/pkg/encoding/json/#Unmarshal).\n\nExample:\n\n    var animals []Animal\n    err := json.Unmarshal(jsonData, animals) // always returns an error\n\nAfter the **Prepend '\\&'** quick-fix is applied:\n\n    var animals []Animal\n    err := json.Unmarshal(jsonData, &animals)\n"
-        },
-        {
-          "shortName": "CssNonIntegerLengthInPixels",
-          "displayName": "Non-integer length in pixels",
-          "enabled": false,
-          "description": "Reports a non-integer length in pixels.\n\n**Example:**\n\n     width: 3.14px\n"
-        },
-        {
-          "shortName": "CssNoGenericFontName",
-          "displayName": "Missing generic font family name",
-          "enabled": false,
-          "description": "Verifies that the [font-family](https://developer.mozilla.org/en-US/docs/Web/CSS/font-family) property contains a generic font family name as a fallback alternative.\n\n\nGeneric font family names are: `serif`, `sans-serif`, `cursive`, `fantasy`,\nand `monospace`."
-        },
-        {
-          "shortName": "CssMissingComma",
-          "displayName": "Missing comma in selector list",
-          "enabled": false,
-          "description": "Reports a multi-line selector. Most likely this means that several single-line selectors are actually intended but a comma is missing at the end of one or several lines.\n\n**Example:**\n\n\n    input /* comma has probably been forgotten */\n    .button {\n      margin: 1px;\n    }\n"
         }
       ]
     },
@@ -904,16 +904,16 @@
           "description": "Reports escaped meta characters. Some RegExp coding styles specify that meta characters should be placed inside a character class, to make the regular expression easier to understand. This inspection does not warn about the meta character `[`, `]` and `^`, because those would need additional escaping inside a character class.\n\n**Example:**\n\n\n      \\d+\\.\\d+\n\nAfter the quick-fix is applied:\n\n\n      \\d+[.]\\d+\n\nNew in 2017.1"
         },
         {
-          "shortName": "RegExpRepeatedSpace",
-          "displayName": "Consecutive spaces",
-          "enabled": true,
-          "description": "Reports multiple consecutive spaces in a RegExp. Because spaces are not visible by default, it can be hard to see how many spaces are required. The RegExp can be made more clear by replacing the consecutive spaces with a single space and a counted quantifier.\n\n**Example:**\n\n\n      (     )\n\nAfter the quick-fix is applied:\n\n\n      ( {5})\n\n\nNew in 2017.1"
-        },
-        {
           "shortName": "RegExpDuplicateAlternationBranch",
           "displayName": "Duplicate branch in alternation",
           "enabled": true,
           "description": "Reports duplicate branches in a RegExp alternation. Duplicate branches slow down matching and obscure the intent of the expression.\n\n**Example:**\n\n\n      (alpha|bravo|charlie|alpha)\n\nAfter the quick-fix is applied:\n\n\n      (alpha|bravo|charlie)\n\nNew in 2017.1"
+        },
+        {
+          "shortName": "RegExpRepeatedSpace",
+          "displayName": "Consecutive spaces",
+          "enabled": true,
+          "description": "Reports multiple consecutive spaces in a RegExp. Because spaces are not visible by default, it can be hard to see how many spaces are required. The RegExp can be made more clear by replacing the consecutive spaces with a single space and a counted quantifier.\n\n**Example:**\n\n\n      (     )\n\nAfter the quick-fix is applied:\n\n\n      ( {5})\n\n\nNew in 2017.1"
         }
       ]
     },
