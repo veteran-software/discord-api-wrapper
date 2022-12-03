@@ -57,6 +57,7 @@ const (
 	Embedded                      ApplicationFlags = 1 << 17 // Indicates if an app is embedded within the Discord client (currently unavailable publicly)
 	GatewayMessageContent         ApplicationFlags = 1 << 18 // Intent required for bots in 100 or more servers to receive message content
 	GatewayMessageContentLimited  ApplicationFlags = 1 << 19 // Intent required for bots in under 100 servers to receive message content, found in Bot Settings
+	ApplicationCommandBadge       ApplicationFlags = 1 << 23 // Indicates if an app has registered global application commands
 )
 
 // InstallParams - settings for the application's default in-app authorization link, if enabled

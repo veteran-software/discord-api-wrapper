@@ -23,6 +23,7 @@ import (
 )
 
 // BaseAuthorizationURL - Base authorization URL
+//
 //goland:noinspection GoUnusedExportedFunction
 func BaseAuthorizationURL() *url.URL {
 	u, err := url.Parse("https://discord.com/api/oauth2/authorize")
@@ -34,6 +35,7 @@ func BaseAuthorizationURL() *url.URL {
 }
 
 // TokenURL - Token URL
+//
 //goland:noinspection GoUnusedExportedFunction
 func TokenURL() *url.URL {
 	u, err := url.Parse("https://discord.com/api/oauth2/token")
@@ -45,6 +47,7 @@ func TokenURL() *url.URL {
 }
 
 // TokenRevocationURL - Token Revocation URL
+//
 //goland:noinspection GoUnusedExportedFunction
 func TokenRevocationURL() *url.URL {
 	u, err := url.Parse("https://discord.com/api/oauth2/token/revoke")
@@ -64,6 +67,9 @@ func TokenRevocationURL() *url.URL {
 // Requesting them from a user without approval from Discord may cause errors or undocumented behavior in the OAuth2 flow.
 type Scopes string
 
+// `guilds.join` and `bot` require you to have a bot account linked to your application.
+// Also, in order to add a user to a guild, your bot has to already belong to that guild.
+//
 //goland:noinspection GoUnusedConst
 const (
 	ActivitiesRead                        Scopes = "activities.read"                          // allows your app to fetch data from a user's "Now Playing/Recently Played" list - requires Discord approval
@@ -77,6 +83,7 @@ const (
 	ApplicationsStoreUpdate               Scopes = "applications.store.update"                // allows your app to read and update store data (SKUs, store listings, achievements, etc.) for a user's applications
 	Bot                                   Scopes = "bot"                                      // for oauth2 bots, this puts the bot in the user's selected guild by default
 	Connections                           Scopes = "connections"                              // allows `/users/@me/connections` to return linked third-party accounts
+	DmChannelsRead                        Scopes = "dm_channels.read"                         // allows your app to see information about the user's DMs and group DMs - requires Discord approval
 	Email                                 Scopes = "email"                                    // enables `/users/@me` to return an email
 	GdmJoin                               Scopes = "gdm.join"                                 // allows your app to join users to a group dm
 	Guilds                                Scopes = "guilds"                                   // allows `/users/@me/guilds` to return basic information about all of a user's guilds
@@ -90,5 +97,6 @@ const (
 	RpcNotificationsRead                  Scopes = "rpc.notifications.read"                   // for local rpc server access, this allows you to receive notifications pushed out to the user - requires Discord approval
 	RpcVoiceRead                          Scopes = "rpc.voice.read"                           // for local rpc server access, this allows you to read a user's voice settings and listen for voice events - requires Discord approval
 	RpcVoiceWrite                         Scopes = "rpc.voice.write"                          // for local rpc server access, this allows you to update a user's voice settings - requires Discord approval
+	Voice                                 Scopes = "voice"                                    // allows your app to connect to voice on user's behalf and see all the voice members - requires Discord approval                                   //
 	WebhookIncoming                       Scopes = "webhook.incoming"                         // this generates a webhook that is returned in the oauth token response for authorization code grants
 )

@@ -21,29 +21,30 @@ import (
 	"net/http"
 )
 
-// An Interaction is the message that your application receives when a user uses an application command or a message component.
+// An Interaction is the message that your application receives when a user uses an ApplicationCommand or a Message Component.
 //
 // For Slash Commands, it includes the values that the user submitted.
 //
-// For User Commands and Message Commands, it includes the resolved user or message on which the action was taken.
+// For User Commands and Message Commands, it includes the resolved User or Message on which the action was taken.
 //
 // For Message Components it includes identifying information about the component that was used.
 //
-// It will also include some metadata about how the interaction was triggered: the guild_id, channel_id, member and other fields.
+// It will also include some metadata about how the interaction was triggered: the `guild_id`, `channel_id`, `member` and other fields.
 type Interaction struct {
-	ID            Snowflake       `json:"id"`                     // id of the interaction
-	ApplicationID Snowflake       `json:"application_id"`         // id of the application this interaction is for
-	Type          InteractionType `json:"type"`                   // the type of interaction
-	Data          InteractionData `json:"data,omitempty"`         // the command data payload
-	GuildID       Snowflake       `json:"guild_id,omitempty"`     // the guild it was sent from
-	ChannelID     Snowflake       `json:"channel_id,omitempty"`   // the channel it was sent from
-	Member        GuildMember     `json:"member,omitempty"`       // guild member data for the invoking user, including permissions
-	User          *User           `json:"user,omitempty"`         // user object for the invoking user, if invoked in a DM
-	Token         string          `json:"token"`                  // a continuation token for responding to the interaction
-	Version       int             `json:"version"`                // read-only property, always 1
-	Message       *Message        `json:"message,omitempty"`      // for components, the message they were attached to
-	Locale        string          `json:"locale,omitempty"`       // the selected language of the invoking user
-	GuildLocale   string          `json:"guild_locale,omitempty"` // the guild's preferred locale, if invoked in a guild
+	ID             Snowflake              `json:"id"`                        // ID of the interaction
+	ApplicationID  Snowflake              `json:"application_id"`            // ID of the application this interaction is for
+	Type           InteractionType        `json:"type"`                      // Type of interaction
+	Data           ApplicationCommandData `json:"data,omitempty"`            // Interaction data payload
+	GuildID        Snowflake              `json:"guild_id,omitempty"`        // Guild that the interaction was sent from
+	ChannelID      Snowflake              `json:"channel_id,omitempty"`      // Channel that the interaction was sent from
+	Member         GuildMember            `json:"member,omitempty"`          // GuildMember data for the invoking user, including permissions
+	User           *User                  `json:"user,omitempty"`            // User object for the invoking user, if invoked in a DM
+	Token          string                 `json:"token"`                     // Continuation token for responding to the interaction
+	Version        int                    `json:"version"`                   // Read-only property, always `1`
+	Message        *Message               `json:"message,omitempty"`         // For components, the message they were attached to
+	AppPermissions string                 `json:"app_permissions,omitempty"` // Bitwise set of permissions the app or bot has within the channel the interaction was sent from
+	Locale         string                 `json:"locale,omitempty"`          // Selected language of the invoking user
+	GuildLocale    string                 `json:"guild_locale,omitempty"`    // Guild's preferred locale, if invoked in a Guild
 }
 
 // InteractionType - The type of Interaction
@@ -58,18 +59,28 @@ const (
 	InteractionTypeModalSubmit                                               // MODAL_SUBMIT
 )
 
-// InteractionData - Inner payload structure of an Interaction
-type InteractionData struct {
-	ID            Snowflake                                  `json:"id,omitempty"`             // the ID of the invoked command
-	Name          string                                     `json:"name,omitempty"`           // the name of the invoked command
-	Type          ApplicationCommandType                     `json:"type,omitempty"`           // the type of the invoked command
-	Resolved      ResolvedData                               `json:"resolved,omitempty"`       // converted users + roles + channels
-	Options       []*ApplicationCommandInteractionDataOption `json:"options,omitempty"`        // the params + values from the user
-	CustomID      string                                     `json:"custom_id,omitempty"`      // for components, the custom_id of the component
-	ComponentType ComponentType                              `json:"component_type,omitempty"` // for components, the type of the component
-	Values        []string                                   `json:"values,omitempty"`         // the values the user selected
-	TargetID      Snowflake                                  `json:"target_id,omitempty"`      // id the of user or message targeted by a user or message command
-	Components    []Component                                `json:"components,omitempty"`     // the values submitted by the user
+// ApplicationCommandData
+//
+// While the data field is guaranteed to be present for all interaction types besides InteractionTypePing, its structure will vary.
+type ApplicationCommandData struct {
+	ID       Snowflake                                  `json:"id,omitempty"`        // the ID of the invoked command
+	Name     string                                     `json:"name,omitempty"`      // the name of the invoked command
+	Type     ApplicationCommandType                     `json:"type,omitempty"`      // the type of the invoked command
+	Resolved ResolvedData                               `json:"resolved,omitempty"`  // converted users + roles + channels
+	Options  []*ApplicationCommandInteractionDataOption `json:"options,omitempty"`   // the params + values from the user
+	GuildID  Snowflake                                  `json:"guild_id,omitempty"`  // the id of the guild the command is registered to
+	TargetID Snowflake                                  `json:"target_id,omitempty"` // id the of user or message targeted by a user or message command
+}
+
+type MessageComponentData struct {
+	CustomID      string        `json:"custom_id"`      // the custom_id of the component
+	ComponentType ComponentType `json:"component_type"` // the type of the component
+	Values        []string      `json:"values"`         // values the user selected in a select menu component
+}
+
+type ModalSubmitData struct {
+	CustomID   string      `json:"custom_id"`  // the custom_id of the modal
+	Components []Component `json:"components"` // the values submitted by the user
 }
 
 // ResolvedData - Descriptive data about the Interaction
@@ -82,6 +93,17 @@ type ResolvedData struct {
 	Channels    map[Snowflake]Channel     `json:"channels,omitempty"`    // the IDs and partial GuildChannel objects
 	Messages    map[Snowflake]Message     `json:"messages,omitempty"`    // the ids and partial Message objects
 	Attachments map[Snowflake]Attachment  `json:"attachments,omitempty"` // the ids and attachment objects
+}
+
+// ApplicationCommandInteractionDataOption - All options have names, and an option can either be a parameter and input value--in which case value will be set--or it can denote a subcommand or group--in which case it will contain a top-level key and another array of options.
+//
+//	value and options are mutually exclusive.
+type ApplicationCommandInteractionDataOption struct {
+	Name    string                                     `json:"name"`              // the name of the parameter
+	Type    ApplicationCommandOptionType               `json:"type"`              // value of application command option type
+	Value   any                                        `json:"value,omitempty"`   // the value of the pair
+	Options []*ApplicationCommandInteractionDataOption `json:"options,omitempty"` // present if this option is a group or subcommand
+	Focused bool                                       `json:"focused,omitempty"` // true if this option is the currently focused option for autocomplete
 }
 
 // MessageInteraction - This is sent on the message object when the message is a response to an Interaction.
@@ -155,8 +177,8 @@ const (
 //
 // Data payload for InteractionResponseMessages
 type InteractionCallbackDataMessages struct {
-	TTS             bool             `json:"tts"`                   // is the response TTS
-	Content         string           `json:"content"`               // message content
+	TTS             bool             `json:"tts,omitempty"`         // is the response TTS
+	Content         string           `json:"content,omitempty"`     // message content
 	Embeds          []Embed          `json:"embeds,omitempty"`      // supports up to 10 embeds
 	AllowedMentions *AllowedMentions `json:"allowed_mentions"`      // AllowedMentionType object
 	Flags           MessageFlags     `json:"flags,omitempty"`       // set to 64 to make your response Ephemeral
@@ -199,7 +221,12 @@ func (i *Interaction) BuildResponse(embeds []*Embed) *InteractionResponseMessage
 
 // TODO: Find the best way to handle these; overloads?
 
-// CreateInteractionResponse Create a response to an Interaction from the gateway.
+// CreateInteractionResponse
+//
+// Create a response to an Interaction from the gateway. Body is an InteractionResponse. Returns 204 No Content.
+//
+// This endpoint also supports file attachments similar to the webhook endpoints.
+// Refer to Uploading Files for details on uploading files and `multipart/form-data` requests.
 func (i *Interaction) CreateInteractionResponse(payload any) {
 	// verify that we only accept the payload that we want
 	// maybe future language version will make this easier/cleaner

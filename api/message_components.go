@@ -19,6 +19,7 @@ package api
 // Component - Components are a new field on the message object, so you can use them whether you're sending messages or responding to a slash command or other interaction.
 //
 // The top-level component's field is an array of Action Row components.
+// Deprecated: Use specific component type
 type Component struct {
 	Type        ComponentType  `json:"type"`                  // ComponentType; valid for all types
 	CustomID    string         `json:"custom_id,omitempty"`   // a developer-defined identifier for the button, max 100 characters
@@ -41,12 +42,16 @@ type Component struct {
 // ComponentType - The type of component
 type ComponentType int
 
-//goland:noinspection GoExportedElementShouldHaveComment
+//goland:noinspection GoExportedElementShouldHaveComment, GoUnusedConst
 const (
-	ComponentTypeActionRow  ComponentType = iota + 1 // A container for other components
-	ComponentTypeButton                              // A clickable button
-	ComponentTypeSelectMenu                          // A select menu for picking from choices
-	ComponentTypeTextInput                           // A text input object
+	ComponentTypeActionRow         ComponentType = iota + 1 // Container for other components
+	ComponentTypeButton                                     // Button object
+	ComponentTypeSelectMenu                                 // SelectMenu for picking from defined text options
+	ComponentTypeTextInput                                  // TextInput object
+	ComponentTypeUserSelect                                 // Select menu for users
+	ComponentTypeRoleSelect                                 // Select menu for roles
+	ComponentTypeMentionableSelect                          // Select menu for mentionables (users and roles)
+	ComponentTypeChannelSelect                              // Select menu for channels
 )
 
 // Button - Buttons are interactive components that render on messages.
@@ -91,13 +96,14 @@ const (
 //	An Action Row can contain only one select menu
 //	An Action Row containing a select menu cannot also contain buttons
 type SelectMenu struct {
-	Type        ComponentType  `json:"type"`                  // ComponentTypeSelectMenu for a select menu
-	CustomID    string         `json:"custom_id"`             // a developer-defined identifier for the button, max 100 characters
-	Options     []SelectOption `json:"options"`               // the choices in the select, max 25
-	Placeholder string         `json:"placeholder,omitempty"` // custom placeholder text if nothing is selected, max 150 characters
-	MinValues   int64          `json:"min_values,omitempty"`  // the minimum number of items that must be chosen; default 1, min 0, max 25
-	MaxValues   int64          `json:"max_values,omitempty"`  // the maximum number of items that can be chosen; default 1, max 25
-	Disabled    bool           `json:"disabled,omitempty"`    // disable the select, default false
+	Type         ComponentType  `json:"type"`                  // ComponentTypeSelectMenu for a select menu
+	CustomID     string         `json:"custom_id"`             // a developer-defined identifier for the button, max 100 characters
+	Options      []SelectOption `json:"options"`               // the choices in the select, max 25
+	ChannelTypes []ChannelType  `json:"channel_types"`         // List of channel types to include in the channel select component (type 8)
+	Placeholder  string         `json:"placeholder,omitempty"` // custom placeholder text if nothing is selected, max 150 characters
+	MinValues    int64          `json:"min_values,omitempty"`  // the minimum number of items that must be chosen; default 1, min 0, max 25
+	MaxValues    int64          `json:"max_values,omitempty"`  // the maximum number of items that can be chosen; default 1, max 25
+	Disabled     bool           `json:"disabled,omitempty"`    // disable the select, default false
 }
 
 // SelectOption - Represents a single select menu option
