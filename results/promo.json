@@ -1,0 +1,2213 @@
+{"version":"3","listProblem":[{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'Guild'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 24,
+      "offset": 6,
+      "length": 5,
+      "code": {
+        "startLine": 22,
+        "length": 5,
+        "offset": 141,
+        "surroundingCode": "\n// Guild - Guilds in Discord represent an isolated collection of users and channels, and are often referred to as \"servers\" in the UI.\ntype Guild struct {\n\tID                          Snowflake                       `json:\"id\"`                                   // guild id\n\tName                        string                          `json:\"name\"`                                 // guild name (2-100 characters, excluding trailing and leading whitespace)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "17d1f862fe3aca51eb63f796731ba4bfaa09b1c84dc2224fc577b40046b722ed"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'DefaultMessageNotificationLevel'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 85,
+      "offset": 6,
+      "length": 31,
+      "code": {
+        "startLine": 83,
+        "length": 31,
+        "offset": 79,
+        "surroundingCode": "\n// DefaultMessageNotificationLevel - default message notifications level\ntype DefaultMessageNotificationLevel int\n\n//goland:noinspection GoUnusedConst"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "9e7964709231439bb2fcc5ede20eb9230e71fe05aaa084667447dc3f838747ea"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'AllMessages'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 89,
+      "offset": 2,
+      "length": 11,
+      "code": {
+        "startLine": 87,
+        "length": 11,
+        "offset": 45,
+        "surroundingCode": "//goland:noinspection GoUnusedConst\nconst (\n\tAllMessages  DefaultMessageNotificationLevel = iota // members will receive notifications for all messages by default\n\tOnlyMentions                                        // members will receive notifications only for messages that @mention them by default\n)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "c8f6bead141904dc2d7ca8c13aebcbcc8d006edd3695fcb8840a6f129f12ee48"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'OnlyMentions'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 90,
+      "offset": 2,
+      "length": 12,
+      "code": {
+        "startLine": 88,
+        "length": 12,
+        "offset": 128,
+        "surroundingCode": "const (\n\tAllMessages  DefaultMessageNotificationLevel = iota // members will receive notifications for all messages by default\n\tOnlyMentions                                        // members will receive notifications only for messages that @mention them by default\n)\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "1b7b7609bec500dbe9d08e7bef51e821693774a9ed04729f58eee5d4754b8502"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'ExplicitContentFilterLevel'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 94,
+      "offset": 6,
+      "length": 26,
+      "code": {
+        "startLine": 92,
+        "length": 26,
+        "offset": 68,
+        "surroundingCode": "\n// ExplicitContentFilterLevel - explicit content filter level\ntype ExplicitContentFilterLevel int\n\n//goland:noinspection GoUnusedConst"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "b427f61e5e593fccbb3519ff987015832a30e4628545eb59f962bc6a33d1ba67"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'Disabled'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 98,
+      "offset": 2,
+      "length": 8,
+      "code": {
+        "startLine": 96,
+        "length": 8,
+        "offset": 45,
+        "surroundingCode": "//goland:noinspection GoUnusedConst\nconst (\n\tDisabled            ExplicitContentFilterLevel = iota // media content will not be scanned\n\tMembersWithoutRoles                                   // media content sent by members without roles will be scanned\n\tAllMembers                                            // media content sent by all members will be scanned"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "1f1f68b59cd40a54aa1445aae12f2be2f15d54b58251d3d7f10822a564a29463"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'MembersWithoutRoles'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 99,
+      "offset": 2,
+      "length": 19,
+      "code": {
+        "startLine": 97,
+        "length": 19,
+        "offset": 101,
+        "surroundingCode": "const (\n\tDisabled            ExplicitContentFilterLevel = iota // media content will not be scanned\n\tMembersWithoutRoles                                   // media content sent by members without roles will be scanned\n\tAllMembers                                            // media content sent by all members will be scanned\n)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "e1159a96ded0fcc17039097e800b1bd7f197ac3e563067d79adb574711a5d060"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'AllMembers'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 100,
+      "offset": 2,
+      "length": 10,
+      "code": {
+        "startLine": 98,
+        "length": 10,
+        "offset": 211,
+        "surroundingCode": "\tDisabled            ExplicitContentFilterLevel = iota // media content will not be scanned\n\tMembersWithoutRoles                                   // media content sent by members without roles will be scanned\n\tAllMembers                                            // media content sent by all members will be scanned\n)\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "ec9cf909382671b4c6333bc966c2e52b56c17deaa6c6b09e6b241603653e4cd1"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'MfaLevel'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 104,
+      "offset": 6,
+      "length": 8,
+      "code": {
+        "startLine": 102,
+        "length": 8,
+        "offset": 53,
+        "surroundingCode": "\n// MfaLevel - required MFA level for the guild\ntype MfaLevel int\n\n//goland:noinspection GoUnusedConst"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "618a1a73e74541a7e8efd26b0b625d9bcea60a692d73b6dc4e0c206b33a74c72"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'MfaNone'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 108,
+      "offset": 2,
+      "length": 7,
+      "code": {
+        "startLine": 106,
+        "length": 7,
+        "offset": 45,
+        "surroundingCode": "//goland:noinspection GoUnusedConst\nconst (\n\tMfaNone     MfaLevel = iota // guild has no MFA/2FA requirement for moderation actions\n\tMfaElevated                 // guild has a 2FA requirement for moderation actions\n)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "bb3ea9ded73939f7495adc5e532c2438a486071d4eca6093468d9a4737e48e6c"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'MfaElevated'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 109,
+      "offset": 2,
+      "length": 11,
+      "code": {
+        "startLine": 107,
+        "length": 11,
+        "offset": 97,
+        "surroundingCode": "const (\n\tMfaNone     MfaLevel = iota // guild has no MFA/2FA requirement for moderation actions\n\tMfaElevated                 // guild has a 2FA requirement for moderation actions\n)\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "7bcdd4065e740d1c4973e39de42431f4e53199e6c9da48a71f81a584f4282508"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'VerificationLevel'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 113,
+      "offset": 6,
+      "length": 17,
+      "code": {
+        "startLine": 111,
+        "length": 17,
+        "offset": 71,
+        "surroundingCode": "\n// VerificationLevel - verification level required for the guild\ntype VerificationLevel int\n\n//goland:noinspection GoUnusedConst"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "5b90eb5d132a03c6bcf42cdc727899123957d89b735fae32a9100b10ce67ad79"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'VerificationLevelNone'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 117,
+      "offset": 2,
+      "length": 21,
+      "code": {
+        "startLine": 115,
+        "length": 21,
+        "offset": 45,
+        "surroundingCode": "//goland:noinspection GoUnusedConst\nconst (\n\tVerificationLevelNone     VerificationLevel = iota // unrestricted\n\tVerificationLevelLow                               // must have verified email on account\n\tVerificationLevelMedium                            // must be registered on Discord for longer than 5 minutes"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "13aab1a013ac5a431b1a82a2d178eedb8caf30658e8af62560b1e53bd00bd829"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'VerificationLevelLow'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 118,
+      "offset": 2,
+      "length": 20,
+      "code": {
+        "startLine": 116,
+        "length": 20,
+        "offset": 77,
+        "surroundingCode": "const (\n\tVerificationLevelNone     VerificationLevel = iota // unrestricted\n\tVerificationLevelLow                               // must have verified email on account\n\tVerificationLevelMedium                            // must be registered on Discord for longer than 5 minutes\n\tVerificationLevelHigh                              // must be a member of the server for longer than 10 minutes"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "5309fab9c606adcee7a83413cac7c126f6d13d335bb54a1b375ad101d4733673"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'VerificationLevelMedium'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 119,
+      "offset": 2,
+      "length": 23,
+      "code": {
+        "startLine": 117,
+        "length": 23,
+        "offset": 160,
+        "surroundingCode": "\tVerificationLevelNone     VerificationLevel = iota // unrestricted\n\tVerificationLevelLow                               // must have verified email on account\n\tVerificationLevelMedium                            // must be registered on Discord for longer than 5 minutes\n\tVerificationLevelHigh                              // must be a member of the server for longer than 10 minutes\n\tVerificationLevelVeryHigh                          // must have a verified phone number"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "41a6a34889557e654ffa206debb8e52ba1472d2f8bd01d907258dae3294ee870"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'VerificationLevelHigh'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 120,
+      "offset": 2,
+      "length": 21,
+      "code": {
+        "startLine": 118,
+        "length": 21,
+        "offset": 203,
+        "surroundingCode": "\tVerificationLevelLow                               // must have verified email on account\n\tVerificationLevelMedium                            // must be registered on Discord for longer than 5 minutes\n\tVerificationLevelHigh                              // must be a member of the server for longer than 10 minutes\n\tVerificationLevelVeryHigh                          // must have a verified phone number\n)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "a48a6a3ca6c73c8f6c5e997ef90002c78a9b8e31660755ffe28284a4738356dd"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'VerificationLevelVeryHigh'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 121,
+      "offset": 2,
+      "length": 25,
+      "code": {
+        "startLine": 119,
+        "length": 25,
+        "offset": 225,
+        "surroundingCode": "\tVerificationLevelMedium                            // must be registered on Discord for longer than 5 minutes\n\tVerificationLevelHigh                              // must be a member of the server for longer than 10 minutes\n\tVerificationLevelVeryHigh                          // must have a verified phone number\n)\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "bb4151b7750a978e862e5fe672a322a10845c8000d1ecb23b5a97a51425fce50"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'GuildNsfwLevel'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 125,
+      "offset": 6,
+      "length": 14,
+      "code": {
+        "startLine": 123,
+        "length": 14,
+        "offset": 43,
+        "surroundingCode": "\n// GuildNsfwLevel - guild NSFW level\ntype GuildNsfwLevel int\n\n//goland:noinspection GoUnusedConst"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "b37bb624a3db55ae292a17395f59280b83d78ae3a8dc35e0c00a7e8a146f4679"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'NsfwDefault'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 129,
+      "offset": 2,
+      "length": 11,
+      "code": {
+        "startLine": 127,
+        "length": 11,
+        "offset": 45,
+        "surroundingCode": "//goland:noinspection GoUnusedConst\nconst (\n\tNsfwDefault GuildNsfwLevel = iota\n\tNsfwExplicit\n\tNsfwSafe"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "c6754050d431f7763a1821ae07ee8e23b77af7fbefb1fd01dc084108c005ed5d"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'NsfwExplicit'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 130,
+      "offset": 2,
+      "length": 12,
+      "code": {
+        "startLine": 128,
+        "length": 12,
+        "offset": 44,
+        "surroundingCode": "const (\n\tNsfwDefault GuildNsfwLevel = iota\n\tNsfwExplicit\n\tNsfwSafe\n\tNsfwAgeRestricted"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "18bde4c80f08fcc253dfa3f5090e4bb22f795bd1afadcb5d37899aa333b686e4"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'NsfwSafe'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 131,
+      "offset": 2,
+      "length": 8,
+      "code": {
+        "startLine": 129,
+        "length": 8,
+        "offset": 50,
+        "surroundingCode": "\tNsfwDefault GuildNsfwLevel = iota\n\tNsfwExplicit\n\tNsfwSafe\n\tNsfwAgeRestricted\n)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "57b2fcd40e9232e2c574273bc63ff32f531e097f037040b581d7be0cce6e00a4"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'NsfwAgeRestricted'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 132,
+      "offset": 2,
+      "length": 17,
+      "code": {
+        "startLine": 130,
+        "length": 17,
+        "offset": 25,
+        "surroundingCode": "\tNsfwExplicit\n\tNsfwSafe\n\tNsfwAgeRestricted\n)\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "dfe0c7b7ff635adb47299e979bc7c0df6a0d97f705afe87e3841097af39e4a70"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'PremiumTier'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 136,
+      "offset": 6,
+      "length": 11,
+      "code": {
+        "startLine": 134,
+        "length": 11,
+        "offset": 57,
+        "surroundingCode": "\n// PremiumTier - premium tier (Server Boost level)\ntype PremiumTier int\n\n//goland:noinspection GoUnusedConst"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "12f69ca6e415be862378b7d080aecb66fbcbc48cd8a16803bd76e0e3ccd30d59"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'PremiumNone'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 140,
+      "offset": 2,
+      "length": 11,
+      "code": {
+        "startLine": 138,
+        "length": 11,
+        "offset": 45,
+        "surroundingCode": "//goland:noinspection GoUnusedConst\nconst (\n\tPremiumNone  PremiumTier = iota // guild has not unlocked any Server Boost perks\n\tPremiumTier1                    // guild has unlocked Server Boost level 1 perks\n\tPremiumTier2                    // guild has unlocked Server Boost level 2 perks"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "e8a8156a2ae4fca47b9d78f3be7cd236e2b114e09da1cdd977e9fdafd903684a"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'PremiumTier1'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 141,
+      "offset": 2,
+      "length": 12,
+      "code": {
+        "startLine": 139,
+        "length": 12,
+        "offset": 91,
+        "surroundingCode": "const (\n\tPremiumNone  PremiumTier = iota // guild has not unlocked any Server Boost perks\n\tPremiumTier1                    // guild has unlocked Server Boost level 1 perks\n\tPremiumTier2                    // guild has unlocked Server Boost level 2 perks\n\tPremiumTier3                    // guild has unlocked Server Boost level 3 perks"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "e5ce3f137e1e5e090fb97270fe2fee8c8ad3340baeee4a75290e3f72b88c482b"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'PremiumTier2'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 142,
+      "offset": 2,
+      "length": 12,
+      "code": {
+        "startLine": 140,
+        "length": 12,
+        "offset": 165,
+        "surroundingCode": "\tPremiumNone  PremiumTier = iota // guild has not unlocked any Server Boost perks\n\tPremiumTier1                    // guild has unlocked Server Boost level 1 perks\n\tPremiumTier2                    // guild has unlocked Server Boost level 2 perks\n\tPremiumTier3                    // guild has unlocked Server Boost level 3 perks\n)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "839082d4e04143ceebabb1451d468ebb033be671f0e0053f8d516b5f3d7292cc"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'PremiumTier3'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 143,
+      "offset": 2,
+      "length": 12,
+      "code": {
+        "startLine": 141,
+        "length": 12,
+        "offset": 165,
+        "surroundingCode": "\tPremiumTier1                    // guild has unlocked Server Boost level 1 perks\n\tPremiumTier2                    // guild has unlocked Server Boost level 2 perks\n\tPremiumTier3                    // guild has unlocked Server Boost level 3 perks\n)\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "170dfafd7de3bd7fa0dbc6d7cd0a2e83d0d314183d9467a17719cd1cf437f85e"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'SystemChannelFlags'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 147,
+      "offset": 6,
+      "length": 18,
+      "code": {
+        "startLine": 145,
+        "length": 18,
+        "offset": 51,
+        "surroundingCode": "\n// SystemChannelFlags - system channel flags\ntype SystemChannelFlags int\n\n//goland:noinspection GoUnusedConst"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "eee03d8d4ea6573e702bd065f7024bcc49a2d3ecee186a44eac5c38c963ecc14"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'SuppressJoinNotifications'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 151,
+      "offset": 2,
+      "length": 25,
+      "code": {
+        "startLine": 149,
+        "length": 25,
+        "offset": 45,
+        "surroundingCode": "//goland:noinspection GoUnusedConst\nconst (\n\tSuppressJoinNotifications          SystemChannelFlags = 1 << 0 // Suppress member join notifications\n\tSuppressPremiumSubscriptions       SystemChannelFlags = 1 << 1 // Suppress server boost notifications\n\tSuppressGuildReminderNotifications SystemChannelFlags = 1 << 2 // Suppress server setup tips"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "40d15c71993f468127935b7379a798a1900492b9b33bded701e9fee45d40f4c5"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'SuppressPremiumSubscriptions'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 152,
+      "offset": 2,
+      "length": 28,
+      "code": {
+        "startLine": 150,
+        "length": 28,
+        "offset": 111,
+        "surroundingCode": "const (\n\tSuppressJoinNotifications          SystemChannelFlags = 1 << 0 // Suppress member join notifications\n\tSuppressPremiumSubscriptions       SystemChannelFlags = 1 << 1 // Suppress server boost notifications\n\tSuppressGuildReminderNotifications SystemChannelFlags = 1 << 2 // Suppress server setup tips\n\tSuppressJoinNotificationReplies    SystemChannelFlags = 1 << 3 // Hide member join sticker reply buttons"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "2a5370574ca46d10450a47168e33767683aa9a42a7faceec90a3b2e40f37be83"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'SuppressGuildReminderNotifications'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 153,
+      "offset": 2,
+      "length": 34,
+      "code": {
+        "startLine": 151,
+        "length": 34,
+        "offset": 206,
+        "surroundingCode": "\tSuppressJoinNotifications          SystemChannelFlags = 1 << 0 // Suppress member join notifications\n\tSuppressPremiumSubscriptions       SystemChannelFlags = 1 << 1 // Suppress server boost notifications\n\tSuppressGuildReminderNotifications SystemChannelFlags = 1 << 2 // Suppress server setup tips\n\tSuppressJoinNotificationReplies    SystemChannelFlags = 1 << 3 // Hide member join sticker reply buttons\n)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "ed576f1b255d96d84ef2fb6af46c96f661bc8ff6601c07613e4aaea511d654bb"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'SuppressJoinNotificationReplies'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 154,
+      "offset": 2,
+      "length": 31,
+      "code": {
+        "startLine": 152,
+        "length": 31,
+        "offset": 198,
+        "surroundingCode": "\tSuppressPremiumSubscriptions       SystemChannelFlags = 1 << 1 // Suppress server boost notifications\n\tSuppressGuildReminderNotifications SystemChannelFlags = 1 << 2 // Suppress server setup tips\n\tSuppressJoinNotificationReplies    SystemChannelFlags = 1 << 3 // Hide member join sticker reply buttons\n)\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "592c0d2c0cd9eeec97749a0bb0137b0dce398690ae5f3b50456f36c599e6004e"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'GuildFeatures'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 158,
+      "offset": 6,
+      "length": 13,
+      "code": {
+        "startLine": 156,
+        "length": 13,
+        "offset": 48,
+        "surroundingCode": "\n// GuildFeatures - enabled guild features\ntype GuildFeatures string\n\n//goland:noinspection SpellCheckingInspection,GrazieInspection,GoUnusedConst"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "52acc297131f76198e36c6bf1eaa1a2df41bc64ace71c5a26916ba32fb5ab1f0"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'AnimatedBanner'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 162,
+      "offset": 2,
+      "length": 14,
+      "code": {
+        "startLine": 160,
+        "length": 14,
+        "offset": 86,
+        "surroundingCode": "//goland:noinspection SpellCheckingInspection,GrazieInspection,GoUnusedConst\nconst (\n\tAnimatedBanner                  GuildFeatures = \"ANIMATED_BANNER\"                    // guild has access to set an animated guild banner image\n\tAnimatedIcon                    GuildFeatures = \"ANIMATED_ICON\"                      // guild has access to set an animated guild icon\n\tApplicationCommandPermissionsV2 GuildFeatures = \"APPLICATION_COMMAND_PERMISSIONS_V2\" // guild is using the old permissions configuration behavior"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "77d3b235292a2feb0fc99b0a2426b0907e3b44bc2f21572f8429870c4ae31f77"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'AnimatedIcon'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 163,
+      "offset": 2,
+      "length": 12,
+      "code": {
+        "startLine": 161,
+        "length": 12,
+        "offset": 153,
+        "surroundingCode": "const (\n\tAnimatedBanner                  GuildFeatures = \"ANIMATED_BANNER\"                    // guild has access to set an animated guild banner image\n\tAnimatedIcon                    GuildFeatures = \"ANIMATED_ICON\"                      // guild has access to set an animated guild icon\n\tApplicationCommandPermissionsV2 GuildFeatures = \"APPLICATION_COMMAND_PERMISSIONS_V2\" // guild is using the old permissions configuration behavior\n\tAutoModeration                  GuildFeatures = \"AUTO_MODERATION\"                    // guild has set up auto moderation rules"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "2f57b3180b4b97a2639fad0427b5a175d95c57b2177d902e876add5da49e1e08"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'ApplicationCommandPermissionsV2'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 164,
+      "offset": 2,
+      "length": 31,
+      "code": {
+        "startLine": 162,
+        "length": 31,
+        "offset": 281,
+        "surroundingCode": "\tAnimatedBanner                  GuildFeatures = \"ANIMATED_BANNER\"                    // guild has access to set an animated guild banner image\n\tAnimatedIcon                    GuildFeatures = \"ANIMATED_ICON\"                      // guild has access to set an animated guild icon\n\tApplicationCommandPermissionsV2 GuildFeatures = \"APPLICATION_COMMAND_PERMISSIONS_V2\" // guild is using the old permissions configuration behavior\n\tAutoModeration                  GuildFeatures = \"AUTO_MODERATION\"                    // guild has set up auto moderation rules\n\tBanner                          GuildFeatures = \"BANNER\"                             // guild has access to set a guild banner image"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "ad8012824a1df9eddd5a3165278efd3902285342e2946f02afe5d223b6d8a4f7"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'AutoModeration'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 165,
+      "offset": 2,
+      "length": 14,
+      "code": {
+        "startLine": 163,
+        "length": 14,
+        "offset": 284,
+        "surroundingCode": "\tAnimatedIcon                    GuildFeatures = \"ANIMATED_ICON\"                      // guild has access to set an animated guild icon\n\tApplicationCommandPermissionsV2 GuildFeatures = \"APPLICATION_COMMAND_PERMISSIONS_V2\" // guild is using the old permissions configuration behavior\n\tAutoModeration                  GuildFeatures = \"AUTO_MODERATION\"                    // guild has set up auto moderation rules\n\tBanner                          GuildFeatures = \"BANNER\"                             // guild has access to set a guild banner image\n\tCommunity                       GuildFeatures = \"COMMUNITY\"                          // guild can enable welcome screen, Membership Screening, stage channels and discovery, and receives community updates"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "cf9448e31e02804ea54dbf85198518ccd7a51329f67804a76008fff2bdec9915"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'Banner'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 166,
+      "offset": 2,
+      "length": 6,
+      "code": {
+        "startLine": 164,
+        "length": 6,
+        "offset": 276,
+        "surroundingCode": "\tApplicationCommandPermissionsV2 GuildFeatures = \"APPLICATION_COMMAND_PERMISSIONS_V2\" // guild is using the old permissions configuration behavior\n\tAutoModeration                  GuildFeatures = \"AUTO_MODERATION\"                    // guild has set up auto moderation rules\n\tBanner                          GuildFeatures = \"BANNER\"                             // guild has access to set a guild banner image\n\tCommunity                       GuildFeatures = \"COMMUNITY\"                          // guild can enable welcome screen, Membership Screening, stage channels and discovery, and receives community updates\n\tDeveloperSupportServer          GuildFeatures = \"DEVELOPER_SUPPORT_SERVER\"           // \tguild has been set as a support server on the App Directory"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "55e85e489de8fd65248c28f79ee22fcc98ccf5e29ddb629c89b53ea716d3d6f0"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'Community'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 167,
+      "offset": 2,
+      "length": 9,
+      "code": {
+        "startLine": 165,
+        "length": 9,
+        "offset": 263,
+        "surroundingCode": "\tAutoModeration                  GuildFeatures = \"AUTO_MODERATION\"                    // guild has set up auto moderation rules\n\tBanner                          GuildFeatures = \"BANNER\"                             // guild has access to set a guild banner image\n\tCommunity                       GuildFeatures = \"COMMUNITY\"                          // guild can enable welcome screen, Membership Screening, stage channels and discovery, and receives community updates\n\tDeveloperSupportServer          GuildFeatures = \"DEVELOPER_SUPPORT_SERVER\"           // \tguild has been set as a support server on the App Directory\n\tDiscoverable                    GuildFeatures = \"DISCOVERABLE\"                       // guild is able to be discovered in the directory"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "1356dba037f88d76e999d2de1b9f6abdfc66dae0d03fc4e588f1c5ec69c27cb1"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'DeveloperSupportServer'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 168,
+      "offset": 2,
+      "length": 22,
+      "code": {
+        "startLine": 166,
+        "length": 22,
+        "offset": 340,
+        "surroundingCode": "\tBanner                          GuildFeatures = \"BANNER\"                             // guild has access to set a guild banner image\n\tCommunity                       GuildFeatures = \"COMMUNITY\"                          // guild can enable welcome screen, Membership Screening, stage channels and discovery, and receives community updates\n\tDeveloperSupportServer          GuildFeatures = \"DEVELOPER_SUPPORT_SERVER\"           // \tguild has been set as a support server on the App Directory\n\tDiscoverable                    GuildFeatures = \"DISCOVERABLE\"                       // guild is able to be discovered in the directory\n\tFeaturable                      GuildFeatures = \"FEATURABLE\"                         // guild is able to be featured in the directory"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "d2e6dd38bd0fec6446139517da20321aec6268255fcf9f542056a86192431ed2"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'Discoverable'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 169,
+      "offset": 2,
+      "length": 12,
+      "code": {
+        "startLine": 167,
+        "length": 12,
+        "offset": 356,
+        "surroundingCode": "\tCommunity                       GuildFeatures = \"COMMUNITY\"                          // guild can enable welcome screen, Membership Screening, stage channels and discovery, and receives community updates\n\tDeveloperSupportServer          GuildFeatures = \"DEVELOPER_SUPPORT_SERVER\"           // \tguild has been set as a support server on the App Directory\n\tDiscoverable                    GuildFeatures = \"DISCOVERABLE\"                       // guild is able to be discovered in the directory\n\tFeaturable                      GuildFeatures = \"FEATURABLE\"                         // guild is able to be featured in the directory\n\tInvitesDisabled                 GuildFeatures = \"INVITES_DISABLED\"                   // Mutable; Pauses all invites/access to the server"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "318ce9f9ca3d5db661ca3858376de21e4bb669125eab2a74b55916938da3a536"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'Featurable'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 170,
+      "offset": 2,
+      "length": 10,
+      "code": {
+        "startLine": 168,
+        "length": 10,
+        "offset": 288,
+        "surroundingCode": "\tDeveloperSupportServer          GuildFeatures = \"DEVELOPER_SUPPORT_SERVER\"           // \tguild has been set as a support server on the App Directory\n\tDiscoverable                    GuildFeatures = \"DISCOVERABLE\"                       // guild is able to be discovered in the directory\n\tFeaturable                      GuildFeatures = \"FEATURABLE\"                         // guild is able to be featured in the directory\n\tInvitesDisabled                 GuildFeatures = \"INVITES_DISABLED\"                   // Mutable; Pauses all invites/access to the server\n\tInviteSplash                    GuildFeatures = \"INVITE_SPLASH\"                      // guild has access to set an invite splash background"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "95f9fd60363bea0e481579932624c0b7f8ff81f777e8c26f28d482ac44904ed6"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'InvitesDisabled'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 171,
+      "offset": 2,
+      "length": 15,
+      "code": {
+        "startLine": 169,
+        "length": 15,
+        "offset": 273,
+        "surroundingCode": "\tDiscoverable                    GuildFeatures = \"DISCOVERABLE\"                       // guild is able to be discovered in the directory\n\tFeaturable                      GuildFeatures = \"FEATURABLE\"                         // guild is able to be featured in the directory\n\tInvitesDisabled                 GuildFeatures = \"INVITES_DISABLED\"                   // Mutable; Pauses all invites/access to the server\n\tInviteSplash                    GuildFeatures = \"INVITE_SPLASH\"                      // guild has access to set an invite splash background\n\tMemberVerificationGateEnabled   GuildFeatures = \"MEMBER_VERIFICATION_GATE_ENABLED\"   // guild has enabled Membership Screening"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "772fc97b01e15e3fb30e8d87d5fe7e032f27951402ccb25c531aaac60ee6bf07"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'InviteSplash'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 172,
+      "offset": 2,
+      "length": 12,
+      "code": {
+        "startLine": 170,
+        "length": 12,
+        "offset": 274,
+        "surroundingCode": "\tFeaturable                      GuildFeatures = \"FEATURABLE\"                         // guild is able to be featured in the directory\n\tInvitesDisabled                 GuildFeatures = \"INVITES_DISABLED\"                   // Mutable; Pauses all invites/access to the server\n\tInviteSplash                    GuildFeatures = \"INVITE_SPLASH\"                      // guild has access to set an invite splash background\n\tMemberVerificationGateEnabled   GuildFeatures = \"MEMBER_VERIFICATION_GATE_ENABLED\"   // guild has enabled Membership Screening\n\tMonetizationEnabled             GuildFeatures = \"MONETIZATION_ENABLED\"               // guild has enabled monetization"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "dd1ec8acfa0f619f45533666519cac4629b0c6e57d09548a4325914ff49e333a"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'MemberVerificationGateEnabled'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 173,
+      "offset": 2,
+      "length": 29,
+      "code": {
+        "startLine": 171,
+        "length": 29,
+        "offset": 280,
+        "surroundingCode": "\tInvitesDisabled                 GuildFeatures = \"INVITES_DISABLED\"                   // Mutable; Pauses all invites/access to the server\n\tInviteSplash                    GuildFeatures = \"INVITE_SPLASH\"                      // guild has access to set an invite splash background\n\tMemberVerificationGateEnabled   GuildFeatures = \"MEMBER_VERIFICATION_GATE_ENABLED\"   // guild has enabled Membership Screening\n\tMonetizationEnabled             GuildFeatures = \"MONETIZATION_ENABLED\"               // guild has enabled monetization\n\tMoreStickers                    GuildFeatures = \"MORE_STICKERS\"                      // guild has increased custom sticker slots"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "86a1a489909fb82ca49c1d605744134dcb4ff79669ed753e0d0b07beca6a0812"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'MonetizationEnabled'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 174,
+      "offset": 2,
+      "length": 19,
+      "code": {
+        "startLine": 172,
+        "length": 19,
+        "offset": 270,
+        "surroundingCode": "\tInviteSplash                    GuildFeatures = \"INVITE_SPLASH\"                      // guild has access to set an invite splash background\n\tMemberVerificationGateEnabled   GuildFeatures = \"MEMBER_VERIFICATION_GATE_ENABLED\"   // guild has enabled Membership Screening\n\tMonetizationEnabled             GuildFeatures = \"MONETIZATION_ENABLED\"               // guild has enabled monetization\n\tMoreStickers                    GuildFeatures = \"MORE_STICKERS\"                      // guild has increased custom sticker slots\n\tNews                            GuildFeatures = \"NEWS\"                               // guild has access to create news channels"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "509e56ec60165cdbb74440f139f318774e3a1eddd2637caafb3bf2e22faf99d5"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'MoreStickers'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 175,
+      "offset": 2,
+      "length": 12,
+      "code": {
+        "startLine": 173,
+        "length": 12,
+        "offset": 249,
+        "surroundingCode": "\tMemberVerificationGateEnabled   GuildFeatures = \"MEMBER_VERIFICATION_GATE_ENABLED\"   // guild has enabled Membership Screening\n\tMonetizationEnabled             GuildFeatures = \"MONETIZATION_ENABLED\"               // guild has enabled monetization\n\tMoreStickers                    GuildFeatures = \"MORE_STICKERS\"                      // guild has increased custom sticker slots\n\tNews                            GuildFeatures = \"NEWS\"                               // guild has access to create news channels\n\tPartnered                       GuildFeatures = \"PARTNERED\"                          // guild is partnered"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "8f75234e58019c4e9550f12f0d251597018836aae1fc7edf2c0052de095116fc"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'News'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 176,
+      "offset": 2,
+      "length": 4,
+      "code": {
+        "startLine": 174,
+        "length": 4,
+        "offset": 251,
+        "surroundingCode": "\tMonetizationEnabled             GuildFeatures = \"MONETIZATION_ENABLED\"               // guild has enabled monetization\n\tMoreStickers                    GuildFeatures = \"MORE_STICKERS\"                      // guild has increased custom sticker slots\n\tNews                            GuildFeatures = \"NEWS\"                               // guild has access to create news channels\n\tPartnered                       GuildFeatures = \"PARTNERED\"                          // guild is partnered\n\tPreviewEnabled                  GuildFeatures = \"PREVIEW_ENABLED\"                    // guild can be previewed before joining via Membership Screening or the directory"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "1b440a45032fcf1aa5ffc7d4c2331800d964b820ef2d8a842cf62a5ee0cb7e4d"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'Partnered'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 177,
+      "offset": 2,
+      "length": 9,
+      "code": {
+        "startLine": 175,
+        "length": 9,
+        "offset": 261,
+        "surroundingCode": "\tMoreStickers                    GuildFeatures = \"MORE_STICKERS\"                      // guild has increased custom sticker slots\n\tNews                            GuildFeatures = \"NEWS\"                               // guild has access to create news channels\n\tPartnered                       GuildFeatures = \"PARTNERED\"                          // guild is partnered\n\tPreviewEnabled                  GuildFeatures = \"PREVIEW_ENABLED\"                    // guild can be previewed before joining via Membership Screening or the directory\n\tRoleIcons                       GuildFeatures = \"ROLE_ICONS\"                         // guild is able to set role icons"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "720bbaf1667e1616ff61ae3450de3bc9be73bcd667a6db3119590957b0aa8f42"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'PreviewEnabled'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 178,
+      "offset": 2,
+      "length": 14,
+      "code": {
+        "startLine": 176,
+        "length": 14,
+        "offset": 239,
+        "surroundingCode": "\tNews                            GuildFeatures = \"NEWS\"                               // guild has access to create news channels\n\tPartnered                       GuildFeatures = \"PARTNERED\"                          // guild is partnered\n\tPreviewEnabled                  GuildFeatures = \"PREVIEW_ENABLED\"                    // guild can be previewed before joining via Membership Screening or the directory\n\tRoleIcons                       GuildFeatures = \"ROLE_ICONS\"                         // guild is able to set role icons\n\tTicketedEventsEnabled           GuildFeatures = \"TICKETED_EVENTS_ENABLED\"            // guild has enabled ticketed events"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "05a435f3bcd8667d7fed44834ba87299a926aec69ec48c4a984c30ab1b9b90b6"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'RoleIcons'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 179,
+      "offset": 2,
+      "length": 9,
+      "code": {
+        "startLine": 177,
+        "length": 9,
+        "offset": 278,
+        "surroundingCode": "\tPartnered                       GuildFeatures = \"PARTNERED\"                          // guild is partnered\n\tPreviewEnabled                  GuildFeatures = \"PREVIEW_ENABLED\"                    // guild can be previewed before joining via Membership Screening or the directory\n\tRoleIcons                       GuildFeatures = \"ROLE_ICONS\"                         // guild is able to set role icons\n\tTicketedEventsEnabled           GuildFeatures = \"TICKETED_EVENTS_ENABLED\"            // guild has enabled ticketed events\n\tVanityURL                       GuildFeatures = \"VANITY_URL\"                         // guild has access to set a vanity URL"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "51409244e99ae36752bae746eea5301ae8a58b541bcd3d180b8ebaf46c0f16cf"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'TicketedEventsEnabled'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 180,
+      "offset": 2,
+      "length": 21,
+      "code": {
+        "startLine": 178,
+        "length": 21,
+        "offset": 291,
+        "surroundingCode": "\tPreviewEnabled                  GuildFeatures = \"PREVIEW_ENABLED\"                    // guild can be previewed before joining via Membership Screening or the directory\n\tRoleIcons                       GuildFeatures = \"ROLE_ICONS\"                         // guild is able to set role icons\n\tTicketedEventsEnabled           GuildFeatures = \"TICKETED_EVENTS_ENABLED\"            // guild has enabled ticketed events\n\tVanityURL                       GuildFeatures = \"VANITY_URL\"                         // guild has access to set a vanity URL\n\tVerified                        GuildFeatures = \"VERIFIED\"                           // guild is verified"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "792c5fa977224981cf1a96aab4175c6cd8ca18edde91c86bcd68c3d5f9833d25"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'VanityURL'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 181,
+      "offset": 2,
+      "length": 9,
+      "code": {
+        "startLine": 179,
+        "length": 9,
+        "offset": 245,
+        "surroundingCode": "\tRoleIcons                       GuildFeatures = \"ROLE_ICONS\"                         // guild is able to set role icons\n\tTicketedEventsEnabled           GuildFeatures = \"TICKETED_EVENTS_ENABLED\"            // guild has enabled ticketed events\n\tVanityURL                       GuildFeatures = \"VANITY_URL\"                         // guild has access to set a vanity URL\n\tVerified                        GuildFeatures = \"VERIFIED\"                           // guild is verified\n\tVipRegions                      GuildFeatures = \"VIP_REGIONS\"                        // guild has access to set 384kbps bitrate in voice (previously VIP voice servers)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "ebfc2c9cd261670bb8d6f571291f194453f3e3b3ef0b00969e6ae92e04c4dbff"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'Verified'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 182,
+      "offset": 2,
+      "length": 8,
+      "code": {
+        "startLine": 180,
+        "length": 8,
+        "offset": 250,
+        "surroundingCode": "\tTicketedEventsEnabled           GuildFeatures = \"TICKETED_EVENTS_ENABLED\"            // guild has enabled ticketed events\n\tVanityURL                       GuildFeatures = \"VANITY_URL\"                         // guild has access to set a vanity URL\n\tVerified                        GuildFeatures = \"VERIFIED\"                           // guild is verified\n\tVipRegions                      GuildFeatures = \"VIP_REGIONS\"                        // guild has access to set 384kbps bitrate in voice (previously VIP voice servers)\n\tWelcomeScreenEnabled            GuildFeatures = \"WELCOME_SCREEN_ENABLED\"             // guild has enabled the welcome screen"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "e53773afc1bfa5c5b402cd066e9b34f8dfedafde12a0ed3c44264e9fa9f1a1b1"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'VipRegions'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 183,
+      "offset": 2,
+      "length": 10,
+      "code": {
+        "startLine": 181,
+        "length": 10,
+        "offset": 234,
+        "surroundingCode": "\tVanityURL                       GuildFeatures = \"VANITY_URL\"                         // guild has access to set a vanity URL\n\tVerified                        GuildFeatures = \"VERIFIED\"                           // guild is verified\n\tVipRegions                      GuildFeatures = \"VIP_REGIONS\"                        // guild has access to set 384kbps bitrate in voice (previously VIP voice servers)\n\tWelcomeScreenEnabled            GuildFeatures = \"WELCOME_SCREEN_ENABLED\"             // guild has enabled the welcome screen\n)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "fc560b8af8df532edc13051e43cf4c02947a153bbde4013c021bd1473c67bf48"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'WelcomeScreenEnabled'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 184,
+      "offset": 2,
+      "length": 20,
+      "code": {
+        "startLine": 182,
+        "length": 20,
+        "offset": 277,
+        "surroundingCode": "\tVerified                        GuildFeatures = \"VERIFIED\"                           // guild is verified\n\tVipRegions                      GuildFeatures = \"VIP_REGIONS\"                        // guild has access to set 384kbps bitrate in voice (previously VIP voice servers)\n\tWelcomeScreenEnabled            GuildFeatures = \"WELCOME_SCREEN_ENABLED\"             // guild has enabled the welcome screen\n)\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "6ff632dccda4a71a31feb648b05c56071a0acee2b3bc7c71e3f8c1f2bd2be89a"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'UnavailableGuild'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 190,
+      "offset": 6,
+      "length": 16,
+      "code": {
+        "startLine": 188,
+        "length": 16,
+        "offset": 147,
+        "surroundingCode": "//\n// Represents an Offline Guild, or a Guild whose information has not been provided through Guild Create events during the Gateway connect.\ntype UnavailableGuild struct {\n\tID          Snowflake `json:\"id\"`\n\tUnavailable bool      `json:\"unavailable\"`"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "c1231d37f61bbbc4cfe72b3e4de737a5420fec895d93732970c59a40db9b2b7a"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'GuildPreview'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 196,
+      "offset": 6,
+      "length": 12,
+      "code": {
+        "startLine": 194,
+        "length": 12,
+        "offset": 39,
+        "surroundingCode": "\n// GuildPreview - preview object\ntype GuildPreview struct {\n\tID                       Snowflake       `json:\"id\"`                         // guild id\n\tName                     string          `json:\"name\"`                       // guild name (2-100 characters)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "ebc08f2f923c8c01ea3d9d444cb7bc87d45cb5fcbc63bcc43ef2380dbebf8d8e"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'GuildWidgetSettings'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 211,
+      "offset": 6,
+      "length": 19,
+      "code": {
+        "startLine": 209,
+        "length": 19,
+        "offset": 55,
+        "surroundingCode": "\n// GuildWidgetSettings - the guild widget status\ntype GuildWidgetSettings struct {\n\tEnabled   bool       `json:\"enabled\"`    // whether the widget is enabled\n\tChannelID *Snowflake `json:\"channel_id\"` // the widget channel id"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "ac4ec0bff049722cfdf8daf9fcd4aba0f0654828375d86ea7377de276dd7f3ed"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'GetGuildWidget'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 219,
+      "offset": 6,
+      "length": 14,
+      "code": {
+        "startLine": 217,
+        "length": 14,
+        "offset": 90,
+        "surroundingCode": "//\n// The fields `id`, `discriminator` and `avatar` are anonymized to prevent abuse.\ntype GetGuildWidget struct {\n\tID            Snowflake     `json:\"id\"`             // guild id\n\tName          string        `json:\"name\"`           // guild name (2-100 characters)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "ae48a3a3bdd8196a550f78c302e6d34daf703724a5f5aeabc834ff51a8a6893b"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'GuildMember'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 234,
+      "offset": 6,
+      "length": 11,
+      "code": {
+        "startLine": 232,
+        "length": 11,
+        "offset": 180,
+        "surroundingCode": "//\tIn GUILD_ events, pending will always be included as true or false.\n//\tIn non GUILD_ events which can only be triggered by non-pending users, pending will not be included.\ntype GuildMember struct {\n\tUser                       User        `json:\"user,omitempty\"`                         // User - the user this guild member represents\n\tNick                       *string     `json:\"nick,omitempty\"`                         // Nick - the users' guild nickname"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "ac2a16a6301ef9afef19d45bfefe48053497bf4593bd04a3f289e56291a05178"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'Integration'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 252,
+      "offset": 6,
+      "length": 11,
+      "code": {
+        "startLine": 250,
+        "length": 11,
+        "offset": 43,
+        "surroundingCode": "\n// Integration - a guild integration\ntype Integration struct {\n\tID                Snowflake                 `json:\"id\"`                            // integration id\n\tName              string                    `json:\"name\"`                          // integration name"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "5fc44a9c38a2eeca3861bafd8a0a6d4d948c37f4ecc51dcde03a6eccad5945b5"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'IntegrationExpireBehavior'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 272,
+      "offset": 6,
+      "length": 25,
+      "code": {
+        "startLine": 270,
+        "length": 25,
+        "offset": 74,
+        "surroundingCode": "\n// IntegrationExpireBehavior - the behavior of expiring subscribers\ntype IntegrationExpireBehavior int\n\n//goland:noinspection GoUnusedConst"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "1c3b3222937a31b9cdf6f255adf1689ad28359dc1a7437a1175262ee5c9bdb6c"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'RemoveRole'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 276,
+      "offset": 2,
+      "length": 10,
+      "code": {
+        "startLine": 274,
+        "length": 10,
+        "offset": 45,
+        "surroundingCode": "//goland:noinspection GoUnusedConst\nconst (\n\tRemoveRole IntegrationExpireBehavior = iota // Remove role\n\tKick                                        // Kick\n)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "6d7813bf09a858562df48bcb51236aead2007b1d5610e5ec0705d2cf322e6e50"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'Kick'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 277,
+      "offset": 2,
+      "length": 4,
+      "code": {
+        "startLine": 275,
+        "length": 4,
+        "offset": 69,
+        "surroundingCode": "const (\n\tRemoveRole IntegrationExpireBehavior = iota // Remove role\n\tKick                                        // Kick\n)\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "883992dc2d9dd90d9dcf3fb9b5de1ed31ae6cc13364d102f4d49c207882f8603"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'IntegrationAccount'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 281,
+      "offset": 6,
+      "length": 18,
+      "code": {
+        "startLine": 279,
+        "length": 18,
+        "offset": 62,
+        "surroundingCode": "\n// IntegrationAccount - integration account information\ntype IntegrationAccount struct {\n\tID   string `json:\"id\"`   // id of the account\n\tName string `json:\"name\"` // name of the account"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "0c9dda760a7ceb6af20fe2fa84bf29d9ec65fe2d48adc6df60c444eab72693fc"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'IntegrationApplication'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 287,
+      "offset": 6,
+      "length": 22,
+      "code": {
+        "startLine": 285,
+        "length": 22,
+        "offset": 86,
+        "surroundingCode": "\n// IntegrationApplication - The bot/OAuth2 application for discord integrations\ntype IntegrationApplication struct {\n\tID          Snowflake `json:\"id\"`            // the id of the app\n\tName        string    `json:\"name\"`          // the name of the app"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "a76d033b0bdc15d78814cc8b59ff1ce8d874e32c80fff2eaa20f2c7f10102b99"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'Ban'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 297,
+      "offset": 6,
+      "length": 3,
+      "code": {
+        "startLine": 295,
+        "length": 3,
+        "offset": 52,
+        "surroundingCode": "\n// Ban - represents a guild member ban object\ntype Ban struct {\n\tReason *string `json:\"reason\"` // the reason for the ban\n\tUser   User    `json:\"user\"`   // the banned user"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "7a6768cd5ef0d46c460387316924a73b8b032f03972110a2f65c43160992e7ab"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'WelcomeScreen'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 303,
+      "offset": 6,
+      "length": 13,
+      "code": {
+        "startLine": 301,
+        "length": 13,
+        "offset": 51,
+        "surroundingCode": "\n// WelcomeScreen - the welcome screen object\ntype WelcomeScreen struct {\n\tDescription     *string                `json:\"description,omitempty\"`      // the server description shown in the welcome screen\n\tWelcomeChannels []WelcomeScreenChannel `json:\"welcome_channels,omitempty\"` // the channels shown in the welcome screen, up to 5"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "2dec9a076c928f5507da02d3dac9a49b748f4304beda57c5e93c233ead844e52"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'WelcomeScreenChannel'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild.go",
+      "language": "go",
+      "line": 309,
+      "offset": 6,
+      "length": 20,
+      "code": {
+        "startLine": 307,
+        "length": 20,
+        "offset": 82,
+        "surroundingCode": "\n// WelcomeScreenChannel - the channels shown in the welcome screen, up to 5\ntype WelcomeScreenChannel struct {\n\tChannelID   Snowflake  `json:\"channel_id,omitempty\"`  // the channel's id\n\tDescription string     `json:\"description,omitempty\"` // the description shown for the channel"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "d209926b0c1d8f852bf483b88175e925849c3d3b7e09c41309136304422ea1d1"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'ListGuildEmojis'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/emoji_endpoints.go",
+      "language": "go",
+      "line": 26,
+      "offset": 17,
+      "length": 15,
+      "code": {
+        "startLine": 24,
+        "length": 15,
+        "offset": 91,
+        "surroundingCode": "\n// ListGuildEmojis - Returns a list of emoji objects for the given guild.\nfunc (g *Guild) ListGuildEmojis() ([]Emoji, error) {\n\tu := parseRoute(fmt.Sprintf(listGuildEmojis, api, g.ID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "5797a75be26cfc04026448a0d3e447f62caaefc70ca3f3d767712f15204474cd"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'GetGuildEmoji'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/emoji_endpoints.go",
+      "language": "go",
+      "line": 36,
+      "offset": 17,
+      "length": 13,
+      "code": {
+        "startLine": 34,
+        "length": 13,
+        "offset": 95,
+        "surroundingCode": "\n// GetGuildEmoji - Returns an emoji object for the given guild and emoji IDs.\nfunc (g *Guild) GetGuildEmoji(emoji Emoji) (*Emoji, error) {\n\tu := parseRoute(fmt.Sprintf(getGuildEmoji, api, g.ID.String(), emoji.ID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "d7ee98251fd04e406ee17583be6695768b0c2f0d494d5b1991dcd3c20325d7fb"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'CreateGuildEmoji'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/emoji_endpoints.go",
+      "language": "go",
+      "line": 58,
+      "offset": 17,
+      "length": 16,
+      "code": {
+        "startLine": 56,
+        "length": 16,
+        "offset": 78,
+        "surroundingCode": "//\n// This endpoint supports the \"X-Audit-Log-Reason\" header.\nfunc (g *Guild) CreateGuildEmoji(payload CreateEmojiJSON, reason *string) (*Emoji, error) {\n\tu := parseRoute(fmt.Sprintf(createGuildEmoji, api, g.ID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "e450e9930ff39af5a9436c5256017f67554fa41361126f5b0215569ddf5651a6"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'CreateEmojiJSON'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/emoji_endpoints.go",
+      "language": "go",
+      "line": 70,
+      "offset": 6,
+      "length": 15,
+      "code": {
+        "startLine": 68,
+        "length": 15,
+        "offset": 46,
+        "surroundingCode": "//\n// TODO: Validate the base64.Encoding\ntype CreateEmojiJSON struct {\n\tName  string          `json:\"name\"`  // Name - name of the emoji\n\tImage base64.Encoding `json:\"image\"` // Image - the 128x128 emoji image"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "9b9110fa8bf3e191beba7f81bdab8145978182f2125ef09ca46902a82daec6ec"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'ModifyGuildEmoji'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/emoji_endpoints.go",
+      "language": "go",
+      "line": 87,
+      "offset": 17,
+      "length": 16,
+      "code": {
+        "startLine": 85,
+        "length": 16,
+        "offset": 76,
+        "surroundingCode": "//\n// This endpoint supports the X-Audit-Log-Reason header.\nfunc (g *Guild) ModifyGuildEmoji(emoji Emoji, payload ModifyGuildEmojiJSON, reason *string) (*Emoji, error) {\n\tu := parseRoute(fmt.Sprintf(modifyGuildEmoji, api, g.ID.String(), emoji.ID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "0cb5d0fccf7b11f6a2a2d16d7a75befefcf46b6e2778c79d8d55aa6e1f8662fc"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'ModifyGuildEmojiJSON'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/emoji_endpoints.go",
+      "language": "go",
+      "line": 97,
+      "offset": 6,
+      "length": 20,
+      "code": {
+        "startLine": 95,
+        "length": 20,
+        "offset": 71,
+        "surroundingCode": "\n// ModifyGuildEmojiJSON - Parameters to pass in the JSON payload\ntype ModifyGuildEmojiJSON struct {\n\tName  string       `json:\"name,omitempty\"`  // Name - name of the emoji\n\tRoles []*Snowflake `json:\"roles,omitempty\"` // Roles - roles allowed to use this emoji"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "babe3107d28b96e0a8a1790f1979f92f1d5420d115dcd9de83203a20b8b43dcf"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'DeleteGuildEmoji'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/emoji_endpoints.go",
+      "language": "go",
+      "line": 111,
+      "offset": 17,
+      "length": 16,
+      "code": {
+        "startLine": 109,
+        "length": 16,
+        "offset": 78,
+        "surroundingCode": "//\n// This endpoint supports the \"X-Audit-Log-Reason\" header.\nfunc (g *Guild) DeleteGuildEmoji(emoji Emoji, reason *string) error {\n\tu := parseRoute(fmt.Sprintf(deleteGuildEmoji, api, g.ID.String(), emoji.ID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "4fac1cae9abab196bfb1fc254eaba53ddbbf98c941c0a9274873befc53d8fafa"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'GetInvite'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/invite_endpoints.go",
+      "language": "go",
+      "line": 26,
+      "offset": 18,
+      "length": 9,
+      "code": {
+        "startLine": 24,
+        "length": 9,
+        "offset": 78,
+        "surroundingCode": "\n// GetInvite - Returns an Invite object for the given code.\nfunc (i *Invite) GetInvite(withCounts *bool, withExpiration *bool, guildScheduledEventID *Snowflake) (*Invite, error) {\n\tu := parseRoute(fmt.Sprintf(getInvite, api, *i.Code))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "d6ade0719015e5efaa640f69271dc7b360738427712885db493b7bbebc37b210"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'DeleteInvite'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/invite_endpoints.go",
+      "language": "go",
+      "line": 58,
+      "offset": 18,
+      "length": 12,
+      "code": {
+        "startLine": 56,
+        "length": 12,
+        "offset": 79,
+        "surroundingCode": "//\n//\tThis endpoint supports the `X-Audit-Log-Reason` header.\nfunc (i *Invite) DeleteInvite(reason *string) error {\n\tu := parseRoute(fmt.Sprintf(deleteInvite, api, *i.Code))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "e7bcbe5d413c694ba7f6226951b131905d57571d6f20811d5548731746d9b35a"
+}]}
