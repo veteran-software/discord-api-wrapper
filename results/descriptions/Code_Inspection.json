@@ -310,16 +310,16 @@
           "description": "Reports structures with methods that use a mixture of types: value and pointer receivers. Such usage is not recommended by the Go Documentation.\n\nFor details, see [Should I define methods on values or pointers?](https://go.dev/doc/faq#methods_on_values_or_pointers) in the Go FAQ.\n\nExample:\n\n    type S struct{\n    }\n\n    func (s *S) fun() {}\n    func (s S) fun2() {}\n"
         },
         {
-          "shortName": "GoVetAtomic",
-          "displayName": "Incorrect usage of the 'sync/atomic' package",
-          "enabled": true,
-          "description": "Reports assignment statements of the form `x = atomic.AddUint64(&x, 1)`.\n\nSuch operations are not atomic,\nand is a common misuse of the `sync/atomic` API. To make them atomic, one need to remove the assignment\nto use a direct call: `atomic.AddUint64(&x, 1)`. In that case, the value of `x` will be updated\natomically by address.\n\nExample:\n\n    import (\n     \"sync/atomic\"\n    )\n\n    type Counter uint64\n\n    func AtomicTests() {\n     x := uint64(1)\n     x = atomic.AddUint64(&x, 1)         // ERROR \"direct assignment to atomic value\"\n     _, x = 10, atomic.AddUint64(&x, 1)  // ERROR \"direct assignment to atomic value\"\n     x, _ = atomic.AddUint64(&x, 1), 10  // ERROR \"direct assignment to atomic value\"\n    }\n"
-        },
-        {
           "shortName": "GoLoopClosure",
           "displayName": "Loop variables captured by the func literal",
           "enabled": true,
           "description": "Reports references to loop variables from within `func` literals in `defer` and `go` statements. Such variables might have unexpected values because they are not copied to `func` literals, and the `func` literals in `defer` and `go` are not executed immediately.\n\nFor more information about closures and goroutines, see [What happens\nwith closures running as goroutines? at golang.org](https://golang.org/doc/go_faq.html#closures_and_goroutines).\n\nExample:\n\n    for _, v := range []string{\"a\", \"b\", \"c\"} {\n      go func() {\n        fmt.Println(v) // output will likely be `c c c`, not `a b c`\n      }()\n    }\n\nAfter the quick-fix is applied:\n\n    for _, v := range []string{\"a\", \"b\", \"c\"} {\n      v := v // `v` is copied now\n      go func() {\n        fmt.Println(v)\n      }()\n    }\n\nNote the analyzer only checks `defer` and `go` statements when they are the last statement in the loop body.\nOtherwise, the analysis might produce false detections."
+        },
+        {
+          "shortName": "GoVetAtomic",
+          "displayName": "Incorrect usage of the 'sync/atomic' package",
+          "enabled": true,
+          "description": "Reports assignment statements of the form `x = atomic.AddUint64(&x, 1)`.\n\nSuch operations are not atomic,\nand is a common misuse of the `sync/atomic` API. To make them atomic, one need to remove the assignment\nto use a direct call: `atomic.AddUint64(&x, 1)`. In that case, the value of `x` will be updated\natomically by address.\n\nExample:\n\n    import (\n     \"sync/atomic\"\n    )\n\n    type Counter uint64\n\n    func AtomicTests() {\n     x := uint64(1)\n     x = atomic.AddUint64(&x, 1)         // ERROR \"direct assignment to atomic value\"\n     _, x = 10, atomic.AddUint64(&x, 1)  // ERROR \"direct assignment to atomic value\"\n     x, _ = atomic.AddUint64(&x, 1), 10  // ERROR \"direct assignment to atomic value\"\n    }\n"
         },
         {
           "shortName": "GoBuildTag",
