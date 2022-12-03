@@ -233,7 +233,7 @@ func (g *Guild) GetGuildMember(userID Snowflake) (*GuildMember, error) {
 // ListGuildMembers - Returns a list of guild member objects that are members of the guild.
 //
 // This endpoint is restricted according to whether the GuildMembers Privileged Intent is enabled for your application.
-func (g *Guild) ListGuildMembers(limit *uint64, after *Snowflake) (*[]GuildMember, error) {
+func (g *Guild) ListGuildMembers(limit *uint64, after *Snowflake) ([]*GuildMember, error) {
 	u := parseRoute(fmt.Sprintf(listGuildMembers, api, g.ID.String()))
 
 	q := u.Query()
@@ -247,7 +247,7 @@ func (g *Guild) ListGuildMembers(limit *uint64, after *Snowflake) (*[]GuildMembe
 		u.RawQuery = q.Encode()
 	}
 
-	var guildMembers *[]GuildMember
+	var guildMembers []*GuildMember
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &guildMembers)
 
 	return guildMembers, err

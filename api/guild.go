@@ -241,8 +241,11 @@ type GuildMember struct {
 	Deaf                       bool        `json:"deaf"`                                   // Deaf - whether the user is deafened in voice channels
 	Mute                       bool        `json:"mute"`                                   // Mute - whether the user is muted in voice channels
 	Pending                    bool        `json:"pending,omitempty"`                      // Pending - whether the user has not yet passed the guild's Membership Screening requirements
-	Permissions                string      `json:"permissions,omitempty"`                  // Permissions - total permissions of the member in the channel, including overwrites, returned when in the interaction object
 	CommunicationDisabledUntil *time.Time  `json:"communication_disabled_until,omitempty"` // CommunicationDisabledUntil - when the user's timeout will expire and the user will be able to communicate in the guild again, null or a time in the past if the user is not timed out
+
+	// Undocumented as of 12/3/2022
+	Flags     UserFlags `json:"flags,omitempty"`
+	IsPending bool      `json:"is_pending,omitempty"`
 }
 
 // Integration - a guild integration
