@@ -17,9 +17,6 @@
 package api
 
 import (
-	"encoding/json"
-	"fmt"
-	"strconv"
 	"time"
 )
 
@@ -54,43 +51,4 @@ type InviteMetadata struct {
 	MaxAge    uint64    `json:"max_age"`    // duration (in seconds) after which the invite expires
 	Temporary bool      `json:"temporary"`  // whether this invite only grants temporary membership
 	CreatedAt time.Time `json:"created_at"` // when this invite was created
-}
-
-// GetInvite - Returns an Invite object for the given code.
-func (i *Invite) GetInvite(withCounts *bool, withExpiration *bool, guildScheduledEventID *Snowflake) (*Invite, error) {
-	u := parseRoute(fmt.Sprintf(getInvite, api, *i.Code))
-
-	q := u.Query()
-	if withCounts != nil {
-		q.Set("with_counts", strconv.FormatBool(*withCounts))
-	}
-	if withExpiration != nil {
-		q.Set("with_expiration", strconv.FormatBool(*withExpiration))
-	}
-	if guildScheduledEventID != nil {
-		q.Set("guild_scheduled_event_id", guildScheduledEventID.String())
-	}
-	if len(q) > 0 {
-		u.RawQuery = q.Encode()
-	}
-
-	var invite *Invite
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &invite)
-
-	return invite, err
-}
-
-// DeleteInvite - Delete an Invite.
-//
-// Requires the ManageChannels permission on the channel this invite belongs to, or ManageGuild to remove any invite across the guild.
-//
-// Returns an Invite object on success.
-//
-// Fires an InviteDelete Gateway event.
-//
-//	This endpoint supports the `X-Audit-Log-Reason` header.
-func (i *Invite) DeleteInvite(reason *string) error {
-	u := parseRoute(fmt.Sprintf(deleteInvite, api, *i.Code))
-
-	return fireDeleteRequest(u, reason)
 }

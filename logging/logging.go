@@ -57,7 +57,7 @@ func init() {
 // Traceln - Logs the event at the Trace level
 //
 //goland:noinspection SpellCheckingInspection
-func Traceln(args ...interface{}) {
+func Traceln(args ...any) {
 	if LogLevel == 0 {
 		log.Traceln(args...)
 	}
@@ -66,7 +66,7 @@ func Traceln(args ...interface{}) {
 // Tracef - Logs the event at the Traceln level with formatting
 //
 //goland:noinspection GoUnusedExportedFunction
-func Tracef(format string, args ...interface{}) {
+func Tracef(format string, args ...any) {
 	if LogLevel == 0 {
 		log.Tracef(format, args...)
 	}
@@ -75,7 +75,7 @@ func Tracef(format string, args ...interface{}) {
 // Debugln - Logs the event at the Debug level
 //
 //goland:noinspection GoUnusedExportedFunction
-func Debugln(args ...interface{}) {
+func Debugln(args ...any) {
 	if LogLevel <= 1 {
 		log.Debugln(args...)
 	}
@@ -84,21 +84,21 @@ func Debugln(args ...interface{}) {
 // Debugf - Logs the event at the Debug level
 //
 //goland:noinspection GoUnusedExportedFunction
-func Debugf(format string, args ...interface{}) {
+func Debugf(format string, args ...any) {
 	if LogLevel <= 1 {
 		log.Debugf(format, args...)
 	}
 }
 
 // Infoln - Logs the event at the Infoln level
-func Infoln(args ...interface{}) {
+func Infoln(args ...any) {
 	if LogLevel <= 2 {
 		log.Infoln(args...)
 	}
 }
 
 // Warnln - Logs the event at the Warning level
-func Warnln(args ...interface{}) {
+func Warnln(args ...any) {
 	if LogLevel <= 3 {
 		log.Warningln(args...)
 	}
@@ -107,14 +107,14 @@ func Warnln(args ...interface{}) {
 // Warnf - Logs the event at the Warning level with formatting
 //
 //goland:noinspection GoUnusedExportedFunction
-func Warnf(format string, args ...interface{}) {
+func Warnf(format string, args ...any) {
 	if LogLevel == 0 {
 		log.Warnf(format, args...)
 	}
 }
 
 // Errorln - Logs the event at the Error level
-func Errorln(args ...interface{}) {
+func Errorln(args ...any) {
 	if LogLevel <= 4 {
 		log.Errorln(args...)
 	}
@@ -123,7 +123,7 @@ func Errorln(args ...interface{}) {
 // Fatalln - Logs the event at the Fatal level
 //
 //goland:noinspection GoUnusedExportedFunction
-func Fatalln(args ...interface{}) {
+func Fatalln(args ...any) {
 	if LogLevel <= 5 {
 		log.Fatalln(args...)
 	}

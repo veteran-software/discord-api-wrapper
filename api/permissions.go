@@ -180,7 +180,7 @@ type Role struct {
 
 // RoleTags - the tags this Role has
 type RoleTags struct {
-	BotID             string  `json:"bot_id,omitempty"`             // the id of the bot this role belongs to
-	IntegrationID     string  `json:"integration_id,omitempty"`     // the id of the integration this role belongs to
-	PremiumSubscriber *string `json:"premium_subscriber,omitempty"` // whether this is the guild's premium subscriber role
+	BotID             Snowflake `json:"bot_id,omitempty"`             // the id of the bot this role belongs to
+	IntegrationID     Snowflake `json:"integration_id,omitempty"`     // the id of the integration this role belongs to
+	PremiumSubscriber *string   `json:"premium_subscriber,omitempty"` // whether this is the guild's premium subscriber role
 }

@@ -16,13 +16,6 @@
 
 package api
 
-import (
-	"encoding/json"
-	"errors"
-	"fmt"
-	"strconv"
-)
-
 /* Whenever an admin action is performed on the API, an entry is added to the respective guild's audit log.
 You can specify the reason by attaching the X-Audit-Log-Reason request header.
 This header supports url encoded utf8 characters.
@@ -176,39 +169,4 @@ type AuditLogChange struct {
 	NewValue any    `json:"new_value,omitempty"` // new value of the key
 	OldValue any    `json:"old_value,omitempty"` // old value of the key
 	Key      string `json:"key"`                 // name of audit log change key
-}
-
-// GetGuildAuditLog - Returns an audit log object for the guild.
-//
-// Requires the ViewAuditLog permission.
-func (g *Guild) GetGuildAuditLog(userID *Snowflake, actionType *uint64, before *Snowflake, limit *uint64) (*AuditLog, error) {
-	u := parseRoute(fmt.Sprintf(getGuildAuditLog, api, g.ID.String()))
-
-	// Set the optional qsp
-	q := u.Query()
-	if userID != nil {
-		q.Set("user_id", userID.String())
-	}
-	if actionType != nil {
-		q.Set("action_type", strconv.FormatUint(*actionType, 10))
-	}
-	if before != nil {
-		q.Set("before", before.String())
-	}
-	if limit != nil {
-		if *limit >= 1 && *limit <= 100 {
-			q.Set("limit", strconv.FormatUint(*limit, 10))
-		} else {
-			return nil, errors.New("the limit filter must be >= 1 && <= 100")
-		}
-	}
-	// If there's any of the optional qsp present, encode and add to the URL
-	if len(q) != 0 {
-		u.RawQuery = q.Encode()
-	}
-
-	var log AuditLog
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &log)
-
-	return &log, err
 }
