@@ -19,7 +19,7 @@ package api
 import (
 	"strconv"
 
-	"github.com/veteran-software/discord-api-wrapper/v10/logging"
+	"github.com/veteran-software/discord-api-wrapper/logging"
 )
 
 // ApplicationCommand - A command, or each individual subcommand, can have a maximum of 25 options

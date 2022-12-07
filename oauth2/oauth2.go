@@ -19,7 +19,7 @@ package oauth2
 import (
 	"net/url"
 
-	"github.com/veteran-software/discord-api-wrapper/v10/logging"
+	"github.com/veteran-software/discord-api-wrapper/logging"
 )
 
 // BaseAuthorizationURL - Base authorization URL
