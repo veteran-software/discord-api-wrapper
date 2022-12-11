@@ -116,8 +116,8 @@ func NewMessageResponse() *InteractionResponseMessages {
 }
 
 // SetType - sets the Type of the InteractionResponseMessages object
-func (i *InteractionResponseMessages) SetType(t InteractionCallbackType) *InteractionResponseMessages {
-	i.Type = t
+func (i *InteractionResponseMessages) SetType(t *InteractionCallbackType) *InteractionResponseMessages {
+	i.Type = *t
 
 	return i
 }
@@ -144,8 +144,8 @@ func (i *InteractionResponseMessages) AddEmbed(e *Embed) *InteractionResponseMes
 }
 
 // AddEmbeds - add multiple Embed objects (max 10) to the response
-func (i *InteractionResponseMessages) AddEmbeds(e []Embed) *InteractionResponseMessages {
-	i.Data.Embeds = append(i.Data.Embeds, e...)
+func (i *InteractionResponseMessages) AddEmbeds(e *[]Embed) *InteractionResponseMessages {
+	i.Data.Embeds = append(i.Data.Embeds, *e...)
 
 	return i
 }

@@ -411,13 +411,13 @@ const (
 //
 // Violating any of these constraints will result in a Bad Request response.
 const (
-	titleLimit       = 256  // 256 characters
-	descriptionLimit = 4096 // 4096 characters
-	fieldCount       = 25   // Up to 25 field objects
-	fieldNameLimit   = 256  // 256 characters
-	fieldValueLimit  = 1024 // 1024 characters
-	footerTextLimit  = 2048 // 2048 characters
-	authorNameLimit  = 256  // 256 characters
+	TitleLimit       = 256  // 256 characters
+	DescriptionLimit = 4096 // 4096 characters
+	FieldCount       = 25   // Up to 25 field objects
+	FieldNameLimit   = 256  // 256 characters
+	FieldValueLimit  = 1024 // 1024 characters
+	FooterTextLimit  = 2048 // 2048 characters
+	AuthorNameLimit  = 256  // 256 characters
 )
 
 // GetChannel - Get a channel by ID.
@@ -498,7 +498,7 @@ func (c *Channel) modifyChannel(payload any, reason *string) (*Channel, error) {
 	u := parseRoute(fmt.Sprintf(modifyChannel, api, c.ID.String()))
 
 	var channel Channel
-	err := json.Unmarshal(fireGetRequest(u, &payload, reason), &channel)
+	err := json.Unmarshal(firePatchRequest(u, &payload, reason), &channel)
 
 	return &channel, err
 }
@@ -550,7 +550,10 @@ func (c *Channel) DeleteChannel(reason *string) error {
 //	The before, after, and around keys are mutually exclusive, only one may be passed at a time.
 //
 // TODO: Check permissions; required ViewChannel and ReadMessageHistory
-func (c *Channel) GetChannelMessages(around *Snowflake, before *Snowflake, after *Snowflake, limit *int) ([]Message, error) {
+func (c *Channel) GetChannelMessages(around *Snowflake, before *Snowflake, after *Snowflake, limit *int) (
+	[]Message,
+	error,
+) {
 	u := parseRoute(fmt.Sprintf(getChannelMessages, api, c.ID.String()))
 
 	q := u.Query()
@@ -700,7 +703,16 @@ func (c *Channel) DeleteOwnReaction(messageID Snowflake, emoji string) error {
 //
 // To use custom emoji, you must encode it in the format name:id with the emoji name and emoji id.
 func (c *Channel) DeleteUserReaction(messageID Snowflake, emoji string, userID Snowflake) error {
-	u := parseRoute(fmt.Sprintf(deleteUserReaction, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji), userID.String()))
+	u := parseRoute(
+		fmt.Sprintf(
+			deleteUserReaction,
+			api,
+			c.ID.String(),
+			messageID.String(),
+			url.QueryEscape(emoji),
+			userID.String(),
+		),
+	)
 
 	return fireDeleteRequest(u, nil)
 }
@@ -755,7 +767,15 @@ func (c *Channel) DeleteAllReactions(messageID Snowflake) error {
 //
 // To use custom emoji, you must encode it in the format name:id with the emoji name and emoji id.
 func (c *Channel) DeleteAllReactionsForEmoji(messageID Snowflake, emoji string) error {
-	u := parseRoute(fmt.Sprintf(deleteAllReactionsForEmoji, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji)))
+	u := parseRoute(
+		fmt.Sprintf(
+			deleteAllReactionsForEmoji,
+			api,
+			c.ID.String(),
+			messageID.String(),
+			url.QueryEscape(emoji),
+		),
+	)
 
 	return fireDeleteRequest(u, nil)
 }
@@ -1045,7 +1065,11 @@ func (c *Channel) GroupDmRemoveRecipient(userID Snowflake) error {
 // The id of the created thread will be the same as the id of the source message, and as such a message can only have a single thread created from it.
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
-func (c *Channel) StartThreadWithMessage(messageID Snowflake, payload StartThreadWithMessageJSON, reason *string) (*Channel, error) {
+func (c *Channel) StartThreadWithMessage(
+	messageID Snowflake,
+	payload StartThreadWithMessageJSON,
+	reason *string,
+) (*Channel, error) {
 	u := parseRoute(fmt.Sprintf(startThreadWithMessage, api, c.ID.String(), messageID.String()))
 
 	var channel Channel
