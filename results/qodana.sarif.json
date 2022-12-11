@@ -19,8 +19,8 @@
               "name": "Go"
             },
             {
-              "id": "Go/Probable bugs",
-              "name": "Probable bugs",
+              "id": "Go/General",
+              "name": "General",
               "relationships": [
                 {
                   "target": {
@@ -37,8 +37,8 @@
               ]
             },
             {
-              "id": "Go/General",
-              "name": "General",
+              "id": "Go/Probable bugs",
+              "name": "Probable bugs",
               "relationships": [
                 {
                   "target": {
@@ -1184,37 +1184,6 @@
             "version": "223.8105",
             "rules": [
               {
-                "id": "GoVetCopyLock",
-                "shortDescription": {
-                  "text": "Locks mistakenly passed by value"
-                },
-                "fullDescription": {
-                  "text": "Reports locks that are mistakenly passed by values. Accidentally copying a value containing a lock may cause both copies to work incorrectly. Generally, such values should be referred to through a pointer. A lock here means a type implementing 'sync.Locker', such as 'sync.Mutex' or 'sync.WaitGroup'. Example: 'type SafeInt struct {\n  m sync.Mutex\n  i int\n}\n\nfunc (s SafeInt) Inc() { // mutex is copied\n  s.m.Lock()\n  s.i++\n  s.m.Unlock()\n}' After the Add pointer quick-fix is applied: 'type SafeInt struct {\n  m sync.Mutex\n  i int\n}\n\nfunc (s *SafeInt) Inc() {\n  s.m.Lock()\n  s.i++\n  s.m.Unlock()\n}'",
-                  "markdown": "Reports locks that are mistakenly passed by values.\n\nAccidentally copying a value containing a lock may cause both copies to work incorrectly. Generally, such values should be\nreferred to through a pointer. A lock here means a type implementing `sync.Locker`, such as `sync.Mutex`\nor `sync.WaitGroup`.\n\nExample:\n\n    type SafeInt struct {\n      m sync.Mutex\n      i int\n    }\n\n    func (s SafeInt) Inc() { // mutex is copied\n      s.m.Lock()\n      s.i++\n      s.m.Unlock()\n    }\n\nAfter the **Add pointer** quick-fix is applied:\n\n    type SafeInt struct {\n      m sync.Mutex\n      i int\n    }\n\n    func (s *SafeInt) Inc() {\n      s.m.Lock()\n      s.i++\n      s.m.Unlock()\n    }\n"
-                },
-                "defaultConfiguration": {
-                  "enabled": true,
-                  "level": "warning",
-                  "parameters": {
-                    "ideaSeverity": "WARNING"
-                  }
-                },
-                "relationships": [
-                  {
-                    "target": {
-                      "id": "Go/Probable bugs",
-                      "index": 2,
-                      "toolComponent": {
-                        "name": "QDGO"
-                      }
-                    },
-                    "kinds": [
-                      "superset"
-                    ]
-                  }
-                ]
-              },
-              {
                 "id": "GoUnnecessarilyExportedIdentifiers",
                 "shortDescription": {
                   "text": "Unnecessarily exported identifier"
@@ -1234,6 +1203,37 @@
                   {
                     "target": {
                       "id": "Go/General",
+                      "index": 2,
+                      "toolComponent": {
+                        "name": "QDGO"
+                      }
+                    },
+                    "kinds": [
+                      "superset"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "GoVetCopyLock",
+                "shortDescription": {
+                  "text": "Locks mistakenly passed by value"
+                },
+                "fullDescription": {
+                  "text": "Reports locks that are mistakenly passed by values. Accidentally copying a value containing a lock may cause both copies to work incorrectly. Generally, such values should be referred to through a pointer. A lock here means a type implementing 'sync.Locker', such as 'sync.Mutex' or 'sync.WaitGroup'. Example: 'type SafeInt struct {\n  m sync.Mutex\n  i int\n}\n\nfunc (s SafeInt) Inc() { // mutex is copied\n  s.m.Lock()\n  s.i++\n  s.m.Unlock()\n}' After the Add pointer quick-fix is applied: 'type SafeInt struct {\n  m sync.Mutex\n  i int\n}\n\nfunc (s *SafeInt) Inc() {\n  s.m.Lock()\n  s.i++\n  s.m.Unlock()\n}'",
+                  "markdown": "Reports locks that are mistakenly passed by values.\n\nAccidentally copying a value containing a lock may cause both copies to work incorrectly. Generally, such values should be\nreferred to through a pointer. A lock here means a type implementing `sync.Locker`, such as `sync.Mutex`\nor `sync.WaitGroup`.\n\nExample:\n\n    type SafeInt struct {\n      m sync.Mutex\n      i int\n    }\n\n    func (s SafeInt) Inc() { // mutex is copied\n      s.m.Lock()\n      s.i++\n      s.m.Unlock()\n    }\n\nAfter the **Add pointer** quick-fix is applied:\n\n    type SafeInt struct {\n      m sync.Mutex\n      i int\n    }\n\n    func (s *SafeInt) Inc() {\n      s.m.Lock()\n      s.i++\n      s.m.Unlock()\n    }\n"
+                },
+                "defaultConfiguration": {
+                  "enabled": true,
+                  "level": "warning",
+                  "parameters": {
+                    "ideaSeverity": "WARNING"
+                  }
+                },
+                "relationships": [
+                  {
+                    "target": {
+                      "id": "Go/Probable bugs",
                       "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
@@ -1265,7 +1265,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -1296,7 +1296,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -1358,7 +1358,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -1420,7 +1420,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -1451,7 +1451,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -1513,7 +1513,7 @@
                   {
                     "target": {
                       "id": "Go/General",
-                      "index": 3,
+                      "index": 2,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -1575,7 +1575,7 @@
                   {
                     "target": {
                       "id": "Go/General",
-                      "index": 3,
+                      "index": 2,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -1637,7 +1637,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -1761,7 +1761,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -1916,7 +1916,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2009,7 +2009,7 @@
                   {
                     "target": {
                       "id": "Go/General",
-                      "index": 3,
+                      "index": 2,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2040,7 +2040,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2071,7 +2071,7 @@
                   {
                     "target": {
                       "id": "Go/General",
-                      "index": 3,
+                      "index": 2,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2176,37 +2176,6 @@
                 ]
               },
               {
-                "id": "GoPrintFunctions",
-                "shortDescription": {
-                  "text": "Incorrect usage of 'fmt.Printf' and 'fmt.Println' functions"
-                },
-                "fullDescription": {
-                  "text": "Reports incorrect usages of 'fmt.Printf', 'fmt.Println', and similar formatting and printing functions. In their format strings, formatting functions use formatting verbs, like '%s', '%d', '%v', and others. If formatting verbs are used incorrectly, the result of a formatting function will contain an error. For more information about formatting verbs, see Package fmt at golang.org. Example: 'fmt.Printf(\"id: %s\", 42)' The output of this function is 'id: %!s(int=42)'. It might be not what you really want. The following function uses the '%d' formatting verb. The output with the '%d' formatting verb will be 'id: 42'. 'fmt.Printf(\"id: %d\", 42)'",
-                  "markdown": "Reports incorrect usages of `fmt.Printf`, `fmt.Println`, and similar formatting and printing functions.\n\nIn their format strings, formatting functions use formatting verbs, like `%s`, `%d`, `%v`, and others.\nIf formatting verbs are used incorrectly, the result of a formatting function will contain an error.\nFor more information about formatting verbs, see [Package fmt at golang.org](https://golang.org/pkg/fmt/).\n\nExample:\n\n    fmt.Printf(\"id: %s\", 42)\n\nThe output of this function is `id: %!s(int=42)`. It might be not what you really want.\nThe following function uses the `%d` formatting verb.\nThe output with the `%d` formatting verb will be `id: 42`.\n\n    fmt.Printf(\"id: %d\", 42)\n"
-                },
-                "defaultConfiguration": {
-                  "enabled": true,
-                  "level": "note",
-                  "parameters": {
-                    "ideaSeverity": "WEAK WARNING"
-                  }
-                },
-                "relationships": [
-                  {
-                    "target": {
-                      "id": "Go/Probable bugs",
-                      "index": 2,
-                      "toolComponent": {
-                        "name": "QDGO"
-                      }
-                    },
-                    "kinds": [
-                      "superset"
-                    ]
-                  }
-                ]
-              },
-              {
                 "id": "GoDeferInLoop",
                 "shortDescription": {
                   "text": "'defer' in the loop"
@@ -2238,6 +2207,37 @@
                 ]
               },
               {
+                "id": "GoPrintFunctions",
+                "shortDescription": {
+                  "text": "Incorrect usage of 'fmt.Printf' and 'fmt.Println' functions"
+                },
+                "fullDescription": {
+                  "text": "Reports incorrect usages of 'fmt.Printf', 'fmt.Println', and similar formatting and printing functions. In their format strings, formatting functions use formatting verbs, like '%s', '%d', '%v', and others. If formatting verbs are used incorrectly, the result of a formatting function will contain an error. For more information about formatting verbs, see Package fmt at golang.org. Example: 'fmt.Printf(\"id: %s\", 42)' The output of this function is 'id: %!s(int=42)'. It might be not what you really want. The following function uses the '%d' formatting verb. The output with the '%d' formatting verb will be 'id: 42'. 'fmt.Printf(\"id: %d\", 42)'",
+                  "markdown": "Reports incorrect usages of `fmt.Printf`, `fmt.Println`, and similar formatting and printing functions.\n\nIn their format strings, formatting functions use formatting verbs, like `%s`, `%d`, `%v`, and others.\nIf formatting verbs are used incorrectly, the result of a formatting function will contain an error.\nFor more information about formatting verbs, see [Package fmt at golang.org](https://golang.org/pkg/fmt/).\n\nExample:\n\n    fmt.Printf(\"id: %s\", 42)\n\nThe output of this function is `id: %!s(int=42)`. It might be not what you really want.\nThe following function uses the `%d` formatting verb.\nThe output with the `%d` formatting verb will be `id: 42`.\n\n    fmt.Printf(\"id: %d\", 42)\n"
+                },
+                "defaultConfiguration": {
+                  "enabled": true,
+                  "level": "note",
+                  "parameters": {
+                    "ideaSeverity": "WEAK WARNING"
+                  }
+                },
+                "relationships": [
+                  {
+                    "target": {
+                      "id": "Go/Probable bugs",
+                      "index": 3,
+                      "toolComponent": {
+                        "name": "QDGO"
+                      }
+                    },
+                    "kinds": [
+                      "superset"
+                    ]
+                  }
+                ]
+              },
+              {
                 "id": "GoErrorsAs",
                 "shortDescription": {
                   "text": "Incorrect usage of the 'errors.As' function"
@@ -2257,7 +2257,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2288,7 +2288,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2319,7 +2319,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2412,7 +2412,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2474,7 +2474,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2536,7 +2536,7 @@
                   {
                     "target": {
                       "id": "Go/General",
-                      "index": 3,
+                      "index": 2,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2629,38 +2629,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
-                      "toolComponent": {
-                        "name": "QDGO"
-                      }
-                    },
-                    "kinds": [
-                      "superset"
-                    ]
-                  }
-                ]
-              },
-              {
-                "id": "GoRedundantBlankArgInRange",
-                "shortDescription": {
-                  "text": "Redundant blank argument in range"
-                },
-                "fullDescription": {
-                  "text": "Reports optional blank variables in range loops. When you use the 'range' loop to iterate over a slice, two values are returned for each iteration. The first is the index number, and the second is a copy of the element at that index. If you do not need the second value, you can skip this element instead of using a blank identifier. Example: 'for a, _ = range v {} // `for a, _ =` is the same as `for a =`' To remove the blank identifier, you can use the Delete blank argument quick-fix. After the quick-fix is applied, the code will look as follows: 'for a = range v {}'",
-                  "markdown": "Reports optional blank variables in range loops.\n\nWhen you use the `range` loop to iterate over a slice, two values are returned for each iteration. The first is the index\nnumber, and the second is a copy of the element at that index. If you do not need the second value, you can skip this element instead of\nusing a blank identifier.\n\nExample:\n\n    for a, _ = range v {} // `for a, _ =` is the same as `for a =`\n\nTo remove the blank identifier, you can use the **Delete blank argument** quick-fix. After the quick-fix is applied, the code will\nlook as follows:\n\n    for a = range v {}\n"
-                },
-                "defaultConfiguration": {
-                  "enabled": true,
-                  "level": "warning",
-                  "parameters": {
-                    "ideaSeverity": "WARNING"
-                  }
-                },
-                "relationships": [
-                  {
-                    "target": {
-                      "id": "Go/Declaration redundancy",
-                      "index": 4,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2703,13 +2672,13 @@
                 ]
               },
               {
-                "id": "GoUnusedFunction",
+                "id": "GoRedundantBlankArgInRange",
                 "shortDescription": {
-                  "text": "Unused function"
+                  "text": "Redundant blank argument in range"
                 },
                 "fullDescription": {
-                  "text": "Reports unused unexported functions. In Go, a function is unexported if it begins with a small letter. Names of unexported functions that were defined but never used are grayed out. '// Unused unexported function\nfunc unExportedUnusedFunc()  {\n\n}\n\nfunc main() {\n fmt.Println(\"Hello\")\n}'",
-                  "markdown": "Reports unused unexported functions.\n\nIn Go, a function is unexported if it begins with a small letter. Names of unexported functions that were defined but never used are\ngrayed out.\n\n    // Unused unexported function\n    func unExportedUnusedFunc()  {\n\n    }\n\n    func main() {\n     fmt.Println(\"Hello\")\n    }\n"
+                  "text": "Reports optional blank variables in range loops. When you use the 'range' loop to iterate over a slice, two values are returned for each iteration. The first is the index number, and the second is a copy of the element at that index. If you do not need the second value, you can skip this element instead of using a blank identifier. Example: 'for a, _ = range v {} // `for a, _ =` is the same as `for a =`' To remove the blank identifier, you can use the Delete blank argument quick-fix. After the quick-fix is applied, the code will look as follows: 'for a = range v {}'",
+                  "markdown": "Reports optional blank variables in range loops.\n\nWhen you use the `range` loop to iterate over a slice, two values are returned for each iteration. The first is the index\nnumber, and the second is a copy of the element at that index. If you do not need the second value, you can skip this element instead of\nusing a blank identifier.\n\nExample:\n\n    for a, _ = range v {} // `for a, _ =` is the same as `for a =`\n\nTo remove the blank identifier, you can use the **Delete blank argument** quick-fix. After the quick-fix is applied, the code will\nlook as follows:\n\n    for a = range v {}\n"
                 },
                 "defaultConfiguration": {
                   "enabled": true,
@@ -2765,26 +2734,26 @@
                 ]
               },
               {
-                "id": "GoMissingTrailingComma",
+                "id": "GoUnusedFunction",
                 "shortDescription": {
-                  "text": "Missing trailing comma before a newline in a composite literal"
+                  "text": "Unused function"
                 },
                 "fullDescription": {
-                  "text": "Reports a missing trailing comma before a newline in composite literals, function call arguments, and function parameter lists. Example: 'func f(f int) (\n int,\n bool   // missing a trailing comma\n){\n println(1, 2  // missing a trailing comma\n )\n}'",
-                  "markdown": "Reports a missing trailing comma before a newline in composite literals, function call arguments, and function parameter lists.\n\nExample:\n\n    func f(f int) (\n     int,\n     bool   // missing a trailing comma\n    ){\n     println(1, 2  // missing a trailing comma\n     )\n    }\n"
+                  "text": "Reports unused unexported functions. In Go, a function is unexported if it begins with a small letter. Names of unexported functions that were defined but never used are grayed out. '// Unused unexported function\nfunc unExportedUnusedFunc()  {\n\n}\n\nfunc main() {\n fmt.Println(\"Hello\")\n}'",
+                  "markdown": "Reports unused unexported functions.\n\nIn Go, a function is unexported if it begins with a small letter. Names of unexported functions that were defined but never used are\ngrayed out.\n\n    // Unused unexported function\n    func unExportedUnusedFunc()  {\n\n    }\n\n    func main() {\n     fmt.Println(\"Hello\")\n    }\n"
                 },
                 "defaultConfiguration": {
-                  "enabled": false,
-                  "level": "error",
+                  "enabled": true,
+                  "level": "warning",
                   "parameters": {
-                    "ideaSeverity": "ERROR"
+                    "ideaSeverity": "WARNING"
                   }
                 },
                 "relationships": [
                   {
                     "target": {
-                      "id": "Go/General",
-                      "index": 3,
+                      "id": "Go/Declaration redundancy",
+                      "index": 4,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2816,6 +2785,37 @@
                     "target": {
                       "id": "Go/Declaration redundancy",
                       "index": 4,
+                      "toolComponent": {
+                        "name": "QDGO"
+                      }
+                    },
+                    "kinds": [
+                      "superset"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "GoMissingTrailingComma",
+                "shortDescription": {
+                  "text": "Missing trailing comma before a newline in a composite literal"
+                },
+                "fullDescription": {
+                  "text": "Reports a missing trailing comma before a newline in composite literals, function call arguments, and function parameter lists. Example: 'func f(f int) (\n int,\n bool   // missing a trailing comma\n){\n println(1, 2  // missing a trailing comma\n )\n}'",
+                  "markdown": "Reports a missing trailing comma before a newline in composite literals, function call arguments, and function parameter lists.\n\nExample:\n\n    func f(f int) (\n     int,\n     bool   // missing a trailing comma\n    ){\n     println(1, 2  // missing a trailing comma\n     )\n    }\n"
+                },
+                "defaultConfiguration": {
+                  "enabled": false,
+                  "level": "error",
+                  "parameters": {
+                    "ideaSeverity": "ERROR"
+                  }
+                },
+                "relationships": [
+                  {
+                    "target": {
+                      "id": "Go/General",
+                      "index": 2,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2877,7 +2877,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2939,7 +2939,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -3001,7 +3001,7 @@
                   {
                     "target": {
                       "id": "Go/General",
-                      "index": 3,
+                      "index": 2,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -3063,7 +3063,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -3094,7 +3094,7 @@
                   {
                     "target": {
                       "id": "Go/General",
-                      "index": 3,
+                      "index": 2,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -3156,7 +3156,7 @@
                   {
                     "target": {
                       "id": "Go/General",
-                      "index": 3,
+                      "index": 2,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -3249,7 +3249,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -3280,7 +3280,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -3323,13 +3323,13 @@
                 ]
               },
               {
-                "id": "GoVetAtomic",
+                "id": "GoLoopClosure",
                 "shortDescription": {
-                  "text": "Incorrect usage of the 'sync/atomic' package"
+                  "text": "Loop variables captured by the func literal"
                 },
                 "fullDescription": {
-                  "text": "Reports assignment statements of the form 'x = atomic.AddUint64(&x, 1)'. Such operations are not atomic, and is a common misuse of the 'sync/atomic' API. To make them atomic, one need to remove the assignment to use a direct call: 'atomic.AddUint64(&x, 1)'. In that case, the value of 'x' will be updated atomically by address. Example: 'import (\n \"sync/atomic\"\n)\n\ntype Counter uint64\n\nfunc AtomicTests() {\n x := uint64(1)\n x = atomic.AddUint64(&x, 1)         // ERROR \"direct assignment to atomic value\"\n _, x = 10, atomic.AddUint64(&x, 1)  // ERROR \"direct assignment to atomic value\"\n x, _ = atomic.AddUint64(&x, 1), 10  // ERROR \"direct assignment to atomic value\"\n}'",
-                  "markdown": "Reports assignment statements of the form `x = atomic.AddUint64(&x, 1)`.\n\nSuch operations are not atomic,\nand is a common misuse of the `sync/atomic` API. To make them atomic, one need to remove the assignment\nto use a direct call: `atomic.AddUint64(&x, 1)`. In that case, the value of `x` will be updated\natomically by address.\n\nExample:\n\n    import (\n     \"sync/atomic\"\n    )\n\n    type Counter uint64\n\n    func AtomicTests() {\n     x := uint64(1)\n     x = atomic.AddUint64(&x, 1)         // ERROR \"direct assignment to atomic value\"\n     _, x = 10, atomic.AddUint64(&x, 1)  // ERROR \"direct assignment to atomic value\"\n     x, _ = atomic.AddUint64(&x, 1), 10  // ERROR \"direct assignment to atomic value\"\n    }\n"
+                  "text": "Reports references to loop variables from within 'func' literals in 'defer' and 'go' statements. Such variables might have unexpected values because they are not copied to 'func' literals, and the 'func' literals in 'defer' and 'go' are not executed immediately. For more information about closures and goroutines, see What happens with closures running as goroutines? at golang.org. Example: 'for _, v := range []string{\"a\", \"b\", \"c\"} {\n  go func() {\n    fmt.Println(v) // output will likely be `c c c`, not `a b c`\n  }()\n}' After the quick-fix is applied: 'for _, v := range []string{\"a\", \"b\", \"c\"} {\n  v := v // `v` is copied now\n  go func() {\n    fmt.Println(v)\n  }()\n}' Note the analyzer only checks 'defer' and 'go' statements when they are the last statement in the loop body. Otherwise, the analysis might produce false detections.",
+                  "markdown": "Reports references to loop variables from within `func` literals in `defer` and `go` statements. Such variables might have unexpected values because they are not copied to `func` literals, and the `func` literals in `defer` and `go` are not executed immediately.\n\nFor more information about closures and goroutines, see [What happens\nwith closures running as goroutines? at golang.org](https://golang.org/doc/go_faq.html#closures_and_goroutines).\n\nExample:\n\n    for _, v := range []string{\"a\", \"b\", \"c\"} {\n      go func() {\n        fmt.Println(v) // output will likely be `c c c`, not `a b c`\n      }()\n    }\n\nAfter the quick-fix is applied:\n\n    for _, v := range []string{\"a\", \"b\", \"c\"} {\n      v := v // `v` is copied now\n      go func() {\n        fmt.Println(v)\n      }()\n    }\n\nNote the analyzer only checks `defer` and `go` statements when they are the last statement in the loop body.\nOtherwise, the analysis might produce false detections."
                 },
                 "defaultConfiguration": {
                   "enabled": true,
@@ -3342,7 +3342,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -3385,13 +3385,13 @@
                 ]
               },
               {
-                "id": "GoLoopClosure",
+                "id": "GoVetAtomic",
                 "shortDescription": {
-                  "text": "Loop variables captured by the func literal"
+                  "text": "Incorrect usage of the 'sync/atomic' package"
                 },
                 "fullDescription": {
-                  "text": "Reports references to loop variables from within 'func' literals in 'defer' and 'go' statements. Such variables might have unexpected values because they are not copied to 'func' literals, and the 'func' literals in 'defer' and 'go' are not executed immediately. For more information about closures and goroutines, see What happens with closures running as goroutines? at golang.org. Example: 'for _, v := range []string{\"a\", \"b\", \"c\"} {\n  go func() {\n    fmt.Println(v) // output will likely be `c c c`, not `a b c`\n  }()\n}' After the quick-fix is applied: 'for _, v := range []string{\"a\", \"b\", \"c\"} {\n  v := v // `v` is copied now\n  go func() {\n    fmt.Println(v)\n  }()\n}' Note the analyzer only checks 'defer' and 'go' statements when they are the last statement in the loop body. Otherwise, the analysis might produce false detections.",
-                  "markdown": "Reports references to loop variables from within `func` literals in `defer` and `go` statements. Such variables might have unexpected values because they are not copied to `func` literals, and the `func` literals in `defer` and `go` are not executed immediately.\n\nFor more information about closures and goroutines, see [What happens\nwith closures running as goroutines? at golang.org](https://golang.org/doc/go_faq.html#closures_and_goroutines).\n\nExample:\n\n    for _, v := range []string{\"a\", \"b\", \"c\"} {\n      go func() {\n        fmt.Println(v) // output will likely be `c c c`, not `a b c`\n      }()\n    }\n\nAfter the quick-fix is applied:\n\n    for _, v := range []string{\"a\", \"b\", \"c\"} {\n      v := v // `v` is copied now\n      go func() {\n        fmt.Println(v)\n      }()\n    }\n\nNote the analyzer only checks `defer` and `go` statements when they are the last statement in the loop body.\nOtherwise, the analysis might produce false detections."
+                  "text": "Reports assignment statements of the form 'x = atomic.AddUint64(&x, 1)'. Such operations are not atomic, and is a common misuse of the 'sync/atomic' API. To make them atomic, one need to remove the assignment to use a direct call: 'atomic.AddUint64(&x, 1)'. In that case, the value of 'x' will be updated atomically by address. Example: 'import (\n \"sync/atomic\"\n)\n\ntype Counter uint64\n\nfunc AtomicTests() {\n x := uint64(1)\n x = atomic.AddUint64(&x, 1)         // ERROR \"direct assignment to atomic value\"\n _, x = 10, atomic.AddUint64(&x, 1)  // ERROR \"direct assignment to atomic value\"\n x, _ = atomic.AddUint64(&x, 1), 10  // ERROR \"direct assignment to atomic value\"\n}'",
+                  "markdown": "Reports assignment statements of the form `x = atomic.AddUint64(&x, 1)`.\n\nSuch operations are not atomic,\nand is a common misuse of the `sync/atomic` API. To make them atomic, one need to remove the assignment\nto use a direct call: `atomic.AddUint64(&x, 1)`. In that case, the value of `x` will be updated\natomically by address.\n\nExample:\n\n    import (\n     \"sync/atomic\"\n    )\n\n    type Counter uint64\n\n    func AtomicTests() {\n     x := uint64(1)\n     x = atomic.AddUint64(&x, 1)         // ERROR \"direct assignment to atomic value\"\n     _, x = 10, atomic.AddUint64(&x, 1)  // ERROR \"direct assignment to atomic value\"\n     x, _ = atomic.AddUint64(&x, 1), 10  // ERROR \"direct assignment to atomic value\"\n    }\n"
                 },
                 "defaultConfiguration": {
                   "enabled": true,
@@ -3404,7 +3404,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -3435,7 +3435,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -3466,7 +3466,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -3738,37 +3738,6 @@
                 ]
               },
               {
-                "id": "RequiredAttributes",
-                "shortDescription": {
-                  "text": "Missing required attribute"
-                },
-                "fullDescription": {
-                  "text": "Reports a missing mandatory attribute in an XML/HTML tag. Suggests configuring attributes that should not be reported.",
-                  "markdown": "Reports a missing mandatory attribute in an XML/HTML tag. Suggests configuring attributes that should not be reported."
-                },
-                "defaultConfiguration": {
-                  "enabled": false,
-                  "level": "warning",
-                  "parameters": {
-                    "ideaSeverity": "WARNING"
-                  }
-                },
-                "relationships": [
-                  {
-                    "target": {
-                      "id": "HTML",
-                      "index": 10,
-                      "toolComponent": {
-                        "name": "QDGO"
-                      }
-                    },
-                    "kinds": [
-                      "superset"
-                    ]
-                  }
-                ]
-              },
-              {
                 "id": "DuplicatedCode",
                 "shortDescription": {
                   "text": "Duplicated code fragment"
@@ -3789,6 +3758,37 @@
                     "target": {
                       "id": "General",
                       "index": 12,
+                      "toolComponent": {
+                        "name": "QDGO"
+                      }
+                    },
+                    "kinds": [
+                      "superset"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "RequiredAttributes",
+                "shortDescription": {
+                  "text": "Missing required attribute"
+                },
+                "fullDescription": {
+                  "text": "Reports a missing mandatory attribute in an XML/HTML tag. Suggests configuring attributes that should not be reported.",
+                  "markdown": "Reports a missing mandatory attribute in an XML/HTML tag. Suggests configuring attributes that should not be reported."
+                },
+                "defaultConfiguration": {
+                  "enabled": false,
+                  "level": "warning",
+                  "parameters": {
+                    "ideaSeverity": "WARNING"
+                  }
+                },
+                "relationships": [
+                  {
+                    "target": {
+                      "id": "HTML",
+                      "index": 10,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -5257,37 +5257,6 @@
                 ]
               },
               {
-                "id": "LossyEncoding",
-                "shortDescription": {
-                  "text": "Lossy encoding"
-                },
-                "fullDescription": {
-                  "text": "Reports characters that cannot be displayed because of the current document encoding. Examples: If you type international characters in a document with the US-ASCII charset, some characters will be lost on save. If you load a UTF-8-encoded file using the ISO-8859-1 one-byte charset, some characters will be displayed incorrectly. You can fix this by changing the file encoding either by specifying the encoding directly in the file, e.g. by editing 'encoding=' attribute in the XML prolog of XML file, or by changing the corresponding options in Settings | Editor | File Encodings.",
-                  "markdown": "Reports characters that cannot be displayed because of the current document encoding.\n\nExamples:\n\n* If you type international characters in a document with the **US-ASCII** charset, some characters will be lost on save.\n* If you load a **UTF-8** -encoded file using the **ISO-8859-1** one-byte charset, some characters will be displayed incorrectly.\n\nYou can fix this by changing the file encoding\neither by specifying the encoding directly in the file, e.g. by editing `encoding=` attribute in the XML prolog of XML file,\nor by changing the corresponding options in **Settings \\| Editor \\| File Encodings**."
-                },
-                "defaultConfiguration": {
-                  "enabled": false,
-                  "level": "warning",
-                  "parameters": {
-                    "ideaSeverity": "WARNING"
-                  }
-                },
-                "relationships": [
-                  {
-                    "target": {
-                      "id": "Internationalization",
-                      "index": 25,
-                      "toolComponent": {
-                        "name": "QDGO"
-                      }
-                    },
-                    "kinds": [
-                      "superset"
-                    ]
-                  }
-                ]
-              },
-              {
                 "id": "RegExpEscapedMetaCharacter",
                 "shortDescription": {
                   "text": "Escaped meta character"
@@ -5319,13 +5288,44 @@
                 ]
               },
               {
-                "id": "RegExpDuplicateAlternationBranch",
+                "id": "LossyEncoding",
                 "shortDescription": {
-                  "text": "Duplicate branch in alternation"
+                  "text": "Lossy encoding"
                 },
                 "fullDescription": {
-                  "text": "Reports duplicate branches in a RegExp alternation. Duplicate branches slow down matching and obscure the intent of the expression. Example: '(alpha|bravo|charlie|alpha)' After the quick-fix is applied: '(alpha|bravo|charlie)' New in 2017.1",
-                  "markdown": "Reports duplicate branches in a RegExp alternation. Duplicate branches slow down matching and obscure the intent of the expression.\n\n**Example:**\n\n\n      (alpha|bravo|charlie|alpha)\n\nAfter the quick-fix is applied:\n\n\n      (alpha|bravo|charlie)\n\nNew in 2017.1"
+                  "text": "Reports characters that cannot be displayed because of the current document encoding. Examples: If you type international characters in a document with the US-ASCII charset, some characters will be lost on save. If you load a UTF-8-encoded file using the ISO-8859-1 one-byte charset, some characters will be displayed incorrectly. You can fix this by changing the file encoding either by specifying the encoding directly in the file, e.g. by editing 'encoding=' attribute in the XML prolog of XML file, or by changing the corresponding options in Settings | Editor | File Encodings.",
+                  "markdown": "Reports characters that cannot be displayed because of the current document encoding.\n\nExamples:\n\n* If you type international characters in a document with the **US-ASCII** charset, some characters will be lost on save.\n* If you load a **UTF-8** -encoded file using the **ISO-8859-1** one-byte charset, some characters will be displayed incorrectly.\n\nYou can fix this by changing the file encoding\neither by specifying the encoding directly in the file, e.g. by editing `encoding=` attribute in the XML prolog of XML file,\nor by changing the corresponding options in **Settings \\| Editor \\| File Encodings**."
+                },
+                "defaultConfiguration": {
+                  "enabled": false,
+                  "level": "warning",
+                  "parameters": {
+                    "ideaSeverity": "WARNING"
+                  }
+                },
+                "relationships": [
+                  {
+                    "target": {
+                      "id": "Internationalization",
+                      "index": 25,
+                      "toolComponent": {
+                        "name": "QDGO"
+                      }
+                    },
+                    "kinds": [
+                      "superset"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "RegExpRepeatedSpace",
+                "shortDescription": {
+                  "text": "Consecutive spaces"
+                },
+                "fullDescription": {
+                  "text": "Reports multiple consecutive spaces in a RegExp. Because spaces are not visible by default, it can be hard to see how many spaces are required. The RegExp can be made more clear by replacing the consecutive spaces with a single space and a counted quantifier. Example: '(     )' After the quick-fix is applied: '( {5})' New in 2017.1",
+                  "markdown": "Reports multiple consecutive spaces in a RegExp. Because spaces are not visible by default, it can be hard to see how many spaces are required. The RegExp can be made more clear by replacing the consecutive spaces with a single space and a counted quantifier.\n\n**Example:**\n\n\n      (     )\n\nAfter the quick-fix is applied:\n\n\n      ( {5})\n\n\nNew in 2017.1"
                 },
                 "defaultConfiguration": {
                   "enabled": true,
@@ -5350,13 +5350,13 @@
                 ]
               },
               {
-                "id": "RegExpRepeatedSpace",
+                "id": "RegExpDuplicateAlternationBranch",
                 "shortDescription": {
-                  "text": "Consecutive spaces"
+                  "text": "Duplicate branch in alternation"
                 },
                 "fullDescription": {
-                  "text": "Reports multiple consecutive spaces in a RegExp. Because spaces are not visible by default, it can be hard to see how many spaces are required. The RegExp can be made more clear by replacing the consecutive spaces with a single space and a counted quantifier. Example: '(     )' After the quick-fix is applied: '( {5})' New in 2017.1",
-                  "markdown": "Reports multiple consecutive spaces in a RegExp. Because spaces are not visible by default, it can be hard to see how many spaces are required. The RegExp can be made more clear by replacing the consecutive spaces with a single space and a counted quantifier.\n\n**Example:**\n\n\n      (     )\n\nAfter the quick-fix is applied:\n\n\n      ( {5})\n\n\nNew in 2017.1"
+                  "text": "Reports duplicate branches in a RegExp alternation. Duplicate branches slow down matching and obscure the intent of the expression. Example: '(alpha|bravo|charlie|alpha)' After the quick-fix is applied: '(alpha|bravo|charlie)' New in 2017.1",
+                  "markdown": "Reports duplicate branches in a RegExp alternation. Duplicate branches slow down matching and obscure the intent of the expression.\n\n**Example:**\n\n\n      (alpha|bravo|charlie|alpha)\n\nAfter the quick-fix is applied:\n\n\n      (alpha|bravo|charlie)\n\nNew in 2017.1"
                 },
                 "defaultConfiguration": {
                   "enabled": true,
@@ -6335,37 +6335,6 @@
                 ]
               },
               {
-                "id": "CssInvalidPseudoSelector",
-                "shortDescription": {
-                  "text": "Invalid pseudo-selector"
-                },
-                "fullDescription": {
-                  "text": "Reports an incorrect CSS pseudo-class pseudo-element.",
-                  "markdown": "Reports an incorrect CSS [pseudo-class](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes) [pseudo-element](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-elements)."
-                },
-                "defaultConfiguration": {
-                  "enabled": false,
-                  "level": "error",
-                  "parameters": {
-                    "ideaSeverity": "ERROR"
-                  }
-                },
-                "relationships": [
-                  {
-                    "target": {
-                      "id": "CSS/Invalid elements",
-                      "index": 14,
-                      "toolComponent": {
-                        "name": "QDGO"
-                      }
-                    },
-                    "kinds": [
-                      "superset"
-                    ]
-                  }
-                ]
-              },
-              {
                 "id": "CssConvertColorToHexInspection",
                 "shortDescription": {
                   "text": "Color could be replaced with #-hex"
@@ -6386,6 +6355,37 @@
                     "target": {
                       "id": "CSS",
                       "index": 9,
+                      "toolComponent": {
+                        "name": "QDGO"
+                      }
+                    },
+                    "kinds": [
+                      "superset"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "CssInvalidPseudoSelector",
+                "shortDescription": {
+                  "text": "Invalid pseudo-selector"
+                },
+                "fullDescription": {
+                  "text": "Reports an incorrect CSS pseudo-class pseudo-element.",
+                  "markdown": "Reports an incorrect CSS [pseudo-class](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes) [pseudo-element](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-elements)."
+                },
+                "defaultConfiguration": {
+                  "enabled": false,
+                  "level": "error",
+                  "parameters": {
+                    "ideaSeverity": "ERROR"
+                  }
+                },
+                "relationships": [
+                  {
+                    "target": {
+                      "id": "CSS/Invalid elements",
+                      "index": 14,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -7100,801 +7100,6 @@
           "kind": "fail",
           "level": "note",
           "message": {
-            "text": "Exported type 'CreateGuildJSON' should have a comment or be unexported",
-            "markdown": "Exported type `CreateGuildJSON` should have a comment or be unexported"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/guild_endpoints.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 51,
-                  "startColumn": 6,
-                  "charOffset": 2301,
-                  "charLength": 15,
-                  "snippet": {
-                    "text": "CreateGuildJSON"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 49,
-                  "startColumn": 1,
-                  "charOffset": 2293,
-                  "charLength": 321,
-                  "snippet": {
-                    "text": "}\n\ntype CreateGuildJSON struct {\n\tName                        string                          `json:\"name\"`                          // guild name (2-100 characters, excluding trailing and leading whitespace)\n\tIcon                        *string                         `json:\"icon\"`                          // icon hash"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "2420b205ec5628517153f2f717ce6f1b70cfd868f9998121776b65ebc6118d71"
-          },
-          "properties": {
-            "ideaSeverity": "WEAK WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoExportedElementShouldHaveComment",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Exported type 'ModifyGuildJSON' should have a comment or be unexported",
-            "markdown": "Exported type `ModifyGuildJSON` should have a comment or be unexported"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/guild_endpoints.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 117,
-                  "startColumn": 6,
-                  "charOffset": 5467,
-                  "charLength": 15,
-                  "snippet": {
-                    "text": "ModifyGuildJSON"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 115,
-                  "startColumn": 1,
-                  "charOffset": 5459,
-                  "charLength": 355,
-                  "snippet": {
-                    "text": "}\n\ntype ModifyGuildJSON struct {\n\tName                        string                           `json:\"name\"`                          // guild name (2-100 characters, excluding trailing and leading whitespace)\n\tVerificationLevel           *VerificationLevel               `json:\"verification_level\"`            // verification level required for the guild"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "449d00e01e40f8b58b0aa367699808615cead37cc9c65b014a50d6a960f8894b"
-          },
-          "properties": {
-            "ideaSeverity": "WEAK WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoExportedElementShouldHaveComment",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Exported type 'CreateGuildChannelJSON' should have a comment or be unexported",
-            "markdown": "Exported type `CreateGuildChannelJSON` should have a comment or be unexported"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/guild_endpoints.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 178,
-                  "startColumn": 6,
-                  "charOffset": 9790,
-                  "charLength": 22,
-                  "snippet": {
-                    "text": "CreateGuildChannelJSON"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 176,
-                  "startColumn": 1,
-                  "charOffset": 9782,
-                  "charLength": 282,
-                  "snippet": {
-                    "text": "}\n\ntype CreateGuildChannelJSON struct {\n\tName                       string      `json:\"name,omitempty\"`                          // the name of the channel (1-100 characters)\n\tType                       ChannelType `json:\"type\"`                                    // the ChannelType"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "0f71832dabf8f6ad09fd46cc982931506414091336f84edff6c116018ec8fd21"
-          },
-          "properties": {
-            "ideaSeverity": "WEAK WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoExportedElementShouldHaveComment",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Exported method 'CreateGuildRole' should have a comment or be unexported",
-            "markdown": "Exported method `CreateGuildRole` should have a comment or be unexported"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/guild_endpoints.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 471,
-                  "startColumn": 17,
-                  "charOffset": 23669,
-                  "charLength": 15,
-                  "snippet": {
-                    "text": "CreateGuildRole"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 469,
-                  "startColumn": 1,
-                  "charOffset": 23650,
-                  "charLength": 167,
-                  "snippet": {
-                    "text": "}\n\nfunc (g *Guild) CreateGuildRole(payload *CreateGuildRoleJSON, reason *string) ([]*Role, error) {\n\tu := parseRoute(fmt.Sprintf(createGuildRole, api, g.ID.String()))\n"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "2f957cdf59f626617fc6abc8b97ca385defd4db4b6c280de2b5ece880de7ea02"
-          },
-          "properties": {
-            "ideaSeverity": "WEAK WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoExportedElementShouldHaveComment",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Exported type 'GetGuildPruneCountResponse' should have a comment or be unexported",
-            "markdown": "Exported type `GetGuildPruneCountResponse` should have a comment or be unexported"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/guild_endpoints.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 592,
-                  "startColumn": 6,
-                  "charOffset": 27668,
-                  "charLength": 26,
-                  "snippet": {
-                    "text": "GetGuildPruneCountResponse"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 590,
-                  "startColumn": 1,
-                  "charOffset": 27660,
-                  "charLength": 77,
-                  "snippet": {
-                    "text": "}\n\ntype GetGuildPruneCountResponse struct {\n\tPruned *uint64 `json:\"pruned\"`\n}"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "e11cca41959adcac0dfeddcbf8a2ac7eca09f93436f4be23415628709e9e576f"
-          },
-          "properties": {
-            "ideaSeverity": "WEAK WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoExportedElementShouldHaveComment",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Exported type 'ModifyGroupDmJSON' should have a comment or be unexported",
-            "markdown": "Exported type `ModifyGroupDmJSON` should have a comment or be unexported"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/channel.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 442,
-                  "startColumn": 6,
-                  "charOffset": 28500,
-                  "charLength": 17,
-                  "snippet": {
-                    "text": "ModifyGroupDmJSON"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 440,
-                  "startColumn": 1,
-                  "charOffset": 28492,
-                  "charLength": 143,
-                  "snippet": {
-                    "text": "}\n\ntype ModifyGroupDmJSON struct {\n\tName string `json:\"name\"` // 1-100 character channel name\n\tIcon string `json:\"icon\"` // base64 encoded icon"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "a23abb1f799b67aae18429776e0e8be3fae931e102906df0a7b5e693fea380f2"
-          },
-          "properties": {
-            "ideaSeverity": "WEAK WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoExportedElementShouldHaveComment",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Exported method 'ModifyGuildTextChannel' should have a comment or be unexported",
-            "markdown": "Exported method `ModifyGuildTextChannel` should have a comment or be unexported"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/channel.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 447,
-                  "startColumn": 19,
-                  "charOffset": 28657,
-                  "charLength": 22,
-                  "snippet": {
-                    "text": "ModifyGuildTextChannel"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 445,
-                  "startColumn": 1,
-                  "charOffset": 28636,
-                  "charLength": 153,
-                  "snippet": {
-                    "text": "}\n\nfunc (c *Channel) ModifyGuildTextChannel(payload ModifyTextChannelJSON, reason *string) (*Channel, error) {\n\treturn c.modifyChannel(payload, reason)\n}"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "ab0718b651167c8dd17d9e49db0ddc009f655bacdcd2b4370ff4efa2c5d5189d"
-          },
-          "properties": {
-            "ideaSeverity": "WEAK WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoExportedElementShouldHaveComment",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Exported method 'ModifyGuildNewsChannel' should have a comment or be unexported",
-            "markdown": "Exported method `ModifyGuildNewsChannel` should have a comment or be unexported"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/channel.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 451,
-                  "startColumn": 19,
-                  "charOffset": 28809,
-                  "charLength": 22,
-                  "snippet": {
-                    "text": "ModifyGuildNewsChannel"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 449,
-                  "startColumn": 1,
-                  "charOffset": 28788,
-                  "charLength": 153,
-                  "snippet": {
-                    "text": "}\n\nfunc (c *Channel) ModifyGuildNewsChannel(payload ModifyNewsChannelJSON, reason *string) (*Channel, error) {\n\treturn c.modifyChannel(payload, reason)\n}"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "920e77bfeb916e419cd51c590d26cdec261934a9ae2a37bc92f6a54dc4d1c786"
-          },
-          "properties": {
-            "ideaSeverity": "WEAK WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoExportedElementShouldHaveComment",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Exported method 'ModifyThread' should have a comment or be unexported",
-            "markdown": "Exported method `ModifyThread` should have a comment or be unexported"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/channel.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 455,
-                  "startColumn": 19,
-                  "charOffset": 28961,
-                  "charLength": 12,
-                  "snippet": {
-                    "text": "ModifyThread"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 453,
-                  "startColumn": 1,
-                  "charOffset": 28940,
-                  "charLength": 138,
-                  "snippet": {
-                    "text": "}\n\nfunc (c *Channel) ModifyThread(payload ModifyThreadJSON, reason *string) (*Channel, error) {\n\treturn c.modifyChannel(payload, reason)\n}"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "b57429b138fea8a391edf4ea39e1c447a96e8951c0040bd6e99494489907cd99"
-          },
-          "properties": {
-            "ideaSeverity": "WEAK WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoExportedElementShouldHaveComment",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Exported method 'ModifyGuildVoiceChannel' should have a comment or be unexported",
-            "markdown": "Exported method `ModifyGuildVoiceChannel` should have a comment or be unexported"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/channel.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 459,
-                  "startColumn": 19,
-                  "charOffset": 29098,
-                  "charLength": 23,
-                  "snippet": {
-                    "text": "ModifyGuildVoiceChannel"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 457,
-                  "startColumn": 1,
-                  "charOffset": 29077,
-                  "charLength": 160,
-                  "snippet": {
-                    "text": "}\n\nfunc (c *Channel) ModifyGuildVoiceChannel(payload ModifyGuildVoiceChannelJSON, reason *string) (*Channel, error) {\n\treturn c.modifyChannel(payload, reason)\n}"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "e6d0bbe6cdc167d60a3064b95bd5363aed0f7999fb4f0c352501c9d8aa34edb4"
-          },
-          "properties": {
-            "ideaSeverity": "WEAK WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoExportedElementShouldHaveComment",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Exported type 'ModifyAllChannelJSON' should have a comment or be unexported",
-            "markdown": "Exported type `ModifyAllChannelJSON` should have a comment or be unexported"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/channel.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 463,
-                  "startColumn": 6,
-                  "charOffset": 29244,
-                  "charLength": 20,
-                  "snippet": {
-                    "text": "ModifyAllChannelJSON"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 461,
-                  "startColumn": 1,
-                  "charOffset": 29236,
-                  "charLength": 255,
-                  "snippet": {
-                    "text": "}\n\ntype ModifyAllChannelJSON struct {\n\tName                 string      `json:\"name\"`                  // 1-100 character channel name\n\tPosition             *int        `json:\"position\"`              // the position of the channel in the left-hand listing"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "838c6eb252d6a99e76bcececd47832c19440221b3647cef2e5cc4cab2e8e495a"
-          },
-          "properties": {
-            "ideaSeverity": "WEAK WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoExportedElementShouldHaveComment",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Exported type 'ModifyNewsChannelJSON' should have a comment or be unexported",
-            "markdown": "Exported type `ModifyNewsChannelJSON` should have a comment or be unexported"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/channel.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 469,
-                  "startColumn": 6,
-                  "charOffset": 29609,
-                  "charLength": 21,
-                  "snippet": {
-                    "text": "ModifyNewsChannelJSON"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 467,
-                  "startColumn": 1,
-                  "charOffset": 29601,
-                  "charLength": 61,
-                  "snippet": {
-                    "text": "}\n\ntype ModifyNewsChannelJSON struct {\n\tModifyAllChannelJSON\n"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "04ce4408bdd95f6a1ca46364fab16a7325ab01d9c3c47c3ee53b48ac3b5e93ad"
-          },
-          "properties": {
-            "ideaSeverity": "WEAK WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoExportedElementShouldHaveComment",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Exported type 'ModifyTextChannelJSON' should have a comment or be unexported",
-            "markdown": "Exported type `ModifyTextChannelJSON` should have a comment or be unexported"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/channel.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 479,
-                  "startColumn": 6,
-                  "charOffset": 30467,
-                  "charLength": 21,
-                  "snippet": {
-                    "text": "ModifyTextChannelJSON"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 477,
-                  "startColumn": 1,
-                  "charOffset": 30459,
-                  "charLength": 62,
-                  "snippet": {
-                    "text": "}\n\ntype ModifyTextChannelJSON struct {\n\tModifyNewsChannelJSON\n"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "4a540061fde2cd3a4fa84c1deaa5ac4160d40d2558e7d691f4c4210473840d66"
-          },
-          "properties": {
-            "ideaSeverity": "WEAK WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoExportedElementShouldHaveComment",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Exported type 'ModifyGuildVoiceChannelJSON' should have a comment or be unexported",
-            "markdown": "Exported type `ModifyGuildVoiceChannelJSON` should have a comment or be unexported"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/channel.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 485,
-                  "startColumn": 6,
-                  "charOffset": 30760,
-                  "charLength": 27,
-                  "snippet": {
-                    "text": "ModifyGuildVoiceChannelJSON"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 483,
-                  "startColumn": 1,
-                  "charOffset": 30752,
-                  "charLength": 67,
-                  "snippet": {
-                    "text": "}\n\ntype ModifyGuildVoiceChannelJSON struct {\n\tModifyAllChannelJSON\n"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "5b9d1676fa8d2541226a08b08ea3f62eaa1313d09b65de9de66e0ec76cf7f2b8"
-          },
-          "properties": {
-            "ideaSeverity": "WEAK WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoExportedElementShouldHaveComment",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Exported type 'ThreadListResponse' should have a comment or be unexported",
-            "markdown": "Exported type `ThreadListResponse` should have a comment or be unexported"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/channel.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 1271,
-                  "startColumn": 6,
-                  "charOffset": 65815,
-                  "charLength": 18,
-                  "snippet": {
-                    "text": "ThreadListResponse"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 1269,
-                  "startColumn": 1,
-                  "charOffset": 65807,
-                  "charLength": 242,
-                  "snippet": {
-                    "text": "}\n\ntype ThreadListResponse struct {\n\tThreads []Channel      `json:\"threads\"`            // the archived threads\n\tMembers []ThreadMember `json:\"members\"`            // a thread member object for each returned thread the current user has joined"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "a1b2608f4a5c42e9d3d372e36c76b0e3f11e43365be95d3ad72d412691e1c5ae"
-          },
-          "properties": {
-            "ideaSeverity": "WEAK WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoExportedElementShouldHaveComment",
-          "kind": "fail",
-          "level": "note",
-          "message": {
             "text": "Exported method 'CreateGuildTemplate' should have a comment or be unexported",
             "markdown": "Exported method `CreateGuildTemplate` should have a comment or be unexported"
           },
@@ -7995,1338 +7200,13 @@
               "go"
             ]
           }
-        },
-        {
-          "ruleId": "GoDeprecation",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'Component' is deprecated",
-            "markdown": "`Component` is deprecated"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/channel.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 138,
-                  "startColumn": 22,
-                  "charOffset": 11528,
-                  "charLength": 9,
-                  "snippet": {
-                    "text": "Component"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 136,
-                  "startColumn": 1,
-                  "charOffset": 11221,
-                  "charLength": 706,
-                  "snippet": {
-                    "text": "\tInteraction       MessageInteraction `json:\"interaction,omitempty\"`        // sent if the message is a response to an Interaction\n\tThread            Channel            `json:\"thread,omitempty\"`             // the thread that was started from this message, includes ThreadMember object\n\tComponents        []Component        `json:\"components,omitempty\"`         // sent if the message contains components like buttons, action rows, or other interactive components\n\tStickerItems      []string           `json:\"sticker_items,omitempty\"`      // sent if the message contains stickers\n\tStickers          []string           `json:\"stickers,omitempty\"`           // Deprecated: the stickers sent with the message"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "b8693c267292fa8244323c7e40083034b57091073d3a2f7f2718e15b1defb8ce"
-          },
-          "properties": {
-            "ideaSeverity": "WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoDeprecation",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'Component' is deprecated",
-            "markdown": "`Component` is deprecated"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/channel.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 645,
-                  "startColumn": 21,
-                  "charOffset": 39267,
-                  "charLength": 9,
-                  "snippet": {
-                    "text": "Component"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 643,
-                  "startColumn": 1,
-                  "charOffset": 39047,
-                  "charLength": 535,
-                  "snippet": {
-                    "text": "\tAllowedMentions  AllowedMentions  `json:\"allowed_mentions\"`  // allowed mentions for the message\n\tMessageReference MessageReference `json:\"message_reference\"` // include to make your message a reply\n\tComponents       []Component      `json:\"components\"`        // the components to include with the message\n\tStickerIDs       []Snowflake      `json:\"sticker_ids\"`       // IDs of up to 3 stickers in the server to send in the message\n\tPayloadJson      string           `json:\"payload_json\"`      // JSON encoded body of non-file params"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "fe1ee09ceae9587d1d533cc135b2f7fe3b0c953441e1fa5bfa52b958bfee8405"
-          },
-          "properties": {
-            "ideaSeverity": "WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoDeprecation",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'Component' is deprecated",
-            "markdown": "`Component` is deprecated"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/channel.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 816,
-                  "startColumn": 21,
-                  "charOffset": 46214,
-                  "charLength": 9,
-                  "snippet": {
-                    "text": "Component"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 814,
-                  "startColumn": 1,
-                  "charOffset": 46065,
-                  "charLength": 323,
-                  "snippet": {
-                    "text": "\tFlags           *int             `json:\"flags,omitempty\"`\n\tAllowedMentions *AllowedMentions `json:\"allowed_mentions,omitempty\"`\n\tComponents      []*Component     `json:\"components,omitempty\"`\n\tPayloadJson     *string          `json:\"payload_json,omitempty\"`\n\tAttachments     []*Attachment    `json:\"attachments,omitempty\"`"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "3a209c58e3a4d96494444ac8230440d6c7472874887bbceea308424214cd5125"
-          },
-          "properties": {
-            "ideaSeverity": "WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoDeprecation",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'Component' is deprecated",
-            "markdown": "`Component` is deprecated"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/channel.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 1157,
-                  "startColumn": 20,
-                  "charOffset": 61774,
-                  "charLength": 9,
-                  "snippet": {
-                    "text": "Component"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 1155,
-                  "startColumn": 1,
-                  "charOffset": 61552,
-                  "charLength": 529,
-                  "snippet": {
-                    "text": "\tEmbeds          []Embed         `json:\"embeds\"`           // embedded rich content (up to 6000 characters)\n\tAllowedMentions AllowedMentions `json:\"allowed_mentions\"` // allowed mentions for the message\n\tComponents      []Component     `json:\"components\"`       // the components to include with the message\n\tStickerIDs      []Snowflake     `json:\"sticker_ids\"`      // IDs of up to 3 stickers in the server to send in the message\n\tPayloadJson     string          `json:\"payload_json\"`     // JSON encoded body of non-file params"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "6905289edf46c48be93d8cf23095c35006a5d705effb7ef0b1d39b29aaa3577e"
-          },
-          "properties": {
-            "ideaSeverity": "WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoDeprecation",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'Component' is deprecated",
-            "markdown": "`Component` is deprecated"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/message_components_api.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 20,
-                  "startColumn": 22,
-                  "charOffset": 868,
-                  "charLength": 9,
-                  "snippet": {
-                    "text": "Component"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 18,
-                  "startColumn": 1,
-                  "charOffset": 806,
-                  "charLength": 96,
-                  "snippet": {
-                    "text": "\n// NewComponent - Build a new Component\nfunc NewComponent() *Component {\n\treturn &Component{}\n}"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "33ac76c0302b1c3986367dbca2e7bbdee3a3e720329063a6338c034e6927e3f6"
-          },
-          "properties": {
-            "ideaSeverity": "WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoDeprecation",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'Component' is deprecated",
-            "markdown": "`Component` is deprecated"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/message_components_api.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 21,
-                  "startColumn": 10,
-                  "charOffset": 889,
-                  "charLength": 9,
-                  "snippet": {
-                    "text": "Component"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 19,
-                  "startColumn": 1,
-                  "charOffset": 807,
-                  "charLength": 96,
-                  "snippet": {
-                    "text": "// NewComponent - Build a new Component\nfunc NewComponent() *Component {\n\treturn &Component{}\n}\n"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "4cca40adec6b5190fb055d049369903f1941d7922c1d3fa7d94e7659e0180b79"
-          },
-          "properties": {
-            "ideaSeverity": "WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoDeprecation",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'Component' is deprecated",
-            "markdown": "`Component` is deprecated"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/message_components_api.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 25,
-                  "startColumn": 10,
-                  "charOffset": 950,
-                  "charLength": 9,
-                  "snippet": {
-                    "text": "Component"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 23,
-                  "startColumn": 1,
-                  "charOffset": 903,
-                  "charLength": 108,
-                  "snippet": {
-                    "text": "\n// SetType - sets the Component type\nfunc (c *Component) SetType(t ComponentType) *Component {\n\tc.Type = t\n"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "f199d2ffdf9f7dbdf709f9591fa855b708002190ed60695922a6b112d495b3cc"
-          },
-          "properties": {
-            "ideaSeverity": "WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoDeprecation",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'Component' is deprecated",
-            "markdown": "`Component` is deprecated"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/message_components_api.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 25,
-                  "startColumn": 47,
-                  "charOffset": 987,
-                  "charLength": 9,
-                  "snippet": {
-                    "text": "Component"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 23,
-                  "startColumn": 1,
-                  "charOffset": 903,
-                  "charLength": 108,
-                  "snippet": {
-                    "text": "\n// SetType - sets the Component type\nfunc (c *Component) SetType(t ComponentType) *Component {\n\tc.Type = t\n"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "d0c11f9e11cfd846d50142bf720b0ea292e5c893be7429e225ab3c27ab87b29d"
-          },
-          "properties": {
-            "ideaSeverity": "WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoDeprecation",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'Component' is deprecated",
-            "markdown": "`Component` is deprecated"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/message_components_api.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 32,
-                  "startColumn": 10,
-                  "charOffset": 1086,
-                  "charLength": 9,
-                  "snippet": {
-                    "text": "Component"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 30,
-                  "startColumn": 1,
-                  "charOffset": 1024,
-                  "charLength": 124,
-                  "snippet": {
-                    "text": "\n// SetCustomID - sets the CustomID of the component\nfunc (c *Component) SetCustomID(t string) *Component {\n\tc.CustomID = t\n"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "dda4e25d97fd49535ecc42d01cbca799ebc458fe1e40f5c5218762a2be62ad6b"
-          },
-          "properties": {
-            "ideaSeverity": "WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoDeprecation",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'Component' is deprecated",
-            "markdown": "`Component` is deprecated"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/message_components_api.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 32,
-                  "startColumn": 44,
-                  "charOffset": 1120,
-                  "charLength": 9,
-                  "snippet": {
-                    "text": "Component"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 30,
-                  "startColumn": 1,
-                  "charOffset": 1024,
-                  "charLength": 124,
-                  "snippet": {
-                    "text": "\n// SetCustomID - sets the CustomID of the component\nfunc (c *Component) SetCustomID(t string) *Component {\n\tc.CustomID = t\n"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "cfd57f436ded7d1d952f5725f158f105287aeb6846d54bdb09361aaf928afd4f"
-          },
-          "properties": {
-            "ideaSeverity": "WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoDeprecation",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'Component' is deprecated",
-            "markdown": "`Component` is deprecated"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/message_components_api.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 39,
-                  "startColumn": 10,
-                  "charOffset": 1213,
-                  "charLength": 9,
-                  "snippet": {
-                    "text": "Component"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 37,
-                  "startColumn": 1,
-                  "charOffset": 1161,
-                  "charLength": 103,
-                  "snippet": {
-                    "text": "\n// IsDisabled - is the Component disabled\nfunc (c *Component) IsDisabled() bool {\n\treturn c.Disabled\n}"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "595588552a553d5ce36c7e27f840a321e9b774e8b9f565d8d9f423d77fa60271"
-          },
-          "properties": {
-            "ideaSeverity": "WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoDeprecation",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'Component' is deprecated",
-            "markdown": "`Component` is deprecated"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/message_components_api.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 44,
-                  "startColumn": 10,
-                  "charOffset": 1333,
-                  "charLength": 9,
-                  "snippet": {
-                    "text": "Component"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 42,
-                  "startColumn": 1,
-                  "charOffset": 1265,
-                  "charLength": 128,
-                  "snippet": {
-                    "text": "\n// SetDisabled - sets the Disabled state of the Component\nfunc (c *Component) SetDisabled(d bool) *Component {\n\tc.Disabled = d\n"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "299966cae1fc610e88bfd9e8df87ac28c2b53834a3e4ca242f83fb88e3c3ae4d"
-          },
-          "properties": {
-            "ideaSeverity": "WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoDeprecation",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'Component' is deprecated",
-            "markdown": "`Component` is deprecated"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/message_components_api.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 44,
-                  "startColumn": 42,
-                  "charOffset": 1365,
-                  "charLength": 9,
-                  "snippet": {
-                    "text": "Component"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 42,
-                  "startColumn": 1,
-                  "charOffset": 1265,
-                  "charLength": 128,
-                  "snippet": {
-                    "text": "\n// SetDisabled - sets the Disabled state of the Component\nfunc (c *Component) SetDisabled(d bool) *Component {\n\tc.Disabled = d\n"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "8583ec9b9bdaab8e0ca03fdedd5324c484829d62be4c4266853808632610d25a"
-          },
-          "properties": {
-            "ideaSeverity": "WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoDeprecation",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'Component' is deprecated",
-            "markdown": "`Component` is deprecated"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/message_components_api.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 51,
-                  "startColumn": 10,
-                  "charOffset": 1465,
-                  "charLength": 9,
-                  "snippet": {
-                    "text": "Component"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 49,
-                  "startColumn": 1,
-                  "charOffset": 1406,
-                  "charLength": 126,
-                  "snippet": {
-                    "text": "\n// SetButtonStyle - sets the style of the Button\nfunc (c *Component) SetButtonStyle(s ButtonStyle) *Component {\n\tc.Style = s\n"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "48e8ea97d7f09c72f91eb65a88baee7e193f2ab6e0551ee39786df6db8284344"
-          },
-          "properties": {
-            "ideaSeverity": "WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoDeprecation",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'Component' is deprecated",
-            "markdown": "`Component` is deprecated"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/message_components_api.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 51,
-                  "startColumn": 52,
-                  "charOffset": 1507,
-                  "charLength": 9,
-                  "snippet": {
-                    "text": "Component"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 49,
-                  "startColumn": 1,
-                  "charOffset": 1406,
-                  "charLength": 126,
-                  "snippet": {
-                    "text": "\n// SetButtonStyle - sets the style of the Button\nfunc (c *Component) SetButtonStyle(s ButtonStyle) *Component {\n\tc.Style = s\n"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "10a29fd5ffa092664a859afbc480acb3a79f2889f8c3fc0be1b0f7628afe85df"
-          },
-          "properties": {
-            "ideaSeverity": "WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoDeprecation",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'Component' is deprecated",
-            "markdown": "`Component` is deprecated"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/message_components_api.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 58,
-                  "startColumn": 10,
-                  "charOffset": 1610,
-                  "charLength": 9,
-                  "snippet": {
-                    "text": "Component"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 56,
-                  "startColumn": 1,
-                  "charOffset": 1545,
-                  "charLength": 138,
-                  "snippet": {
-                    "text": "\n// SetTextInputStyle - sets the style of the TextInput\nfunc (c *Component) SetTextInputStyle(s TextInputStyle) *Component {\n\tc.Style = s\n"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "a4477453b36ff513ab95ca82d4a76f24e4be5a5494a942340a0b9ffdbff457c7"
-          },
-          "properties": {
-            "ideaSeverity": "WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoDeprecation",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'Component' is deprecated",
-            "markdown": "`Component` is deprecated"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/message_components_api.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 58,
-                  "startColumn": 58,
-                  "charOffset": 1658,
-                  "charLength": 9,
-                  "snippet": {
-                    "text": "Component"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 56,
-                  "startColumn": 1,
-                  "charOffset": 1545,
-                  "charLength": 138,
-                  "snippet": {
-                    "text": "\n// SetTextInputStyle - sets the style of the TextInput\nfunc (c *Component) SetTextInputStyle(s TextInputStyle) *Component {\n\tc.Style = s\n"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "d19f89fae2e31ff029d903ccbf355b3a9ae8d6c94e1b1e6cb43e1f6310518627"
-          },
-          "properties": {
-            "ideaSeverity": "WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoDeprecation",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'Component' is deprecated",
-            "markdown": "`Component` is deprecated"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/message_components_api.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 65,
-                  "startColumn": 10,
-                  "charOffset": 1750,
-                  "charLength": 9,
-                  "snippet": {
-                    "text": "Component"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 63,
-                  "startColumn": 1,
-                  "charOffset": 1696,
-                  "charLength": 110,
-                  "snippet": {
-                    "text": "\n// SetEmoji - sets the Emoji for the Button\nfunc (c *Component) SetEmoji(e *Emoji) *Component {\n\tc.Emoji = e\n"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "49f4aad32c97b54ee39fd9beaa1c9f5ffb8e257b507402788d42d156d14a84ea"
-          },
-          "properties": {
-            "ideaSeverity": "WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoDeprecation",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'Component' is deprecated",
-            "markdown": "`Component` is deprecated"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/message_components_api.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 65,
-                  "startColumn": 41,
-                  "charOffset": 1781,
-                  "charLength": 9,
-                  "snippet": {
-                    "text": "Component"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 63,
-                  "startColumn": 1,
-                  "charOffset": 1696,
-                  "charLength": 110,
-                  "snippet": {
-                    "text": "\n// SetEmoji - sets the Emoji for the Button\nfunc (c *Component) SetEmoji(e *Emoji) *Component {\n\tc.Emoji = e\n"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "5e9ea216ae4b1954946ddfa39c56b408434c855f9e142685545995cb3e9ad0c8"
-          },
-          "properties": {
-            "ideaSeverity": "WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoDeprecation",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'Component' is deprecated",
-            "markdown": "`Component` is deprecated"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/message_components_api.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 72,
-                  "startColumn": 10,
-                  "charOffset": 1869,
-                  "charLength": 9,
-                  "snippet": {
-                    "text": "Component"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 70,
-                  "startColumn": 1,
-                  "charOffset": 1819,
-                  "charLength": 102,
-                  "snippet": {
-                    "text": "\n// SetURL - sets the URL for the Button\nfunc (c *Component) SetURL(u string) *Component {\n\tc.URL = u\n"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "8a62729ec8bf9c9ec6a6bc152e0f965a2be49ac30cc9eaf0217b8356abe4249e"
-          },
-          "properties": {
-            "ideaSeverity": "WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoDeprecation",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'Component' is deprecated",
-            "markdown": "`Component` is deprecated"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/message_components_api.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 72,
-                  "startColumn": 39,
-                  "charOffset": 1898,
-                  "charLength": 9,
-                  "snippet": {
-                    "text": "Component"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 70,
-                  "startColumn": 1,
-                  "charOffset": 1819,
-                  "charLength": 102,
-                  "snippet": {
-                    "text": "\n// SetURL - sets the URL for the Button\nfunc (c *Component) SetURL(u string) *Component {\n\tc.URL = u\n"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "adb9efa82d9d0737187468802480548c6d92fedbd4d692dfa633819e14930c5d"
-          },
-          "properties": {
-            "ideaSeverity": "WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoDeprecation",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'Component' is deprecated",
-            "markdown": "`Component` is deprecated"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/message_components_api.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 103,
-                  "startColumn": 52,
-                  "charOffset": 2699,
-                  "charLength": 9,
-                  "snippet": {
-                    "text": "Component"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 101,
-                  "startColumn": 1,
-                  "charOffset": 2573,
-                  "charLength": 216,
-                  "snippet": {
-                    "text": "\n// AddComponent - adds a single Component to the InteractionResponseModal\nfunc (i *InteractionResponseModal) AddComponent(c *Component) *InteractionResponseModal {\n\ti.Data.Components = append(i.Data.Components, *c)\n"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "065502b8a8f8020d9f44d37e5af8fb11414a45987d546f0e3a276dbe64ca8055"
-          },
-          "properties": {
-            "ideaSeverity": "WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoDeprecation",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'Component' is deprecated",
-            "markdown": "`Component` is deprecated"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/message_components_api.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 172,
-                  "startColumn": 55,
-                  "charOffset": 4618,
-                  "charLength": 9,
-                  "snippet": {
-                    "text": "Component"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 170,
-                  "startColumn": 1,
-                  "charOffset": 4497,
-                  "charLength": 214,
-                  "snippet": {
-                    "text": "\n// AddComponent - adds a single Component to the response message\nfunc (i *InteractionResponseMessages) AddComponent(c *Component) *InteractionResponseMessages {\n\ti.Data.Components = append(i.Data.Components, *c)\n"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "0c3866457006dadea87580796e2798e13086db268c38a3cf987f5b0924675bcb"
-          },
-          "properties": {
-            "ideaSeverity": "WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoDeprecation",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'Component' is deprecated",
-            "markdown": "`Component` is deprecated"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/webhook_endpoints.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 213,
-                  "startColumn": 20,
-                  "charOffset": 7421,
-                  "charLength": 9,
-                  "snippet": {
-                    "text": "Component"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 211,
-                  "startColumn": 1,
-                  "charOffset": 7144,
-                  "charLength": 678,
-                  "snippet": {
-                    "text": "\tEmbeds          []Embed         `json:\"embeds\"`                     // embedded rich content; Required - one of content, file, embeds\n\tAllowedMentions AllowedMentions `json:\"allowed_mentions,omitempty\"` // allowed mentions for the message; Required - false\n\tComponents      []Component     `json:\"components,omitempty\"`       // the components to include with the message - Required - false\n\tPayloadJson     string          `json:\"payload_json\"`               // JSON encoded body of non-file params; Required - \"multipart/form-data\" only\n\tAttachments     []Attachment    `json:\"attachments,omitempty\"`      // Attachment objects with filename and description; Required - false"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "fdd0e6dcc1d68c6b420f7a8e2ecbfc1bae9024668d5a679059d53276f832d738"
-          },
-          "properties": {
-            "ideaSeverity": "WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoDeprecation",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'Component' is deprecated",
-            "markdown": "`Component` is deprecated"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/webhook_endpoints.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 280,
-                  "startColumn": 21,
-                  "charOffset": 10830,
-                  "charLength": 9,
-                  "snippet": {
-                    "text": "Component"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 278,
-                  "startColumn": 1,
-                  "charOffset": 10609,
-                  "charLength": 589,
-                  "snippet": {
-                    "text": "\tEmbeds          []*Embed         `json:\"embeds,omitempty\"`           // embedded rich content\n\tAllowedMentions *AllowedMentions `json:\"allowed_mentions,omitempty\"` // allowed mentions for the message\n\tComponents      []*Component     `json:\"components,omitempty\"`       // the components to include with the message\n\tPayloadJson     *string          `json:\"payload_json,omitempty\"`     // JSON encoded body of non-file params (multipart/form-data only)\n\tAttachments     []*Attachment    `json:\"attachments,omitempty\"`      // attached files to keep and possible descriptions for new files"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "04ce42b498ca771975e87c5f3e1e19dd177721e299bd7bd480bcb4d6b1cd9c19"
-          },
-          "properties": {
-            "ideaSeverity": "WARNING",
-            "tags": [
-              "go"
-            ]
-          }
         }
       ],
       "automationDetails": {
         "id": "project/qodana/2022-12-11",
-        "guid": "1e0adb45-aae5-4e60-8bf7-5b8171e640dc",
+        "guid": "4ea02be9-3109-4939-a319-98481988139a",
         "properties": {
-          "jobUrl": "https://github.com/veteran-software/discord-api-wrapper/actions/runs/3669978260"
+          "jobUrl": "https://github.com/veteran-software/discord-api-wrapper/actions/runs/3670005865"
         }
       },
       "newlineSequences": [
