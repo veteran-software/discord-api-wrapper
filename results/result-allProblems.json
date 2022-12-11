@@ -6,6 +6,533 @@
     "go"
   ],
   "severity": "Moderate",
+  "comment": "Exported type 'ModifyGroupDmJSON' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel.go",
+      "language": "go",
+      "line": 442,
+      "offset": 6,
+      "length": 17,
+      "code": {
+        "startLine": 440,
+        "length": 17,
+        "offset": 8,
+        "surroundingCode": "}\n\ntype ModifyGroupDmJSON struct {\n\tName string `json:\"name\"` // 1-100 character channel name\n\tIcon string `json:\"icon\"` // base64 encoded icon"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "a23abb1f799b67aae18429776e0e8be3fae931e102906df0a7b5e693fea380f2"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported method 'ModifyGuildTextChannel' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel.go",
+      "language": "go",
+      "line": 447,
+      "offset": 19,
+      "length": 22,
+      "code": {
+        "startLine": 445,
+        "length": 22,
+        "offset": 21,
+        "surroundingCode": "}\n\nfunc (c *Channel) ModifyGuildTextChannel(payload ModifyTextChannelJSON, reason *string) (*Channel, error) {\n\treturn c.modifyChannel(payload, reason)\n}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "ab0718b651167c8dd17d9e49db0ddc009f655bacdcd2b4370ff4efa2c5d5189d"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported method 'ModifyGuildNewsChannel' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel.go",
+      "language": "go",
+      "line": 451,
+      "offset": 19,
+      "length": 22,
+      "code": {
+        "startLine": 449,
+        "length": 22,
+        "offset": 21,
+        "surroundingCode": "}\n\nfunc (c *Channel) ModifyGuildNewsChannel(payload ModifyNewsChannelJSON, reason *string) (*Channel, error) {\n\treturn c.modifyChannel(payload, reason)\n}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "920e77bfeb916e419cd51c590d26cdec261934a9ae2a37bc92f6a54dc4d1c786"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported method 'ModifyThread' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel.go",
+      "language": "go",
+      "line": 455,
+      "offset": 19,
+      "length": 12,
+      "code": {
+        "startLine": 453,
+        "length": 12,
+        "offset": 21,
+        "surroundingCode": "}\n\nfunc (c *Channel) ModifyThread(payload ModifyThreadJSON, reason *string) (*Channel, error) {\n\treturn c.modifyChannel(payload, reason)\n}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "b57429b138fea8a391edf4ea39e1c447a96e8951c0040bd6e99494489907cd99"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported method 'ModifyGuildVoiceChannel' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel.go",
+      "language": "go",
+      "line": 459,
+      "offset": 19,
+      "length": 23,
+      "code": {
+        "startLine": 457,
+        "length": 23,
+        "offset": 21,
+        "surroundingCode": "}\n\nfunc (c *Channel) ModifyGuildVoiceChannel(payload ModifyGuildVoiceChannelJSON, reason *string) (*Channel, error) {\n\treturn c.modifyChannel(payload, reason)\n}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "e6d0bbe6cdc167d60a3064b95bd5363aed0f7999fb4f0c352501c9d8aa34edb4"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported type 'ModifyAllChannelJSON' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel.go",
+      "language": "go",
+      "line": 463,
+      "offset": 6,
+      "length": 20,
+      "code": {
+        "startLine": 461,
+        "length": 20,
+        "offset": 8,
+        "surroundingCode": "}\n\ntype ModifyAllChannelJSON struct {\n\tName                 string      `json:\"name\"`                  // 1-100 character channel name\n\tPosition             *int        `json:\"position\"`              // the position of the channel in the left-hand listing"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "838c6eb252d6a99e76bcececd47832c19440221b3647cef2e5cc4cab2e8e495a"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported type 'ModifyNewsChannelJSON' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel.go",
+      "language": "go",
+      "line": 469,
+      "offset": 6,
+      "length": 21,
+      "code": {
+        "startLine": 467,
+        "length": 21,
+        "offset": 8,
+        "surroundingCode": "}\n\ntype ModifyNewsChannelJSON struct {\n\tModifyAllChannelJSON\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "04ce4408bdd95f6a1ca46364fab16a7325ab01d9c3c47c3ee53b48ac3b5e93ad"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported type 'ModifyTextChannelJSON' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel.go",
+      "language": "go",
+      "line": 479,
+      "offset": 6,
+      "length": 21,
+      "code": {
+        "startLine": 477,
+        "length": 21,
+        "offset": 8,
+        "surroundingCode": "}\n\ntype ModifyTextChannelJSON struct {\n\tModifyNewsChannelJSON\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "4a540061fde2cd3a4fa84c1deaa5ac4160d40d2558e7d691f4c4210473840d66"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported type 'ModifyGuildVoiceChannelJSON' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel.go",
+      "language": "go",
+      "line": 485,
+      "offset": 6,
+      "length": 27,
+      "code": {
+        "startLine": 483,
+        "length": 27,
+        "offset": 8,
+        "surroundingCode": "}\n\ntype ModifyGuildVoiceChannelJSON struct {\n\tModifyAllChannelJSON\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "5b9d1676fa8d2541226a08b08ea3f62eaa1313d09b65de9de66e0ec76cf7f2b8"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported type 'ThreadListResponse' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel.go",
+      "language": "go",
+      "line": 1271,
+      "offset": 6,
+      "length": 18,
+      "code": {
+        "startLine": 1269,
+        "length": 18,
+        "offset": 8,
+        "surroundingCode": "}\n\ntype ThreadListResponse struct {\n\tThreads []Channel      `json:\"threads\"`            // the archived threads\n\tMembers []ThreadMember `json:\"members\"`            // a thread member object for each returned thread the current user has joined"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "a1b2608f4a5c42e9d3d372e36c76b0e3f11e43365be95d3ad72d412691e1c5ae"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported type 'MessageComponentData' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/interactions.go",
+      "language": "go",
+      "line": 75,
+      "offset": 6,
+      "length": 20,
+      "code": {
+        "startLine": 73,
+        "length": 20,
+        "offset": 8,
+        "surroundingCode": "}\n\ntype MessageComponentData struct {\n\tCustomID      string        `json:\"custom_id\"`      // the custom_id of the component\n\tComponentType ComponentType `json:\"component_type\"` // the type of the component"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "49579eb488d05c1fd0dca86ed511b83370635699a7137cb2f2f9676d70107271"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported type 'ModalSubmitData' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/interactions.go",
+      "language": "go",
+      "line": 81,
+      "offset": 6,
+      "length": 15,
+      "code": {
+        "startLine": 79,
+        "length": 15,
+        "offset": 8,
+        "surroundingCode": "}\n\ntype ModalSubmitData struct {\n\tCustomID   string      `json:\"custom_id\"`  // the custom_id of the modal\n\tComponents []Component `json:\"components\"` // the values submitted by the user"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "074cae396b594bc1a4e2cf8259645b08df76e14cb83f9d23cdff70d965a89659"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported type 'CreateGuildJSON' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild_endpoints.go",
+      "language": "go",
+      "line": 51,
+      "offset": 6,
+      "length": 15,
+      "code": {
+        "startLine": 49,
+        "length": 15,
+        "offset": 8,
+        "surroundingCode": "}\n\ntype CreateGuildJSON struct {\n\tName                        string                          `json:\"name\"`                          // guild name (2-100 characters, excluding trailing and leading whitespace)\n\tIcon                        *string                         `json:\"icon\"`                          // icon hash"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "2420b205ec5628517153f2f717ce6f1b70cfd868f9998121776b65ebc6118d71"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported type 'ModifyGuildJSON' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild_endpoints.go",
+      "language": "go",
+      "line": 117,
+      "offset": 6,
+      "length": 15,
+      "code": {
+        "startLine": 115,
+        "length": 15,
+        "offset": 8,
+        "surroundingCode": "}\n\ntype ModifyGuildJSON struct {\n\tName                        string                           `json:\"name\"`                          // guild name (2-100 characters, excluding trailing and leading whitespace)\n\tVerificationLevel           *VerificationLevel               `json:\"verification_level\"`            // verification level required for the guild"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "449d00e01e40f8b58b0aa367699808615cead37cc9c65b014a50d6a960f8894b"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported type 'CreateGuildChannelJSON' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild_endpoints.go",
+      "language": "go",
+      "line": 178,
+      "offset": 6,
+      "length": 22,
+      "code": {
+        "startLine": 176,
+        "length": 22,
+        "offset": 8,
+        "surroundingCode": "}\n\ntype CreateGuildChannelJSON struct {\n\tName                       string      `json:\"name,omitempty\"`                          // the name of the channel (1-100 characters)\n\tType                       ChannelType `json:\"type\"`                                    // the ChannelType"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "0f71832dabf8f6ad09fd46cc982931506414091336f84edff6c116018ec8fd21"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported method 'CreateGuildRole' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild_endpoints.go",
+      "language": "go",
+      "line": 471,
+      "offset": 17,
+      "length": 15,
+      "code": {
+        "startLine": 469,
+        "length": 15,
+        "offset": 19,
+        "surroundingCode": "}\n\nfunc (g *Guild) CreateGuildRole(payload *CreateGuildRoleJSON, reason *string) ([]*Role, error) {\n\tu := parseRoute(fmt.Sprintf(createGuildRole, api, g.ID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "2f957cdf59f626617fc6abc8b97ca385defd4db4b6c280de2b5ece880de7ea02"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported type 'GetGuildPruneCountResponse' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/guild_endpoints.go",
+      "language": "go",
+      "line": 592,
+      "offset": 6,
+      "length": 26,
+      "code": {
+        "startLine": 590,
+        "length": 26,
+        "offset": 8,
+        "surroundingCode": "}\n\ntype GetGuildPruneCountResponse struct {\n\tPruned *uint64 `json:\"pruned\"`\n}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "e11cca41959adcac0dfeddcbf8a2ac7eca09f93436f4be23415628709e9e576f"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
   "comment": "Exported method 'CreateGuildTemplate' should have a comment or be unexported",
   "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
   "sources": [
@@ -60,4 +587,2236 @@
     "inspectionName": "GoExportedElementShouldHaveComment"
   },
   "hash": "51458d79bee3698bbf74b56fafdee376bd6657255a5ca6391367716d97665941"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api.go",
+      "language": "go",
+      "line": 20,
+      "offset": 22,
+      "length": 9,
+      "code": {
+        "startLine": 18,
+        "length": 9,
+        "offset": 62,
+        "surroundingCode": "\n// NewComponent - Build a new Component\nfunc NewComponent() *Component {\n\treturn &Component{}\n}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "33ac76c0302b1c3986367dbca2e7bbdee3a3e720329063a6338c034e6927e3f6"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api.go",
+      "language": "go",
+      "line": 21,
+      "offset": 10,
+      "length": 9,
+      "code": {
+        "startLine": 19,
+        "length": 9,
+        "offset": 82,
+        "surroundingCode": "// NewComponent - Build a new Component\nfunc NewComponent() *Component {\n\treturn &Component{}\n}\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "4cca40adec6b5190fb055d049369903f1941d7922c1d3fa7d94e7659e0180b79"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api.go",
+      "language": "go",
+      "line": 25,
+      "offset": 10,
+      "length": 9,
+      "code": {
+        "startLine": 23,
+        "length": 9,
+        "offset": 47,
+        "surroundingCode": "\n// SetType - sets the Component type\nfunc (c *Component) SetType(t ComponentType) *Component {\n\tc.Type = t\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "f199d2ffdf9f7dbdf709f9591fa855b708002190ed60695922a6b112d495b3cc"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api.go",
+      "language": "go",
+      "line": 25,
+      "offset": 47,
+      "length": 9,
+      "code": {
+        "startLine": 23,
+        "length": 9,
+        "offset": 84,
+        "surroundingCode": "\n// SetType - sets the Component type\nfunc (c *Component) SetType(t ComponentType) *Component {\n\tc.Type = t\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "d0c11f9e11cfd846d50142bf720b0ea292e5c893be7429e225ab3c27ab87b29d"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api.go",
+      "language": "go",
+      "line": 32,
+      "offset": 10,
+      "length": 9,
+      "code": {
+        "startLine": 30,
+        "length": 9,
+        "offset": 62,
+        "surroundingCode": "\n// SetCustomID - sets the CustomID of the component\nfunc (c *Component) SetCustomID(t string) *Component {\n\tc.CustomID = t\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "dda4e25d97fd49535ecc42d01cbca799ebc458fe1e40f5c5218762a2be62ad6b"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api.go",
+      "language": "go",
+      "line": 32,
+      "offset": 44,
+      "length": 9,
+      "code": {
+        "startLine": 30,
+        "length": 9,
+        "offset": 96,
+        "surroundingCode": "\n// SetCustomID - sets the CustomID of the component\nfunc (c *Component) SetCustomID(t string) *Component {\n\tc.CustomID = t\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "cfd57f436ded7d1d952f5725f158f105287aeb6846d54bdb09361aaf928afd4f"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api.go",
+      "language": "go",
+      "line": 39,
+      "offset": 10,
+      "length": 9,
+      "code": {
+        "startLine": 37,
+        "length": 9,
+        "offset": 52,
+        "surroundingCode": "\n// IsDisabled - is the Component disabled\nfunc (c *Component) IsDisabled() bool {\n\treturn c.Disabled\n}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "595588552a553d5ce36c7e27f840a321e9b774e8b9f565d8d9f423d77fa60271"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api.go",
+      "language": "go",
+      "line": 44,
+      "offset": 10,
+      "length": 9,
+      "code": {
+        "startLine": 42,
+        "length": 9,
+        "offset": 68,
+        "surroundingCode": "\n// SetDisabled - sets the Disabled state of the Component\nfunc (c *Component) SetDisabled(d bool) *Component {\n\tc.Disabled = d\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "299966cae1fc610e88bfd9e8df87ac28c2b53834a3e4ca242f83fb88e3c3ae4d"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api.go",
+      "language": "go",
+      "line": 44,
+      "offset": 42,
+      "length": 9,
+      "code": {
+        "startLine": 42,
+        "length": 9,
+        "offset": 100,
+        "surroundingCode": "\n// SetDisabled - sets the Disabled state of the Component\nfunc (c *Component) SetDisabled(d bool) *Component {\n\tc.Disabled = d\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "8583ec9b9bdaab8e0ca03fdedd5324c484829d62be4c4266853808632610d25a"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api.go",
+      "language": "go",
+      "line": 51,
+      "offset": 10,
+      "length": 9,
+      "code": {
+        "startLine": 49,
+        "length": 9,
+        "offset": 59,
+        "surroundingCode": "\n// SetButtonStyle - sets the style of the Button\nfunc (c *Component) SetButtonStyle(s ButtonStyle) *Component {\n\tc.Style = s\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "48e8ea97d7f09c72f91eb65a88baee7e193f2ab6e0551ee39786df6db8284344"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api.go",
+      "language": "go",
+      "line": 51,
+      "offset": 52,
+      "length": 9,
+      "code": {
+        "startLine": 49,
+        "length": 9,
+        "offset": 101,
+        "surroundingCode": "\n// SetButtonStyle - sets the style of the Button\nfunc (c *Component) SetButtonStyle(s ButtonStyle) *Component {\n\tc.Style = s\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "10a29fd5ffa092664a859afbc480acb3a79f2889f8c3fc0be1b0f7628afe85df"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api.go",
+      "language": "go",
+      "line": 58,
+      "offset": 10,
+      "length": 9,
+      "code": {
+        "startLine": 56,
+        "length": 9,
+        "offset": 65,
+        "surroundingCode": "\n// SetTextInputStyle - sets the style of the TextInput\nfunc (c *Component) SetTextInputStyle(s TextInputStyle) *Component {\n\tc.Style = s\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "a4477453b36ff513ab95ca82d4a76f24e4be5a5494a942340a0b9ffdbff457c7"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api.go",
+      "language": "go",
+      "line": 58,
+      "offset": 58,
+      "length": 9,
+      "code": {
+        "startLine": 56,
+        "length": 9,
+        "offset": 113,
+        "surroundingCode": "\n// SetTextInputStyle - sets the style of the TextInput\nfunc (c *Component) SetTextInputStyle(s TextInputStyle) *Component {\n\tc.Style = s\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "d19f89fae2e31ff029d903ccbf355b3a9ae8d6c94e1b1e6cb43e1f6310518627"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api.go",
+      "language": "go",
+      "line": 65,
+      "offset": 10,
+      "length": 9,
+      "code": {
+        "startLine": 63,
+        "length": 9,
+        "offset": 54,
+        "surroundingCode": "\n// SetEmoji - sets the Emoji for the Button\nfunc (c *Component) SetEmoji(e *Emoji) *Component {\n\tc.Emoji = e\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "49f4aad32c97b54ee39fd9beaa1c9f5ffb8e257b507402788d42d156d14a84ea"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api.go",
+      "language": "go",
+      "line": 65,
+      "offset": 41,
+      "length": 9,
+      "code": {
+        "startLine": 63,
+        "length": 9,
+        "offset": 85,
+        "surroundingCode": "\n// SetEmoji - sets the Emoji for the Button\nfunc (c *Component) SetEmoji(e *Emoji) *Component {\n\tc.Emoji = e\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "5e9ea216ae4b1954946ddfa39c56b408434c855f9e142685545995cb3e9ad0c8"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api.go",
+      "language": "go",
+      "line": 72,
+      "offset": 10,
+      "length": 9,
+      "code": {
+        "startLine": 70,
+        "length": 9,
+        "offset": 50,
+        "surroundingCode": "\n// SetURL - sets the URL for the Button\nfunc (c *Component) SetURL(u string) *Component {\n\tc.URL = u\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "8a62729ec8bf9c9ec6a6bc152e0f965a2be49ac30cc9eaf0217b8356abe4249e"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api.go",
+      "language": "go",
+      "line": 72,
+      "offset": 39,
+      "length": 9,
+      "code": {
+        "startLine": 70,
+        "length": 9,
+        "offset": 79,
+        "surroundingCode": "\n// SetURL - sets the URL for the Button\nfunc (c *Component) SetURL(u string) *Component {\n\tc.URL = u\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "adb9efa82d9d0737187468802480548c6d92fedbd4d692dfa633819e14930c5d"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api.go",
+      "language": "go",
+      "line": 103,
+      "offset": 52,
+      "length": 9,
+      "code": {
+        "startLine": 101,
+        "length": 9,
+        "offset": 126,
+        "surroundingCode": "\n// AddComponent - adds a single Component to the InteractionResponseModal\nfunc (i *InteractionResponseModal) AddComponent(c *Component) *InteractionResponseModal {\n\ti.Data.Components = append(i.Data.Components, *c)\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "065502b8a8f8020d9f44d37e5af8fb11414a45987d546f0e3a276dbe64ca8055"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api.go",
+      "language": "go",
+      "line": 172,
+      "offset": 55,
+      "length": 9,
+      "code": {
+        "startLine": 170,
+        "length": 9,
+        "offset": 121,
+        "surroundingCode": "\n// AddComponent - adds a single Component to the response message\nfunc (i *InteractionResponseMessages) AddComponent(c *Component) *InteractionResponseMessages {\n\ti.Data.Components = append(i.Data.Components, *c)\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "b2bb82f7cdaf64c5ee1253eba9dbbaf99a48f2b377823fc5e86279f15572733a"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel.go",
+      "language": "go",
+      "line": 138,
+      "offset": 22,
+      "length": 9,
+      "code": {
+        "startLine": 136,
+        "length": 9,
+        "offset": 307,
+        "surroundingCode": "\tInteraction       MessageInteraction `json:\"interaction,omitempty\"`        // sent if the message is a response to an Interaction\n\tThread            Channel            `json:\"thread,omitempty\"`             // the thread that was started from this message, includes ThreadMember object\n\tComponents        []Component        `json:\"components,omitempty\"`         // sent if the message contains components like buttons, action rows, or other interactive components\n\tStickerItems      []string           `json:\"sticker_items,omitempty\"`      // sent if the message contains stickers\n\tStickers          []string           `json:\"stickers,omitempty\"`           // Deprecated: the stickers sent with the message"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "b8693c267292fa8244323c7e40083034b57091073d3a2f7f2718e15b1defb8ce"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel.go",
+      "language": "go",
+      "line": 645,
+      "offset": 21,
+      "length": 9,
+      "code": {
+        "startLine": 643,
+        "length": 9,
+        "offset": 220,
+        "surroundingCode": "\tAllowedMentions  AllowedMentions  `json:\"allowed_mentions\"`  // allowed mentions for the message\n\tMessageReference MessageReference `json:\"message_reference\"` // include to make your message a reply\n\tComponents       []Component      `json:\"components\"`        // the components to include with the message\n\tStickerIDs       []Snowflake      `json:\"sticker_ids\"`       // IDs of up to 3 stickers in the server to send in the message\n\tPayloadJson      string           `json:\"payload_json\"`      // JSON encoded body of non-file params"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "fe1ee09ceae9587d1d533cc135b2f7fe3b0c953441e1fa5bfa52b958bfee8405"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel.go",
+      "language": "go",
+      "line": 816,
+      "offset": 21,
+      "length": 9,
+      "code": {
+        "startLine": 814,
+        "length": 9,
+        "offset": 149,
+        "surroundingCode": "\tFlags           *int             `json:\"flags,omitempty\"`\n\tAllowedMentions *AllowedMentions `json:\"allowed_mentions,omitempty\"`\n\tComponents      []*Component     `json:\"components,omitempty\"`\n\tPayloadJson     *string          `json:\"payload_json,omitempty\"`\n\tAttachments     []*Attachment    `json:\"attachments,omitempty\"`"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "3a209c58e3a4d96494444ac8230440d6c7472874887bbceea308424214cd5125"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel.go",
+      "language": "go",
+      "line": 1157,
+      "offset": 20,
+      "length": 9,
+      "code": {
+        "startLine": 1155,
+        "length": 9,
+        "offset": 222,
+        "surroundingCode": "\tEmbeds          []Embed         `json:\"embeds\"`           // embedded rich content (up to 6000 characters)\n\tAllowedMentions AllowedMentions `json:\"allowed_mentions\"` // allowed mentions for the message\n\tComponents      []Component     `json:\"components\"`       // the components to include with the message\n\tStickerIDs      []Snowflake     `json:\"sticker_ids\"`      // IDs of up to 3 stickers in the server to send in the message\n\tPayloadJson     string          `json:\"payload_json\"`     // JSON encoded body of non-file params"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "6905289edf46c48be93d8cf23095c35006a5d705effb7ef0b1d39b29aaa3577e"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 61,
+      "offset": 10,
+      "length": 9,
+      "code": {
+        "startLine": 59,
+        "length": 9,
+        "offset": 75,
+        "surroundingCode": "\tfor _, tt := range tests {\n\t\tt.Run(tt.name, func(t *testing.T) {\n\t\t\tc := &Component{\n\t\t\t\tType: tt.fields.Type,\n\t\t\t}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "77354330745969471768aff784fa53aa7c480265b3356bad5d9e35cf39e0dee2"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 82,
+      "offset": 11,
+      "length": 9,
+      "code": {
+        "startLine": 80,
+        "length": 9,
+        "offset": 40,
+        "surroundingCode": "\t\tfields fields\n\t\targs   args\n\t\twant   *Component\n\t}{\n\t\t{"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "e1cff8a8ffdf87bc9a0e3840df056f8b60233fb8c63e576e427c764329897e42"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 88,
+      "offset": 11,
+      "length": 9,
+      "code": {
+        "startLine": 86,
+        "length": 9,
+        "offset": 103,
+        "surroundingCode": "\t\t\tfields: fields{Type: ComponentTypeActionRow},\n\t\t\targs:   args{t: ComponentTypeActionRow},\n\t\t\twant: &Component{\n\t\t\t\tType: ComponentTypeActionRow,\n\t\t\t},"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "8d64967a29d9eeddd4a503c98a5668de5f40d93abe9b1acc5e1108ada04875df"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 96,
+      "offset": 11,
+      "length": 9,
+      "code": {
+        "startLine": 94,
+        "length": 9,
+        "offset": 97,
+        "surroundingCode": "\t\t\tfields: fields{Type: ComponentTypeButton},\n\t\t\targs:   args{t: ComponentTypeButton},\n\t\t\twant: &Component{\n\t\t\t\tType: ComponentTypeButton,\n\t\t\t},"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "88c272dcb47a3467db5fa3a6e80f5ce4adcd8b467111d17ee28ed41e6c118b61"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 104,
+      "offset": 11,
+      "length": 9,
+      "code": {
+        "startLine": 102,
+        "length": 9,
+        "offset": 105,
+        "surroundingCode": "\t\t\tfields: fields{Type: ComponentTypeSelectMenu},\n\t\t\targs:   args{t: ComponentTypeSelectMenu},\n\t\t\twant: &Component{\n\t\t\t\tType: ComponentTypeSelectMenu,\n\t\t\t},"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "049f79b0e3e81ecf4663500cf19db7a2604c70fbc82d473fa24f68d657f7464a"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 112,
+      "offset": 11,
+      "length": 9,
+      "code": {
+        "startLine": 110,
+        "length": 9,
+        "offset": 103,
+        "surroundingCode": "\t\t\tfields: fields{Type: ComponentTypeTextInput},\n\t\t\targs:   args{t: ComponentTypeTextInput},\n\t\t\twant: &Component{\n\t\t\t\tType: ComponentTypeTextInput,\n\t\t\t},"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "1d48c235c6364c326c6a68f3d6f26f89d5743b8b55922897a77f3e9854adfe07"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 119,
+      "offset": 10,
+      "length": 9,
+      "code": {
+        "startLine": 117,
+        "length": 9,
+        "offset": 75,
+        "surroundingCode": "\tfor _, tt := range tests {\n\t\tt.Run(tt.name, func(t *testing.T) {\n\t\t\tc := &Component{\n\t\t\t\tType: tt.fields.Type,\n\t\t\t}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "0b2dbc4f72e42d3aa9d5118b7d1e83396eeba02fc99407befe17c5a90a539ba6"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 156,
+      "offset": 10,
+      "length": 9,
+      "code": {
+        "startLine": 154,
+        "length": 9,
+        "offset": 75,
+        "surroundingCode": "\tfor _, tt := range tests {\n\t\tt.Run(tt.name, func(t *testing.T) {\n\t\t\tc := &Component{\n\t\t\t\tCustomID: tt.fields.CustomID,\n\t\t\t}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "49268bf0e901685a6f948f7a00aa3a3a3feec9383659629add29da2572c19163"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 178,
+      "offset": 11,
+      "length": 9,
+      "code": {
+        "startLine": 176,
+        "length": 9,
+        "offset": 40,
+        "surroundingCode": "\t\tfields fields\n\t\targs   args\n\t\twant   *Component\n\t}{\n\t\t{"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "419cc0337a1d0d08921b0fd49ae50d54c3aeadc72c8659d1f276f98c64641c5f"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 184,
+      "offset": 11,
+      "length": 9,
+      "code": {
+        "startLine": 182,
+        "length": 9,
+        "offset": 67,
+        "surroundingCode": "\t\t\tfields: fields{CustomID: \"\"},\n\t\t\targs:   args{t: \"\"},\n\t\t\twant: &Component{\n\t\t\t\tCustomID: \"\",\n\t\t\t},"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "bc2ad77d3b72a08d4554cae6329f2c2011ee16a1ab49ee4ffbc78e1fc148473b"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 192,
+      "offset": 11,
+      "length": 9,
+      "code": {
+        "startLine": 190,
+        "length": 9,
+        "offset": 69,
+        "surroundingCode": "\t\t\tfields: fields{CustomID: \"G\"},\n\t\t\targs:   args{t: \"G\"},\n\t\t\twant: &Component{\n\t\t\t\tCustomID: \"G\",\n\t\t\t},"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "f534d7d58823b6ae93fa4c318e7d1092b2846510d78848c85f4d677cff1eaebf"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 200,
+      "offset": 11,
+      "length": 9,
+      "code": {
+        "startLine": 198,
+        "length": 9,
+        "offset": 89,
+        "surroundingCode": "\t\t\tfields: fields{CustomID: quickBrownFox},\n\t\t\targs:   args{t: quickBrownFox},\n\t\t\twant: &Component{\n\t\t\t\tCustomID: quickBrownFox,\n\t\t\t},"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "bc730db9720c174ec108b2f06dac2dd293cab1447d87b195dc6a65e115fbc64b"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 207,
+      "offset": 10,
+      "length": 9,
+      "code": {
+        "startLine": 205,
+        "length": 9,
+        "offset": 75,
+        "surroundingCode": "\tfor _, tt := range tests {\n\t\tt.Run(tt.name, func(t *testing.T) {\n\t\t\tc := &Component{\n\t\t\t\tCustomID: tt.fields.CustomID,\n\t\t\t}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "f295ceed027cb24b176a09edc7cc3e844e7d99b014a87eef01d88d1faf8c5c50"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 239,
+      "offset": 10,
+      "length": 9,
+      "code": {
+        "startLine": 237,
+        "length": 9,
+        "offset": 75,
+        "surroundingCode": "\tfor _, tt := range tests {\n\t\tt.Run(tt.name, func(t *testing.T) {\n\t\t\tc := &Component{\n\t\t\t\tDisabled: tt.fields.Disabled,\n\t\t\t}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "059b81710be302d9232f2946e7cbc063c7a4cfcfced796a420a85f0e5f39a5ef"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 260,
+      "offset": 11,
+      "length": 9,
+      "code": {
+        "startLine": 258,
+        "length": 9,
+        "offset": 40,
+        "surroundingCode": "\t\tfields fields\n\t\targs   args\n\t\twant   *Component\n\t}{\n\t\t{"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "614caa309d216594a326661ae2f7ca20d2a2e62e95a17404b0096a58928476ef"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 266,
+      "offset": 11,
+      "length": 9,
+      "code": {
+        "startLine": 264,
+        "length": 9,
+        "offset": 71,
+        "surroundingCode": "\t\t\tfields: fields{Disabled: true},\n\t\t\targs:   args{d: true},\n\t\t\twant: &Component{\n\t\t\t\tDisabled: true,\n\t\t\t},"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "2faf2e89c4ec27c5d22eba3678e2e1974f2859ea47f3a22a665ed2bc2f4c62f1"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 274,
+      "offset": 11,
+      "length": 9,
+      "code": {
+        "startLine": 272,
+        "length": 9,
+        "offset": 73,
+        "surroundingCode": "\t\t\tfields: fields{Disabled: false},\n\t\t\targs:   args{d: false},\n\t\t\twant: &Component{\n\t\t\t\tDisabled: false,\n\t\t\t},"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "1cdb182cf789a74194ba7d2991081ca19e63ad30b075063f29659ce00d162646"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 282,
+      "offset": 10,
+      "length": 9,
+      "code": {
+        "startLine": 280,
+        "length": 9,
+        "offset": 75,
+        "surroundingCode": "\tfor _, tt := range tests {\n\t\tt.Run(tt.name, func(t *testing.T) {\n\t\t\tc := &Component{\n\t\t\t\tDisabled: tt.fields.Disabled,\n\t\t\t}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "a17149b06d95f706ccf42e4af94ba1930e772f41aa765a43aa9171ad7adeb2ba"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 329,
+      "offset": 10,
+      "length": 9,
+      "code": {
+        "startLine": 327,
+        "length": 9,
+        "offset": 75,
+        "surroundingCode": "\tfor _, tt := range tests {\n\t\tt.Run(tt.name, func(t *testing.T) {\n\t\t\tc := &Component{\n\t\t\t\tStyle: tt.fields.Style,\n\t\t\t}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "9ed878734a1419616b053ea87cc3e0015d9778e85426a7edebc1a01ba747680f"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 350,
+      "offset": 11,
+      "length": 9,
+      "code": {
+        "startLine": 348,
+        "length": 9,
+        "offset": 40,
+        "surroundingCode": "\t\tfields fields\n\t\targs   args\n\t\twant   *Component\n\t}{\n\t\t{"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "1660977abe543b0bfd07cc47dd3bb893b39d1ec7fe12940c2f9f97cc0cf75ab5"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 356,
+      "offset": 11,
+      "length": 9,
+      "code": {
+        "startLine": 354,
+        "length": 9,
+        "offset": 86,
+        "surroundingCode": "\t\t\tfields: fields{Style: ButtonPrimary},\n\t\t\targs:   args{s: ButtonPrimary},\n\t\t\twant: &Component{\n\t\t\t\tStyle: ButtonPrimary,\n\t\t\t},"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "b034d862dfdb2e2db3be08c5a76d3054d2e33ef7bde49e3fef8cf8eae45863ba"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 364,
+      "offset": 11,
+      "length": 9,
+      "code": {
+        "startLine": 362,
+        "length": 9,
+        "offset": 90,
+        "surroundingCode": "\t\t\tfields: fields{Style: ButtonSecondary},\n\t\t\targs:   args{s: ButtonSecondary},\n\t\t\twant: &Component{\n\t\t\t\tStyle: ButtonSecondary,\n\t\t\t},"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "844eda1c098266a371933adab3fac03d590e2635b9997d3484a99b02a1d2d626"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 372,
+      "offset": 11,
+      "length": 9,
+      "code": {
+        "startLine": 370,
+        "length": 9,
+        "offset": 86,
+        "surroundingCode": "\t\t\tfields: fields{Style: ButtonSuccess},\n\t\t\targs:   args{s: ButtonSuccess},\n\t\t\twant: &Component{\n\t\t\t\tStyle: ButtonSuccess,\n\t\t\t},"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "90220cce6d7fc02d0e784dabad8318bee572425b9ab96ea04eecbf32ec408e14"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 380,
+      "offset": 11,
+      "length": 9,
+      "code": {
+        "startLine": 378,
+        "length": 9,
+        "offset": 84,
+        "surroundingCode": "\t\t\tfields: fields{Style: ButtonDanger},\n\t\t\targs:   args{s: ButtonDanger},\n\t\t\twant: &Component{\n\t\t\t\tStyle: ButtonDanger,\n\t\t\t},"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "a8524ef9e88d650fff351bca0dfee3486b35cb6a478937c35b56eb35b97476b1"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 388,
+      "offset": 11,
+      "length": 9,
+      "code": {
+        "startLine": 386,
+        "length": 9,
+        "offset": 80,
+        "surroundingCode": "\t\t\tfields: fields{Style: ButtonLink},\n\t\t\targs:   args{s: ButtonLink},\n\t\t\twant: &Component{\n\t\t\t\tStyle: ButtonLink,\n\t\t\t},"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "8858e25b139b4c3f35245a7a225d11ddf1bfe200754916479a7c5772a6c26b79"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 395,
+      "offset": 10,
+      "length": 9,
+      "code": {
+        "startLine": 393,
+        "length": 9,
+        "offset": 75,
+        "surroundingCode": "\tfor _, tt := range tests {\n\t\tt.Run(tt.name, func(t *testing.T) {\n\t\t\tc := &Component{\n\t\t\t\tStyle: tt.fields.Style,\n\t\t\t}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "6882819ed6614c7c5f1a58ff78732f768c5d1cbeb21c65e08814d81deed32bcb"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 427,
+      "offset": 10,
+      "length": 9,
+      "code": {
+        "startLine": 425,
+        "length": 9,
+        "offset": 75,
+        "surroundingCode": "\tfor _, tt := range tests {\n\t\tt.Run(tt.name, func(t *testing.T) {\n\t\t\tc := &Component{\n\t\t\t\tStyle: tt.fields.Style,\n\t\t\t}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "716d55e7b21fbf2e916eb39fcecce91dc5e88282c4b4aaca06120daa68b292a8"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 448,
+      "offset": 11,
+      "length": 9,
+      "code": {
+        "startLine": 446,
+        "length": 9,
+        "offset": 40,
+        "surroundingCode": "\t\tfields fields\n\t\targs   args\n\t\twant   *Component\n\t}{\n\t\t{"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "6b36b4e5aa7bb260754ddedc7aa05be46d093dfdd30c817980fecd53f3284e59"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 454,
+      "offset": 11,
+      "length": 9,
+      "code": {
+        "startLine": 452,
+        "length": 9,
+        "offset": 88,
+        "surroundingCode": "\t\t\tfields: fields{Style: TextInputShort},\n\t\t\targs:   args{s: TextInputShort},\n\t\t\twant: &Component{\n\t\t\t\tStyle: TextInputShort,\n\t\t\t},"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "427a948bb9ce7ebc245e860601559fe40bf27beeae1e993bf813eb314026cc72"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 462,
+      "offset": 11,
+      "length": 9,
+      "code": {
+        "startLine": 460,
+        "length": 9,
+        "offset": 96,
+        "surroundingCode": "\t\t\tfields: fields{Style: TextInputParagraph},\n\t\t\targs:   args{s: TextInputParagraph},\n\t\t\twant: &Component{\n\t\t\t\tStyle: TextInputParagraph,\n\t\t\t},"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "0708ac50b2e5452ee19153fccc3b2e2327e922e628fc3618c09d217a11e471a5"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 469,
+      "offset": 10,
+      "length": 9,
+      "code": {
+        "startLine": 467,
+        "length": 9,
+        "offset": 75,
+        "surroundingCode": "\tfor _, tt := range tests {\n\t\tt.Run(tt.name, func(t *testing.T) {\n\t\t\tc := &Component{\n\t\t\t\tStyle: tt.fields.Style,\n\t\t\t}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "9237df4a711e36f76cb32b2c4420195f1d5f06dc19af808f33d6a5213d51b4e5"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 482,
+      "offset": 9,
+      "length": 9,
+      "code": {
+        "startLine": 480,
+        "length": 9,
+        "offset": 43,
+        "surroundingCode": "\ttests := []struct {\n\t\tname string\n\t\twant *Component\n\t}{\n\t\t{"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "aca1717422cee9abf6c0851a0851449a0a4e57cd19109507e7958b7be887e49b"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 486,
+      "offset": 11,
+      "length": 9,
+      "code": {
+        "startLine": 484,
+        "length": 9,
+        "offset": 40,
+        "surroundingCode": "\t\t{\n\t\t\tname: \"New Component\",\n\t\t\twant: &Component{},\n\t\t},\n\t}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "ce004a2e14cd3b54a207852fef741bb933304c48f19bddf551f2fc3a1ea270f1"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 536,
+      "offset": 10,
+      "length": 9,
+      "code": {
+        "startLine": 534,
+        "length": 9,
+        "offset": 75,
+        "surroundingCode": "\tfor _, tt := range tests {\n\t\tt.Run(tt.name, func(t *testing.T) {\n\t\t\tc := &Component{\n\t\t\t\tEmoji: tt.fields.Emoji,\n\t\t\t}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "d6a2bc5aeaec6ac5dca02ce92a08ba3e99b5daff869ceb8e2ed2db11d1512d77"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 557,
+      "offset": 11,
+      "length": 9,
+      "code": {
+        "startLine": 555,
+        "length": 9,
+        "offset": 40,
+        "surroundingCode": "\t\tfields fields\n\t\targs   args\n\t\twant   *Component\n\t}{\n\t\t{"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "d558d07dccf09c6524cf8408d7221f2eb59c1ec2565694cb1aefb5115148b310"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 571,
+      "offset": 11,
+      "length": 9,
+      "code": {
+        "startLine": 569,
+        "length": 9,
+        "offset": 38,
+        "surroundingCode": "\t\t\t\tAnimated: false,\n\t\t\t}},\n\t\t\twant: &Component{\n\t\t\t\tEmoji: &Emoji{\n\t\t\t\t\tID:       StringToSnowflake(\"941127649168871454\"),"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "9bc6744ca5d54751918293d074edfe1d8c285cb877a704db896b5f12cf97508e"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 591,
+      "offset": 11,
+      "length": 9,
+      "code": {
+        "startLine": 589,
+        "length": 9,
+        "offset": 38,
+        "surroundingCode": "\t\t\t\tAnimated: false,\n\t\t\t}},\n\t\t\twant: &Component{\n\t\t\t\tEmoji: &Emoji{\n\t\t\t\t\tID:       nil,"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "9ef279e6479a1c53f8218b815f0f539d44dc523002d735b8eeff408a1f29e6be"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 602,
+      "offset": 10,
+      "length": 9,
+      "code": {
+        "startLine": 600,
+        "length": 9,
+        "offset": 75,
+        "surroundingCode": "\tfor _, tt := range tests {\n\t\tt.Run(tt.name, func(t *testing.T) {\n\t\t\tc := &Component{\n\t\t\t\tEmoji: tt.fields.Emoji,\n\t\t\t}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "464d40a8a8d054295a2566b13d79d37cd4dea7e87fde40c2c7feb01d04a2d052"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 629,
+      "offset": 10,
+      "length": 9,
+      "code": {
+        "startLine": 627,
+        "length": 9,
+        "offset": 75,
+        "surroundingCode": "\tfor _, tt := range tests {\n\t\tt.Run(tt.name, func(t *testing.T) {\n\t\t\tc := &Component{\n\t\t\t\tURL: tt.fields.URL,\n\t\t\t}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "369aeabd4059e4612ad70d3ba6ed3b0ac4968a73426f35c082088d99e50cd8db"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 651,
+      "offset": 11,
+      "length": 9,
+      "code": {
+        "startLine": 649,
+        "length": 9,
+        "offset": 40,
+        "surroundingCode": "\t\tfields fields\n\t\targs   args\n\t\twant   *Component\n\t}{\n\t\t{"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "581bdb41f9f4540763e981c67bf5276523ac44e5dd79da7a332e98056187a7db"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 657,
+      "offset": 11,
+      "length": 9,
+      "code": {
+        "startLine": 655,
+        "length": 9,
+        "offset": 82,
+        "surroundingCode": "\t\t\tfields: fields{URL: googleDotCom},\n\t\t\targs:   args{u: googleDotCom},\n\t\t\twant: &Component{\n\t\t\t\tURL: googleDotCom,\n\t\t\t},"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "4fa37747b06afae55623a6bc5f6ea2a5e3f76b758d6b39df1cbc032aea0e42cc"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components_api_test.go",
+      "language": "go",
+      "line": 664,
+      "offset": 10,
+      "length": 9,
+      "code": {
+        "startLine": 662,
+        "length": 9,
+        "offset": 75,
+        "surroundingCode": "\tfor _, tt := range tests {\n\t\tt.Run(tt.name, func(t *testing.T) {\n\t\t\tc := &Component{\n\t\t\t\tURL: tt.fields.URL,\n\t\t\t}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "0e0e5f1b7f8e48e24c691edac07984aa0ca7b2bf7bf7a231776cbd2be28616ac"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/webhook_endpoints.go",
+      "language": "go",
+      "line": 213,
+      "offset": 20,
+      "length": 9,
+      "code": {
+        "startLine": 211,
+        "length": 9,
+        "offset": 277,
+        "surroundingCode": "\tEmbeds          []Embed         `json:\"embeds\"`                     // embedded rich content; Required - one of content, file, embeds\n\tAllowedMentions AllowedMentions `json:\"allowed_mentions,omitempty\"` // allowed mentions for the message; Required - false\n\tComponents      []Component     `json:\"components,omitempty\"`       // the components to include with the message - Required - false\n\tPayloadJson     string          `json:\"payload_json\"`               // JSON encoded body of non-file params; Required - \"multipart/form-data\" only\n\tAttachments     []Attachment    `json:\"attachments,omitempty\"`      // Attachment objects with filename and description; Required - false"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "fdd0e6dcc1d68c6b420f7a8e2ecbfc1bae9024668d5a679059d53276f832d738"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/webhook_endpoints.go",
+      "language": "go",
+      "line": 280,
+      "offset": 21,
+      "length": 9,
+      "code": {
+        "startLine": 278,
+        "length": 9,
+        "offset": 221,
+        "surroundingCode": "\tEmbeds          []*Embed         `json:\"embeds,omitempty\"`           // embedded rich content\n\tAllowedMentions *AllowedMentions `json:\"allowed_mentions,omitempty\"` // allowed mentions for the message\n\tComponents      []*Component     `json:\"components,omitempty\"`       // the components to include with the message\n\tPayloadJson     *string          `json:\"payload_json,omitempty\"`     // JSON encoded body of non-file params (multipart/form-data only)\n\tAttachments     []*Attachment    `json:\"attachments,omitempty\"`      // attached files to keep and possible descriptions for new files"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "04ce42b498ca771975e87c5f3e1e19dd177721e299bd7bd480bcb4d6b1cd9c19"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/interactions.go",
+      "language": "go",
+      "line": 83,
+      "offset": 15,
+      "length": 9,
+      "code": {
+        "startLine": 81,
+        "length": 9,
+        "offset": 118,
+        "surroundingCode": "type ModalSubmitData struct {\n\tCustomID   string      `json:\"custom_id\"`  // the custom_id of the modal\n\tComponents []Component `json:\"components\"` // the values submitted by the user\n}\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "2c76c86127466435cd479bbaab272156c2ee1402ea2c9f3fe0086b62b014ecc6"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/interactions.go",
+      "language": "go",
+      "line": 185,
+      "offset": 20,
+      "length": 9,
+      "code": {
+        "startLine": 183,
+        "length": 9,
+        "offset": 223,
+        "surroundingCode": "\tAllowedMentions *AllowedMentions `json:\"allowed_mentions\"`      // AllowedMentionType object\n\tFlags           MessageFlags     `json:\"flags,omitempty\"`       // set to 64 to make your response Ephemeral\n\tComponents      []Component      `json:\"components,omitempty\"`  // message components\n\tAttachments     []Attachment     `json:\"attachments,omitempty\"` // attachment objects with filename and description\n}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "71f8109f1733b0f606a23edf438778d8c5e04f2b7aa37ec6b0af1fa4ea1cc27f"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/interactions.go",
+      "language": "go",
+      "line": 198,
+      "offset": 15,
+      "length": 9,
+      "code": {
+        "startLine": 196,
+        "length": 9,
+        "offset": 225,
+        "surroundingCode": "\tCustomID   string      `json:\"custom_id\"`  // a developer-defined identifier for the component, max 100 characters\n\tTitle      string      `json:\"title\"`      // the title of the popup modal, max 45 characters\n\tComponents []Component `json:\"components\"` // between 1 and 5 (inclusive) components that make up the modal\n}\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "12a63050aac2213085f9418ce7652a23229efc43f5310adb8978ae89d3e243d7"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "Deprecated type is still used",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components.go",
+      "language": "go",
+      "line": 23,
+      "offset": 6,
+      "length": 9,
+      "code": {
+        "startLine": 21,
+        "length": 9,
+        "offset": 121,
+        "surroundingCode": "// The top-level component's field is an array of Action Row components.\n// Deprecated: Use specific component type\ntype Component struct {\n\tType        ComponentType  `json:\"type\"`                  // ComponentType; valid for all types\n\tCustomID    string         `json:\"custom_id,omitempty\"`   // a developer-defined identifier for the button, max 100 characters"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "4eeb7e053dbb5f7cac0c935872c4fafdba00f06eb390c6c05105eabfcfa40c62"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components.go",
+      "language": "go",
+      "line": 35,
+      "offset": 16,
+      "length": 9,
+      "code": {
+        "startLine": 33,
+        "length": 9,
+        "offset": 272,
+        "surroundingCode": "\tMaxValues   int            `json:\"max_values,omitempty\"`  // the maximum number of items that can be chosen; default 1, max 25\n\tPlaceholder string         `json:\"placeholder,omitempty\"` // custom placeholder text if nothing is selected, max 100 characters\n\tComponents  []Component    `json:\"components,omitempty\"`  // a list of child components\n\tMinLength   int            `json:\"min_length,omitempty\"`  // the minimum input length for a text input\n\tMaxLength   int            `json:\"max_length,omitempty\"`  // the maximum input length for a text input"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "985e78b7bf67fa5c69b29d57030bc99a622b68abb87d689a06b32bb9e83a1208"
 }]}
