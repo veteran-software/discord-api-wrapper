@@ -2238,19 +2238,19 @@
                 ]
               },
               {
-                "id": "GoErrorsAs",
+                "id": "GoDeferGo",
                 "shortDescription": {
-                  "text": "Incorrect usage of the 'errors.As' function"
+                  "text": "Defer/go statement calls 'recover' or 'panic' directly"
                 },
                 "fullDescription": {
-                  "text": "Reports calls of the 'errors.As' function when the second argument is not a pointer to an interface or to a type that implements an error. Such calls panic at runtime. For more information about the 'As' function, see func As at golang.org. Example: '_, err := os.Open(\"non-existing\")\nvar pathError *fs.PathError\nif errors.As(err, pathError) { // a pointer to *fs.PathError is required\n}' After the Prepend '&' quick-fix is applied: '_, err := os.Open(\"non-existing\")\nvar pathError *fs.PathError\nif errors.As(err, &pathError) {\n}' This inspection only reports if the language version is 1.13 or higher.",
-                  "markdown": "Reports calls of the `errors.As` function when the second argument is not a pointer to an interface or to a type that implements an error.\n\nSuch calls panic at runtime.\n\nFor more information about the `As` function, see [func As at golang.org](https://golang.org/pkg/errors/#As).\n\nExample:\n\n    _, err := os.Open(\"non-existing\")\n    var pathError *fs.PathError\n    if errors.As(err, pathError) { // a pointer to *fs.PathError is required\n    }\n\nAfter the **Prepend '\\&'** quick-fix is applied:\n\n    _, err := os.Open(\"non-existing\")\n    var pathError *fs.PathError\n    if errors.As(err, &pathError) {\n    }\n\nThis inspection only reports if the language version is 1.13 or higher."
+                  "text": "Reports 'defer' and 'go' statements that call 'panic()' or 'recover()' directly. Such statements are rarely useful and might indicate a misuse of the 'panic()' and 'recover()' mechanism. In particular: 'go panic()': a newly-started goroutine will panic immediately. 'defer panic()': a function with this statement will always panic on exit. 'go recover()': has no effect as newly-started goroutine cannot panic. 'defer recover()': function with this statement will silently stop panicking. This could be a valid usage, but an idiomatic way is to inspect the value returned by 'recover()': 'defer func() {\n  if r := recover(); r != nil {\n    fmt.Println(\"Recovered from: \", r)\n  }\n}()' For more information about go statements and panics handling, see Handling panics and Go statements in the Go Language Specification.",
+                  "markdown": "Reports `defer` and `go` statements that call `panic()` or `recover()` directly.\n\nSuch statements are rarely useful and might indicate a misuse of the `panic()` and `recover()` mechanism.\nIn particular:\n\n* `go panic()`: a newly-started goroutine will panic immediately.\n* `defer panic()`: a function with this statement will always panic on exit.\n* `go recover()`: has no effect as newly-started goroutine cannot panic.\n* `defer recover()`: function with this statement will silently stop panicking. This could be a valid usage, but an idiomatic way is to inspect the value returned by `recover()`:\n\n      defer func() {\n        if r := recover(); r != nil {\n          fmt.Println(\"Recovered from: \", r)\n        }\n      }()\n\nFor more information about go statements and panics handling, see [Handling\npanics](https://golang.org/ref/spec#Handling_panics) and\n[Go statements](https://golang.org/ref/spec#Go_statements) in the Go Language Specification."
                 },
                 "defaultConfiguration": {
                   "enabled": true,
-                  "level": "warning",
+                  "level": "note",
                   "parameters": {
-                    "ideaSeverity": "WARNING"
+                    "ideaSeverity": "WEAK WARNING"
                   }
                 },
                 "relationships": [
@@ -2269,19 +2269,19 @@
                 ]
               },
               {
-                "id": "GoDeferGo",
+                "id": "GoErrorsAs",
                 "shortDescription": {
-                  "text": "Defer/go statement calls 'recover' or 'panic' directly"
+                  "text": "Incorrect usage of the 'errors.As' function"
                 },
                 "fullDescription": {
-                  "text": "Reports 'defer' and 'go' statements that call 'panic()' or 'recover()' directly. Such statements are rarely useful and might indicate a misuse of the 'panic()' and 'recover()' mechanism. In particular: 'go panic()': a newly-started goroutine will panic immediately. 'defer panic()': a function with this statement will always panic on exit. 'go recover()': has no effect as newly-started goroutine cannot panic. 'defer recover()': function with this statement will silently stop panicking. This could be a valid usage, but an idiomatic way is to inspect the value returned by 'recover()': 'defer func() {\n  if r := recover(); r != nil {\n    fmt.Println(\"Recovered from: \", r)\n  }\n}()' For more information about go statements and panics handling, see Handling panics and Go statements in the Go Language Specification.",
-                  "markdown": "Reports `defer` and `go` statements that call `panic()` or `recover()` directly.\n\nSuch statements are rarely useful and might indicate a misuse of the `panic()` and `recover()` mechanism.\nIn particular:\n\n* `go panic()`: a newly-started goroutine will panic immediately.\n* `defer panic()`: a function with this statement will always panic on exit.\n* `go recover()`: has no effect as newly-started goroutine cannot panic.\n* `defer recover()`: function with this statement will silently stop panicking. This could be a valid usage, but an idiomatic way is to inspect the value returned by `recover()`:\n\n      defer func() {\n        if r := recover(); r != nil {\n          fmt.Println(\"Recovered from: \", r)\n        }\n      }()\n\nFor more information about go statements and panics handling, see [Handling\npanics](https://golang.org/ref/spec#Handling_panics) and\n[Go statements](https://golang.org/ref/spec#Go_statements) in the Go Language Specification."
+                  "text": "Reports calls of the 'errors.As' function when the second argument is not a pointer to an interface or to a type that implements an error. Such calls panic at runtime. For more information about the 'As' function, see func As at golang.org. Example: '_, err := os.Open(\"non-existing\")\nvar pathError *fs.PathError\nif errors.As(err, pathError) { // a pointer to *fs.PathError is required\n}' After the Prepend '&' quick-fix is applied: '_, err := os.Open(\"non-existing\")\nvar pathError *fs.PathError\nif errors.As(err, &pathError) {\n}' This inspection only reports if the language version is 1.13 or higher.",
+                  "markdown": "Reports calls of the `errors.As` function when the second argument is not a pointer to an interface or to a type that implements an error.\n\nSuch calls panic at runtime.\n\nFor more information about the `As` function, see [func As at golang.org](https://golang.org/pkg/errors/#As).\n\nExample:\n\n    _, err := os.Open(\"non-existing\")\n    var pathError *fs.PathError\n    if errors.As(err, pathError) { // a pointer to *fs.PathError is required\n    }\n\nAfter the **Prepend '\\&'** quick-fix is applied:\n\n    _, err := os.Open(\"non-existing\")\n    var pathError *fs.PathError\n    if errors.As(err, &pathError) {\n    }\n\nThis inspection only reports if the language version is 1.13 or higher."
                 },
                 "defaultConfiguration": {
                   "enabled": true,
-                  "level": "note",
+                  "level": "warning",
                   "parameters": {
-                    "ideaSeverity": "WEAK WARNING"
+                    "ideaSeverity": "WARNING"
                   }
                 },
                 "relationships": [
@@ -2703,13 +2703,13 @@
                 ]
               },
               {
-                "id": "GoUnusedConst",
+                "id": "GoUnusedFunction",
                 "shortDescription": {
-                  "text": "Unused constant"
+                  "text": "Unused function"
                 },
                 "fullDescription": {
-                  "text": "Reports constants that are defined but are never used in code. 'func main() {\n const i = 100\n}' Unlike unused variables and imports, this code will compile. Unused constants might increase your code base and slow down program compilation. To delete the unused constant, consider using the Delete constant quick-fix.",
-                  "markdown": "Reports constants that are defined but are never used in code.\n\n    func main() {\n     const i = 100\n    }\n\nUnlike unused variables and imports, this code will compile. Unused constants might increase your code base and\nslow down program compilation. To delete the unused constant, consider using the **Delete constant** quick-fix."
+                  "text": "Reports unused unexported functions. In Go, a function is unexported if it begins with a small letter. Names of unexported functions that were defined but never used are grayed out. '// Unused unexported function\nfunc unExportedUnusedFunc()  {\n\n}\n\nfunc main() {\n fmt.Println(\"Hello\")\n}'",
+                  "markdown": "Reports unused unexported functions.\n\nIn Go, a function is unexported if it begins with a small letter. Names of unexported functions that were defined but never used are\ngrayed out.\n\n    // Unused unexported function\n    func unExportedUnusedFunc()  {\n\n    }\n\n    func main() {\n     fmt.Println(\"Hello\")\n    }\n"
                 },
                 "defaultConfiguration": {
                   "enabled": true,
@@ -2734,13 +2734,13 @@
                 ]
               },
               {
-                "id": "GoUnusedFunction",
+                "id": "GoUnusedConst",
                 "shortDescription": {
-                  "text": "Unused function"
+                  "text": "Unused constant"
                 },
                 "fullDescription": {
-                  "text": "Reports unused unexported functions. In Go, a function is unexported if it begins with a small letter. Names of unexported functions that were defined but never used are grayed out. '// Unused unexported function\nfunc unExportedUnusedFunc()  {\n\n}\n\nfunc main() {\n fmt.Println(\"Hello\")\n}'",
-                  "markdown": "Reports unused unexported functions.\n\nIn Go, a function is unexported if it begins with a small letter. Names of unexported functions that were defined but never used are\ngrayed out.\n\n    // Unused unexported function\n    func unExportedUnusedFunc()  {\n\n    }\n\n    func main() {\n     fmt.Println(\"Hello\")\n    }\n"
+                  "text": "Reports constants that are defined but are never used in code. 'func main() {\n const i = 100\n}' Unlike unused variables and imports, this code will compile. Unused constants might increase your code base and slow down program compilation. To delete the unused constant, consider using the Delete constant quick-fix.",
+                  "markdown": "Reports constants that are defined but are never used in code.\n\n    func main() {\n     const i = 100\n    }\n\nUnlike unused variables and imports, this code will compile. Unused constants might increase your code base and\nslow down program compilation. To delete the unused constant, consider using the **Delete constant** quick-fix."
                 },
                 "defaultConfiguration": {
                   "enabled": true,
@@ -3354,37 +3354,6 @@
                 ]
               },
               {
-                "id": "GoAssignmentToReceiver",
-                "shortDescription": {
-                  "text": "Assignment to a receiver"
-                },
-                "fullDescription": {
-                  "text": "Reports assignments to method receivers. When you assign a value to the method receiver, the value will not be reflected outside of the method itself. Values will be reflected in subsequent calls from the same method. Example: 'package main\n\nimport \"fmt\"\n\ntype demo struct {\n Val int\n}\n\nfunc (d *demo) change() {\n d = nil // Assignment to the method receiver propagates only to callees but not to callers\n d.myVal()\n}\n\nfunc (d *demo) myVal() {\n fmt.Printf(\"my val: %#v\\n\", d)\n}\n\nfunc (d demo) change2() {\n d = demo{} // Assignment to the method receiver doesn't propagate to other calls\n d.myVal()\n}\n\nfunc (d *demo) change3() {\n d.Val = 3\n d.myVal()\n}\n\nfunc main() {\n d := &demo{}\n d.myVal()\n d.change()\n d.myVal()\n d.Val = 2\n d.change2()\n d.myVal()\n d.change3()\n d.myVal()\n}'",
-                  "markdown": "Reports assignments to method receivers.\n\nWhen you assign a value to the method receiver, the value will not be reflected outside of the method itself.\nValues will be reflected in subsequent calls from the same method.\n\nExample:\n\n    package main\n\n    import \"fmt\"\n\n    type demo struct {\n     Val int\n    }\n\n    func (d *demo) change() {\n     d = nil // Assignment to the method receiver propagates only to callees but not to callers\n     d.myVal()\n    }\n\n    func (d *demo) myVal() {\n     fmt.Printf(\"my val: %#v\\n\", d)\n    }\n\n    func (d demo) change2() {\n     d = demo{} // Assignment to the method receiver doesn't propagate to other calls\n     d.myVal()\n    }\n\n    func (d *demo) change3() {\n     d.Val = 3\n     d.myVal()\n    }\n\n    func main() {\n     d := &demo{}\n     d.myVal()\n     d.change()\n     d.myVal()\n     d.Val = 2\n     d.change2()\n     d.myVal()\n     d.change3()\n     d.myVal()\n    }\n"
-                },
-                "defaultConfiguration": {
-                  "enabled": true,
-                  "level": "note",
-                  "parameters": {
-                    "ideaSeverity": "WEAK WARNING"
-                  }
-                },
-                "relationships": [
-                  {
-                    "target": {
-                      "id": "Go/Control flow issues",
-                      "index": 23,
-                      "toolComponent": {
-                        "name": "QDGO"
-                      }
-                    },
-                    "kinds": [
-                      "superset"
-                    ]
-                  }
-                ]
-              },
-              {
                 "id": "GoVetAtomic",
                 "shortDescription": {
                   "text": "Incorrect usage of the 'sync/atomic' package"
@@ -3405,6 +3374,37 @@
                     "target": {
                       "id": "Go/Probable bugs",
                       "index": 3,
+                      "toolComponent": {
+                        "name": "QDGO"
+                      }
+                    },
+                    "kinds": [
+                      "superset"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "GoAssignmentToReceiver",
+                "shortDescription": {
+                  "text": "Assignment to a receiver"
+                },
+                "fullDescription": {
+                  "text": "Reports assignments to method receivers. When you assign a value to the method receiver, the value will not be reflected outside of the method itself. Values will be reflected in subsequent calls from the same method. Example: 'package main\n\nimport \"fmt\"\n\ntype demo struct {\n Val int\n}\n\nfunc (d *demo) change() {\n d = nil // Assignment to the method receiver propagates only to callees but not to callers\n d.myVal()\n}\n\nfunc (d *demo) myVal() {\n fmt.Printf(\"my val: %#v\\n\", d)\n}\n\nfunc (d demo) change2() {\n d = demo{} // Assignment to the method receiver doesn't propagate to other calls\n d.myVal()\n}\n\nfunc (d *demo) change3() {\n d.Val = 3\n d.myVal()\n}\n\nfunc main() {\n d := &demo{}\n d.myVal()\n d.change()\n d.myVal()\n d.Val = 2\n d.change2()\n d.myVal()\n d.change3()\n d.myVal()\n}'",
+                  "markdown": "Reports assignments to method receivers.\n\nWhen you assign a value to the method receiver, the value will not be reflected outside of the method itself.\nValues will be reflected in subsequent calls from the same method.\n\nExample:\n\n    package main\n\n    import \"fmt\"\n\n    type demo struct {\n     Val int\n    }\n\n    func (d *demo) change() {\n     d = nil // Assignment to the method receiver propagates only to callees but not to callers\n     d.myVal()\n    }\n\n    func (d *demo) myVal() {\n     fmt.Printf(\"my val: %#v\\n\", d)\n    }\n\n    func (d demo) change2() {\n     d = demo{} // Assignment to the method receiver doesn't propagate to other calls\n     d.myVal()\n    }\n\n    func (d *demo) change3() {\n     d.Val = 3\n     d.myVal()\n    }\n\n    func main() {\n     d := &demo{}\n     d.myVal()\n     d.change()\n     d.myVal()\n     d.Val = 2\n     d.change2()\n     d.myVal()\n     d.change3()\n     d.myVal()\n    }\n"
+                },
+                "defaultConfiguration": {
+                  "enabled": true,
+                  "level": "note",
+                  "parameters": {
+                    "ideaSeverity": "WEAK WARNING"
+                  }
+                },
+                "relationships": [
+                  {
+                    "target": {
+                      "id": "Go/Control flow issues",
+                      "index": 23,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -3521,37 +3521,6 @@
                 ]
               },
               {
-                "id": "XmlDuplicatedId",
-                "shortDescription": {
-                  "text": "Duplicate 'id' attribute"
-                },
-                "fullDescription": {
-                  "text": "Reports a duplicate 'id' attribute in XML.",
-                  "markdown": "Reports a duplicate `id` attribute in XML."
-                },
-                "defaultConfiguration": {
-                  "enabled": false,
-                  "level": "error",
-                  "parameters": {
-                    "ideaSeverity": "ERROR"
-                  }
-                },
-                "relationships": [
-                  {
-                    "target": {
-                      "id": "XML",
-                      "index": 5,
-                      "toolComponent": {
-                        "name": "QDGO"
-                      }
-                    },
-                    "kinds": [
-                      "superset"
-                    ]
-                  }
-                ]
-              },
-              {
                 "id": "JsonSchemaDeprecation",
                 "shortDescription": {
                   "text": "Deprecated JSON property"
@@ -3572,6 +3541,37 @@
                     "target": {
                       "id": "JSON and JSON5",
                       "index": 7,
+                      "toolComponent": {
+                        "name": "QDGO"
+                      }
+                    },
+                    "kinds": [
+                      "superset"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "XmlDuplicatedId",
+                "shortDescription": {
+                  "text": "Duplicate 'id' attribute"
+                },
+                "fullDescription": {
+                  "text": "Reports a duplicate 'id' attribute in XML.",
+                  "markdown": "Reports a duplicate `id` attribute in XML."
+                },
+                "defaultConfiguration": {
+                  "enabled": false,
+                  "level": "error",
+                  "parameters": {
+                    "ideaSeverity": "ERROR"
+                  }
+                },
+                "relationships": [
+                  {
+                    "target": {
+                      "id": "XML",
+                      "index": 5,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -4823,37 +4823,6 @@
                 ]
               },
               {
-                "id": "HtmlExtraClosingTag",
-                "shortDescription": {
-                  "text": "Redundant closing tag"
-                },
-                "fullDescription": {
-                  "text": "Reports redundant closing tags on empty elements, for example, 'img' or 'br'. Example: '<html>\n    <body>\n      <br></br>\n    </body>\n  </html>' After the quick-fix is applied: '<html>\n    <body>\n      <br>\n    </body>\n  </html>'",
-                  "markdown": "Reports redundant closing tags on empty elements, for example, `img` or `br`.\n\n**Example:**\n\n\n      <html>\n        <body>\n          <br></br>\n        </body>\n      </html>\n\nAfter the quick-fix is applied:\n\n\n      <html>\n        <body>\n          <br>\n        </body>\n      </html>\n"
-                },
-                "defaultConfiguration": {
-                  "enabled": false,
-                  "level": "error",
-                  "parameters": {
-                    "ideaSeverity": "ERROR"
-                  }
-                },
-                "relationships": [
-                  {
-                    "target": {
-                      "id": "HTML",
-                      "index": 10,
-                      "toolComponent": {
-                        "name": "QDGO"
-                      }
-                    },
-                    "kinds": [
-                      "superset"
-                    ]
-                  }
-                ]
-              },
-              {
                 "id": "RegExpOctalEscape",
                 "shortDescription": {
                   "text": "Octal escape"
@@ -4874,6 +4843,37 @@
                     "target": {
                       "id": "RegExp",
                       "index": 8,
+                      "toolComponent": {
+                        "name": "QDGO"
+                      }
+                    },
+                    "kinds": [
+                      "superset"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "HtmlExtraClosingTag",
+                "shortDescription": {
+                  "text": "Redundant closing tag"
+                },
+                "fullDescription": {
+                  "text": "Reports redundant closing tags on empty elements, for example, 'img' or 'br'. Example: '<html>\n    <body>\n      <br></br>\n    </body>\n  </html>' After the quick-fix is applied: '<html>\n    <body>\n      <br>\n    </body>\n  </html>'",
+                  "markdown": "Reports redundant closing tags on empty elements, for example, `img` or `br`.\n\n**Example:**\n\n\n      <html>\n        <body>\n          <br></br>\n        </body>\n      </html>\n\nAfter the quick-fix is applied:\n\n\n      <html>\n        <body>\n          <br>\n        </body>\n      </html>\n"
+                },
+                "defaultConfiguration": {
+                  "enabled": false,
+                  "level": "error",
+                  "parameters": {
+                    "ideaSeverity": "ERROR"
+                  }
+                },
+                "relationships": [
+                  {
+                    "target": {
+                      "id": "HTML",
+                      "index": 10,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -5257,37 +5257,6 @@
                 ]
               },
               {
-                "id": "RegExpEscapedMetaCharacter",
-                "shortDescription": {
-                  "text": "Escaped meta character"
-                },
-                "fullDescription": {
-                  "text": "Reports escaped meta characters. Some RegExp coding styles specify that meta characters should be placed inside a character class, to make the regular expression easier to understand. This inspection does not warn about the meta character '[', ']' and '^', because those would need additional escaping inside a character class. Example: '\\d+\\.\\d+' After the quick-fix is applied: '\\d+[.]\\d+' New in 2017.1",
-                  "markdown": "Reports escaped meta characters. Some RegExp coding styles specify that meta characters should be placed inside a character class, to make the regular expression easier to understand. This inspection does not warn about the meta character `[`, `]` and `^`, because those would need additional escaping inside a character class.\n\n**Example:**\n\n\n      \\d+\\.\\d+\n\nAfter the quick-fix is applied:\n\n\n      \\d+[.]\\d+\n\nNew in 2017.1"
-                },
-                "defaultConfiguration": {
-                  "enabled": true,
-                  "level": "note",
-                  "parameters": {
-                    "ideaSeverity": "INFORMATION"
-                  }
-                },
-                "relationships": [
-                  {
-                    "target": {
-                      "id": "RegExp",
-                      "index": 8,
-                      "toolComponent": {
-                        "name": "QDGO"
-                      }
-                    },
-                    "kinds": [
-                      "superset"
-                    ]
-                  }
-                ]
-              },
-              {
                 "id": "LossyEncoding",
                 "shortDescription": {
                   "text": "Lossy encoding"
@@ -5308,6 +5277,37 @@
                     "target": {
                       "id": "Internationalization",
                       "index": 25,
+                      "toolComponent": {
+                        "name": "QDGO"
+                      }
+                    },
+                    "kinds": [
+                      "superset"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "RegExpEscapedMetaCharacter",
+                "shortDescription": {
+                  "text": "Escaped meta character"
+                },
+                "fullDescription": {
+                  "text": "Reports escaped meta characters. Some RegExp coding styles specify that meta characters should be placed inside a character class, to make the regular expression easier to understand. This inspection does not warn about the meta character '[', ']' and '^', because those would need additional escaping inside a character class. Example: '\\d+\\.\\d+' After the quick-fix is applied: '\\d+[.]\\d+' New in 2017.1",
+                  "markdown": "Reports escaped meta characters. Some RegExp coding styles specify that meta characters should be placed inside a character class, to make the regular expression easier to understand. This inspection does not warn about the meta character `[`, `]` and `^`, because those would need additional escaping inside a character class.\n\n**Example:**\n\n\n      \\d+\\.\\d+\n\nAfter the quick-fix is applied:\n\n\n      \\d+[.]\\d+\n\nNew in 2017.1"
+                },
+                "defaultConfiguration": {
+                  "enabled": true,
+                  "level": "note",
+                  "parameters": {
+                    "ideaSeverity": "INFORMATION"
+                  }
+                },
+                "relationships": [
+                  {
+                    "target": {
+                      "id": "RegExp",
+                      "index": 8,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -7204,9 +7204,9 @@
       ],
       "automationDetails": {
         "id": "project/qodana/2022-12-11",
-        "guid": "4ea02be9-3109-4939-a319-98481988139a",
+        "guid": "0f1ec228-8391-4c7e-87d0-e620a92c2586",
         "properties": {
-          "jobUrl": "https://github.com/veteran-software/discord-api-wrapper/actions/runs/3670005865"
+          "jobUrl": "https://github.com/veteran-software/discord-api-wrapper/actions/runs/3670045119"
         }
       },
       "newlineSequences": [
@@ -7214,6 +7214,1808 @@
         "\n"
       ],
       "properties": {
+        "qodana.promo.results": [
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported function 'GetCurrentUser'",
+              "markdown": "Unnecessarily exported function `GetCurrentUser`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/user_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 30,
+                    "startColumn": 6,
+                    "charOffset": 1155,
+                    "charLength": 14,
+                    "snippet": {
+                      "text": "GetCurrentUser"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 28,
+                    "startColumn": 1,
+                    "charOffset": 1100,
+                    "charLength": 140,
+                    "snippet": {
+                      "text": "//\n//goland:noinspection GoUnusedExportedFunction\nfunc GetCurrentUser() (*User, error) {\n\tu := parseRoute(fmt.Sprintf(getCurrentUser, api))\n"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "c2d71a9fc45fd04a7958d0f61fedb5ca59592f778c856bcf4438f44137b04e70"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported method 'GetUser'",
+              "markdown": "Unnecessarily exported method `GetUser`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/user_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 42,
+                    "startColumn": 16,
+                    "charOffset": 1459,
+                    "charLength": 7,
+                    "snippet": {
+                      "text": "GetUser"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 40,
+                    "startColumn": 1,
+                    "charOffset": 1394,
+                    "charLength": 155,
+                    "snippet": {
+                      "text": "//\n//goland:noinspection GoUnusedExportedFunction\nfunc (u *User) GetUser() (*User, error) {\n\troute := parseRoute(fmt.Sprintf(getUser, api, u.ID.String()))\n"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "f06abdba852d41d053e430b26be22130ce2a7979c1c6f7757051c819a3f14ca0"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported function 'ModifyCurrentUser'",
+              "markdown": "Unnecessarily exported function `ModifyCurrentUser`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/user_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 56,
+                    "startColumn": 6,
+                    "charOffset": 1860,
+                    "charLength": 17,
+                    "snippet": {
+                      "text": "ModifyCurrentUser"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 54,
+                    "startColumn": 1,
+                    "charOffset": 1805,
+                    "charLength": 176,
+                    "snippet": {
+                      "text": "//\n//goland:noinspection GoUnusedExportedFunction\nfunc ModifyCurrentUser(payload *ModifyCurrentUserJSON) (*User, error) {\n\tu := parseRoute(fmt.Sprintf(modifyCurrentUser, api))\n"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "45e64915b42882ca40cfd872da197e6274227435634cf11bbb7268327ea734ee"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported function 'GetCurrentUserGuilds'",
+              "markdown": "Unnecessarily exported function `GetCurrentUserGuilds`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/user_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 74,
+                    "startColumn": 6,
+                    "charOffset": 2444,
+                    "charLength": 20,
+                    "snippet": {
+                      "text": "GetCurrentUserGuilds"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 72,
+                    "startColumn": 1,
+                    "charOffset": 2389,
+                    "charLength": 205,
+                    "snippet": {
+                      "text": "//\n//goland:noinspection GoUnusedExportedFunction\nfunc GetCurrentUserGuilds(before *Snowflake, after *Snowflake, limit *uint64) ([]*Guild, error) {\n\tu := parseRoute(fmt.Sprintf(getCurrentUserGuilds, api))\n"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "e8d3ecb8a0ecc6f5d987f06ef00fa1ff9eeaaf056c24a3935a1b350746058fa9"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported method 'GetCurrentUserGuildMember'",
+              "markdown": "Unnecessarily exported method `GetCurrentUserGuildMember`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/user_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 98,
+                    "startColumn": 17,
+                    "charOffset": 3095,
+                    "charLength": 25,
+                    "snippet": {
+                      "text": "GetCurrentUserGuildMember"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 96,
+                    "startColumn": 1,
+                    "charOffset": 2947,
+                    "charLength": 277,
+                    "snippet": {
+                      "text": "\n// GetCurrentUserGuildMember - Returns a GuildMember object for the current user. Requires the `guilds.members.read` OAuth2 scope.\nfunc (g *Guild) GetCurrentUserGuildMember() (*GuildMember, error) {\n\tu := parseRoute(fmt.Sprintf(getCurrentUserGuildMember, api, g.ID.String()))\n"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "0d8f91b17e2510c89e1d853a7562b3e7c0867d1f1f4cf16bc9cf8b5d2d427742"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported method 'LeaveGuild'",
+              "markdown": "Unnecessarily exported method `LeaveGuild`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/user_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 108,
+                    "startColumn": 17,
+                    "charOffset": 3438,
+                    "charLength": 10,
+                    "snippet": {
+                      "text": "LeaveGuild"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 106,
+                    "startColumn": 1,
+                    "charOffset": 3349,
+                    "charLength": 172,
+                    "snippet": {
+                      "text": "\n// LeaveGuild - Leave a guild. Returns a 204 empty response on success.\nfunc (g *Guild) LeaveGuild() error {\n\tu := parseRoute(fmt.Sprintf(leaveGuild, api, g.ID.String()))\n"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "244175901934edd13a56fb726ce9d37e4ac57ec913909768971f92cecda28047"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported function 'CreateDM'",
+              "markdown": "Unnecessarily exported function `CreateDM`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/user_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 123,
+                    "startColumn": 6,
+                    "charOffset": 3957,
+                    "charLength": 8,
+                    "snippet": {
+                      "text": "CreateDM"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 121,
+                    "startColumn": 1,
+                    "charOffset": 3902,
+                    "charLength": 152,
+                    "snippet": {
+                      "text": "//\n//goland:noinspection GoUnusedExportedFunction\nfunc CreateDM(payload *CreateDmJSON) (*Channel, error) {\n\tu := parseRoute(fmt.Sprintf(createDM, api))\n"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "104e20877a1e9cab59f344cd16450051d247e51a4c94130b739334fe821696d9"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported function 'CreateGroupDM'",
+              "markdown": "Unnecessarily exported function `CreateGroupDM`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/user_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 146,
+                    "startColumn": 6,
+                    "charOffset": 4688,
+                    "charLength": 13,
+                    "snippet": {
+                      "text": "CreateGroupDM"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 144,
+                    "startColumn": 1,
+                    "charOffset": 4633,
+                    "charLength": 162,
+                    "snippet": {
+                      "text": "//\n//goland:noinspection GoUnusedExportedFunction\nfunc CreateGroupDM(payload *CreateDmJSON) (*Channel, error) {\n\tu := parseRoute(fmt.Sprintf(createGroupDM, api))\n"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "bff6926957777c534f481c3cf1a11dda7845ee3ce3f1cee505df1948b9cbc0a7"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported type 'CreateGroupDmJSON'",
+              "markdown": "Unnecessarily exported type `CreateGroupDmJSON`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/user_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 156,
+                    "startColumn": 6,
+                    "charOffset": 4951,
+                    "charLength": 17,
+                    "snippet": {
+                      "text": "CreateGroupDmJSON"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 154,
+                    "startColumn": 1,
+                    "charOffset": 4909,
+                    "charLength": 316,
+                    "snippet": {
+                      "text": "\n// CreateGroupDmJSON - JSON payload\ntype CreateGroupDmJSON struct {\n\tAccessTokens []string             `json:\"access_tokens\"` // access tokens of users that have granted your app the `gdm.join` scope\n\tNicks        map[Snowflake]string `json:\"nicks\"`         // a dictionary of user ids to their respective nicknames"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "cc2218be4c9f4adac887bdf43411e324bdbe86a11afef9a38d0915c16b942e4b"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported function 'GetUserConnections'",
+              "markdown": "Unnecessarily exported function `GetUserConnections`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/user_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 164,
+                    "startColumn": 6,
+                    "charOffset": 5387,
+                    "charLength": 18,
+                    "snippet": {
+                      "text": "GetUserConnections"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 162,
+                    "startColumn": 1,
+                    "charOffset": 5332,
+                    "charLength": 156,
+                    "snippet": {
+                      "text": "//\n//goland:noinspection GoUnusedExportedFunction\nfunc GetUserConnections() ([]*Connection, error) {\n\tu := parseRoute(fmt.Sprintf(getUserConnections, api))\n"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "2221660c562354683f74e7ae135e263eca43d5aa9af8845cc1846e1f4dd8f3c3"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported method 'GetAvatarUrl'",
+              "markdown": "Unnecessarily exported method `GetAvatarUrl`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/user_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 174,
+                    "startColumn": 16,
+                    "charOffset": 5688,
+                    "charLength": 12,
+                    "snippet": {
+                      "text": "GetAvatarUrl"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 172,
+                    "startColumn": 1,
+                    "charOffset": 5614,
+                    "charLength": 155,
+                    "snippet": {
+                      "text": "\n// GetAvatarUrl - returns a properly formatted avatar url\nfunc (u *User) GetAvatarUrl() string {\n\tif u.Avatar != nil {\n\t\tif PtrStr(u.Avatar)[:2] == \"a_\" {"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "748153d3d89dcd1f270e1874297b0e13becfdd8386accf011efcd25dc4255d9e"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported method 'GetDefaultUserAvatarUrl'",
+              "markdown": "Unnecessarily exported method `GetDefaultUserAvatarUrl`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/user_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 185,
+                    "startColumn": 16,
+                    "charOffset": 6014,
+                    "charLength": 23,
+                    "snippet": {
+                      "text": "GetDefaultUserAvatarUrl"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 183,
+                    "startColumn": 1,
+                    "charOffset": 5934,
+                    "charLength": 184,
+                    "snippet": {
+                      "text": "\n// GetDefaultUserAvatarUrl - returns the default Discord avatar\nfunc (u *User) GetDefaultUserAvatarUrl() string {\n\tdiscriminator, err := strconv.Atoi(u.Discriminator)\n\tif err != nil {"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "4a6c8e3b7fe35da9b50769c67016c7976fbe2b52736f9f71b5676215d80126ac"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported method 'CreateWebhook'",
+              "markdown": "Unnecessarily exported method `CreateWebhook`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/webhook_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 40,
+                    "startColumn": 19,
+                    "charOffset": 1328,
+                    "charLength": 13,
+                    "snippet": {
+                      "text": "CreateWebhook"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 38,
+                    "startColumn": 1,
+                    "charOffset": 1248,
+                    "charLength": 344,
+                    "snippet": {
+                      "text": "//\n// This endpoint supports the \"X-Audit-Log-Reason\" header.\nfunc (c *Channel) CreateWebhook(name string, avatar *dataurl.DataURL, reason *string) (*Webhook, error) {\n\tif len(name) < 1 || len(name) > 80 || strings.Contains(strings.ToLower(name), \"clyde\") {\n\t\treturn nil, errors.New(\"webhook length is incorrect or the name contains \\\"Clyde\\\"\")"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "901c4a2d76c91097b04b04866e2c8025a60d8cbc9d7e7e05163c3c524cb26ed0"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported method 'GetChannelWebhooks'",
+              "markdown": "Unnecessarily exported method `GetChannelWebhooks`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/webhook_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 64,
+                    "startColumn": 19,
+                    "charOffset": 2084,
+                    "charLength": 18,
+                    "snippet": {
+                      "text": "GetChannelWebhooks"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 62,
+                    "startColumn": 1,
+                    "charOffset": 1958,
+                    "charLength": 215,
+                    "snippet": {
+                      "text": "\n// GetChannelWebhooks - Returns a list of channel webhook objects. Requires the ManageWebhooks permission.\nfunc (c *Channel) GetChannelWebhooks() ([]*Webhook, error) {\n\t// TODO: Check for ManageWebhooks permission\n"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "1bd305615a612b8f470325237653c20e96943de511458e9c0d6cdee42c83aaa7"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported method 'GetGuildWebhooks'",
+              "markdown": "Unnecessarily exported method `GetGuildWebhooks`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/webhook_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 76,
+                    "startColumn": 17,
+                    "charOffset": 2478,
+                    "charLength": 16,
+                    "snippet": {
+                      "text": "GetGuildWebhooks"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 74,
+                    "startColumn": 1,
+                    "charOffset": 2358,
+                    "charLength": 207,
+                    "snippet": {
+                      "text": "\n// GetGuildWebhooks - Returns a list of guild webhook objects. Requires the ManageWebhooks permission.\nfunc (g *Guild) GetGuildWebhooks() ([]*Webhook, error) {\n\t// TODO: Check for ManageWebhooks permission\n"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "5b4d98fe69017729734bbc3642b95916f9332720d49f05b31bfb3d4963d6a34c"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported method 'GetWebhook'",
+              "markdown": "Unnecessarily exported method `GetWebhook`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/webhook_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 88,
+                    "startColumn": 19,
+                    "charOffset": 2832,
+                    "charLength": 10,
+                    "snippet": {
+                      "text": "GetWebhook"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 86,
+                    "startColumn": 1,
+                    "charOffset": 2748,
+                    "charLength": 179,
+                    "snippet": {
+                      "text": "\n// GetWebhook - Returns the new webhook object for the given id.\nfunc (w *Webhook) GetWebhook() (*Webhook, error) {\n\tu := parseRoute(fmt.Sprintf(getWebhook, api, w.ID.String()))\n"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "21273e3cd3772379fd255ff1e73258ba98e129bfab949f785a778a2d342dccfd"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported method 'GetWebhookWithToken'",
+              "markdown": "Unnecessarily exported method `GetWebhookWithToken`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/webhook_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 98,
+                    "startColumn": 19,
+                    "charOffset": 3187,
+                    "charLength": 19,
+                    "snippet": {
+                      "text": "GetWebhookWithToken"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 96,
+                    "startColumn": 1,
+                    "charOffset": 3036,
+                    "charLength": 273,
+                    "snippet": {
+                      "text": "\n// GetWebhookWithToken - Same as above, except this call does not require authentication and returns no user in the webhook object.\nfunc (w *Webhook) GetWebhookWithToken() (*Webhook, error) {\n\tu := parseRoute(fmt.Sprintf(getWebhookWithToken, api, w.ID.String(), w.Token))\n"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "1ee89905c2f20580738eb104095d9f25ef5f51199e74480a42027c0e4f95700e"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported method 'ModifyWebhook'",
+              "markdown": "Unnecessarily exported method `ModifyWebhook`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/webhook_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 112,
+                    "startColumn": 19,
+                    "charOffset": 3715,
+                    "charLength": 13,
+                    "snippet": {
+                      "text": "ModifyWebhook"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 110,
+                    "startColumn": 1,
+                    "charOffset": 3635,
+                    "charLength": 191,
+                    "snippet": {
+                      "text": "//\n// This endpoint supports the \"X-Audit-Log-Reason\" header.\nfunc (w *Webhook) ModifyWebhook(name *string, avatar *dataurl.DataURL, channelId *Snowflake, reason *string) (\n\t*Webhook,\n\terror,"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "f645f573d9ac7fd54fb347ed43c60dcaf40de0d3f366c226275d08bd3c01a598"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported method 'ModifyWebhookWithToken'",
+              "markdown": "Unnecessarily exported method `ModifyWebhookWithToken`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/webhook_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 143,
+                    "startColumn": 19,
+                    "charOffset": 4605,
+                    "charLength": 22,
+                    "snippet": {
+                      "text": "ModifyWebhookWithToken"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 141,
+                    "startColumn": 1,
+                    "charOffset": 4391,
+                    "charLength": 371,
+                    "snippet": {
+                      "text": "\n// ModifyWebhookWithToken - Same as above, except this call does not require authentication, does not accept a channel_id parameter in the body, and does not return a user in the webhook object.\nfunc (w *Webhook) ModifyWebhookWithToken(name *string, avatar *dataurl.DataURL, reason *string) (*Webhook, error) {\n\tparams := struct {\n\t\tName   string `json:\"name,omitempty\"`"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "7fd9c7d2c5b93991c7f2f305585d15a47d11c18fa036834f81e04d7ea8359a3d"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported method 'DeleteWebhook'",
+              "markdown": "Unnecessarily exported method `DeleteWebhook`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/webhook_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 167,
+                    "startColumn": 19,
+                    "charOffset": 5328,
+                    "charLength": 13,
+                    "snippet": {
+                      "text": "DeleteWebhook"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 165,
+                    "startColumn": 1,
+                    "charOffset": 5248,
+                    "charLength": 183,
+                    "snippet": {
+                      "text": "//\n// This endpoint supports the \"X-Audit-Log-Reason\" header.\nfunc (w *Webhook) DeleteWebhook(reason *string) error {\n\tu := parseRoute(fmt.Sprintf(deleteWebhook, api, w.ID.String()))\n"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "9df42b08066ad1ee2b2a724221cdee7b65860574712937be29c302a0b519b7ff"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported method 'DeleteWebhookWithToken'",
+              "markdown": "Unnecessarily exported method `DeleteWebhookWithToken`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/webhook_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 174,
+                    "startColumn": 19,
+                    "charOffset": 5583,
+                    "charLength": 22,
+                    "snippet": {
+                      "text": "DeleteWebhookWithToken"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 172,
+                    "startColumn": 1,
+                    "charOffset": 5471,
+                    "charLength": 242,
+                    "snippet": {
+                      "text": "\n// DeleteWebhookWithToken - Same as above, except this call does not require authentication.\nfunc (w *Webhook) DeleteWebhookWithToken(reason *string) error {\n\tu := parseRoute(fmt.Sprintf(deleteWebhookWithToken, api, w.ID.String(), w.Token))\n"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "3e5ea8b1b9b8797dcc86d964e7acb4d7172a030230f8f19291f05055c1b27e6a"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported method 'ExecuteWebhook'",
+              "markdown": "Unnecessarily exported method `ExecuteWebhook`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/webhook_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 185,
+                    "startColumn": 19,
+                    "charOffset": 6050,
+                    "charLength": 14,
+                    "snippet": {
+                      "text": "ExecuteWebhook"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 183,
+                    "startColumn": 1,
+                    "charOffset": 5971,
+                    "charLength": 241,
+                    "snippet": {
+                      "text": "//\n// wait and threadID are optional; pass nil if not needed\nfunc (w *Webhook) ExecuteWebhook(wait *bool, threadID *Snowflake, params *ExecuteWebhookJSON) (*Message, error) {\n\tu := parseRoute(fmt.Sprintf(executeWebhook, api, w.ID, w.Token))\n"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "a5c24fc4a99407551b2e27f70bcf3b399f531ab2dd2f93d9c55e5a11ca7db4ef"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported type 'ExecuteWebhookJSON'",
+              "markdown": "Unnecessarily exported type `ExecuteWebhookJSON`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/webhook_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 206,
+                    "startColumn": 6,
+                    "charOffset": 6570,
+                    "charLength": 18,
+                    "snippet": {
+                      "text": "ExecuteWebhookJSON"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 204,
+                    "startColumn": 1,
+                    "charOffset": 6517,
+                    "charLength": 373,
+                    "snippet": {
+                      "text": "\n// ExecuteWebhookJSON - JSON payload structure\ntype ExecuteWebhookJSON struct {\n\tContent         string          `json:\"content\"`                    // the message contents (up to 2000 characters); Required - one of content, file, embeds\n\tUsername        string          `json:\"username,omitempty\"`         // override the default username of the webhook; Required - false"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "a258eb2b4d417717ae577f08c8e051edfd82f9edf7ba367c5cb1b1be9df2dcbb"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported method 'GetWebhookMessage'",
+              "markdown": "Unnecessarily exported method `GetWebhookMessage`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/webhook_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 223,
+                    "startColumn": 19,
+                    "charOffset": 8309,
+                    "charLength": 17,
+                    "snippet": {
+                      "text": "GetWebhookMessage"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 221,
+                    "startColumn": 1,
+                    "charOffset": 8240,
+                    "charLength": 240,
+                    "snippet": {
+                      "text": "//\n// threadID is optional; pass nil if not needed\nfunc (w *Webhook) GetWebhookMessage(msgID *Snowflake, threadID *Snowflake) (*Message, error) {\n\tu := parseRoute(fmt.Sprintf(getWebhookMessage, api, w.ID.String(), w.Token, msgID.String()))\n"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "e89ad677c807385fa9cac5d35902b3ac5d2ad9f4234ccbd6f82343aba5b2526b"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported method 'EditWebhookMessage'",
+              "markdown": "Unnecessarily exported method `EditWebhookMessage`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/webhook_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 255,
+                    "startColumn": 19,
+                    "charOffset": 9912,
+                    "charLength": 18,
+                    "snippet": {
+                      "text": "EditWebhookMessage"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 253,
+                    "startColumn": 1,
+                    "charOffset": 9843,
+                    "charLength": 180,
+                    "snippet": {
+                      "text": "//\n// threadID is optional; pass nil if not needed\nfunc (w *Webhook) EditWebhookMessage(msgID *Snowflake, threadID *Snowflake, payload *EditWebhookMessageJSON) (\n\t*Message,\n\terror,"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "563edac7511d80acfb760153d5b895b79abeff9a0f9798364b4b308947c9b39b"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported type 'EditWebhookMessageJSON'",
+              "markdown": "Unnecessarily exported type `EditWebhookMessageJSON`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/webhook_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 276,
+                    "startColumn": 6,
+                    "charOffset": 10459,
+                    "charLength": 22,
+                    "snippet": {
+                      "text": "EditWebhookMessageJSON"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 274,
+                    "startColumn": 1,
+                    "charOffset": 10366,
+                    "charLength": 337,
+                    "snippet": {
+                      "text": "\n// EditWebhookMessageJSON - All parameters to this endpoint are optional and nullable.\ntype EditWebhookMessageJSON struct {\n\tContent         *string          `json:\"content,omitempty\"`          // the message contents (up to 2000 characters)\n\tEmbeds          []*Embed         `json:\"embeds,omitempty\"`           // embedded rich content"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "b098bf95f058f0f5ba5bd5298344c811a400eb363905f1d94607d9127e53fb9b"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported method 'DeleteWebhookMessage'",
+              "markdown": "Unnecessarily exported method `DeleteWebhookMessage`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/webhook_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 288,
+                    "startColumn": 19,
+                    "charOffset": 11394,
+                    "charLength": 20,
+                    "snippet": {
+                      "text": "DeleteWebhookMessage"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 286,
+                    "startColumn": 1,
+                    "charOffset": 11325,
+                    "charLength": 234,
+                    "snippet": {
+                      "text": "//\n// threadID is optional; pass nil if not needed\nfunc (w *Webhook) DeleteWebhookMessage(msgID *Snowflake, threadID *Snowflake) error {\n\tu := parseRoute(fmt.Sprintf(deleteWebhookMessage, api, w.ID.String(), w.Token, msgID.String()))\n"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "6bb8adfc2d934968e0242153af8d65c9f631fa53e8a06b0a22bab2bb3c761f45"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported function 'GetGuildTemplate'",
+              "markdown": "Unnecessarily exported function `GetGuildTemplate`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/guild_template_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 27,
+                    "startColumn": 6,
+                    "charOffset": 971,
+                    "charLength": 16,
+                    "snippet": {
+                      "text": "GetGuildTemplate"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 25,
+                    "startColumn": 1,
+                    "charOffset": 916,
+                    "charLength": 186,
+                    "snippet": {
+                      "text": "//\n//goland:noinspection GoUnusedExportedFunction\nfunc GetGuildTemplate(templateCode string) (*GuildTemplate, error) {\n\tu := parseRoute(fmt.Sprintf(getGuildTemplate, api, templateCode))\n"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "1740f7121567e50c620e67c1699d4379bcac6665be0b9c62eb0279b67f3343f7"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported function 'CreateGuildFromGuildTemplate'",
+              "markdown": "Unnecessarily exported function `CreateGuildFromGuildTemplate`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/guild_template_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 41,
+                    "startColumn": 6,
+                    "charOffset": 1504,
+                    "charLength": 28,
+                    "snippet": {
+                      "text": "CreateGuildFromGuildTemplate"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 39,
+                    "startColumn": 1,
+                    "charOffset": 1449,
+                    "charLength": 245,
+                    "snippet": {
+                      "text": "//\n//goland:noinspection GoUnusedExportedFunction\nfunc CreateGuildFromGuildTemplate(templateCode string, payload *CreateGuildFromGuildTemplateJSON) (*Guild, error) {\n\tu := parseRoute(fmt.Sprintf(createGuildFromGuildTemplate, api, templateCode))\n"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "d0d55ba425571b0d134c0f3027c1fc806099fc36b9b4e9cb27b92082562a2b22"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported method 'GetGuildTemplates'",
+              "markdown": "Unnecessarily exported method `GetGuildTemplates`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/guild_template_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 57,
+                    "startColumn": 17,
+                    "charOffset": 2085,
+                    "charLength": 17,
+                    "snippet": {
+                      "text": "GetGuildTemplates"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 55,
+                    "startColumn": 1,
+                    "charOffset": 1965,
+                    "charLength": 237,
+                    "snippet": {
+                      "text": "\n// GetGuildTemplates - Returns an array of GuildTemplate objects. Requires the ManageGuild permission.\nfunc (g *Guild) GetGuildTemplates() ([]*GuildTemplate, error) {\n\tu := parseRoute(fmt.Sprintf(getGuildTemplates, api, g.ID.String()))\n"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "47fe55cd8c3fd09760aea3aed27b7abcbc56b203132fe3dfbd7f11424021c6d8"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported method 'CreateGuildTemplate'",
+              "markdown": "Unnecessarily exported method `CreateGuildTemplate`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/guild_template_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 66,
+                    "startColumn": 17,
+                    "charOffset": 2357,
+                    "charLength": 19,
+                    "snippet": {
+                      "text": "CreateGuildTemplate"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 64,
+                    "startColumn": 1,
+                    "charOffset": 2338,
+                    "charLength": 170,
+                    "snippet": {
+                      "text": "}\n\nfunc (g *Guild) CreateGuildTemplate(payload *CreateGuildTemplateJSON) (*GuildTemplate, error) {\n\tu := parseRoute(fmt.Sprintf(createGuildTemplate, api, g.ID.String()))\n"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "d16b6dc116afa71bb4f552f8e83799efb70957b1679fecac7524110d007f2545"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported type 'CreateGuildTemplateJSON'",
+              "markdown": "Unnecessarily exported type `CreateGuildTemplateJSON`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/guild_template_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 76,
+                    "startColumn": 6,
+                    "charOffset": 2694,
+                    "charLength": 23,
+                    "snippet": {
+                      "text": "CreateGuildTemplateJSON"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 74,
+                    "startColumn": 1,
+                    "charOffset": 2646,
+                    "charLength": 278,
+                    "snippet": {
+                      "text": "\n// CreateGuildTemplateJSON - JSON payload\ntype CreateGuildTemplateJSON struct {\n\tName        string  `json:\"name,omitempty\"`        // name of the template (1-100 characters)\n\tDescription *string `json:\"description,omitempty\"` // description for the template (0-120 characters)"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "da82f9458bbdf4fca5a08b45dd0b4003adc5587d301795ed918ee067ff11e751"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported method 'SyncGuildTemplate'",
+              "markdown": "Unnecessarily exported method `SyncGuildTemplate`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/guild_template_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 84,
+                    "startColumn": 17,
+                    "charOffset": 3104,
+                    "charLength": 17,
+                    "snippet": {
+                      "text": "SyncGuildTemplate"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 82,
+                    "startColumn": 1,
+                    "charOffset": 3000,
+                    "charLength": 252,
+                    "snippet": {
+                      "text": "//\n// Requires the ManageGuild permission. Returns the GuildTemplate object on success.\nfunc (g *Guild) SyncGuildTemplate(templateCode string) (*GuildTemplate, error) {\n\tu := parseRoute(fmt.Sprintf(syncGuildTemplate, api, g.ID.String(), templateCode))\n"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "699f6a26976916406d417c0c7aab7181dbbef43ad8680a53d14ca614d54f92c7"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported method 'ModifyGuildTemplate'",
+              "markdown": "Unnecessarily exported method `ModifyGuildTemplate`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/guild_template_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 98,
+                    "startColumn": 17,
+                    "charOffset": 3555,
+                    "charLength": 19,
+                    "snippet": {
+                      "text": "ModifyGuildTemplate"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 96,
+                    "startColumn": 1,
+                    "charOffset": 3488,
+                    "charLength": 253,
+                    "snippet": {
+                      "text": "//\n// Returns the GuildTemplate object on success.\nfunc (g *Guild) ModifyGuildTemplate(templateCode string, payload *ModifyGuildTemplateJSON) (*GuildTemplate, error) {\n\tu := parseRoute(fmt.Sprintf(modifyGuildTemplate, api, g.ID.String(), templateCode))\n"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "ed41de041c2bcd5dfcd53b269ce09c87762b00ea8f0895fc28e512982fa41557"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported type 'ModifyGuildTemplateJSON'",
+              "markdown": "Unnecessarily exported type `ModifyGuildTemplateJSON`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/guild_template_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 107,
+                    "startColumn": 6,
+                    "charOffset": 3886,
+                    "charLength": 23,
+                    "snippet": {
+                      "text": "ModifyGuildTemplateJSON"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 105,
+                    "startColumn": 1,
+                    "charOffset": 3878,
+                    "charLength": 67,
+                    "snippet": {
+                      "text": "}\n\ntype ModifyGuildTemplateJSON struct {\n\tCreateGuildTemplateJSON\n}"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "244a1fef890dd6a7b8b2521fbdaba8ec3c8d058b6e716b3fda81f8d6ae6dfacf"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          },
+          {
+            "ruleId": "GoUnnecessarilyExportedIdentifiers",
+            "kind": "fail",
+            "level": "note",
+            "message": {
+              "text": "Unnecessarily exported method 'DeleteGuildTemplate'",
+              "markdown": "Unnecessarily exported method `DeleteGuildTemplate`"
+            },
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "api/guild_template_endpoints.go",
+                    "uriBaseId": "SRCROOT"
+                  },
+                  "region": {
+                    "startLine": 115,
+                    "startColumn": 17,
+                    "charOffset": 4227,
+                    "charLength": 19,
+                    "snippet": {
+                      "text": "DeleteGuildTemplate"
+                    },
+                    "sourceLanguage": "go"
+                  },
+                  "contextRegion": {
+                    "startLine": 113,
+                    "startColumn": 1,
+                    "charOffset": 3997,
+                    "charLength": 364,
+                    "snippet": {
+                      "text": "// Requires the ManageGuild permission. Returns the deleted GuildTemplate object on success.\n// TODO: This DELETE endpoint returns a payload; update the delete request and all other methods that use it accordingly\nfunc (g *Guild) DeleteGuildTemplate(templateCode string) error {\n\tu := parseRoute(fmt.Sprintf(deleteGuildTemplate, api, g.ID.String(), templateCode))\n"
+                    }
+                  }
+                },
+                "logicalLocations": [
+                  {
+                    "fullyQualifiedName": "project",
+                    "kind": "module"
+                  }
+                ]
+              }
+            ],
+            "partialFingerprints": {
+              "equalIndicator/v1": "80f46e01a43413d6ff38942d1c9e6a851a7fbd0fb1bce84faf6afd0c5343af84"
+            },
+            "properties": {
+              "ideaSeverity": "WEAK WARNING"
+            }
+          }
+        ],
         "configProfile": "absent",
         "deviceId": "200820300000000-bb6d-3bba-1831-ac4c93d548d4"
       }
