@@ -116,8 +116,8 @@ func NewMessageResponse() *InteractionResponseMessages {
 }
 
 // SetType - sets the Type of the InteractionResponseMessages object
-func (i *InteractionResponseMessages) SetType(t *InteractionCallbackType) *InteractionResponseMessages {
-	i.Type = *t
+func (i *InteractionResponseMessages) SetType(t InteractionCallbackType) *InteractionResponseMessages {
+	i.Type = t
 
 	return i
 }
