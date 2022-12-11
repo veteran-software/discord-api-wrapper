@@ -144,8 +144,8 @@ func (i *InteractionResponseMessages) AddEmbed(e *Embed) *InteractionResponseMes
 }
 
 // AddEmbeds - add multiple Embed objects (max 10) to the response
-func (i *InteractionResponseMessages) AddEmbeds(e []Embed) *InteractionResponseMessages {
-	i.Data.Embeds = append(i.Data.Embeds, e...)
+func (i *InteractionResponseMessages) AddEmbeds(e *[]Embed) *InteractionResponseMessages {
+	i.Data.Embeds = append(i.Data.Embeds, *e...)
 
 	return i
 }

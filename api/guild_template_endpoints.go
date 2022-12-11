@@ -38,7 +38,7 @@ func GetGuildTemplate(templateCode string) (*GuildTemplate, error) {
 //	This endpoint can be used only by bots in less than 10 guilds.
 //
 //goland:noinspection GoUnusedExportedFunction
-func CreateGuildFromGuildTemplate(templateCode string, payload CreateGuildFromGuildTemplateJSON) (*Guild, error) {
+func CreateGuildFromGuildTemplate(templateCode string, payload *CreateGuildFromGuildTemplateJSON) (*Guild, error) {
 	u := parseRoute(fmt.Sprintf(createGuildFromGuildTemplate, api, templateCode))
 
 	var guild *Guild
@@ -54,16 +54,16 @@ type CreateGuildFromGuildTemplateJSON struct {
 }
 
 // GetGuildTemplates - Returns an array of GuildTemplate objects. Requires the ManageGuild permission.
-func (g *Guild) GetGuildTemplates() ([]GuildTemplate, error) {
+func (g *Guild) GetGuildTemplates() ([]*GuildTemplate, error) {
 	u := parseRoute(fmt.Sprintf(getGuildTemplates, api, g.ID.String()))
 
-	var guildTemplates []GuildTemplate
+	var guildTemplates []*GuildTemplate
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &guildTemplates)
 
 	return guildTemplates, err
 }
 
-func (g *Guild) CreateGuildTemplate(payload CreateGuildTemplateJSON) (*GuildTemplate, error) {
+func (g *Guild) CreateGuildTemplate(payload *CreateGuildTemplateJSON) (*GuildTemplate, error) {
 	u := parseRoute(fmt.Sprintf(createGuildTemplate, api, g.ID.String()))
 
 	var guildTemplate *GuildTemplate
@@ -95,7 +95,7 @@ func (g *Guild) SyncGuildTemplate(templateCode string) (*GuildTemplate, error) {
 // Requires the ManageGuild permission.
 //
 // Returns the GuildTemplate object on success.
-func (g *Guild) ModifyGuildTemplate(templateCode string, payload ModifyGuildTemplateJSON) (*GuildTemplate, error) {
+func (g *Guild) ModifyGuildTemplate(templateCode string, payload *ModifyGuildTemplateJSON) (*GuildTemplate, error) {
 	u := parseRoute(fmt.Sprintf(modifyGuildTemplate, api, g.ID.String(), templateCode))
 
 	var guildTemplate *GuildTemplate

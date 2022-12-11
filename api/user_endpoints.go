@@ -53,7 +53,7 @@ func (u *User) GetUser() (*User, error) {
 //	All parameters to this endpoint are optional.
 //
 //goland:noinspection GoUnusedExportedFunction
-func ModifyCurrentUser(payload ModifyCurrentUserJSON) (*User, error) {
+func ModifyCurrentUser(payload *ModifyCurrentUserJSON) (*User, error) {
 	u := parseRoute(fmt.Sprintf(modifyCurrentUser, api))
 
 	var user *User
@@ -71,7 +71,7 @@ type ModifyCurrentUserJSON struct {
 // GetCurrentUserGuilds - Returns a list of partial Guild objects the current user is a member of. Requires the `guilds` OAuth2 scope.
 //
 //goland:noinspection GoUnusedExportedFunction
-func GetCurrentUserGuilds(before *Snowflake, after *Snowflake, limit *uint64) ([]Guild, error) {
+func GetCurrentUserGuilds(before *Snowflake, after *Snowflake, limit *uint64) ([]*Guild, error) {
 	u := parseRoute(fmt.Sprintf(getCurrentUserGuilds, api))
 
 	q := u.Query()
@@ -88,7 +88,7 @@ func GetCurrentUserGuilds(before *Snowflake, after *Snowflake, limit *uint64) ([
 		u.RawQuery = q.Encode()
 	}
 
-	var guilds []Guild
+	var guilds []*Guild
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &guilds)
 
 	return guilds, err
@@ -120,7 +120,7 @@ func (g *Guild) LeaveGuild() error {
 //	If you open a significant amount of DMs too quickly, your bot may be rate limited or blocked from opening new ones.
 //
 //goland:noinspection GoUnusedExportedFunction
-func CreateDM(payload CreateDmJSON) (*Channel, error) {
+func CreateDM(payload *CreateDmJSON) (*Channel, error) {
 	u := parseRoute(fmt.Sprintf(createDM, api))
 
 	var channel *Channel
@@ -143,7 +143,7 @@ type CreateDmJSON struct {
 //	This endpoint is limited to 10 active group DMs.
 //
 //goland:noinspection GoUnusedExportedFunction
-func CreateGroupDM(payload CreateDmJSON) (*Channel, error) {
+func CreateGroupDM(payload *CreateDmJSON) (*Channel, error) {
 	u := parseRoute(fmt.Sprintf(createGroupDM, api))
 
 	var channel *Channel
@@ -161,10 +161,10 @@ type CreateGroupDmJSON struct {
 // GetUserConnections - Returns a list of Connection objects. Requires the `connections` OAuth2 scope.
 //
 //goland:noinspection GoUnusedExportedFunction
-func GetUserConnections() ([]Connection, error) {
+func GetUserConnections() ([]*Connection, error) {
 	u := parseRoute(fmt.Sprintf(getUserConnections, api))
 
-	var connections []Connection
+	var connections []*Connection
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &connections)
 
 	return connections, err

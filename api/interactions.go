@@ -231,9 +231,9 @@ func (i *Interaction) CreateInteractionResponse(payload any) {
 	// verify that we only accept the payload that we want
 	// maybe future language version will make this easier/cleaner
 	switch payload.(type) {
-	case InteractionResponseMessages:
-	case InteractionResponseAutocomplete:
-	case InteractionResponseModal:
+	case **InteractionResponseMessages:
+	case **InteractionResponseAutocomplete:
+	case **InteractionResponseModal:
 	default:
 		return
 	}

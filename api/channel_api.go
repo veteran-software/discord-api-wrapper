@@ -23,9 +23,9 @@ import (
 
 // IsValidLength - Checks that the total size of an Embed is valid for sending
 func (e *Embed) IsValidLength() bool {
-	if len(e.Title) <= titleLimit && len(e.Description) <= descriptionLimit && len(e.Fields) <= fieldCount && len(e.Footer.Text) <= footerTextLimit && len(e.Author.Name) <= authorNameLimit {
+	if len(e.Title) <= TitleLimit && len(e.Description) <= DescriptionLimit && len(e.Fields) <= FieldCount && len(e.Footer.Text) <= FooterTextLimit && len(e.Author.Name) <= AuthorNameLimit {
 		for _, field := range e.Fields {
-			if len(field.Name) > fieldNameLimit || len(field.Value) > fieldValueLimit {
+			if len(field.Name) > FieldNameLimit || len(field.Value) > FieldValueLimit {
 				return false
 			}
 		}
@@ -81,8 +81,8 @@ func NewEmbed() *Embed {
 
 // SetTitle - Set the Embed title
 func (e *Embed) SetTitle(title string) *Embed {
-	if len(title) > titleLimit {
-		title = title[:titleLimit-4] + " ..."
+	if len(title) > TitleLimit {
+		title = title[:TitleLimit-4] + " ..."
 	}
 	e.Title = title
 
@@ -91,8 +91,8 @@ func (e *Embed) SetTitle(title string) *Embed {
 
 // SetDescription - Set the Embed description
 func (e *Embed) SetDescription(description string) *Embed {
-	if len(description) > descriptionLimit {
-		description = description[:descriptionLimit-4] + " ..."
+	if len(description) > DescriptionLimit {
+		description = description[:DescriptionLimit-4] + " ..."
 	}
 	e.Description = description
 
@@ -178,8 +178,8 @@ func newFooter() *Footer {
 
 // SetText - set the Footer text
 func (f *Footer) SetText(text string) *Footer {
-	if len(text) > footerTextLimit {
-		text = text[:footerTextLimit-4] + " ..."
+	if len(text) > FooterTextLimit {
+		text = text[:FooterTextLimit-4] + " ..."
 	}
 	f.Text = text
 
@@ -236,8 +236,8 @@ func newAuthor() *Author {
 
 // SetName - set the Author Name
 func (a *Author) SetName(name string) *Author {
-	if len(name) > authorNameLimit {
-		name = name[:authorNameLimit-4] + " ..."
+	if len(name) > AuthorNameLimit {
+		name = name[:AuthorNameLimit-4] + " ..."
 	}
 	a.Name = name
 
@@ -275,8 +275,8 @@ func NewField() *Field {
 
 // SetName - set the Field Name
 func (f *Field) SetName(name string) *Field {
-	if len(name) > fieldNameLimit {
-		name = name[:fieldNameLimit-4] + " ..."
+	if len(name) > FieldNameLimit {
+		name = name[:FieldNameLimit-4] + " ..."
 	}
 	f.Name = name
 
@@ -285,8 +285,8 @@ func (f *Field) SetName(name string) *Field {
 
 // SetValue - set the Field Value
 func (f *Field) SetValue(value string) *Field {
-	if len(value) > fieldValueLimit {
-		value = value[:fieldValueLimit-4] + " ..."
+	if len(value) > FieldValueLimit {
+		value = value[:FieldValueLimit-4] + " ..."
 	}
 	f.Value = value
 
