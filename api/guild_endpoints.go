@@ -54,8 +54,8 @@ type CreateGuildJSON struct {
 	VerificationLevel           VerificationLevel               `json:"verification_level"`            // verification level required for the guild
 	DefaultMessageNotifications DefaultMessageNotificationLevel `json:"default_message_notifications"` // default message notifications level
 	ExplicitContentFilter       ExplicitContentFilterLevel      `json:"explicit_content_filter"`       // explicit content filter level
-	Roles                       []Role                          `json:"roles"`                         // roles in the guild
-	Channels                    []Channel                       `json:"channels,omitempty"`            // channels in the guild
+	Roles                       []*Role                         `json:"roles"`                         // roles in the guild
+	Channels                    []*Channel                      `json:"channels,omitempty"`            // channels in the guild
 	AfkChannelID                Snowflake                       `json:"afk_channel_id,omitempty"`      // id of afk channel
 	AfkTimeout                  int64                           `json:"afk_timeout"`                   // afk timeout in seconds
 	SystemChannelID             *Snowflake                      `json:"system_channel_id"`             // the id of the channel where guild notices such as welcome messages and boost events are posted
@@ -131,7 +131,7 @@ type ModifyGuildJSON struct {
 	RulesChannelID              *Snowflake                       `json:"rules_channel_id"`              // the id of the channel where Community guilds can display rules and/or guidelines
 	PublicUpdatesChannelID      *Snowflake                       `json:"public_updates_channel_id"`     // the id of the channel where admins and moderators of Community guilds receive notices from Discord
 	PreferredLocale             string                           `json:"preferred_locale"`              // the preferred locale of a Community guild; used in server discovery and notices from Discord, and sent in interactions; defaults to "en-US"
-	Features                    []GuildFeatures                  `json:"features"`                      // enabled guild features
+	Features                    []*GuildFeatures                 `json:"features"`                      // enabled guild features
 	Description                 *string                          `json:"description"`                   // the description of a Community guild
 	PremiumProgressBarEnabled   bool                             `json:"premium_progress_bar_enabled"`  // whether the guild has the boost progress bar enabled
 }
@@ -176,17 +176,17 @@ func (g *Guild) CreateGuildChannel(payload CreateGuildChannelJSON, reason *strin
 }
 
 type CreateGuildChannelJSON struct {
-	Name                       string      `json:"name,omitempty"`                          // the name of the channel (1-100 characters)
-	Type                       ChannelType `json:"type"`                                    // the ChannelType
-	Topic                      *string     `json:"topic,omitempty"`                         // the channel topic (0-1024 characters)
-	Bitrate                    int64       `json:"bitrate,omitempty"`                       // the bitrate (in bits) of the voice channel
-	UserLimit                  int64       `json:"user_limit,omitempty"`                    // the user limit of the voice channel
-	RateLimitPerUser           int64       `json:"rate_limit_per_user,omitempty"`           // amount of seconds a user has to wait before sending another Message (0-21600); bots, as well as users with the permission ManageMessages or ManageChannels, are unaffected
-	Position                   int         `json:"position,omitempty"`                      // sorting position of the channel
-	PermissionOverwrites       []Overwrite `json:"permission_overwrites,omitempty"`         // explicit permission overwrites for members and roles
-	ParentID                   *Snowflake  `json:"parent_id,omitempty"`                     // for guild channels: id of the parent category for a channel (each parent category can contain up to 50 channels), for threads: id of the text channel this thread was created
-	Nsfw                       bool        `json:"nsfw,omitempty"`                          // whether the channel is nsfw
-	DefaultAutoArchiveDuration int         `json:"default_auto_archive_duration,omitempty"` // default duration that the clients (not the API) will use for newly created threads, in minutes, to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080
+	Name                       string       `json:"name,omitempty"`                          // the name of the channel (1-100 characters)
+	Type                       ChannelType  `json:"type"`                                    // the ChannelType
+	Topic                      *string      `json:"topic,omitempty"`                         // the channel topic (0-1024 characters)
+	Bitrate                    int64        `json:"bitrate,omitempty"`                       // the bitrate (in bits) of the voice channel
+	UserLimit                  int64        `json:"user_limit,omitempty"`                    // the user limit of the voice channel
+	RateLimitPerUser           int64        `json:"rate_limit_per_user,omitempty"`           // amount of seconds a user has to wait before sending another Message (0-21600); bots, as well as users with the permission ManageMessages or ManageChannels, are unaffected
+	Position                   int          `json:"position,omitempty"`                      // sorting position of the channel
+	PermissionOverwrites       []*Overwrite `json:"permission_overwrites,omitempty"`         // explicit permission overwrites for members and roles
+	ParentID                   *Snowflake   `json:"parent_id,omitempty"`                     // for guild channels: id of the parent category for a channel (each parent category can contain up to 50 channels), for threads: id of the text channel this thread was created
+	Nsfw                       bool         `json:"nsfw,omitempty"`                          // whether the channel is nsfw
+	DefaultAutoArchiveDuration int          `json:"default_auto_archive_duration,omitempty"` // default duration that the clients (not the API) will use for newly created threads, in minutes, to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080
 }
 
 // ModifyGuildChannelPositions - Modify the positions of a set of channel objects for the guild.
@@ -301,11 +301,11 @@ func (g *Guild) AddGuildMember(userID *Snowflake, payload *AddGuildMemberJSON) (
 
 // AddGuildMemberJSON - JSON payload
 type AddGuildMemberJSON struct {
-	AccessToken string      `json:"access_token"`    // an oauth2 access token granted with the `guilds.join` to the bots' application for the user you want to add to the guild
-	Nick        string      `json:"nick,omitempty"`  // value to set user's nickname to
-	Roles       []Snowflake `json:"roles,omitempty"` // array of role ids the member is assigned
-	Mute        bool        `json:"mute,omitempty"`  // whether the user is muted in voice channels
-	Deaf        bool        `json:"deaf,omitempty"`  // whether the user is deafened in voice channels
+	AccessToken string       `json:"access_token"`    // an oauth2 access token granted with the `guilds.join` to the bots' application for the user you want to add to the guild
+	Nick        string       `json:"nick,omitempty"`  // value to set user's nickname to
+	Roles       []*Snowflake `json:"roles,omitempty"` // array of role ids the member is assigned
+	Mute        bool         `json:"mute,omitempty"`  // whether the user is muted in voice channels
+	Deaf        bool         `json:"deaf,omitempty"`  // whether the user is deafened in voice channels
 }
 
 // ModifyGuildMember - Modify attributes of a guild member.
@@ -625,9 +625,9 @@ func (g *Guild) BeginGuildPrune(payload *BeginGuildPruneJSON, reason *string) (*
 
 // BeginGuildPruneJSON - JSON payload
 type BeginGuildPruneJSON struct {
-	Days              uint64      `json:"days"`                // number of days to prune (1-30)
-	ComputePruneCount bool        `json:"compute_prune_count"` // whether `pruned` is returned, discouraged for large guilds
-	IncludeRoles      []Snowflake `json:"include_roles"`       // role(s) to include
+	Days              uint64       `json:"days"`                // number of days to prune (1-30)
+	ComputePruneCount bool         `json:"compute_prune_count"` // whether `pruned` is returned, discouraged for large guilds
+	IncludeRoles      []*Snowflake `json:"include_roles"`       // role(s) to include
 }
 
 // GetGuildVoiceRegions - Returns a list of voice region objects for the guild.

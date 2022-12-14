@@ -181,14 +181,12 @@ func (w *Webhook) DeleteWebhookWithToken(reason *string) error {
 //
 // Note that when sending a message, you must provide a value for at least one of content, embeds, or file.
 //
-// wait and threadID are optional; pass nil if not needed
-func (w *Webhook) ExecuteWebhook(wait *bool, threadID *Snowflake, params *ExecuteWebhookJSON) (*Message, error) {
+// wait is required; threadID is optional; pass nil if not needed
+func (w *Webhook) ExecuteWebhook(wait bool, threadID *Snowflake, params *ExecuteWebhookJSON) (*Message, error) {
 	u := parseRoute(fmt.Sprintf(executeWebhook, api, w.ID, w.Token))
 
 	q := u.Query()
-	if wait != nil {
-		q.Set("wait", strconv.FormatBool(*wait))
-	}
+	q.Set("wait", strconv.FormatBool(wait))
 	if threadID != nil {
 		q.Set("thread_id", threadID.String())
 	}
@@ -204,17 +202,17 @@ func (w *Webhook) ExecuteWebhook(wait *bool, threadID *Snowflake, params *Execut
 
 // ExecuteWebhookJSON - JSON payload structure
 type ExecuteWebhookJSON struct {
-	Content         string          `json:"content"`                    // the message contents (up to 2000 characters); Required - one of content, file, embeds
-	Username        string          `json:"username,omitempty"`         // override the default username of the webhook; Required - false
-	AvatarURL       string          `json:"avatar_url,omitempty"`       // override the default avatar of the webhook; Required - false
-	Tts             bool            `json:"tts,omitempty"`              // true if this is a TTS message; Required - false
-	Embeds          []Embed         `json:"embeds"`                     // embedded rich content; Required - one of content, file, embeds
-	AllowedMentions AllowedMentions `json:"allowed_mentions,omitempty"` // allowed mentions for the message; Required - false
-	Components      []Component     `json:"components,omitempty"`       // the components to include with the message - Required - false
-	PayloadJson     string          `json:"payload_json"`               // JSON encoded body of non-file params; Required - "multipart/form-data" only
-	Attachments     []Attachment    `json:"attachments,omitempty"`      // Attachment objects with filename and description; Required - false
-	Flags           MessageFlags    `json:"flags,omitempty"`            // MessageFlags combined as a bitfield (only SuppressEmbeds can be set)
-	ThreadName      string          `json:"thread_name"`                // name of thread to create (requires the webhook channel to be a forum channel)
+	Content         string           `json:"content"`                    // the message contents (up to 2000 characters); Required - one of content, file, embeds
+	Username        string           `json:"username,omitempty"`         // override the default username of the webhook; Required - false
+	AvatarURL       string           `json:"avatar_url,omitempty"`       // override the default avatar of the webhook; Required - false
+	Tts             bool             `json:"tts,omitempty"`              // true if this is a TTS message; Required - false
+	Embeds          []*Embed         `json:"embeds"`                     // embedded rich content; Required - one of content, file, embeds
+	AllowedMentions *AllowedMentions `json:"allowed_mentions,omitempty"` // allowed mentions for the message; Required - false
+	Components      []*Component     `json:"components,omitempty"`       // the components to include with the message - Required - false
+	PayloadJson     string           `json:"payload_json"`               // JSON encoded body of non-file params; Required - "multipart/form-data" only
+	Attachments     []*Attachment    `json:"attachments,omitempty"`      // Attachment objects with filename and description; Required - false
+	Flags           MessageFlags     `json:"flags,omitempty"`            // MessageFlags combined as a bitfield (only SuppressEmbeds can be set)
+	ThreadName      string           `json:"thread_name"`                // name of thread to create (requires the webhook channel to be a forum channel)
 }
 
 // GetWebhookMessage - Returns a previously-sent webhook message from the same token. Returns a message object on success.

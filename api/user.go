@@ -92,7 +92,7 @@ type Connection struct {
 	Name         string                   `json:"name"`                   // the username of the connection account
 	Type         Service                  `json:"type"`                   // the service of the connection (Twitch, YouTube)
 	Revoked      bool                     `json:"revoked,omitempty"`      // whether the connection is revoked
-	Integrations []Integration            `json:"integrations,omitempty"` // an array of partial server integrations
+	Integrations []*Integration           `json:"integrations,omitempty"` // an array of partial server integrations
 	Verified     bool                     `json:"verified"`               // whether the connection is verified
 	FriendSync   bool                     `json:"friend_sync"`            // whether friend sync is enabled for this connection
 	ShowActivity bool                     `json:"show_activity"`          // whether activities related to this connection will be shown in presence updates

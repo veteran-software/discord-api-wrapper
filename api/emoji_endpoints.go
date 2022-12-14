@@ -70,7 +70,7 @@ func (g *Guild) CreateGuildEmoji(payload *CreateEmojiJSON, reason *string) (*Emo
 type CreateEmojiJSON struct {
 	Name  string          `json:"name"`  // Name - name of the emoji
 	Image base64.Encoding `json:"image"` // Image - the 128x128 emoji image
-	Roles []Snowflake     `json:"roles"` // Roles - roles allowed to use this emoji
+	Roles []*Snowflake    `json:"roles"` // Roles - roles allowed to use this emoji
 }
 
 // ModifyGuildEmoji - Modify the given emoji.
