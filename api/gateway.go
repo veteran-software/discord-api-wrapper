@@ -129,12 +129,12 @@ type Resume struct {
 //	Requesting a prefix (query parameter) will return a maximum of 100 members
 //	Requesting user_ids will continue to be limited to returning 100 members
 type GuildRequestMembers struct {
-	GuildID   Snowflake   `json:"guild_id"`            // id of the guild to get members for
-	Query     string      `json:"query,omitempty"`     // string that username starts with, or an empty string to return all members
-	Limit     int         `json:"limit"`               // maximum number of members to send matching the query; a limit of 0 can be used with an empty string query to return all members
-	Presences bool        `json:"presences,omitempty"` // used to specify if we want the presences of the matched members
-	UserIDs   []Snowflake `json:"user_ids,omitempty"`  // used to specify which users you wish to fetch
-	Nonce     string      `json:"nonce,omitempty"`     // nonce to identify the Guild Members Chunk response
+	GuildID   Snowflake    `json:"guild_id"`            // id of the guild to get members for
+	Query     string       `json:"query,omitempty"`     // string that username starts with, or an empty string to return all members
+	Limit     int          `json:"limit"`               // maximum number of members to send matching the query; a limit of 0 can be used with an empty string query to return all members
+	Presences bool         `json:"presences,omitempty"` // used to specify if we want the presences of the matched members
+	UserIDs   []*Snowflake `json:"user_ids,omitempty"`  // used to specify which users you wish to fetch
+	Nonce     string       `json:"nonce,omitempty"`     // nonce to identify the Guild Members Chunk response
 }
 
 // GatewayVoiceStateUpdate - Sent when a client wants to join, move, or disconnect from a voice channel.
@@ -147,10 +147,10 @@ type GatewayVoiceStateUpdate struct {
 
 // GatewayPresenceUpdate - Sent by the client to indicate a presence or status update.
 type GatewayPresenceUpdate struct {
-	Since      *int       `json:"since"`      // unix time (in milliseconds) of when the client went idle, or null if the client is not idle
-	Activities []Activity `json:"activities"` // the user's activities
-	Status     StatusType `json:"status"`     // the user's new StatusType
-	Afk        bool       `json:"afk"`        // whether the client is afk
+	Since      *int        `json:"since"`      // unix time (in milliseconds) of when the client went idle, or null if the client is not idle
+	Activities []*Activity `json:"activities"` // the user's activities
+	Status     StatusType  `json:"status"`     // the user's new StatusType
+	Afk        bool        `json:"afk"`        // whether the client is afk
 }
 
 // Hello - Sent on connection to the websocket. Defines the heartbeat interval that the client should heartbeat to.
@@ -168,13 +168,13 @@ type Hello struct {
 //
 // As they become available, your bot will be notified via Guild Create events.
 type Ready struct {
-	V                int                `json:"v"`                  // gateway version
-	User             User               `json:"user"`               // information about the user including email
-	Guilds           []UnavailableGuild `json:"guilds"`             // the guilds the user is in
-	SessionID        string             `json:"session_id"`         // used for resuming connections
-	ResumeGatewayURL string             `json:"resume_gateway_url"` // Gateway URL for resuming connections
-	Shard            [2]int             `json:"shard,omitempty"`    // the shard information associated with this session, if sent when identifying
-	Application      Application        `json:"application"`        // contains id and flags
+	V                int                 `json:"v"`                  // gateway version
+	User             User                `json:"user"`               // information about the user including email
+	Guilds           []*UnavailableGuild `json:"guilds"`             // the guilds the user is in
+	SessionID        string              `json:"session_id"`         // used for resuming connections
+	ResumeGatewayURL string              `json:"resume_gateway_url"` // Gateway URL for resuming connections
+	Shard            [2]int              `json:"shard,omitempty"`    // the shard information associated with this session, if sent when identifying
+	Application      Application         `json:"application"`        // contains id and flags
 }
 
 // StatusType - a user's current activity status
@@ -291,7 +291,7 @@ type Activity struct {
 	Secrets       ActivitySecrets    `json:"secrets,omitempty"`        // secrets for Rich Presence joining and spectating
 	Instance      bool               `json:"instance,omitempty"`       // whether the activity is an instanced game session
 	Flags         ActivityFlag       `json:"flags,omitempty"`          // activity flags ORd together, describes what the payload includes
-	Buttons       []ActivityButtons  `json:"buttons,omitempty"`        // the custom buttons shown in the Rich Presence (max 2)
+	Buttons       []*ActivityButtons `json:"buttons,omitempty"`        // the custom buttons shown in the Rich Presence (max 2)
 }
 
 // ClientStatus - Active sessions are indicated with an "online", "idle", or "dnd" string per platform.
@@ -316,6 +316,6 @@ type PresenceUpdateEvent struct {
 	User         User           `json:"user"`          // the user presence is being updated for
 	GuildID      Snowflake      `json:"guild_id"`      // id of the guild
 	Status       PresenceStatus `json:"status"`        // either "idle", "dnd", "online", or "offline"
-	Activities   []Activity     `json:"activities"`    // user's current activities
+	Activities   []*Activity    `json:"activities"`    // user's current activities
 	ClientStatus ClientStatus   `json:"client_status"` // user's platform-dependent status
 }

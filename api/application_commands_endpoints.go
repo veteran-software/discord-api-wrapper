@@ -27,14 +27,14 @@ import (
 // Returns an array of application command objects.
 //
 //goland:noinspection GoUnusedExportedFunction
-func GetGlobalApplicationCommands(applicationID Snowflake, withLocalizations bool) ([]ApplicationCommand, error) {
+func GetGlobalApplicationCommands(applicationID Snowflake, withLocalizations bool) ([]*ApplicationCommand, error) {
 	u := parseRoute(fmt.Sprintf(getGlobalApplicationCommands, api, applicationID.String()))
 
 	q := u.Query()
 	q.Set("with_localizations", strconv.FormatBool(withLocalizations))
 	u.RawQuery = q.Encode()
 
-	var commands []ApplicationCommand
+	var commands []*ApplicationCommand
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &commands)
 
 	return commands, err
@@ -65,7 +65,7 @@ type CreateApplicationCommandJSON struct {
 	NameLocalizations        *LocalizationDict           `json:"name_localizations,omitempty"`         // Localization dictionary for the name field. Values follow the same restrictions as name
 	Description              string                      `json:"description"`                          // 1-100 character description
 	DescriptionLocalizations *LocalizationDict           `json:"description_localizations,omitempty"`  // Localization dictionary for the description field. Values follow the same restrictions as description
-	Options                  *[]ApplicationCommandOption `json:"options,omitempty"`                    // the parameters for the command
+	Options                  []*ApplicationCommandOption `json:"options,omitempty"`                    // the parameters for the command
 	DefaultMemberPermissions *string                     `json:"default_member_permissions,omitempty"` // Set of permissions represented as a bit set
 	DmPermission             *bool                       `json:"dm_permission,omitempty"`              // Indicates whether the command is available in DMs with the app, only for globally-scoped commands. By default, commands are visible.
 	DefaultPermission        bool                        `json:"default_permission,omitempty"`         // whether the command is enabled by default when the app is added to a guild; default true
@@ -106,7 +106,7 @@ type EditApplicationCommandJSON struct {
 	NameLocalizations        *LocalizationDict           `json:"name_localizations,omitempty"`         // Localization dictionary for the name field. Values follow the same restrictions as name
 	Description              string                      `json:"description"`                          // 1-100 character description
 	DescriptionLocalizations *LocalizationDict           `json:"description_localizations,omitempty"`  // Localization dictionary for the description field. Values follow the same restrictions as description
-	Options                  *[]ApplicationCommandOption `json:"options,omitempty"`                    // the parameters for the command
+	Options                  []*ApplicationCommandOption `json:"options,omitempty"`                    // the parameters for the command
 	DefaultMemberPermissions *string                     `json:"default_member_permissions,omitempty"` // Set of permissions represented as a bit set
 	DmPermission             *bool                       `json:"dm_permission,omitempty"`              // Indicates whether the command is available in DMs with the app, only for globally-scoped commands. By default, commands are visible.
 	DefaultPermission        bool                        `json:"default_permission,omitempty"`         // whether the command is enabled by default when the app is added to a guild; default true
@@ -355,5 +355,5 @@ func (i *Interaction) EditApplicationCommandPermissions(payload *EditApplication
 
 // EditApplicationCommandPermissionsJSON - JSON payload structure
 type EditApplicationCommandPermissionsJSON struct {
-	Permissions []ApplicationCommandPermissions `json:"permissions"` // the permissions for the command in the guild
+	Permissions []*ApplicationCommandPermissions `json:"permissions"` // the permissions for the command in the guild
 }

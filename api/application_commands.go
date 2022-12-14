@@ -30,18 +30,18 @@ import (
 //
 //goland:noinspection SpellCheckingInspection
 type ApplicationCommand struct {
-	ID                       Snowflake                  `json:"id,omitempty"`                         // unique id of the command
-	Type                     ApplicationCommandType     `json:"type,omitempty"`                       // the type of command, defaults 1 if not set
-	ApplicationID            Snowflake                  `json:"application_id"`                       // unique id of the parent application
-	GuildID                  Snowflake                  `json:"guild_id,omitempty"`                   // guild id of the command, if not global
-	Name                     string                     `json:"name"`                                 // max 32 chars, must follow ^[\w-]{1,32}$ regex
-	NameLocalizations        *LocalizationDict          `json:"name_localizations,omitempty"`         // Localization dictionary for the name field. Values follow the same restrictions as name
-	Description              string                     `json:"description"`                          // 1-100 character description for CHAT_INPUT command, empty string for USER and MESSAGE command
-	DescriptionLocalizations *LocalizationDict          `json:"description_localizations,omitempty"`  // Localization dictionary for the description field. Values follow the same restrictions as description
-	Options                  []ApplicationCommandOption `json:"options,omitempty"`                    // the parameters for the command, max 25; CHAT_INPUT
-	DefaultMemberPermissions *string                    `json:"default_member_permissions,omitempty"` // Set of permissions represented as a bit set
-	DmPermission             *bool                      `json:"dm_permission,omitempty"`              // Indicates whether the command is available in DMs with the app, only for globally-scoped commands. By default, commands are visible.
-	Version                  Snowflake                  `json:"version"`                              // autoincrementing version identifier updated during substantial record changes
+	ID                       Snowflake                   `json:"id,omitempty"`                         // unique id of the command
+	Type                     ApplicationCommandType      `json:"type,omitempty"`                       // the type of command, defaults 1 if not set
+	ApplicationID            Snowflake                   `json:"application_id"`                       // unique id of the parent application
+	GuildID                  Snowflake                   `json:"guild_id,omitempty"`                   // guild id of the command, if not global
+	Name                     string                      `json:"name"`                                 // max 32 chars, must follow ^[\w-]{1,32}$ regex
+	NameLocalizations        *LocalizationDict           `json:"name_localizations,omitempty"`         // Localization dictionary for the name field. Values follow the same restrictions as name
+	Description              string                      `json:"description"`                          // 1-100 character description for CHAT_INPUT command, empty string for USER and MESSAGE command
+	DescriptionLocalizations *LocalizationDict           `json:"description_localizations,omitempty"`  // Localization dictionary for the description field. Values follow the same restrictions as description
+	Options                  []*ApplicationCommandOption `json:"options,omitempty"`                    // the parameters for the command, max 25; CHAT_INPUT
+	DefaultMemberPermissions *string                     `json:"default_member_permissions,omitempty"` // Set of permissions represented as a bit set
+	DmPermission             *bool                       `json:"dm_permission,omitempty"`              // Indicates whether the command is available in DMs with the app, only for globally-scoped commands. By default, commands are visible.
+	Version                  Snowflake                   `json:"version"`                              // autoincrementing version identifier updated during substantial record changes
 }
 
 // ApplicationCommandType - The type of application command
@@ -56,20 +56,20 @@ const (
 
 // ApplicationCommandOption - You can specify a maximum of 25 choices per option
 type ApplicationCommandOption struct {
-	Type                     ApplicationCommandOptionType     `json:"type"`                                // the type of option
-	Name                     string                           `json:"name"`                                // 1-32 character name
-	NameLocalizations        *LocalizationDict                `json:"name_localizations,omitempty"`        // Localization dictionary for the name field. Values follow the same restrictions as name
-	Description              string                           `json:"description"`                         // 1-100 character description
-	DescriptionLocalizations *LocalizationDict                `json:"description_localizations,omitempty"` // Localization dictionary for the description field. Values follow the same restrictions as description
-	Required                 bool                             `json:"required,omitempty"`                  // if the parameter is required or optional--default `false`
-	Choices                  []ApplicationCommandOptionChoice `json:"choices,omitempty"`                   // choices for STRING, INTEGER, and NUMBER types for the user to pick from, max 25
-	Options                  []ApplicationCommandOption       `json:"options,omitempty"`                   // if the option is a subcommand or subcommand group type, these nested options will be the parameters
-	ChannelTypes             []ChannelType                    `json:"channel_types,omitempty"`             // if the option is a channel type, the channels shown will be restricted to these types
-	MinValue                 any                              `json:"min_value,omitempty"`                 // if the option is an INTEGER or NUMBER type, the minimum value permitted; integer for INTEGER options, double for NUMBER options
-	MaxValue                 any                              `json:"max_value,omitempty"`                 // if the option is an INTEGER or NUMBER type, the maximum value permitted; integer for INTEGER options, double for NUMBER options
-	MinLength                int                              `json:"min_length,omitempty"`                // For option type STRING, the minimum allowed length (minimum of 0, maximum of 6000)
-	MaxLength                int                              `json:"max_length,omitempty"`                // For option type STRING, the maximum allowed length (minimum of 1, maximum of 6000)
-	Autocomplete             bool                             `json:"autocomplete,omitempty"`              // If autocomplete interactions are enabled for this STRING, INTEGER, or NUMBER type option
+	Type                     ApplicationCommandOptionType      `json:"type"`                                // the type of option
+	Name                     string                            `json:"name"`                                // 1-32 character name
+	NameLocalizations        *LocalizationDict                 `json:"name_localizations,omitempty"`        // Localization dictionary for the name field. Values follow the same restrictions as name
+	Description              string                            `json:"description"`                         // 1-100 character description
+	DescriptionLocalizations *LocalizationDict                 `json:"description_localizations,omitempty"` // Localization dictionary for the description field. Values follow the same restrictions as description
+	Required                 bool                              `json:"required,omitempty"`                  // if the parameter is required or optional--default `false`
+	Choices                  []*ApplicationCommandOptionChoice `json:"choices,omitempty"`                   // choices for STRING, INTEGER, and NUMBER types for the user to pick from, max 25
+	Options                  []*ApplicationCommandOption       `json:"options,omitempty"`                   // if the option is a subcommand or subcommand group type, these nested options will be the parameters
+	ChannelTypes             []*ChannelType                    `json:"channel_types,omitempty"`             // if the option is a channel type, the channels shown will be restricted to these types
+	MinValue                 any                               `json:"min_value,omitempty"`                 // if the option is an INTEGER or NUMBER type, the minimum value permitted; integer for INTEGER options, double for NUMBER options
+	MaxValue                 any                               `json:"max_value,omitempty"`                 // if the option is an INTEGER or NUMBER type, the maximum value permitted; integer for INTEGER options, double for NUMBER options
+	MinLength                int                               `json:"min_length,omitempty"`                // For option type STRING, the minimum allowed length (minimum of 0, maximum of 6000)
+	MaxLength                int                               `json:"max_length,omitempty"`                // For option type STRING, the maximum allowed length (minimum of 1, maximum of 6000)
+	Autocomplete             bool                              `json:"autocomplete,omitempty"`              // If autocomplete interactions are enabled for this STRING, INTEGER, or NUMBER type option
 }
 
 // ApplicationCommandOptionType - The option type of the command
@@ -99,10 +99,10 @@ type ApplicationCommandOptionChoice struct {
 
 // GuildApplicationCommandPermissions - Returned when fetching the permissions for a command in a guild.
 type GuildApplicationCommandPermissions struct {
-	ID            Snowflake                       `json:"id"`             // the id of the command
-	ApplicationID Snowflake                       `json:"application_id"` // the id of the application the command belongs to
-	GuildID       Snowflake                       `json:"guild_id"`       // the id of the guild
-	Permissions   []ApplicationCommandPermissions `json:"permissions"`    // the permissions for the command in the guild
+	ID            Snowflake                        `json:"id"`             // the id of the command
+	ApplicationID Snowflake                        `json:"application_id"` // the id of the application the command belongs to
+	GuildID       Snowflake                        `json:"guild_id"`       // the id of the guild
+	Permissions   []*ApplicationCommandPermissions `json:"permissions"`    // the permissions for the command in the guild
 }
 
 // ApplicationCommandPermissions - Application command permissions allow you to enable or disable command for specific users or roles within a guild.

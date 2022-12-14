@@ -24,7 +24,7 @@ package api
 type Emoji struct {
 	ID            *Snowflake `json:"id"`                       // ID - emoji id
 	Name          string     `json:"name"`                     // Name - emoji name
-	Roles         []Role     `json:"roles,omitempty"`          // Roles - roles allowed to use this emoji
+	Roles         []*Role    `json:"roles,omitempty"`          // Roles - roles allowed to use this emoji
 	User          *User      `json:"user,omitempty"`           // User - user that created this emoji
 	RequireColons bool       `json:"require_colons,omitempty"` // RequireColons - whether this emoji must be wrapped in colons
 	Managed       bool       `json:"managed,omitempty"`        // Managed - whether this emoji is managed

@@ -79,8 +79,8 @@ type MessageComponentData struct {
 }
 
 type ModalSubmitData struct {
-	CustomID   string      `json:"custom_id"`  // the custom_id of the modal
-	Components []Component `json:"components"` // the values submitted by the user
+	CustomID   string       `json:"custom_id"`  // the custom_id of the modal
+	Components []*Component `json:"components"` // the values submitted by the user
 }
 
 // ResolvedData - Descriptive data about the Interaction
@@ -179,11 +179,11 @@ const (
 type InteractionCallbackDataMessages struct {
 	TTS             bool             `json:"tts,omitempty"`         // is the response TTS
 	Content         string           `json:"content,omitempty"`     // message content
-	Embeds          []Embed          `json:"embeds,omitempty"`      // supports up to 10 embeds
+	Embeds          []*Embed         `json:"embeds,omitempty"`      // supports up to 10 embeds
 	AllowedMentions *AllowedMentions `json:"allowed_mentions"`      // AllowedMentionType object
 	Flags           MessageFlags     `json:"flags,omitempty"`       // set to 64 to make your response Ephemeral
-	Components      []Component      `json:"components,omitempty"`  // message components
-	Attachments     []Attachment     `json:"attachments,omitempty"` // attachment objects with filename and description
+	Components      []*Component     `json:"components,omitempty"`  // message components
+	Attachments     []*Attachment    `json:"attachments,omitempty"` // attachment objects with filename and description
 }
 
 // InteractionCallbackDataAutocomplete - Data payload for InteractionResponseAutocomplete
@@ -193,9 +193,9 @@ type InteractionCallbackDataAutocomplete struct {
 
 // InteractionCallbackDataModal - Data payload for InteractionResponseModal
 type InteractionCallbackDataModal struct {
-	CustomID   string      `json:"custom_id"`  // a developer-defined identifier for the component, max 100 characters
-	Title      string      `json:"title"`      // the title of the popup modal, max 45 characters
-	Components []Component `json:"components"` // between 1 and 5 (inclusive) components that make up the modal
+	CustomID   string       `json:"custom_id"`  // a developer-defined identifier for the component, max 100 characters
+	Title      string       `json:"title"`      // the title of the popup modal, max 45 characters
+	Components []*Component `json:"components"` // between 1 and 5 (inclusive) components that make up the modal
 }
 
 // BuildResponse
@@ -206,7 +206,7 @@ func (i *Interaction) BuildResponse(embeds []*Embed) *InteractionResponseMessage
 	}
 
 	for _, embed := range embeds {
-		ir.Data.Embeds = append(ir.Data.Embeds, *embed)
+		ir.Data.Embeds = append(ir.Data.Embeds, embed)
 	}
 
 	if i.Type == InteractionTypeApplicationCommand {
