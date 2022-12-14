@@ -244,16 +244,16 @@
           "description": "Reports incorrect usages of `fmt.Printf`, `fmt.Println`, and similar formatting and printing functions.\n\nIn their format strings, formatting functions use formatting verbs, like `%s`, `%d`, `%v`, and others.\nIf formatting verbs are used incorrectly, the result of a formatting function will contain an error.\nFor more information about formatting verbs, see [Package fmt at golang.org](https://golang.org/pkg/fmt/).\n\nExample:\n\n    fmt.Printf(\"id: %s\", 42)\n\nThe output of this function is `id: %!s(int=42)`. It might be not what you really want.\nThe following function uses the `%d` formatting verb.\nThe output with the `%d` formatting verb will be `id: 42`.\n\n    fmt.Printf(\"id: %d\", 42)\n"
         },
         {
-          "shortName": "GoErrorsAs",
-          "displayName": "Incorrect usage of the 'errors.As' function",
-          "enabled": true,
-          "description": "Reports calls of the `errors.As` function when the second argument is not a pointer to an interface or to a type that implements an error.\n\nSuch calls panic at runtime.\n\nFor more information about the `As` function, see [func As at golang.org](https://golang.org/pkg/errors/#As).\n\nExample:\n\n    _, err := os.Open(\"non-existing\")\n    var pathError *fs.PathError\n    if errors.As(err, pathError) { // a pointer to *fs.PathError is required\n    }\n\nAfter the **Prepend '\\&'** quick-fix is applied:\n\n    _, err := os.Open(\"non-existing\")\n    var pathError *fs.PathError\n    if errors.As(err, &pathError) {\n    }\n\nThis inspection only reports if the language version is 1.13 or higher."
-        },
-        {
           "shortName": "GoDeferGo",
           "displayName": "Defer/go statement calls 'recover' or 'panic' directly",
           "enabled": true,
           "description": "Reports `defer` and `go` statements that call `panic()` or `recover()` directly.\n\nSuch statements are rarely useful and might indicate a misuse of the `panic()` and `recover()` mechanism.\nIn particular:\n\n* `go panic()`: a newly-started goroutine will panic immediately.\n* `defer panic()`: a function with this statement will always panic on exit.\n* `go recover()`: has no effect as newly-started goroutine cannot panic.\n* `defer recover()`: function with this statement will silently stop panicking. This could be a valid usage, but an idiomatic way is to inspect the value returned by `recover()`:\n\n      defer func() {\n        if r := recover(); r != nil {\n          fmt.Println(\"Recovered from: \", r)\n        }\n      }()\n\nFor more information about go statements and panics handling, see [Handling\npanics](https://golang.org/ref/spec#Handling_panics) and\n[Go statements](https://golang.org/ref/spec#Go_statements) in the Go Language Specification."
+        },
+        {
+          "shortName": "GoErrorsAs",
+          "displayName": "Incorrect usage of the 'errors.As' function",
+          "enabled": true,
+          "description": "Reports calls of the `errors.As` function when the second argument is not a pointer to an interface or to a type that implements an error.\n\nSuch calls panic at runtime.\n\nFor more information about the `As` function, see [func As at golang.org](https://golang.org/pkg/errors/#As).\n\nExample:\n\n    _, err := os.Open(\"non-existing\")\n    var pathError *fs.PathError\n    if errors.As(err, pathError) { // a pointer to *fs.PathError is required\n    }\n\nAfter the **Prepend '\\&'** quick-fix is applied:\n\n    _, err := os.Open(\"non-existing\")\n    var pathError *fs.PathError\n    if errors.As(err, &pathError) {\n    }\n\nThis inspection only reports if the language version is 1.13 or higher."
         },
         {
           "shortName": "GoVetUnsafePointer",
@@ -602,16 +602,16 @@
           "description": "Reports optional blank variables in range loops.\n\nWhen you use the `range` loop to iterate over a slice, two values are returned for each iteration. The first is the index\nnumber, and the second is a copy of the element at that index. If you do not need the second value, you can skip this element instead of\nusing a blank identifier.\n\nExample:\n\n    for a, _ = range v {} // `for a, _ =` is the same as `for a =`\n\nTo remove the blank identifier, you can use the **Delete blank argument** quick-fix. After the quick-fix is applied, the code will\nlook as follows:\n\n    for a = range v {}\n"
         },
         {
-          "shortName": "GoUnusedFunction",
-          "displayName": "Unused function",
-          "enabled": true,
-          "description": "Reports unused unexported functions.\n\nIn Go, a function is unexported if it begins with a small letter. Names of unexported functions that were defined but never used are\ngrayed out.\n\n    // Unused unexported function\n    func unExportedUnusedFunc()  {\n\n    }\n\n    func main() {\n     fmt.Println(\"Hello\")\n    }\n"
-        },
-        {
           "shortName": "GoUnusedConst",
           "displayName": "Unused constant",
           "enabled": true,
           "description": "Reports constants that are defined but are never used in code.\n\n    func main() {\n     const i = 100\n    }\n\nUnlike unused variables and imports, this code will compile. Unused constants might increase your code base and\nslow down program compilation. To delete the unused constant, consider using the **Delete constant** quick-fix."
+        },
+        {
+          "shortName": "GoUnusedFunction",
+          "displayName": "Unused function",
+          "enabled": true,
+          "description": "Reports unused unexported functions.\n\nIn Go, a function is unexported if it begins with a small letter. Names of unexported functions that were defined but never used are\ngrayed out.\n\n    // Unused unexported function\n    func unExportedUnusedFunc()  {\n\n    }\n\n    func main() {\n     fmt.Println(\"Hello\")\n    }\n"
         },
         {
           "shortName": "GoEmptyDeclaration",
