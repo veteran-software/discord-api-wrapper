@@ -20,6 +20,7 @@ import (
 	"strconv"
 
 	"github.com/veteran-software/discord-api-wrapper/v10/logging"
+	"github.com/veteran-software/discord-api-wrapper/v10/utilities"
 )
 
 // ApplicationCommand - A command, or each individual subcommand, can have a maximum of 25 options
@@ -137,7 +138,7 @@ func PermissionConstantsEveryone(guildID Snowflake) *Snowflake {
 func PermissionsConstantsAllChannels(guildID Snowflake) *Snowflake {
 	snowflakeInt, err := strconv.ParseUint(string(guildID), 10, 64)
 	if err != nil {
-		logging.Errorln(err)
+		logging.Errorln(utilities.FuncName(), err)
 		return new(Snowflake)
 	}
 

@@ -16,6 +16,11 @@
 
 package utilities
 
+import (
+	"fmt"
+	"runtime"
+)
+
 // Contains - helper function to determine if a slice contains a particular value
 //
 //goland:noinspection GoUnusedExportedFunction
@@ -27,4 +32,9 @@ func Contains[T comparable](slice []T, e T) bool {
 	}
 
 	return false
+}
+
+func FuncName() string {
+	pc, _, line, _ := runtime.Caller(1)
+	return fmt.Sprintf("(%s:L%d)", runtime.FuncForPC(pc).Name(), line)
 }
