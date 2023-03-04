@@ -1,7 +1,7 @@
 {
-  "total": 5,
+  "total": 0,
   "tools inspection": {
-    "Code Inspection": 5
+    "Code Inspection": 0
   },
   "linter": "QDGO",
   "attributes": {
@@ -9,6 +9,6 @@
       "sarifIdea": {}
     },
     "deviceId": "200820300000000-bb6d-3bba-1831-ac4c93d548d4",
-    "jobUrl": "https://github.com/veteran-software/discord-api-wrapper/actions/runs/4329630331"
+    "jobUrl": "https://github.com/veteran-software/discord-api-wrapper/actions/runs/4329674624"
   }
 }

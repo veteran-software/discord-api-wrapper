@@ -19,8 +19,8 @@
               "name": "Go"
             },
             {
-              "id": "Go/Probable bugs",
-              "name": "Probable bugs",
+              "id": "Go/General",
+              "name": "General",
               "relationships": [
                 {
                   "target": {
@@ -37,8 +37,8 @@
               ]
             },
             {
-              "id": "Go/General",
-              "name": "General",
+              "id": "Go/Probable bugs",
+              "name": "Probable bugs",
               "relationships": [
                 {
                   "target": {
@@ -1184,37 +1184,6 @@
             "version": "223.8788",
             "rules": [
               {
-                "id": "GoVetCopyLock",
-                "shortDescription": {
-                  "text": "Locks mistakenly passed by value"
-                },
-                "fullDescription": {
-                  "text": "Reports locks that are mistakenly passed by values. Accidentally copying a value containing a lock may cause both copies to work incorrectly. Generally, such values should be referred to through a pointer. A lock here means a type implementing 'sync.Locker', such as 'sync.Mutex' or 'sync.WaitGroup'. Example: 'type SafeInt struct {\n  m sync.Mutex\n  i int\n}\n\nfunc (s SafeInt) Inc() { // mutex is copied\n  s.m.Lock()\n  s.i++\n  s.m.Unlock()\n}' After the Add pointer quick-fix is applied: 'type SafeInt struct {\n  m sync.Mutex\n  i int\n}\n\nfunc (s *SafeInt) Inc() {\n  s.m.Lock()\n  s.i++\n  s.m.Unlock()\n}'",
-                  "markdown": "Reports locks that are mistakenly passed by values.\n\nAccidentally copying a value containing a lock may cause both copies to work incorrectly. Generally, such values should be\nreferred to through a pointer. A lock here means a type implementing `sync.Locker`, such as `sync.Mutex`\nor `sync.WaitGroup`.\n\nExample:\n\n    type SafeInt struct {\n      m sync.Mutex\n      i int\n    }\n\n    func (s SafeInt) Inc() { // mutex is copied\n      s.m.Lock()\n      s.i++\n      s.m.Unlock()\n    }\n\nAfter the **Add pointer** quick-fix is applied:\n\n    type SafeInt struct {\n      m sync.Mutex\n      i int\n    }\n\n    func (s *SafeInt) Inc() {\n      s.m.Lock()\n      s.i++\n      s.m.Unlock()\n    }\n"
-                },
-                "defaultConfiguration": {
-                  "enabled": true,
-                  "level": "warning",
-                  "parameters": {
-                    "ideaSeverity": "WARNING"
-                  }
-                },
-                "relationships": [
-                  {
-                    "target": {
-                      "id": "Go/Probable bugs",
-                      "index": 2,
-                      "toolComponent": {
-                        "name": "QDGO"
-                      }
-                    },
-                    "kinds": [
-                      "superset"
-                    ]
-                  }
-                ]
-              },
-              {
                 "id": "GoUnnecessarilyExportedIdentifiers",
                 "shortDescription": {
                   "text": "Unnecessarily exported identifier"
@@ -1234,6 +1203,37 @@
                   {
                     "target": {
                       "id": "Go/General",
+                      "index": 2,
+                      "toolComponent": {
+                        "name": "QDGO"
+                      }
+                    },
+                    "kinds": [
+                      "superset"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "GoVetCopyLock",
+                "shortDescription": {
+                  "text": "Locks mistakenly passed by value"
+                },
+                "fullDescription": {
+                  "text": "Reports locks that are mistakenly passed by values. Accidentally copying a value containing a lock may cause both copies to work incorrectly. Generally, such values should be referred to through a pointer. A lock here means a type implementing 'sync.Locker', such as 'sync.Mutex' or 'sync.WaitGroup'. Example: 'type SafeInt struct {\n  m sync.Mutex\n  i int\n}\n\nfunc (s SafeInt) Inc() { // mutex is copied\n  s.m.Lock()\n  s.i++\n  s.m.Unlock()\n}' After the Add pointer quick-fix is applied: 'type SafeInt struct {\n  m sync.Mutex\n  i int\n}\n\nfunc (s *SafeInt) Inc() {\n  s.m.Lock()\n  s.i++\n  s.m.Unlock()\n}'",
+                  "markdown": "Reports locks that are mistakenly passed by values.\n\nAccidentally copying a value containing a lock may cause both copies to work incorrectly. Generally, such values should be\nreferred to through a pointer. A lock here means a type implementing `sync.Locker`, such as `sync.Mutex`\nor `sync.WaitGroup`.\n\nExample:\n\n    type SafeInt struct {\n      m sync.Mutex\n      i int\n    }\n\n    func (s SafeInt) Inc() { // mutex is copied\n      s.m.Lock()\n      s.i++\n      s.m.Unlock()\n    }\n\nAfter the **Add pointer** quick-fix is applied:\n\n    type SafeInt struct {\n      m sync.Mutex\n      i int\n    }\n\n    func (s *SafeInt) Inc() {\n      s.m.Lock()\n      s.i++\n      s.m.Unlock()\n    }\n"
+                },
+                "defaultConfiguration": {
+                  "enabled": true,
+                  "level": "warning",
+                  "parameters": {
+                    "ideaSeverity": "WARNING"
+                  }
+                },
+                "relationships": [
+                  {
+                    "target": {
+                      "id": "Go/Probable bugs",
                       "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
@@ -1265,7 +1265,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -1296,7 +1296,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -1358,7 +1358,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -1420,7 +1420,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -1451,7 +1451,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -1513,7 +1513,7 @@
                   {
                     "target": {
                       "id": "Go/General",
-                      "index": 3,
+                      "index": 2,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -1575,7 +1575,7 @@
                   {
                     "target": {
                       "id": "Go/General",
-                      "index": 3,
+                      "index": 2,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -1637,7 +1637,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -1761,7 +1761,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -1916,7 +1916,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2009,7 +2009,7 @@
                   {
                     "target": {
                       "id": "Go/General",
-                      "index": 3,
+                      "index": 2,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2040,7 +2040,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2071,7 +2071,7 @@
                   {
                     "target": {
                       "id": "Go/General",
-                      "index": 3,
+                      "index": 2,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2176,6 +2176,37 @@
                 ]
               },
               {
+                "id": "GoPrintFunctions",
+                "shortDescription": {
+                  "text": "Incorrect usage of 'fmt.Printf' and 'fmt.Println' functions"
+                },
+                "fullDescription": {
+                  "text": "Reports incorrect usages of 'fmt.Printf', 'fmt.Println', and similar formatting and printing functions. In their format strings, formatting functions use formatting verbs, like '%s', '%d', '%v', and others. If formatting verbs are used incorrectly, the result of a formatting function will contain an error. For more information about formatting verbs, see Package fmt at golang.org. Example: 'fmt.Printf(\"id: %s\", 42)' The output of this function is 'id: %!s(int=42)'. It might be not what you really want. The following function uses the '%d' formatting verb. The output with the '%d' formatting verb will be 'id: 42'. 'fmt.Printf(\"id: %d\", 42)'",
+                  "markdown": "Reports incorrect usages of `fmt.Printf`, `fmt.Println`, and similar formatting and printing functions.\n\nIn their format strings, formatting functions use formatting verbs, like `%s`, `%d`, `%v`, and others.\nIf formatting verbs are used incorrectly, the result of a formatting function will contain an error.\nFor more information about formatting verbs, see [Package fmt at golang.org](https://golang.org/pkg/fmt/).\n\nExample:\n\n    fmt.Printf(\"id: %s\", 42)\n\nThe output of this function is `id: %!s(int=42)`. It might be not what you really want.\nThe following function uses the `%d` formatting verb.\nThe output with the `%d` formatting verb will be `id: 42`.\n\n    fmt.Printf(\"id: %d\", 42)\n"
+                },
+                "defaultConfiguration": {
+                  "enabled": true,
+                  "level": "note",
+                  "parameters": {
+                    "ideaSeverity": "WEAK WARNING"
+                  }
+                },
+                "relationships": [
+                  {
+                    "target": {
+                      "id": "Go/Probable bugs",
+                      "index": 3,
+                      "toolComponent": {
+                        "name": "QDGO"
+                      }
+                    },
+                    "kinds": [
+                      "superset"
+                    ]
+                  }
+                ]
+              },
+              {
                 "id": "GoDeferInLoop",
                 "shortDescription": {
                   "text": "'defer' in the loop"
@@ -2207,26 +2238,26 @@
                 ]
               },
               {
-                "id": "GoPrintFunctions",
+                "id": "GoErrorsAs",
                 "shortDescription": {
-                  "text": "Incorrect usage of 'fmt.Printf' and 'fmt.Println' functions"
+                  "text": "Incorrect usage of the 'errors.As' function"
                 },
                 "fullDescription": {
-                  "text": "Reports incorrect usages of 'fmt.Printf', 'fmt.Println', and similar formatting and printing functions. In their format strings, formatting functions use formatting verbs, like '%s', '%d', '%v', and others. If formatting verbs are used incorrectly, the result of a formatting function will contain an error. For more information about formatting verbs, see Package fmt at golang.org. Example: 'fmt.Printf(\"id: %s\", 42)' The output of this function is 'id: %!s(int=42)'. It might be not what you really want. The following function uses the '%d' formatting verb. The output with the '%d' formatting verb will be 'id: 42'. 'fmt.Printf(\"id: %d\", 42)'",
-                  "markdown": "Reports incorrect usages of `fmt.Printf`, `fmt.Println`, and similar formatting and printing functions.\n\nIn their format strings, formatting functions use formatting verbs, like `%s`, `%d`, `%v`, and others.\nIf formatting verbs are used incorrectly, the result of a formatting function will contain an error.\nFor more information about formatting verbs, see [Package fmt at golang.org](https://golang.org/pkg/fmt/).\n\nExample:\n\n    fmt.Printf(\"id: %s\", 42)\n\nThe output of this function is `id: %!s(int=42)`. It might be not what you really want.\nThe following function uses the `%d` formatting verb.\nThe output with the `%d` formatting verb will be `id: 42`.\n\n    fmt.Printf(\"id: %d\", 42)\n"
+                  "text": "Reports calls of the 'errors.As' function when the second argument is not a pointer to an interface or to a type that implements an error. Such calls panic at runtime. For more information about the 'As' function, see func As at golang.org. Example: '_, err := os.Open(\"non-existing\")\nvar pathError *fs.PathError\nif errors.As(err, pathError) { // a pointer to *fs.PathError is required\n}' After the Prepend '&' quick-fix is applied: '_, err := os.Open(\"non-existing\")\nvar pathError *fs.PathError\nif errors.As(err, &pathError) {\n}' This inspection only reports if the language version is 1.13 or higher.",
+                  "markdown": "Reports calls of the `errors.As` function when the second argument is not a pointer to an interface or to a type that implements an error.\n\nSuch calls panic at runtime.\n\nFor more information about the `As` function, see [func As at golang.org](https://golang.org/pkg/errors/#As).\n\nExample:\n\n    _, err := os.Open(\"non-existing\")\n    var pathError *fs.PathError\n    if errors.As(err, pathError) { // a pointer to *fs.PathError is required\n    }\n\nAfter the **Prepend '\\&'** quick-fix is applied:\n\n    _, err := os.Open(\"non-existing\")\n    var pathError *fs.PathError\n    if errors.As(err, &pathError) {\n    }\n\nThis inspection only reports if the language version is 1.13 or higher."
                 },
                 "defaultConfiguration": {
                   "enabled": true,
-                  "level": "note",
+                  "level": "warning",
                   "parameters": {
-                    "ideaSeverity": "WEAK WARNING"
+                    "ideaSeverity": "WARNING"
                   }
                 },
                 "relationships": [
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2257,38 +2288,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
-                      "toolComponent": {
-                        "name": "QDGO"
-                      }
-                    },
-                    "kinds": [
-                      "superset"
-                    ]
-                  }
-                ]
-              },
-              {
-                "id": "GoErrorsAs",
-                "shortDescription": {
-                  "text": "Incorrect usage of the 'errors.As' function"
-                },
-                "fullDescription": {
-                  "text": "Reports calls of the 'errors.As' function when the second argument is not a pointer to an interface or to a type that implements an error. Such calls panic at runtime. For more information about the 'As' function, see func As at golang.org. Example: '_, err := os.Open(\"non-existing\")\nvar pathError *fs.PathError\nif errors.As(err, pathError) { // a pointer to *fs.PathError is required\n}' After the Prepend '&' quick-fix is applied: '_, err := os.Open(\"non-existing\")\nvar pathError *fs.PathError\nif errors.As(err, &pathError) {\n}' This inspection only reports if the language version is 1.13 or higher.",
-                  "markdown": "Reports calls of the `errors.As` function when the second argument is not a pointer to an interface or to a type that implements an error.\n\nSuch calls panic at runtime.\n\nFor more information about the `As` function, see [func As at golang.org](https://golang.org/pkg/errors/#As).\n\nExample:\n\n    _, err := os.Open(\"non-existing\")\n    var pathError *fs.PathError\n    if errors.As(err, pathError) { // a pointer to *fs.PathError is required\n    }\n\nAfter the **Prepend '\\&'** quick-fix is applied:\n\n    _, err := os.Open(\"non-existing\")\n    var pathError *fs.PathError\n    if errors.As(err, &pathError) {\n    }\n\nThis inspection only reports if the language version is 1.13 or higher."
-                },
-                "defaultConfiguration": {
-                  "enabled": true,
-                  "level": "warning",
-                  "parameters": {
-                    "ideaSeverity": "WARNING"
-                  }
-                },
-                "relationships": [
-                  {
-                    "target": {
-                      "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2319,7 +2319,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2412,7 +2412,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2474,7 +2474,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2536,7 +2536,7 @@
                   {
                     "target": {
                       "id": "Go/General",
-                      "index": 3,
+                      "index": 2,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2629,38 +2629,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
-                      "toolComponent": {
-                        "name": "QDGO"
-                      }
-                    },
-                    "kinds": [
-                      "superset"
-                    ]
-                  }
-                ]
-              },
-              {
-                "id": "GoCommentStart",
-                "shortDescription": {
-                  "text": "Comment of exported element starts with the incorrect name"
-                },
-                "fullDescription": {
-                  "text": "Reports comments that do not start with the name of the exported element. According to Comment Sentences at golang.org, this is a convention to begin a comment with the name of the exported element. Example: '// represents a request to run a command.\ntype Request struct {}' The comment starts with the struct description, not with the struct name. To stick to the convention rules, you can apply the Add prefix to comment quick-fix. After the quick-fix is applied, the comment looks as follows: // Request represents a request to run a command.\ntype Request struct {} // better",
-                  "markdown": "Reports comments that do not start with the name of the exported element.\n\nAccording to\n[Comment Sentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences), this is a convention to begin\na comment with the name of the exported element.\n\nExample:\n\n    // represents a request to run a command.\n    type Request struct {}\n\nThe comment starts with the struct description, not with the struct name. To stick to the convention rules, you can apply the **Add\nprefix to comment** quick-fix. After the quick-fix is applied, the comment looks as follows:\n\n```\n// Request represents a request to run a command.\ntype Request struct {} // better\n```"
-                },
-                "defaultConfiguration": {
-                  "enabled": true,
-                  "level": "note",
-                  "parameters": {
-                    "ideaSeverity": "WEAK WARNING"
-                  }
-                },
-                "relationships": [
-                  {
-                    "target": {
-                      "id": "Go/Code style issues",
-                      "index": 16,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2692,6 +2661,37 @@
                     "target": {
                       "id": "Go/Declaration redundancy",
                       "index": 4,
+                      "toolComponent": {
+                        "name": "QDGO"
+                      }
+                    },
+                    "kinds": [
+                      "superset"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "GoCommentStart",
+                "shortDescription": {
+                  "text": "Comment of exported element starts with the incorrect name"
+                },
+                "fullDescription": {
+                  "text": "Reports comments that do not start with the name of the exported element. According to Comment Sentences at golang.org, this is a convention to begin a comment with the name of the exported element. Example: '// represents a request to run a command.\ntype Request struct {}' The comment starts with the struct description, not with the struct name. To stick to the convention rules, you can apply the Add prefix to comment quick-fix. After the quick-fix is applied, the comment looks as follows: // Request represents a request to run a command.\ntype Request struct {} // better",
+                  "markdown": "Reports comments that do not start with the name of the exported element.\n\nAccording to\n[Comment Sentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences), this is a convention to begin\na comment with the name of the exported element.\n\nExample:\n\n    // represents a request to run a command.\n    type Request struct {}\n\nThe comment starts with the struct description, not with the struct name. To stick to the convention rules, you can apply the **Add\nprefix to comment** quick-fix. After the quick-fix is applied, the comment looks as follows:\n\n```\n// Request represents a request to run a command.\ntype Request struct {} // better\n```"
+                },
+                "defaultConfiguration": {
+                  "enabled": true,
+                  "level": "note",
+                  "parameters": {
+                    "ideaSeverity": "WEAK WARNING"
+                  }
+                },
+                "relationships": [
+                  {
+                    "target": {
+                      "id": "Go/Code style issues",
+                      "index": 16,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2815,7 +2815,7 @@
                   {
                     "target": {
                       "id": "Go/General",
-                      "index": 3,
+                      "index": 2,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2877,7 +2877,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -2939,7 +2939,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -3001,7 +3001,7 @@
                   {
                     "target": {
                       "id": "Go/General",
-                      "index": 3,
+                      "index": 2,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -3044,37 +3044,6 @@
                 ]
               },
               {
-                "id": "GoContextTodo",
-                "shortDescription": {
-                  "text": "Usage of context.TODO()"
-                },
-                "fullDescription": {
-                  "text": "Reports usages of 'context.TODO()'. According to the documentation at pkg.go.dev, you need to use 'context.TODO' when it is unclear what 'Context' to use, or 'Context' is not yet available. 'Context' might not be available because of the surrounding function that has not yet been extended to accept the 'Context' parameter. Note that it is a temporary placeholder, and you must change it in the future to a more meaningful context (for example, 'context.Background()').",
-                  "markdown": "Reports usages of `context.TODO()`.\n\nAccording to the [documentation at pkg.go.dev](https://pkg.go.dev/context#TODO),\nyou need to use `context.TODO` when it is unclear what\n`Context` to use, or `Context` is not yet available.\n`Context` might not be available because of the surrounding function that\nhas not yet been extended to accept the `Context` parameter.\n\nNote that it is a temporary placeholder, and you must change it in the future to a more meaningful\ncontext (for example, `context.Background()`)."
-                },
-                "defaultConfiguration": {
-                  "enabled": false,
-                  "level": "note",
-                  "parameters": {
-                    "ideaSeverity": "WEAK WARNING"
-                  }
-                },
-                "relationships": [
-                  {
-                    "target": {
-                      "id": "Go/General",
-                      "index": 3,
-                      "toolComponent": {
-                        "name": "QDGO"
-                      }
-                    },
-                    "kinds": [
-                      "superset"
-                    ]
-                  }
-                ]
-              },
-              {
                 "id": "GoUnusedCallResult",
                 "shortDescription": {
                   "text": "Unused function or method call result"
@@ -3094,6 +3063,37 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
+                      "index": 3,
+                      "toolComponent": {
+                        "name": "QDGO"
+                      }
+                    },
+                    "kinds": [
+                      "superset"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "GoContextTodo",
+                "shortDescription": {
+                  "text": "Usage of context.TODO()"
+                },
+                "fullDescription": {
+                  "text": "Reports usages of 'context.TODO()'. According to the documentation at pkg.go.dev, you need to use 'context.TODO' when it is unclear what 'Context' to use, or 'Context' is not yet available. 'Context' might not be available because of the surrounding function that has not yet been extended to accept the 'Context' parameter. Note that it is a temporary placeholder, and you must change it in the future to a more meaningful context (for example, 'context.Background()').",
+                  "markdown": "Reports usages of `context.TODO()`.\n\nAccording to the [documentation at pkg.go.dev](https://pkg.go.dev/context#TODO),\nyou need to use `context.TODO` when it is unclear what\n`Context` to use, or `Context` is not yet available.\n`Context` might not be available because of the surrounding function that\nhas not yet been extended to accept the `Context` parameter.\n\nNote that it is a temporary placeholder, and you must change it in the future to a more meaningful\ncontext (for example, `context.Background()`)."
+                },
+                "defaultConfiguration": {
+                  "enabled": false,
+                  "level": "note",
+                  "parameters": {
+                    "ideaSeverity": "WEAK WARNING"
+                  }
+                },
+                "relationships": [
+                  {
+                    "target": {
+                      "id": "Go/General",
                       "index": 2,
                       "toolComponent": {
                         "name": "QDGO"
@@ -3156,7 +3156,7 @@
                   {
                     "target": {
                       "id": "Go/General",
-                      "index": 3,
+                      "index": 2,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -3249,7 +3249,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -3280,7 +3280,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -3354,37 +3354,6 @@
                 ]
               },
               {
-                "id": "GoLoopClosure",
-                "shortDescription": {
-                  "text": "Loop variables captured by the func literal"
-                },
-                "fullDescription": {
-                  "text": "Reports references to loop variables from within 'func' literals in 'defer' and 'go' statements. Such variables might have unexpected values because they are not copied to 'func' literals, and the 'func' literals in 'defer' and 'go' are not executed immediately. For more information about closures and goroutines, see What happens with closures running as goroutines? at golang.org. Example: 'for _, v := range []string{\"a\", \"b\", \"c\"} {\n  go func() {\n    fmt.Println(v) // output will likely be `c c c`, not `a b c`\n  }()\n}' After the quick-fix is applied: 'for _, v := range []string{\"a\", \"b\", \"c\"} {\n  v := v // `v` is copied now\n  go func() {\n    fmt.Println(v)\n  }()\n}' Note the analyzer only checks 'defer' and 'go' statements when they are the last statement in the loop body. Otherwise, the analysis might produce false detections.",
-                  "markdown": "Reports references to loop variables from within `func` literals in `defer` and `go` statements. Such variables might have unexpected values because they are not copied to `func` literals, and the `func` literals in `defer` and `go` are not executed immediately.\n\nFor more information about closures and goroutines, see [What happens\nwith closures running as goroutines? at golang.org](https://golang.org/doc/go_faq.html#closures_and_goroutines).\n\nExample:\n\n    for _, v := range []string{\"a\", \"b\", \"c\"} {\n      go func() {\n        fmt.Println(v) // output will likely be `c c c`, not `a b c`\n      }()\n    }\n\nAfter the quick-fix is applied:\n\n    for _, v := range []string{\"a\", \"b\", \"c\"} {\n      v := v // `v` is copied now\n      go func() {\n        fmt.Println(v)\n      }()\n    }\n\nNote the analyzer only checks `defer` and `go` statements when they are the last statement in the loop body.\nOtherwise, the analysis might produce false detections."
-                },
-                "defaultConfiguration": {
-                  "enabled": true,
-                  "level": "warning",
-                  "parameters": {
-                    "ideaSeverity": "WARNING"
-                  }
-                },
-                "relationships": [
-                  {
-                    "target": {
-                      "id": "Go/Probable bugs",
-                      "index": 2,
-                      "toolComponent": {
-                        "name": "QDGO"
-                      }
-                    },
-                    "kinds": [
-                      "superset"
-                    ]
-                  }
-                ]
-              },
-              {
                 "id": "GoVetAtomic",
                 "shortDescription": {
                   "text": "Incorrect usage of the 'sync/atomic' package"
@@ -3404,7 +3373,38 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
+                      "toolComponent": {
+                        "name": "QDGO"
+                      }
+                    },
+                    "kinds": [
+                      "superset"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "GoLoopClosure",
+                "shortDescription": {
+                  "text": "Loop variables captured by the func literal"
+                },
+                "fullDescription": {
+                  "text": "Reports references to loop variables from within 'func' literals in 'defer' and 'go' statements. Such variables might have unexpected values because they are not copied to 'func' literals, and the 'func' literals in 'defer' and 'go' are not executed immediately. For more information about closures and goroutines, see What happens with closures running as goroutines? at golang.org. Example: 'for _, v := range []string{\"a\", \"b\", \"c\"} {\n  go func() {\n    fmt.Println(v) // output will likely be `c c c`, not `a b c`\n  }()\n}' After the quick-fix is applied: 'for _, v := range []string{\"a\", \"b\", \"c\"} {\n  v := v // `v` is copied now\n  go func() {\n    fmt.Println(v)\n  }()\n}' Note the analyzer only checks 'defer' and 'go' statements when they are the last statement in the loop body. Otherwise, the analysis might produce false detections.",
+                  "markdown": "Reports references to loop variables from within `func` literals in `defer` and `go` statements. Such variables might have unexpected values because they are not copied to `func` literals, and the `func` literals in `defer` and `go` are not executed immediately.\n\nFor more information about closures and goroutines, see [What happens\nwith closures running as goroutines? at golang.org](https://golang.org/doc/go_faq.html#closures_and_goroutines).\n\nExample:\n\n    for _, v := range []string{\"a\", \"b\", \"c\"} {\n      go func() {\n        fmt.Println(v) // output will likely be `c c c`, not `a b c`\n      }()\n    }\n\nAfter the quick-fix is applied:\n\n    for _, v := range []string{\"a\", \"b\", \"c\"} {\n      v := v // `v` is copied now\n      go func() {\n        fmt.Println(v)\n      }()\n    }\n\nNote the analyzer only checks `defer` and `go` statements when they are the last statement in the loop body.\nOtherwise, the analysis might produce false detections."
+                },
+                "defaultConfiguration": {
+                  "enabled": true,
+                  "level": "warning",
+                  "parameters": {
+                    "ideaSeverity": "WARNING"
+                  }
+                },
+                "relationships": [
+                  {
+                    "target": {
+                      "id": "Go/Probable bugs",
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -3435,7 +3435,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -3466,7 +3466,7 @@
                   {
                     "target": {
                       "id": "Go/Probable bugs",
-                      "index": 2,
+                      "index": 3,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -3521,37 +3521,6 @@
                 ]
               },
               {
-                "id": "XmlDuplicatedId",
-                "shortDescription": {
-                  "text": "Duplicate 'id' attribute"
-                },
-                "fullDescription": {
-                  "text": "Reports a duplicate 'id' attribute in XML.",
-                  "markdown": "Reports a duplicate `id` attribute in XML."
-                },
-                "defaultConfiguration": {
-                  "enabled": false,
-                  "level": "error",
-                  "parameters": {
-                    "ideaSeverity": "ERROR"
-                  }
-                },
-                "relationships": [
-                  {
-                    "target": {
-                      "id": "XML",
-                      "index": 5,
-                      "toolComponent": {
-                        "name": "QDGO"
-                      }
-                    },
-                    "kinds": [
-                      "superset"
-                    ]
-                  }
-                ]
-              },
-              {
                 "id": "JsonSchemaDeprecation",
                 "shortDescription": {
                   "text": "Deprecated JSON property"
@@ -3572,6 +3541,37 @@
                     "target": {
                       "id": "JSON and JSON5",
                       "index": 7,
+                      "toolComponent": {
+                        "name": "QDGO"
+                      }
+                    },
+                    "kinds": [
+                      "superset"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "XmlDuplicatedId",
+                "shortDescription": {
+                  "text": "Duplicate 'id' attribute"
+                },
+                "fullDescription": {
+                  "text": "Reports a duplicate 'id' attribute in XML.",
+                  "markdown": "Reports a duplicate `id` attribute in XML."
+                },
+                "defaultConfiguration": {
+                  "enabled": false,
+                  "level": "error",
+                  "parameters": {
+                    "ideaSeverity": "ERROR"
+                  }
+                },
+                "relationships": [
+                  {
+                    "target": {
+                      "id": "XML",
+                      "index": 5,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -3738,37 +3738,6 @@
                 ]
               },
               {
-                "id": "RequiredAttributes",
-                "shortDescription": {
-                  "text": "Missing required attribute"
-                },
-                "fullDescription": {
-                  "text": "Reports a missing mandatory attribute in an XML/HTML tag. Suggests configuring attributes that should not be reported.",
-                  "markdown": "Reports a missing mandatory attribute in an XML/HTML tag. Suggests configuring attributes that should not be reported."
-                },
-                "defaultConfiguration": {
-                  "enabled": false,
-                  "level": "warning",
-                  "parameters": {
-                    "ideaSeverity": "WARNING"
-                  }
-                },
-                "relationships": [
-                  {
-                    "target": {
-                      "id": "HTML",
-                      "index": 10,
-                      "toolComponent": {
-                        "name": "QDGO"
-                      }
-                    },
-                    "kinds": [
-                      "superset"
-                    ]
-                  }
-                ]
-              },
-              {
                 "id": "DuplicatedCode",
                 "shortDescription": {
                   "text": "Duplicated code fragment"
@@ -3789,6 +3758,37 @@
                     "target": {
                       "id": "General",
                       "index": 12,
+                      "toolComponent": {
+                        "name": "QDGO"
+                      }
+                    },
+                    "kinds": [
+                      "superset"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "RequiredAttributes",
+                "shortDescription": {
+                  "text": "Missing required attribute"
+                },
+                "fullDescription": {
+                  "text": "Reports a missing mandatory attribute in an XML/HTML tag. Suggests configuring attributes that should not be reported.",
+                  "markdown": "Reports a missing mandatory attribute in an XML/HTML tag. Suggests configuring attributes that should not be reported."
+                },
+                "defaultConfiguration": {
+                  "enabled": false,
+                  "level": "warning",
+                  "parameters": {
+                    "ideaSeverity": "WARNING"
+                  }
+                },
+                "relationships": [
+                  {
+                    "target": {
+                      "id": "HTML",
+                      "index": 10,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -4885,37 +4885,6 @@
                 ]
               },
               {
-                "id": "UnusedDefine",
-                "shortDescription": {
-                  "text": "Unused define"
-                },
-                "fullDescription": {
-                  "text": "Reports an unused named pattern ('define') in a RELAX-NG file (XML or Compact Syntax). 'define' elements that are used through an include in another file are ignored.",
-                  "markdown": "Reports an unused named pattern (`define`) in a RELAX-NG file (XML or Compact Syntax). `define` elements that are used through an include in another file are ignored."
-                },
-                "defaultConfiguration": {
-                  "enabled": false,
-                  "level": "warning",
-                  "parameters": {
-                    "ideaSeverity": "WARNING"
-                  }
-                },
-                "relationships": [
-                  {
-                    "target": {
-                      "id": "RELAX NG",
-                      "index": 22,
-                      "toolComponent": {
-                        "name": "QDGO"
-                      }
-                    },
-                    "kinds": [
-                      "superset"
-                    ]
-                  }
-                ]
-              },
-              {
                 "id": "HtmlUnknownAnchorTarget",
                 "shortDescription": {
                   "text": "Unresolved fragment in a link"
@@ -4936,6 +4905,37 @@
                     "target": {
                       "id": "HTML",
                       "index": 10,
+                      "toolComponent": {
+                        "name": "QDGO"
+                      }
+                    },
+                    "kinds": [
+                      "superset"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "UnusedDefine",
+                "shortDescription": {
+                  "text": "Unused define"
+                },
+                "fullDescription": {
+                  "text": "Reports an unused named pattern ('define') in a RELAX-NG file (XML or Compact Syntax). 'define' elements that are used through an include in another file are ignored.",
+                  "markdown": "Reports an unused named pattern (`define`) in a RELAX-NG file (XML or Compact Syntax). `define` elements that are used through an include in another file are ignored."
+                },
+                "defaultConfiguration": {
+                  "enabled": false,
+                  "level": "warning",
+                  "parameters": {
+                    "ideaSeverity": "WARNING"
+                  }
+                },
+                "relationships": [
+                  {
+                    "target": {
+                      "id": "RELAX NG",
+                      "index": 22,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -6335,37 +6335,6 @@
                 ]
               },
               {
-                "id": "CssConvertColorToHexInspection",
-                "shortDescription": {
-                  "text": "Color could be replaced with #-hex"
-                },
-                "fullDescription": {
-                  "text": "Reports an 'rgb()', 'hsl()', or other color function. Suggests replacing a color function with an equivalent hexadecimal notation. Example: 'rgb(12, 15, 255)' After the quick-fix is applied: '#0c0fff'.",
-                  "markdown": "Reports an `rgb()`, `hsl()`, or other color function.\n\nSuggests replacing a color function with an equivalent hexadecimal notation.\n\n**Example:**\n\n    rgb(12, 15, 255)\n\nAfter the quick-fix is applied:\n\n    #0c0fff.\n"
-                },
-                "defaultConfiguration": {
-                  "enabled": false,
-                  "level": "warning",
-                  "parameters": {
-                    "ideaSeverity": "WARNING"
-                  }
-                },
-                "relationships": [
-                  {
-                    "target": {
-                      "id": "CSS",
-                      "index": 9,
-                      "toolComponent": {
-                        "name": "QDGO"
-                      }
-                    },
-                    "kinds": [
-                      "superset"
-                    ]
-                  }
-                ]
-              },
-              {
                 "id": "CssInvalidPseudoSelector",
                 "shortDescription": {
                   "text": "Invalid pseudo-selector"
@@ -6386,6 +6355,37 @@
                     "target": {
                       "id": "CSS/Invalid elements",
                       "index": 14,
+                      "toolComponent": {
+                        "name": "QDGO"
+                      }
+                    },
+                    "kinds": [
+                      "superset"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "CssConvertColorToHexInspection",
+                "shortDescription": {
+                  "text": "Color could be replaced with #-hex"
+                },
+                "fullDescription": {
+                  "text": "Reports an 'rgb()', 'hsl()', or other color function. Suggests replacing a color function with an equivalent hexadecimal notation. Example: 'rgb(12, 15, 255)' After the quick-fix is applied: '#0c0fff'.",
+                  "markdown": "Reports an `rgb()`, `hsl()`, or other color function.\n\nSuggests replacing a color function with an equivalent hexadecimal notation.\n\n**Example:**\n\n    rgb(12, 15, 255)\n\nAfter the quick-fix is applied:\n\n    #0c0fff.\n"
+                },
+                "defaultConfiguration": {
+                  "enabled": false,
+                  "level": "warning",
+                  "parameters": {
+                    "ideaSeverity": "WARNING"
+                  }
+                },
+                "relationships": [
+                  {
+                    "target": {
+                      "id": "CSS",
+                      "index": 9,
                       "toolComponent": {
                         "name": "QDGO"
                       }
@@ -7094,278 +7094,12 @@
         }
       ],
       "language": "en-US",
-      "results": [
-        {
-          "ruleId": "GoExportedElementShouldHaveComment",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Exported type 'CreateGuildJSON' should have a comment or be unexported",
-            "markdown": "Exported type `CreateGuildJSON` should have a comment or be unexported"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/guild_endpoints.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 51,
-                  "startColumn": 6,
-                  "charOffset": 2306,
-                  "charLength": 15,
-                  "snippet": {
-                    "text": "CreateGuildJSON"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 49,
-                  "startColumn": 1,
-                  "charOffset": 2298,
-                  "charLength": 321,
-                  "snippet": {
-                    "text": "}\n\ntype CreateGuildJSON struct {\n\tName                        string                          `json:\"name\"`                          // guild name (2-100 characters, excluding trailing and leading whitespace)\n\tIcon                        *string                         `json:\"icon\"`                          // icon hash"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "afae08e17419d2aa88a84cb1d42d170075b07c8041d2d4e521df1b23e09980e8"
-          },
-          "properties": {
-            "ideaSeverity": "WEAK WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoExportedElementShouldHaveComment",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Exported type 'ModifyGuildJSON' should have a comment or be unexported",
-            "markdown": "Exported type `ModifyGuildJSON` should have a comment or be unexported"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/guild_endpoints.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 117,
-                  "startColumn": 6,
-                  "charOffset": 5472,
-                  "charLength": 15,
-                  "snippet": {
-                    "text": "ModifyGuildJSON"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 115,
-                  "startColumn": 1,
-                  "charOffset": 5464,
-                  "charLength": 355,
-                  "snippet": {
-                    "text": "}\n\ntype ModifyGuildJSON struct {\n\tName                        string                           `json:\"name\"`                          // guild name (2-100 characters, excluding trailing and leading whitespace)\n\tVerificationLevel           *VerificationLevel               `json:\"verification_level\"`            // verification level required for the guild"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "4633814bbaaf79208fd94ff9af17dedc8ed2b71803cd7a57e40331afdd6384f7"
-          },
-          "properties": {
-            "ideaSeverity": "WEAK WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoExportedElementShouldHaveComment",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Exported type 'CreateGuildChannelJSON' should have a comment or be unexported",
-            "markdown": "Exported type `CreateGuildChannelJSON` should have a comment or be unexported"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/guild_endpoints.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 178,
-                  "startColumn": 6,
-                  "charOffset": 9795,
-                  "charLength": 22,
-                  "snippet": {
-                    "text": "CreateGuildChannelJSON"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 176,
-                  "startColumn": 1,
-                  "charOffset": 9787,
-                  "charLength": 284,
-                  "snippet": {
-                    "text": "}\n\ntype CreateGuildChannelJSON struct {\n\tName                       string       `json:\"name,omitempty\"`                          // the name of the channel (1-100 characters)\n\tType                       ChannelType  `json:\"type\"`                                    // the ChannelType"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "f9e7842ca924384b4ab588c04f09c3fa35041da97811d7b1382e1c490c710d7b"
-          },
-          "properties": {
-            "ideaSeverity": "WEAK WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoExportedElementShouldHaveComment",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Exported method 'CreateGuildRole' should have a comment or be unexported",
-            "markdown": "Exported method `CreateGuildRole` should have a comment or be unexported"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/guild_endpoints.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 471,
-                  "startColumn": 17,
-                  "charOffset": 23688,
-                  "charLength": 15,
-                  "snippet": {
-                    "text": "CreateGuildRole"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 469,
-                  "startColumn": 1,
-                  "charOffset": 23669,
-                  "charLength": 167,
-                  "snippet": {
-                    "text": "}\n\nfunc (g *Guild) CreateGuildRole(payload *CreateGuildRoleJSON, reason *string) ([]*Role, error) {\n\tu := parseRoute(fmt.Sprintf(createGuildRole, api, g.ID.String()))\n"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "8ceab86cc42087306109324a501f41dac899898dba2e30d188ef614147c58bf4"
-          },
-          "properties": {
-            "ideaSeverity": "WEAK WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        },
-        {
-          "ruleId": "GoExportedElementShouldHaveComment",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Exported type 'GetGuildPruneCountResponse' should have a comment or be unexported",
-            "markdown": "Exported type `GetGuildPruneCountResponse` should have a comment or be unexported"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "api/guild_endpoints.go",
-                  "uriBaseId": "SRCROOT"
-                },
-                "region": {
-                  "startLine": 592,
-                  "startColumn": 6,
-                  "charOffset": 27687,
-                  "charLength": 26,
-                  "snippet": {
-                    "text": "GetGuildPruneCountResponse"
-                  },
-                  "sourceLanguage": "go"
-                },
-                "contextRegion": {
-                  "startLine": 590,
-                  "startColumn": 1,
-                  "charOffset": 27679,
-                  "charLength": 77,
-                  "snippet": {
-                    "text": "}\n\ntype GetGuildPruneCountResponse struct {\n\tPruned *uint64 `json:\"pruned\"`\n}"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "project",
-                  "kind": "module"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "equalIndicator/v1": "b27555fa5b30d08f6cd1808d77fb30562384ffa86019d9c72a02d328beca12c3"
-          },
-          "properties": {
-            "ideaSeverity": "WEAK WARNING",
-            "tags": [
-              "go"
-            ]
-          }
-        }
-      ],
+      "results": [],
       "automationDetails": {
         "id": "project/qodana/2023-03-04",
-        "guid": "5b3cad23-0c72-4735-928c-2c84b1d75780",
+        "guid": "8ff81437-b4cf-4015-870e-1ee355f925e1",
         "properties": {
-          "jobUrl": "https://github.com/veteran-software/discord-api-wrapper/actions/runs/4329630331"
+          "jobUrl": "https://github.com/veteran-software/discord-api-wrapper/actions/runs/4329674624"
         }
       },
       "newlineSequences": [
