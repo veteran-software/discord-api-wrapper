@@ -1,1 +1,1681 @@
-{"version":"3","listProblem":[]}
+{"version":"3","listProblem":[{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'ListGuildEmojis'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/emoji_endpoints.go",
+      "language": "go",
+      "line": 26,
+      "offset": 17,
+      "length": 15,
+      "code": {
+        "startLine": 24,
+        "length": 15,
+        "offset": 91,
+        "surroundingCode": "\n// ListGuildEmojis - Returns a list of emoji objects for the given guild.\nfunc (g *Guild) ListGuildEmojis() ([]*Emoji, error) {\n\tu := parseRoute(fmt.Sprintf(listGuildEmojis, api, g.ID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "3c4d9f6277553c6108c872b2f697e88f6b3db2086438aabc7ff6927c84b35bd5"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'GetGuildEmoji'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/emoji_endpoints.go",
+      "language": "go",
+      "line": 36,
+      "offset": 17,
+      "length": 13,
+      "code": {
+        "startLine": 34,
+        "length": 13,
+        "offset": 95,
+        "surroundingCode": "\n// GetGuildEmoji - Returns an emoji object for the given guild and emoji IDs.\nfunc (g *Guild) GetGuildEmoji(emoji *Emoji) (*Emoji, error) {\n\tu := parseRoute(fmt.Sprintf(getGuildEmoji, api, g.ID.String(), emoji.ID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "66299637f8cb4eedbe152fb6495e3f3b09a2e3a7a8ff018250e01dc89587ae5c"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'CreateGuildEmoji'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/emoji_endpoints.go",
+      "language": "go",
+      "line": 58,
+      "offset": 17,
+      "length": 16,
+      "code": {
+        "startLine": 56,
+        "length": 16,
+        "offset": 78,
+        "surroundingCode": "//\n// This endpoint supports the \"X-Audit-Log-Reason\" header.\nfunc (g *Guild) CreateGuildEmoji(payload *CreateEmojiJSON, reason *string) (*Emoji, error) {\n\tu := parseRoute(fmt.Sprintf(createGuildEmoji, api, g.ID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "29ebee102aa26d01af93fe9453300baa0a1b0ff5b5c5242923069d870a0becef"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'CreateEmojiJSON'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/emoji_endpoints.go",
+      "language": "go",
+      "line": 70,
+      "offset": 6,
+      "length": 15,
+      "code": {
+        "startLine": 68,
+        "length": 15,
+        "offset": 46,
+        "surroundingCode": "//\n// TODO: Validate the base64.Encoding\ntype CreateEmojiJSON struct {\n\tName  string          `json:\"name\"`  // Name - name of the emoji\n\tImage base64.Encoding `json:\"image\"` // Image - the 128x128 emoji image"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "7f1c4a557f5d65465c28d9f99707825a51d1f14a95c412f8297b3a3d01ebfc07"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'ModifyGuildEmoji'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/emoji_endpoints.go",
+      "language": "go",
+      "line": 87,
+      "offset": 17,
+      "length": 16,
+      "code": {
+        "startLine": 85,
+        "length": 16,
+        "offset": 76,
+        "surroundingCode": "//\n// This endpoint supports the X-Audit-Log-Reason header.\nfunc (g *Guild) ModifyGuildEmoji(emoji *Emoji, payload *ModifyGuildEmojiJSON, reason *string) (*Emoji, error) {\n\tu := parseRoute(fmt.Sprintf(modifyGuildEmoji, api, g.ID.String(), emoji.ID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "13ffab9c4662c7d2a084dd24a9f69298d1e5401e59a68ed9a35aacadaa1dce3b"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'ModifyGuildEmojiJSON'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/emoji_endpoints.go",
+      "language": "go",
+      "line": 97,
+      "offset": 6,
+      "length": 20,
+      "code": {
+        "startLine": 95,
+        "length": 20,
+        "offset": 71,
+        "surroundingCode": "\n// ModifyGuildEmojiJSON - Parameters to pass in the JSON payload\ntype ModifyGuildEmojiJSON struct {\n\tName  string       `json:\"name,omitempty\"`  // Name - name of the emoji\n\tRoles []*Snowflake `json:\"roles,omitempty\"` // Roles - roles allowed to use this emoji"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "1322179afa6efb892a4cd3b664578d4abb6efb24883e591a2587c5a9ca5ca666"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'DeleteGuildEmoji'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/emoji_endpoints.go",
+      "language": "go",
+      "line": 111,
+      "offset": 17,
+      "length": 16,
+      "code": {
+        "startLine": 109,
+        "length": 16,
+        "offset": 78,
+        "surroundingCode": "//\n// This endpoint supports the \"X-Audit-Log-Reason\" header.\nfunc (g *Guild) DeleteGuildEmoji(emoji *Emoji, reason *string) error {\n\tu := parseRoute(fmt.Sprintf(deleteGuildEmoji, api, g.ID.String(), emoji.ID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "718e2cb31b4d374840d979b869d722ead2c2266ca1b53d7eef402b2ac6d47058"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported function 'BaseAuthorizationURL'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 29,
+      "offset": 6,
+      "length": 20,
+      "code": {
+        "startLine": 27,
+        "length": 20,
+        "offset": 55,
+        "surroundingCode": "//\n//goland:noinspection GoUnusedExportedFunction\nfunc BaseAuthorizationURL() *url.URL {\n\tu, err := url.Parse(\"https://discord.com/api/oauth2/authorize\")\n\tif err != nil {"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "938749fd7f120e98dfdf0bcf77c189b929eb02791c5c726723ead6491674425a"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported function 'TokenURL'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 41,
+      "offset": 6,
+      "length": 8,
+      "code": {
+        "startLine": 39,
+        "length": 8,
+        "offset": 55,
+        "surroundingCode": "//\n//goland:noinspection GoUnusedExportedFunction\nfunc TokenURL() *url.URL {\n\tu, err := url.Parse(\"https://discord.com/api/oauth2/token\")\n\tif err != nil {"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "9119793c1aa8dfefd283543a9d3f2a0e05f2a251b265a2c70941672811c0670d"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported function 'TokenRevocationURL'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 53,
+      "offset": 6,
+      "length": 18,
+      "code": {
+        "startLine": 51,
+        "length": 18,
+        "offset": 55,
+        "surroundingCode": "//\n//goland:noinspection GoUnusedExportedFunction\nfunc TokenRevocationURL() *url.URL {\n\tu, err := url.Parse(\"https://discord.com/api/oauth2/token/revoke\")\n\tif err != nil {"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "48d8a176d0acd994cd9dee80d025af6f95d757d912c555829603bb313b42d2fc"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'ActivitiesRead'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 76,
+      "offset": 2,
+      "length": 14,
+      "code": {
+        "startLine": 74,
+        "length": 14,
+        "offset": 45,
+        "surroundingCode": "//goland:noinspection GoUnusedConst\nconst (\n\tActivitiesRead                        Scopes = \"activities.read\"                          // allows your app to fetch data from a user's \"Now Playing/Recently Played\" list - requires Discord approval\n\tActivitiesWrite                       Scopes = \"activities.write\"                         // allows your app to update a user's activity - requires Discord approval (NOT REQUIRED FOR GAMESDK ACTIVITY MANAGER)\n\tApplicationsBuildsRead                Scopes = \"applications.builds.read\"                 // allows your app to read build data for a user's applications"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "014bae92f193ad44d02f3a17be265dac1ac539bc6be84bd5fc551c75c21ea651"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'ActivitiesWrite'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 77,
+      "offset": 2,
+      "length": 15,
+      "code": {
+        "startLine": 75,
+        "length": 15,
+        "offset": 210,
+        "surroundingCode": "const (\n\tActivitiesRead                        Scopes = \"activities.read\"                          // allows your app to fetch data from a user's \"Now Playing/Recently Played\" list - requires Discord approval\n\tActivitiesWrite                       Scopes = \"activities.write\"                         // allows your app to update a user's activity - requires Discord approval (NOT REQUIRED FOR GAMESDK ACTIVITY MANAGER)\n\tApplicationsBuildsRead                Scopes = \"applications.builds.read\"                 // allows your app to read build data for a user's applications\n\tApplicationsBuildsUpload              Scopes = \"applications.builds.upload\"               // allows your app to upload/update builds for a user's applications - requires Discord approval"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "566079fc1ecd55befff1e253be1f0c9c3e8b463721a0dd7f354db1fc8b9e0d1b"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'ApplicationsBuildsRead'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 78,
+      "offset": 2,
+      "length": 22,
+      "code": {
+        "startLine": 76,
+        "length": 22,
+        "offset": 412,
+        "surroundingCode": "\tActivitiesRead                        Scopes = \"activities.read\"                          // allows your app to fetch data from a user's \"Now Playing/Recently Played\" list - requires Discord approval\n\tActivitiesWrite                       Scopes = \"activities.write\"                         // allows your app to update a user's activity - requires Discord approval (NOT REQUIRED FOR GAMESDK ACTIVITY MANAGER)\n\tApplicationsBuildsRead                Scopes = \"applications.builds.read\"                 // allows your app to read build data for a user's applications\n\tApplicationsBuildsUpload              Scopes = \"applications.builds.upload\"               // allows your app to upload/update builds for a user's applications - requires Discord approval\n\tApplicationsCommands                  Scopes = \"applications.commands\"                    // allows your app to use commands in a guild"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "cdcee88fe7a7f9747d67ce2074ac9db7ee3a87ac488e7283b9e218e11c0aa29b"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'ApplicationsBuildsUpload'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 79,
+      "offset": 2,
+      "length": 24,
+      "code": {
+        "startLine": 77,
+        "length": 24,
+        "offset": 366,
+        "surroundingCode": "\tActivitiesWrite                       Scopes = \"activities.write\"                         // allows your app to update a user's activity - requires Discord approval (NOT REQUIRED FOR GAMESDK ACTIVITY MANAGER)\n\tApplicationsBuildsRead                Scopes = \"applications.builds.read\"                 // allows your app to read build data for a user's applications\n\tApplicationsBuildsUpload              Scopes = \"applications.builds.upload\"               // allows your app to upload/update builds for a user's applications - requires Discord approval\n\tApplicationsCommands                  Scopes = \"applications.commands\"                    // allows your app to use commands in a guild\n\tApplicationsCommandsUpdate            Scopes = \"applications.commands.update\"             // allows your app to update its commands using a Bearer token - client credentials grant only"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "03ac2aeea1ae06fa9fa13cf94470c95fec12628766e303c8c6b144703f7cb2cf"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'ApplicationsCommands'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 80,
+      "offset": 2,
+      "length": 20,
+      "code": {
+        "startLine": 78,
+        "length": 20,
+        "offset": 344,
+        "surroundingCode": "\tApplicationsBuildsRead                Scopes = \"applications.builds.read\"                 // allows your app to read build data for a user's applications\n\tApplicationsBuildsUpload              Scopes = \"applications.builds.upload\"               // allows your app to upload/update builds for a user's applications - requires Discord approval\n\tApplicationsCommands                  Scopes = \"applications.commands\"                    // allows your app to use commands in a guild\n\tApplicationsCommandsUpdate            Scopes = \"applications.commands.update\"             // allows your app to update its commands using a Bearer token - client credentials grant only\n\tApplicationsCommandsPermissionsUpdate Scopes = \"applications.commands.permissions.update\" // allows your app to update permissions for its commands in a guild a user has permissions to"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "e5a6111ae5719b8693b610715d8594cfce163140dfe5698d2e8bbd65455069a7"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'ApplicationsCommandsUpdate'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 81,
+      "offset": 2,
+      "length": 26,
+      "code": {
+        "startLine": 79,
+        "length": 26,
+        "offset": 326,
+        "surroundingCode": "\tApplicationsBuildsUpload              Scopes = \"applications.builds.upload\"               // allows your app to upload/update builds for a user's applications - requires Discord approval\n\tApplicationsCommands                  Scopes = \"applications.commands\"                    // allows your app to use commands in a guild\n\tApplicationsCommandsUpdate            Scopes = \"applications.commands.update\"             // allows your app to update its commands using a Bearer token - client credentials grant only\n\tApplicationsCommandsPermissionsUpdate Scopes = \"applications.commands.permissions.update\" // allows your app to update permissions for its commands in a guild a user has permissions to\n\tApplicationsEntitlements              Scopes = \"applications.entitlements\"                // allows your app to read entitlements for a user's applications"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "a137fbce712fe7af72f0495c6d0248365638bb9944457ef984bccd08de678489"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'ApplicationsCommandsPermissionsUpdate'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 82,
+      "offset": 2,
+      "length": 37,
+      "code": {
+        "startLine": 80,
+        "length": 37,
+        "offset": 324,
+        "surroundingCode": "\tApplicationsCommands                  Scopes = \"applications.commands\"                    // allows your app to use commands in a guild\n\tApplicationsCommandsUpdate            Scopes = \"applications.commands.update\"             // allows your app to update its commands using a Bearer token - client credentials grant only\n\tApplicationsCommandsPermissionsUpdate Scopes = \"applications.commands.permissions.update\" // allows your app to update permissions for its commands in a guild a user has permissions to\n\tApplicationsEntitlements              Scopes = \"applications.entitlements\"                // allows your app to read entitlements for a user's applications\n\tApplicationsStoreUpdate               Scopes = \"applications.store.update\"                // allows your app to read and update store data (SKUs, store listings, achievements, etc.) for a user's applications"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "c748cb8c2e772d08187b8aea260a7d7284128d109927efe6b6f0e93689f1061c"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'ApplicationsEntitlements'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 83,
+      "offset": 2,
+      "length": 24,
+      "code": {
+        "startLine": 81,
+        "length": 24,
+        "offset": 373,
+        "surroundingCode": "\tApplicationsCommandsUpdate            Scopes = \"applications.commands.update\"             // allows your app to update its commands using a Bearer token - client credentials grant only\n\tApplicationsCommandsPermissionsUpdate Scopes = \"applications.commands.permissions.update\" // allows your app to update permissions for its commands in a guild a user has permissions to\n\tApplicationsEntitlements              Scopes = \"applications.entitlements\"                // allows your app to read entitlements for a user's applications\n\tApplicationsStoreUpdate               Scopes = \"applications.store.update\"                // allows your app to read and update store data (SKUs, store listings, achievements, etc.) for a user's applications\n\tBot                                   Scopes = \"bot\"                                      // for oauth2 bots, this puts the bot in the user's selected guild by default"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "92702f133a1eadacfcec209f58150125d6b89ed5bd678e83d16245109408da93"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'ApplicationsStoreUpdate'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 84,
+      "offset": 2,
+      "length": 23,
+      "code": {
+        "startLine": 82,
+        "length": 23,
+        "offset": 344,
+        "surroundingCode": "\tApplicationsCommandsPermissionsUpdate Scopes = \"applications.commands.permissions.update\" // allows your app to update permissions for its commands in a guild a user has permissions to\n\tApplicationsEntitlements              Scopes = \"applications.entitlements\"                // allows your app to read entitlements for a user's applications\n\tApplicationsStoreUpdate               Scopes = \"applications.store.update\"                // allows your app to read and update store data (SKUs, store listings, achievements, etc.) for a user's applications\n\tBot                                   Scopes = \"bot\"                                      // for oauth2 bots, this puts the bot in the user's selected guild by default\n\tConnections                           Scopes = \"connections\"                              // allows `/users/@me/connections` to return linked third-party accounts"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "01266547b3396c1d82271135f37597d9597532e8cf2bc1ab887091c792b38062"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'Bot'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 85,
+      "offset": 2,
+      "length": 3,
+      "code": {
+        "startLine": 83,
+        "length": 3,
+        "offset": 367,
+        "surroundingCode": "\tApplicationsEntitlements              Scopes = \"applications.entitlements\"                // allows your app to read entitlements for a user's applications\n\tApplicationsStoreUpdate               Scopes = \"applications.store.update\"                // allows your app to read and update store data (SKUs, store listings, achievements, etc.) for a user's applications\n\tBot                                   Scopes = \"bot\"                                      // for oauth2 bots, this puts the bot in the user's selected guild by default\n\tConnections                           Scopes = \"connections\"                              // allows `/users/@me/connections` to return linked third-party accounts\n\tDmChannelsRead                        Scopes = \"dm_channels.read\"                         // allows your app to see information about the user's DMs and group DMs - requires Discord approval"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "d1d985428c9e892790d0a0a3a46f6b5e8b4fd4df3fc99d6d9bed65e480b70f69"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'Connections'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 86,
+      "offset": 2,
+      "length": 11,
+      "code": {
+        "startLine": 84,
+        "length": 11,
+        "offset": 379,
+        "surroundingCode": "\tApplicationsStoreUpdate               Scopes = \"applications.store.update\"                // allows your app to read and update store data (SKUs, store listings, achievements, etc.) for a user's applications\n\tBot                                   Scopes = \"bot\"                                      // for oauth2 bots, this puts the bot in the user's selected guild by default\n\tConnections                           Scopes = \"connections\"                              // allows `/users/@me/connections` to return linked third-party accounts\n\tDmChannelsRead                        Scopes = \"dm_channels.read\"                         // allows your app to see information about the user's DMs and group DMs - requires Discord approval\n\tEmail                                 Scopes = \"email\"                                    // enables `/users/@me` to return an email"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "98a3383561c0e8e4bb1202e3d03b2fbce3d2f20dfc6456f09f47f6f906525b6c"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'DmChannelsRead'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 87,
+      "offset": 2,
+      "length": 14,
+      "code": {
+        "startLine": 85,
+        "length": 14,
+        "offset": 334,
+        "surroundingCode": "\tBot                                   Scopes = \"bot\"                                      // for oauth2 bots, this puts the bot in the user's selected guild by default\n\tConnections                           Scopes = \"connections\"                              // allows `/users/@me/connections` to return linked third-party accounts\n\tDmChannelsRead                        Scopes = \"dm_channels.read\"                         // allows your app to see information about the user's DMs and group DMs - requires Discord approval\n\tEmail                                 Scopes = \"email\"                                    // enables `/users/@me` to return an email\n\tGdmJoin                               Scopes = \"gdm.join\"                                 // allows your app to join users to a group dm"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "3948b8d13cf8dd4ba31be1d96a1c253455c4db5c8417c27bd5c24e5925adca35"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'Email'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 88,
+      "offset": 2,
+      "length": 5,
+      "code": {
+        "startLine": 86,
+        "length": 5,
+        "offset": 357,
+        "surroundingCode": "\tConnections                           Scopes = \"connections\"                              // allows `/users/@me/connections` to return linked third-party accounts\n\tDmChannelsRead                        Scopes = \"dm_channels.read\"                         // allows your app to see information about the user's DMs and group DMs - requires Discord approval\n\tEmail                                 Scopes = \"email\"                                    // enables `/users/@me` to return an email\n\tGdmJoin                               Scopes = \"gdm.join\"                                 // allows your app to join users to a group dm\n\tGuilds                                Scopes = \"guilds\"                                   // allows `/users/@me/guilds` to return basic information about all of a user's guilds"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "eedad9797c11601db3354f901eba48c239cdd7970f71be1ba10d4113358c050c"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'GdmJoin'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 89,
+      "offset": 2,
+      "length": 7,
+      "code": {
+        "startLine": 87,
+        "length": 7,
+        "offset": 327,
+        "surroundingCode": "\tDmChannelsRead                        Scopes = \"dm_channels.read\"                         // allows your app to see information about the user's DMs and group DMs - requires Discord approval\n\tEmail                                 Scopes = \"email\"                                    // enables `/users/@me` to return an email\n\tGdmJoin                               Scopes = \"gdm.join\"                                 // allows your app to join users to a group dm\n\tGuilds                                Scopes = \"guilds\"                                   // allows `/users/@me/guilds` to return basic information about all of a user's guilds\n\tGuildsJoin                            Scopes = \"guilds.join\"                              // allows `/guilds/{guild.id}/members/{user.id}` to be used for joining users to a guild"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "c4b26f21afbac0dc97cb55f122d751e4f3aaca01192f5cb7e6bcf74dfd78166c"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'Guilds'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 90,
+      "offset": 2,
+      "length": 6,
+      "code": {
+        "startLine": 88,
+        "length": 6,
+        "offset": 273,
+        "surroundingCode": "\tEmail                                 Scopes = \"email\"                                    // enables `/users/@me` to return an email\n\tGdmJoin                               Scopes = \"gdm.join\"                                 // allows your app to join users to a group dm\n\tGuilds                                Scopes = \"guilds\"                                   // allows `/users/@me/guilds` to return basic information about all of a user's guilds\n\tGuildsJoin                            Scopes = \"guilds.join\"                              // allows `/guilds/{guild.id}/members/{user.id}` to be used for joining users to a guild\n\tGuildsMembersRead                     Scopes = \"guilds.members.read\"                      // allows `/users/@me/guilds/{guild.id}/member` to return a user's member information in a guild"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "c8741cf4f9a71a86850cd94ff4e11504e5ffee3bc80b29277d68cbc34a508c4f"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'GuildsJoin'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 91,
+      "offset": 2,
+      "length": 10,
+      "code": {
+        "startLine": 89,
+        "length": 10,
+        "offset": 317,
+        "surroundingCode": "\tGdmJoin                               Scopes = \"gdm.join\"                                 // allows your app to join users to a group dm\n\tGuilds                                Scopes = \"guilds\"                                   // allows `/users/@me/guilds` to return basic information about all of a user's guilds\n\tGuildsJoin                            Scopes = \"guilds.join\"                              // allows `/guilds/{guild.id}/members/{user.id}` to be used for joining users to a guild\n\tGuildsMembersRead                     Scopes = \"guilds.members.read\"                      // allows `/users/@me/guilds/{guild.id}/member` to return a user's member information in a guild\n\tIdentify                              Scopes = \"identify\"                                 // allows `/users/@me` without email"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "561390e2bef90338d0d6e46b44c01a6f9d7dd00ba662b1f7f6e0caa18eacf355"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'GuildsMembersRead'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 92,
+      "offset": 2,
+      "length": 17,
+      "code": {
+        "startLine": 90,
+        "length": 17,
+        "offset": 359,
+        "surroundingCode": "\tGuilds                                Scopes = \"guilds\"                                   // allows `/users/@me/guilds` to return basic information about all of a user's guilds\n\tGuildsJoin                            Scopes = \"guilds.join\"                              // allows `/guilds/{guild.id}/members/{user.id}` to be used for joining users to a guild\n\tGuildsMembersRead                     Scopes = \"guilds.members.read\"                      // allows `/users/@me/guilds/{guild.id}/member` to return a user's member information in a guild\n\tIdentify                              Scopes = \"identify\"                                 // allows `/users/@me` without email\n\tMessagesRead                          Scopes = \"messages.read\"                            // for local rpc server api access, this allows you to read messages from all client channels (otherwise restricted to channels/guilds your app creates)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "1ff5e68a7aa0c50233523aa40a738c14fbb6f76ae79b882b82196a15881c02f2"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'Identify'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 93,
+      "offset": 2,
+      "length": 8,
+      "code": {
+        "startLine": 91,
+        "length": 8,
+        "offset": 369,
+        "surroundingCode": "\tGuildsJoin                            Scopes = \"guilds.join\"                              // allows `/guilds/{guild.id}/members/{user.id}` to be used for joining users to a guild\n\tGuildsMembersRead                     Scopes = \"guilds.members.read\"                      // allows `/users/@me/guilds/{guild.id}/member` to return a user's member information in a guild\n\tIdentify                              Scopes = \"identify\"                                 // allows `/users/@me` without email\n\tMessagesRead                          Scopes = \"messages.read\"                            // for local rpc server api access, this allows you to read messages from all client channels (otherwise restricted to channels/guilds your app creates)\n\tRelationshipsRead                     Scopes = \"relationships.read\"                       // allows your app to know a user's friends and implicit relationships - requires Discord approval"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "b41cff11d9e426ab2a0b7a09531af541b50bd8e2be32e580a3910fd33b96dfe7"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'MessagesRead'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 94,
+      "offset": 2,
+      "length": 12,
+      "code": {
+        "startLine": 92,
+        "length": 12,
+        "offset": 317,
+        "surroundingCode": "\tGuildsMembersRead                     Scopes = \"guilds.members.read\"                      // allows `/users/@me/guilds/{guild.id}/member` to return a user's member information in a guild\n\tIdentify                              Scopes = \"identify\"                                 // allows `/users/@me` without email\n\tMessagesRead                          Scopes = \"messages.read\"                            // for local rpc server api access, this allows you to read messages from all client channels (otherwise restricted to channels/guilds your app creates)\n\tRelationshipsRead                     Scopes = \"relationships.read\"                       // allows your app to know a user's friends and implicit relationships - requires Discord approval\n\tRpc                                   Scopes = \"rpc\"                                      // for local rpc server access, this allows you to control a user's local Discord client - requires Discord approval"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "3beb0b0801a785f6eb6b7263dae8d6f176d5472e21ec024235a6a39434e3b25a"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'RelationshipsRead'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 95,
+      "offset": 2,
+      "length": 17,
+      "code": {
+        "startLine": 93,
+        "length": 17,
+        "offset": 373,
+        "surroundingCode": "\tIdentify                              Scopes = \"identify\"                                 // allows `/users/@me` without email\n\tMessagesRead                          Scopes = \"messages.read\"                            // for local rpc server api access, this allows you to read messages from all client channels (otherwise restricted to channels/guilds your app creates)\n\tRelationshipsRead                     Scopes = \"relationships.read\"                       // allows your app to know a user's friends and implicit relationships - requires Discord approval\n\tRpc                                   Scopes = \"rpc\"                                      // for local rpc server access, this allows you to control a user's local Discord client - requires Discord approval\n\tRpcActivitiesWrite                    Scopes = \"rpc.activities.write\"                     // for local rpc server access, this allows you to update a user's activity - requires Discord approval"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "befea7ea8d09b492b468e2dc933ebd689d7b442b95d3797f617d273cc82cff07"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'Rpc'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 96,
+      "offset": 2,
+      "length": 3,
+      "code": {
+        "startLine": 94,
+        "length": 3,
+        "offset": 435,
+        "surroundingCode": "\tMessagesRead                          Scopes = \"messages.read\"                            // for local rpc server api access, this allows you to read messages from all client channels (otherwise restricted to channels/guilds your app creates)\n\tRelationshipsRead                     Scopes = \"relationships.read\"                       // allows your app to know a user's friends and implicit relationships - requires Discord approval\n\tRpc                                   Scopes = \"rpc\"                                      // for local rpc server access, this allows you to control a user's local Discord client - requires Discord approval\n\tRpcActivitiesWrite                    Scopes = \"rpc.activities.write\"                     // for local rpc server access, this allows you to update a user's activity - requires Discord approval\n\tRpcNotificationsRead                  Scopes = \"rpc.notifications.read\"                   // for local rpc server access, this allows you to receive notifications pushed out to the user - requires Discord approval"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "379efd590d07fd6d8f0f37e419858f149e83702445c94f6ff8fddc11c373f8df"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'RpcActivitiesWrite'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 97,
+      "offset": 2,
+      "length": 18,
+      "code": {
+        "startLine": 95,
+        "length": 18,
+        "offset": 399,
+        "surroundingCode": "\tRelationshipsRead                     Scopes = \"relationships.read\"                       // allows your app to know a user's friends and implicit relationships - requires Discord approval\n\tRpc                                   Scopes = \"rpc\"                                      // for local rpc server access, this allows you to control a user's local Discord client - requires Discord approval\n\tRpcActivitiesWrite                    Scopes = \"rpc.activities.write\"                     // for local rpc server access, this allows you to update a user's activity - requires Discord approval\n\tRpcNotificationsRead                  Scopes = \"rpc.notifications.read\"                   // for local rpc server access, this allows you to receive notifications pushed out to the user - requires Discord approval\n\tRpcVoiceRead                          Scopes = \"rpc.voice.read\"                           // for local rpc server access, this allows you to read a user's voice settings and listen for voice events - requires Discord approval"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "296e8eeb49eb066b2652fb32daef1436cc9d057c75f0b49dcfb167a00517dc6b"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'RpcNotificationsRead'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 98,
+      "offset": 2,
+      "length": 20,
+      "code": {
+        "startLine": 96,
+        "length": 20,
+        "offset": 404,
+        "surroundingCode": "\tRpc                                   Scopes = \"rpc\"                                      // for local rpc server access, this allows you to control a user's local Discord client - requires Discord approval\n\tRpcActivitiesWrite                    Scopes = \"rpc.activities.write\"                     // for local rpc server access, this allows you to update a user's activity - requires Discord approval\n\tRpcNotificationsRead                  Scopes = \"rpc.notifications.read\"                   // for local rpc server access, this allows you to receive notifications pushed out to the user - requires Discord approval\n\tRpcVoiceRead                          Scopes = \"rpc.voice.read\"                           // for local rpc server access, this allows you to read a user's voice settings and listen for voice events - requires Discord approval\n\tRpcVoiceWrite                         Scopes = \"rpc.voice.write\"                          // for local rpc server access, this allows you to update a user's voice settings - requires Discord approval"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "4ec4f81e3f72978187ea22e8f9e540184aa787719797a5aa239090c3a8da9a6f"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'RpcVoiceRead'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 99,
+      "offset": 2,
+      "length": 12,
+      "code": {
+        "startLine": 97,
+        "length": 12,
+        "offset": 411,
+        "surroundingCode": "\tRpcActivitiesWrite                    Scopes = \"rpc.activities.write\"                     // for local rpc server access, this allows you to update a user's activity - requires Discord approval\n\tRpcNotificationsRead                  Scopes = \"rpc.notifications.read\"                   // for local rpc server access, this allows you to receive notifications pushed out to the user - requires Discord approval\n\tRpcVoiceRead                          Scopes = \"rpc.voice.read\"                           // for local rpc server access, this allows you to read a user's voice settings and listen for voice events - requires Discord approval\n\tRpcVoiceWrite                         Scopes = \"rpc.voice.write\"                          // for local rpc server access, this allows you to update a user's voice settings - requires Discord approval\n\tVoice                                 Scopes = \"voice\"                                    // allows your app to connect to voice on user's behalf and see all the voice members - requires Discord approval                                   //"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "b079da7396f511f173c7fc37df14c4727e73ea3ecc605388a85e82041fe762cb"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'RpcVoiceWrite'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 100,
+      "offset": 2,
+      "length": 13,
+      "code": {
+        "startLine": 98,
+        "length": 13,
+        "offset": 443,
+        "surroundingCode": "\tRpcNotificationsRead                  Scopes = \"rpc.notifications.read\"                   // for local rpc server access, this allows you to receive notifications pushed out to the user - requires Discord approval\n\tRpcVoiceRead                          Scopes = \"rpc.voice.read\"                           // for local rpc server access, this allows you to read a user's voice settings and listen for voice events - requires Discord approval\n\tRpcVoiceWrite                         Scopes = \"rpc.voice.write\"                          // for local rpc server access, this allows you to update a user's voice settings - requires Discord approval\n\tVoice                                 Scopes = \"voice\"                                    // allows your app to connect to voice on user's behalf and see all the voice members - requires Discord approval                                   //\n\tWebhookIncoming                       Scopes = \"webhook.incoming\"                         // this generates a webhook that is returned in the oauth token response for authorization code grants"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "456ad171e95c8054e41bc643574d228dcda9835f4ff0d65a06f07aeb688cd13b"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'Voice'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 101,
+      "offset": 2,
+      "length": 5,
+      "code": {
+        "startLine": 99,
+        "length": 5,
+        "offset": 429,
+        "surroundingCode": "\tRpcVoiceRead                          Scopes = \"rpc.voice.read\"                           // for local rpc server access, this allows you to read a user's voice settings and listen for voice events - requires Discord approval\n\tRpcVoiceWrite                         Scopes = \"rpc.voice.write\"                          // for local rpc server access, this allows you to update a user's voice settings - requires Discord approval\n\tVoice                                 Scopes = \"voice\"                                    // allows your app to connect to voice on user's behalf and see all the voice members - requires Discord approval                                   //\n\tWebhookIncoming                       Scopes = \"webhook.incoming\"                         // this generates a webhook that is returned in the oauth token response for authorization code grants\n)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "0752bc3d115ec04395942848b14a36d677ad89ce36314dd03b7ae365e5648438"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'WebhookIncoming'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "oauth2/oauth2.go",
+      "language": "go",
+      "line": 102,
+      "offset": 2,
+      "length": 15,
+      "code": {
+        "startLine": 100,
+        "length": 15,
+        "offset": 444,
+        "surroundingCode": "\tRpcVoiceWrite                         Scopes = \"rpc.voice.write\"                          // for local rpc server access, this allows you to update a user's voice settings - requires Discord approval\n\tVoice                                 Scopes = \"voice\"                                    // allows your app to connect to voice on user's behalf and see all the voice members - requires Discord approval                                   //\n\tWebhookIncoming                       Scopes = \"webhook.incoming\"                         // this generates a webhook that is returned in the oauth token response for authorization code grants\n)\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "60f4fa29f82b491c0aaba452e08fdcf830857859557e4ac006c2a2ef432bfa45"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'GetInvite'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/invite_endpoints.go",
+      "language": "go",
+      "line": 26,
+      "offset": 18,
+      "length": 9,
+      "code": {
+        "startLine": 24,
+        "length": 9,
+        "offset": 78,
+        "surroundingCode": "\n// GetInvite - Returns an Invite object for the given code.\nfunc (i *Invite) GetInvite(withCounts *bool, withExpiration *bool, guildScheduledEventID *Snowflake) (*Invite, error) {\n\tu := parseRoute(fmt.Sprintf(getInvite, api, *i.Code))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "d6ade0719015e5efaa640f69271dc7b360738427712885db493b7bbebc37b210"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'DeleteInvite'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/invite_endpoints.go",
+      "language": "go",
+      "line": 58,
+      "offset": 18,
+      "length": 12,
+      "code": {
+        "startLine": 56,
+        "length": 12,
+        "offset": 79,
+        "surroundingCode": "//\n//\tThis endpoint supports the `X-Audit-Log-Reason` header.\nfunc (i *Invite) DeleteInvite(reason *string) error {\n\tu := parseRoute(fmt.Sprintf(deleteInvite, api, *i.Code))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "e7bcbe5d413c694ba7f6226951b131905d57571d6f20811d5548731746d9b35a"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'Sticker'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 25,
+      "offset": 6,
+      "length": 7,
+      "code": {
+        "startLine": 23,
+        "length": 7,
+        "offset": 70,
+        "surroundingCode": "\n// Sticker - Represents a sticker that can be sent in messages.\ntype Sticker struct {\n\tID          Snowflake   `json:\"id\"`                   // id of the sticker\n\tPackID      Snowflake   `json:\"pack_id,omitempty\"`    // for standard stickers, id of the pack the sticker is from"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "82948f9efc7f9a1020b1b1d02895aa7bc1a54401281fe885c9f791fca4a10ec1"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'StickerType'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 41,
+      "offset": 6,
+      "length": 11,
+      "code": {
+        "startLine": 39,
+        "length": 11,
+        "offset": 39,
+        "surroundingCode": "\n// StickerType - type of sticker\ntype StickerType int\n\n//goland:noinspection GoUnusedConst"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "b28b979cb08e201422b0177ead091ccf483d3df74a586e9cd99797f0eb2f6cca"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'StickerTypeStandard'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 45,
+      "offset": 2,
+      "length": 19,
+      "code": {
+        "startLine": 43,
+        "length": 19,
+        "offset": 45,
+        "surroundingCode": "//goland:noinspection GoUnusedConst\nconst (\n\tStickerTypeStandard StickerType = iota + 1 // an official sticker in a pack, part of Nitro or in a removed purchasable pack\n\tStickerTypeGuild                           // a sticker uploaded to a Boosted guild for the guild's members\n)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "287c557b0c0d5456690d10d56b84c57efc50397ef29d64040a6044e026ca190d"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'StickerTypeGuild'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 46,
+      "offset": 2,
+      "length": 16,
+      "code": {
+        "startLine": 44,
+        "length": 16,
+        "offset": 134,
+        "surroundingCode": "const (\n\tStickerTypeStandard StickerType = iota + 1 // an official sticker in a pack, part of Nitro or in a removed purchasable pack\n\tStickerTypeGuild                           // a sticker uploaded to a Boosted guild for the guild's members\n)\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "d94c33a96ec555e705a0a1dd8616c4e8745daa70fad525631dc92d7a9c8aef66"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'StickerFormatType'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 50,
+      "offset": 6,
+      "length": 17,
+      "code": {
+        "startLine": 48,
+        "length": 17,
+        "offset": 55,
+        "surroundingCode": "\n// StickerFormatType - The format of the Sticker\ntype StickerFormatType int\n\n//goland:noinspection GoUnusedConst"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "2b4dee65731272c905e90d39dfe4b95cbf0def6e852c5962e9eb13a6bfc50571"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'StickerFormatTypePng'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 54,
+      "offset": 2,
+      "length": 20,
+      "code": {
+        "startLine": 52,
+        "length": 20,
+        "offset": 45,
+        "surroundingCode": "//goland:noinspection GoUnusedConst\nconst (\n\tStickerFormatTypePng         StickerFormatType = iota + 1 // PNG\n\tStickerFormatTypeAnimatedPng                              // APNG\n\tStickerFormatTypeLottie                                   // LOTTIE"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "da15e2fd6fa95d99beb07082ff77dadb8e9e8d4de5688c4725090824c14742e7"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'StickerFormatTypeAnimatedPng'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 55,
+      "offset": 2,
+      "length": 28,
+      "code": {
+        "startLine": 53,
+        "length": 28,
+        "offset": 75,
+        "surroundingCode": "const (\n\tStickerFormatTypePng         StickerFormatType = iota + 1 // PNG\n\tStickerFormatTypeAnimatedPng                              // APNG\n\tStickerFormatTypeLottie                                   // LOTTIE\n)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "8ff90c158b8ec9977e24d2449ae7ff36a01da7b72f419640222e8fccfb792423"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'StickerFormatTypeLottie'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 56,
+      "offset": 2,
+      "length": 23,
+      "code": {
+        "startLine": 54,
+        "length": 23,
+        "offset": 134,
+        "surroundingCode": "\tStickerFormatTypePng         StickerFormatType = iota + 1 // PNG\n\tStickerFormatTypeAnimatedPng                              // APNG\n\tStickerFormatTypeLottie                                   // LOTTIE\n)\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "f2524080d437d22429d77f2e4411c07643ebc8efb7fa521ccf5841de1f697f42"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'StickerItem'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 60,
+      "offset": 6,
+      "length": 11,
+      "code": {
+        "startLine": 58,
+        "length": 11,
+        "offset": 107,
+        "surroundingCode": "\n// StickerItem - The smallest amount of data required to render a sticker. A partial sticker object.\ntype StickerItem struct {\n\tID         Snowflake         `json:\"id\"`          // id of the sticker\n\tName       string            `json:\"name\"`        // name of the sticker"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "354d4a991a8c1b9d7c273d306eae7eb4838612fa2e1398721559e66cfb6f5a16"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'StickerPack'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 67,
+      "offset": 6,
+      "length": 11,
+      "code": {
+        "startLine": 65,
+        "length": 11,
+        "offset": 63,
+        "surroundingCode": "\n// StickerPack - Represents a pack of standard stickers.\ntype StickerPack struct {\n\tID             Snowflake  `json:\"id\"`                         // id of the sticker pack\n\tStickers       []*Sticker `json:\"stickers\"`                   // the stickers in the pack"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "6c1a1fe1149098d2cfec035747a2980b9bdeec673979417b560d6beac9a44072"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'GetSticker'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 78,
+      "offset": 19,
+      "length": 10,
+      "code": {
+        "startLine": 76,
+        "length": 10,
+        "offset": 86,
+        "surroundingCode": "\n// GetSticker - Returns a sticker object for the given sticker ID.\nfunc (s *Sticker) GetSticker() (*Sticker, error) {\n\tu := parseRoute(fmt.Sprintf(getSticker, api, s.ID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "2aae16af2d64d6de3ba002977e38d4af8f4d3140baa6ed4b910f41957890d5cb"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported function 'ListNitroStickerPacks'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 90,
+      "offset": 6,
+      "length": 21,
+      "code": {
+        "startLine": 88,
+        "length": 21,
+        "offset": 55,
+        "surroundingCode": "//\n//goland:noinspection GoUnusedExportedFunction\nfunc ListNitroStickerPacks() (*ListNitroStickerPacksResponse, error) {\n\tu := parseRoute(fmt.Sprintf(listNitroStickerPacks, api))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "65153548b58a4b305bd80e1c77c0473ff7d7e3a415b416b0c40eb342bc9542d7"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'ListNitroStickerPacksResponse'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 100,
+      "offset": 6,
+      "length": 29,
+      "code": {
+        "startLine": 98,
+        "length": 29,
+        "offset": 55,
+        "surroundingCode": "\n// ListNitroStickerPacksResponse - JSON response\ntype ListNitroStickerPacksResponse struct {\n\tStickerPacks []*StickerPack `json:\"sticker_packs\"`\n}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "ac30b4863acc772321fcb73f417bd8ca922b3bedaaae76928705b9c7dfb19db7"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'ListGuildStickers'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 107,
+      "offset": 17,
+      "length": 17,
+      "code": {
+        "startLine": 105,
+        "length": 17,
+        "offset": 98,
+        "surroundingCode": "//\n// Includes user fields if the bot has the ManageEmojisAndStickers permission.\nfunc (g *Guild) ListGuildStickers() ([]*Sticker, error) {\n\tu := parseRoute(fmt.Sprintf(listGuildStickers, api, g.ID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "bc88c54cd8b23a59de05ec0b5a40fae8dd4478b4c80da9e95258df1d12163017"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'GetGuildSticker'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 119,
+      "offset": 17,
+      "length": 15,
+      "code": {
+        "startLine": 117,
+        "length": 15,
+        "offset": 103,
+        "surroundingCode": "//\n// Includes the `user` field if the bot has the ManageEmojisAndStickers permission.\nfunc (g *Guild) GetGuildSticker(stickerID Snowflake) (*Sticker, error) {\n\tu := parseRoute(fmt.Sprintf(getGuildSticker, api, g.ID.String(), stickerID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "81c6eca56a3742d8a5a0e9ada85e08769578b40a532365500d14177a2de3dde2"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'CreateGuildSticker'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 136,
+      "offset": 17,
+      "length": 18,
+      "code": {
+        "startLine": 134,
+        "length": 18,
+        "offset": 87,
+        "surroundingCode": "// Returns the new sticker object on success.\n// TODO: FormData fields\nfunc (g *Guild) CreateGuildSticker() (*Sticker, error) {\n\tu := parseRoute(fmt.Sprintf(createGuildSticker, api, g.ID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "8c1ea45dbe89cadd291698110efbb409fcc03ffb3c93fb0f7b0e34f5f5efc6e6"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'ModifyGuildSticker'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 154,
+      "offset": 17,
+      "length": 18,
+      "code": {
+        "startLine": 152,
+        "length": 18,
+        "offset": 78,
+        "surroundingCode": "//\n// This endpoint supports the `X-Audit-Log-Reason` header.\nfunc (g *Guild) ModifyGuildSticker(stickerID Snowflake, payload ModifyGuildStickerJSON, reason *string) (*Sticker, error) {\n\tu := parseRoute(fmt.Sprintf(modifyGuildSticker, api, g.ID.String(), stickerID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "c85a043779d061f0d6387d12beed9dc083d7f98af48f97c83b5c5f8f557e9985"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'ModifyGuildStickerJSON'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 164,
+      "offset": 6,
+      "length": 22,
+      "code": {
+        "startLine": 162,
+        "length": 22,
+        "offset": 47,
+        "surroundingCode": "\n// ModifyGuildStickerJSON - JSON payload\ntype ModifyGuildStickerJSON struct {\n\tName        string  `json:\"name\"`        // name of the sticker (2-30 characters)\n\tDescription *string `json:\"description\"` // description of the sticker (2-100 characters)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "642145b32c978a87d93a742e250409ca594cdd23cf429f079724fc6648e88858"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'DeleteGuildSticker'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 177,
+      "offset": 17,
+      "length": 18,
+      "code": {
+        "startLine": 175,
+        "length": 18,
+        "offset": 78,
+        "surroundingCode": "//\n// This endpoint supports the `X-Audit-Log-Reason` header.\nfunc (g *Guild) DeleteGuildSticker(stickerID Snowflake, reason *string) error {\n\tu := parseRoute(fmt.Sprintf(deleteGuildSticker, api, g.ID.String(), stickerID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "da009df54a5ac1ce7a9412b3b44d48c99c9243f2ebdd59209d6a97ca5e8c1037"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported variable 'Rest'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/rest.go",
+      "language": "go",
+      "line": 57,
+      "offset": 2,
+      "length": 4,
+      "code": {
+        "startLine": 55,
+        "length": 4,
+        "offset": 47,
+        "surroundingCode": "var (\n\t// Rest - Holds the rate limit buckets\n\tRest *RateLimiter\n)\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "37687b6c2c3cd8b9b0b30e74f8ffdff133734a00680dc8da98592e47ebe83bb1"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'Request'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/rest.go",
+      "language": "go",
+      "line": 65,
+      "offset": 23,
+      "length": 7,
+      "code": {
+        "startLine": 63,
+        "length": 7,
+        "offset": 76,
+        "surroundingCode": "\n// Request - send an HTTP request with rate limiting\nfunc (r *RateLimiter) Request(method, route string, data any, reason *string) (*http.Response, error) {\n\treturn r.requestWithBucketID(method, route, strings.SplitN(route, \"?\", 2)[0], data, reason)\n}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "4eee9eb141abdf5f613cd0eda21dd9862515eb013913953cdffbeb19d8f053ae"
+}]}
