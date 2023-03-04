@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Veteran Software
+ * Copyright (c) 2022-2023. Veteran Software
  *
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
@@ -16,7 +16,7 @@
 
 package api
 
-import "github.com/veteran-software/discord-api-wrapper/oauth2"
+import "github.com/veteran-software/discord-api-wrapper/v10/oauth2"
 
 // Application - an application which operates on Discord, commonly referred to as bots
 //

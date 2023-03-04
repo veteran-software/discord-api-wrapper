@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Veteran Software
+ * Copyright (c) 2022-2023. Veteran Software
  *
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
@@ -17,8 +17,8 @@
 package main
 
 import (
-	_ "github.com/veteran-software/discord-api-wrapper/api"
-	_ "github.com/veteran-software/discord-api-wrapper/logging"
+	_ "github.com/veteran-software/discord-api-wrapper/v10/api"
+	_ "github.com/veteran-software/discord-api-wrapper/v10/logging"
 )
 
 func main() {
