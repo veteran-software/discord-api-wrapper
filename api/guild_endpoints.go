@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Veteran Software
+ * Copyright (c) 2022-2023. Veteran Software
  *
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
@@ -318,7 +318,8 @@ type AddGuildMemberJSON struct {
 //	All parameters to this endpoint are optional and nullable. When moving members to channels, the API user must have permissions to both connect to the channel and have the MoveMembers permission.
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
-func (g *Guild) ModifyGuildMember(userID Snowflake, payload ModifyGuildMemberJSON, reason *string) (*GuildMember, error) {
+func (g *Guild) ModifyGuildMember(userID Snowflake, payload ModifyGuildMemberJSON, reason *string) (*GuildMember,
+	error) {
 	u := parseRoute(fmt.Sprintf(modifyGuildMember, api, g.ID.String(), userID.String()))
 
 	var guildMember *GuildMember
@@ -711,11 +712,11 @@ func (g *Guild) ModifyGuildWidget(payload GuildWidgetSettings, reason *string) (
 	return guildWidgetSettings, err
 }
 
-// GetGuildWidget - Returns the widget for the guild.
-func (g *Guild) GetGuildWidget() (*GetGuildWidget, error) {
+// GuildWidget - Returns the widget for the guild.
+func (g *Guild) GetGuildWidget() (*GuildWidget, error) {
 	u := parseRoute(fmt.Sprintf(getGuildWidget, api, g.ID.String()))
 
-	var guildWidget *GetGuildWidget
+	var guildWidget *GuildWidget
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &guildWidget)
 
 	return guildWidget, err

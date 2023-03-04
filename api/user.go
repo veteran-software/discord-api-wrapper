@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Veteran Software
+ * Copyright (c) 2022-2023. Veteran Software
  *
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
@@ -118,9 +118,10 @@ const (
 	Spotify         Service = "spotify"
 	Skype           Service = "skype"
 	Steam           Service = "steam"
+	TikTok          Service = "tiktok"
 	Twitch          Service = "twitch"
 	Twitter         Service = "twitter"
-	XBox            Service = "xbox"
+	Xbox            Service = "xbox"
 	YouTube         Service = "youtube"
 )
 

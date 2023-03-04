@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Veteran Software
+ * Copyright (c) 2022-2023. Veteran Software
  *
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
@@ -148,10 +148,12 @@ type SystemChannelFlags int
 
 //goland:noinspection GoUnusedConst
 const (
-	SuppressJoinNotifications          SystemChannelFlags = 1 << 0 // Suppress member join notifications
-	SuppressPremiumSubscriptions       SystemChannelFlags = 1 << 1 // Suppress server boost notifications
-	SuppressGuildReminderNotifications SystemChannelFlags = 1 << 2 // Suppress server setup tips
-	SuppressJoinNotificationReplies    SystemChannelFlags = 1 << 3 // Hide member join sticker reply buttons
+	SuppressJoinNotifications                            SystemChannelFlags = 1 << 0 // Suppress member join notifications
+	SuppressPremiumSubscriptions                         SystemChannelFlags = 1 << 1 // Suppress server boost notifications
+	SuppressGuildReminderNotifications                   SystemChannelFlags = 1 << 2 // Suppress server setup tips
+	SuppressJoinNotificationReplies                      SystemChannelFlags = 1 << 3 // Hide member join sticker reply buttons
+	SuppressRoleSubscriptionPurchaseNotifications        SystemChannelFlags = 1 << 4 // Suppress role subscription purchase and renewal notifications
+	SuppresssRoleSubscriptionPurchaseNotificationReplies SystemChannelFlags = 1 << 5 // Hide role subscription sticker reply buttons
 )
 
 // GuildFeatures - enabled guild features
@@ -159,29 +161,33 @@ type GuildFeatures string
 
 //goland:noinspection SpellCheckingInspection,GrazieInspection,GoUnusedConst
 const (
-	AnimatedBanner                  GuildFeatures = "ANIMATED_BANNER"                    // guild has access to set an animated guild banner image
-	AnimatedIcon                    GuildFeatures = "ANIMATED_ICON"                      // guild has access to set an animated guild icon
-	ApplicationCommandPermissionsV2 GuildFeatures = "APPLICATION_COMMAND_PERMISSIONS_V2" // guild is using the old permissions configuration behavior
-	AutoModeration                  GuildFeatures = "AUTO_MODERATION"                    // guild has set up auto moderation rules
-	Banner                          GuildFeatures = "BANNER"                             // guild has access to set a guild banner image
-	Community                       GuildFeatures = "COMMUNITY"                          // guild can enable welcome screen, Membership Screening, stage channels and discovery, and receives community updates
-	DeveloperSupportServer          GuildFeatures = "DEVELOPER_SUPPORT_SERVER"           // 	guild has been set as a support server on the App Directory
-	Discoverable                    GuildFeatures = "DISCOVERABLE"                       // guild is able to be discovered in the directory
-	Featurable                      GuildFeatures = "FEATURABLE"                         // guild is able to be featured in the directory
-	InvitesDisabled                 GuildFeatures = "INVITES_DISABLED"                   // Mutable; Pauses all invites/access to the server
-	InviteSplash                    GuildFeatures = "INVITE_SPLASH"                      // guild has access to set an invite splash background
-	MemberVerificationGateEnabled   GuildFeatures = "MEMBER_VERIFICATION_GATE_ENABLED"   // guild has enabled Membership Screening
-	MonetizationEnabled             GuildFeatures = "MONETIZATION_ENABLED"               // guild has enabled monetization
-	MoreStickers                    GuildFeatures = "MORE_STICKERS"                      // guild has increased custom sticker slots
-	News                            GuildFeatures = "NEWS"                               // guild has access to create news channels
-	Partnered                       GuildFeatures = "PARTNERED"                          // guild is partnered
-	PreviewEnabled                  GuildFeatures = "PREVIEW_ENABLED"                    // guild can be previewed before joining via Membership Screening or the directory
-	RoleIcons                       GuildFeatures = "ROLE_ICONS"                         // guild is able to set role icons
-	TicketedEventsEnabled           GuildFeatures = "TICKETED_EVENTS_ENABLED"            // guild has enabled ticketed events
-	VanityURL                       GuildFeatures = "VANITY_URL"                         // guild has access to set a vanity URL
-	Verified                        GuildFeatures = "VERIFIED"                           // guild is verified
-	VipRegions                      GuildFeatures = "VIP_REGIONS"                        // guild has access to set 384kbps bitrate in voice (previously VIP voice servers)
-	WelcomeScreenEnabled            GuildFeatures = "WELCOME_SCREEN_ENABLED"             // guild has enabled the welcome screen
+	AnimatedBanner                        GuildFeatures = "ANIMATED_BANNER"                           // guild has access to set an animated guild banner image
+	AnimatedIcon                          GuildFeatures = "ANIMATED_ICON"                             // guild has access to set an animated guild icon
+	ApplicationCommandPermissionsV2       GuildFeatures = "APPLICATION_COMMAND_PERMISSIONS_V2"        // guild is using the old permissions configuration behavior
+	AutoModeration                        GuildFeatures = "AUTO_MODERATION"                           // guild has set up auto moderation rules
+	Banner                                GuildFeatures = "BANNER"                                    // guild has access to set a guild banner image
+	Community                             GuildFeatures = "COMMUNITY"                                 // Mutable; guild can enable welcome screen, Membership Screening, stage channels and discovery, and receives community updates
+	CreatorMonetizableProvisional         GuildFeatures = "CREATOR_MONETIZABLE_PROVISIONAL"           // guild has enabled monetization
+	CreatorStorePage                      GuildFeatures = "CREATOR_STORE_PAGE"                        // guild has enabled the role subscription promo page
+	DeveloperSupportServer                GuildFeatures = "DEVELOPER_SUPPORT_SERVER"                  //	guild has been set as a support server on the App Directory
+	Discoverable                          GuildFeatures = "DISCOVERABLE"                              // Mutable; guild is able to be discovered in the directory
+	Featurable                            GuildFeatures = "FEATURABLE"                                // guild is able to be featured in the directory
+	InvitesDisabled                       GuildFeatures = "INVITES_DISABLED"                          // Mutable; Pauses all invites/access to the server
+	InviteSplash                          GuildFeatures = "INVITE_SPLASH"                             // guild has access to set an invite splash background
+	MemberVerificationGateEnabled         GuildFeatures = "MEMBER_VERIFICATION_GATE_ENABLED"          // guild has enabled Membership Screening
+	MonetizationEnabled                   GuildFeatures = "MONETIZATION_ENABLED"                      // guild has enabled monetization
+	MoreStickers                          GuildFeatures = "MORE_STICKERS"                             // guild has increased custom sticker slots
+	News                                  GuildFeatures = "NEWS"                                      // guild has access to create news channels
+	Partnered                             GuildFeatures = "PARTNERED"                                 // guild is partnered
+	PreviewEnabled                        GuildFeatures = "PREVIEW_ENABLED"                           // guild can be previewed before joining via Membership Screening or the directory
+	RoleIcons                             GuildFeatures = "ROLE_ICONS"                                // guild is able to set role icons
+	RoleSubscriptionsAvailableForPurchase GuildFeatures = "ROLE_SUBSCRIPTIONS_AVAILABLE_FOR_PURCHASE" // guild has role subscriptions that can be purchased
+	RoleSubscriptionsEnabled              GuildFeatures = "ROLE_SUBSCRIPTIONS_ENABLED"                // guild has enabled role subscriptions
+	TicketedEventsEnabled                 GuildFeatures = "TICKETED_EVENTS_ENABLED"                   // guild has enabled ticketed events
+	VanityURL                             GuildFeatures = "VANITY_URL"                                // guild has access to set a vanity URL
+	Verified                              GuildFeatures = "VERIFIED"                                  // guild is verified
+	VipRegions                            GuildFeatures = "VIP_REGIONS"                               // guild has access to set 384kbps bitrate in voice (previously VIP voice servers)
+	WelcomeScreenEnabled                  GuildFeatures = "WELCOME_SCREEN_ENABLED"                    // guild has enabled the welcome screen
 )
 
 // UnavailableGuild - A partial guild object.
@@ -213,10 +219,10 @@ type GuildWidgetSettings struct {
 	ChannelID *Snowflake `json:"channel_id"` // the widget channel id
 }
 
-// GetGuildWidget - the guild widget
+// GuildWidget - the guild widget
 //
 // The fields `id`, `discriminator` and `avatar` are anonymized to prevent abuse.
-type GetGuildWidget struct {
+type GuildWidget struct {
 	ID            Snowflake     `json:"id"`             // guild id
 	Name          string        `json:"name"`           // guild name (2-100 characters)
 	InstantInvite *string       `json:"instant_invite"` // instant invite for the guilds specified widget invite channel
