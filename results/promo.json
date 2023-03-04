@@ -3,6 +3,34 @@
   "category": "General",
   "type": "Unnecessarily exported identifier",
   "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'GetGuildAuditLog'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/audit_log_endpoints.go",
+      "language": "go",
+      "line": 29,
+      "offset": 17,
+      "length": 16,
+      "code": {
+        "startLine": 27,
+        "length": 16,
+        "offset": 60,
+        "surroundingCode": "//\n// Requires the ViewAuditLog permission.\nfunc (g *Guild) GetGuildAuditLog(userID *Snowflake, actionType *uint64, before *Snowflake, limit *uint64) (*AuditLog, error) {\n\tu := parseRoute(fmt.Sprintf(getGuildAuditLog, api, g.ID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "e32a003088d6f6227490ea1ffbf048dd34ee2d49e9284dbf3fe538771867ce5d"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
   "comment": "Unnecessarily exported type 'Application'",
   "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
   "sources": [
@@ -334,4 +362,2020 @@
     "inspectionName": "GoUnnecessarilyExportedIdentifiers"
   },
   "hash": "54841a6e95dcc8c205b5bbfd07c62d4fe08234690c6ae22cc9517817b9890532"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'ApplicationCommand'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/application_commands.go",
+      "language": "go",
+      "line": 33,
+      "offset": 6,
+      "length": 18,
+      "code": {
+        "startLine": 31,
+        "length": 18,
+        "offset": 54,
+        "surroundingCode": "//\n//goland:noinspection SpellCheckingInspection\ntype ApplicationCommand struct {\n\tID                       Snowflake                   `json:\"id,omitempty\"`                         // unique id of the command\n\tType                     ApplicationCommandType      `json:\"type,omitempty\"`                       // the type of command, defaults 1 if not set"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "ff1ce2178d4cb9c944cb0cf8fdaa1612df1200a1a4df0ab88534c62d126292d5"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'ApplicationCommandType'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/application_commands.go",
+      "language": "go",
+      "line": 49,
+      "offset": 6,
+      "length": 22,
+      "code": {
+        "startLine": 47,
+        "length": 22,
+        "offset": 66,
+        "surroundingCode": "\n// ApplicationCommandType - The type of application command\ntype ApplicationCommandType int\n\n//goland:noinspection GoUnusedConst"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "60bdf32aa11dbd9b81a63896bd6169062a55e75e034cd406e81124a5b1e4dc3b"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'CommandTypeChatInput'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/application_commands.go",
+      "language": "go",
+      "line": 53,
+      "offset": 2,
+      "length": 20,
+      "code": {
+        "startLine": 51,
+        "length": 20,
+        "offset": 45,
+        "surroundingCode": "//goland:noinspection GoUnusedConst\nconst (\n\tCommandTypeChatInput ApplicationCommandType = iota + 1\n\tCommandTypeUser\n\tCommandTypeMessage"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "035108eace51769fe8fdd762be67326f57e9c85916d53ba1176c0760881d0fcd"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'CommandTypeUser'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/application_commands.go",
+      "language": "go",
+      "line": 54,
+      "offset": 2,
+      "length": 15,
+      "code": {
+        "startLine": 52,
+        "length": 15,
+        "offset": 65,
+        "surroundingCode": "const (\n\tCommandTypeChatInput ApplicationCommandType = iota + 1\n\tCommandTypeUser\n\tCommandTypeMessage\n)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "2260f3872e620c457decf01d8579f1decb12ab7c33e6ae43b5fd042edc5be701"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'CommandTypeMessage'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/application_commands.go",
+      "language": "go",
+      "line": 55,
+      "offset": 2,
+      "length": 18,
+      "code": {
+        "startLine": 53,
+        "length": 18,
+        "offset": 74,
+        "surroundingCode": "\tCommandTypeChatInput ApplicationCommandType = iota + 1\n\tCommandTypeUser\n\tCommandTypeMessage\n)\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "4dc4b98e47feaf13fbd92fbc0c0f2e9d6a0d4fb2fea4ead6f046059fc2761762"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'ApplicationCommandOption'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/application_commands.go",
+      "language": "go",
+      "line": 59,
+      "offset": 6,
+      "length": 24,
+      "code": {
+        "startLine": 57,
+        "length": 24,
+        "offset": 87,
+        "surroundingCode": "\n// ApplicationCommandOption - You can specify a maximum of 25 choices per option\ntype ApplicationCommandOption struct {\n\tType                     ApplicationCommandOptionType      `json:\"type\"`                                // the type of option\n\tName                     string                            `json:\"name\"`                                // 1-32 character name"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "970645651a51f8667e35549d59df1dba43a150ace398b6b4811483373910a91c"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'ApplicationCommandOptionType'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/application_commands.go",
+      "language": "go",
+      "line": 77,
+      "offset": 6,
+      "length": 28,
+      "code": {
+        "startLine": 75,
+        "length": 28,
+        "offset": 71,
+        "surroundingCode": "\n// ApplicationCommandOptionType - The option type of the command\ntype ApplicationCommandOptionType int\n\n//goland:noinspection GoUnusedConst"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "a29d8363bc4faed71ab887d9caf0a932a59beedd677c13f4ff6fb33991849210"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'OptionTypeSubCommand'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/application_commands.go",
+      "language": "go",
+      "line": 81,
+      "offset": 2,
+      "length": 20,
+      "code": {
+        "startLine": 79,
+        "length": 20,
+        "offset": 45,
+        "surroundingCode": "//goland:noinspection GoUnusedConst\nconst (\n\tOptionTypeSubCommand ApplicationCommandOptionType = iota + 1\n\tOptionTypeSubCommandGroup\n\tOptionTypeString"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "0ee1fe9abcca39b49fb8351398e17e3bf3838e8d40ab1dd584142c03c9d22a75"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'OptionTypeSubCommandGroup'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/application_commands.go",
+      "language": "go",
+      "line": 82,
+      "offset": 2,
+      "length": 25,
+      "code": {
+        "startLine": 80,
+        "length": 25,
+        "offset": 71,
+        "surroundingCode": "const (\n\tOptionTypeSubCommand ApplicationCommandOptionType = iota + 1\n\tOptionTypeSubCommandGroup\n\tOptionTypeString\n\tOptionTypeInteger // Any integer between -2^53 and 2^53"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "fc1035618f4faec0e4f5d6af84cb400483e5de89e2635ea9f60ff2f58327f995"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'OptionTypeString'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/application_commands.go",
+      "language": "go",
+      "line": 83,
+      "offset": 2,
+      "length": 16,
+      "code": {
+        "startLine": 81,
+        "length": 16,
+        "offset": 90,
+        "surroundingCode": "\tOptionTypeSubCommand ApplicationCommandOptionType = iota + 1\n\tOptionTypeSubCommandGroup\n\tOptionTypeString\n\tOptionTypeInteger // Any integer between -2^53 and 2^53\n\tOptionTypeBoolean"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "9a9c8acc219118f555003b61ae95f5c36fae2c2a1a7b0db78a5af7c0fd46a806"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'OptionTypeInteger'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/application_commands.go",
+      "language": "go",
+      "line": 84,
+      "offset": 2,
+      "length": 17,
+      "code": {
+        "startLine": 82,
+        "length": 17,
+        "offset": 46,
+        "surroundingCode": "\tOptionTypeSubCommandGroup\n\tOptionTypeString\n\tOptionTypeInteger // Any integer between -2^53 and 2^53\n\tOptionTypeBoolean\n\tOptionTypeUser"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "ea5b18ea15c0feb4567284c4380bf016759c058385ecfcdde0a6f5502fb9e6f9"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'OptionTypeBoolean'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/application_commands.go",
+      "language": "go",
+      "line": 85,
+      "offset": 2,
+      "length": 17,
+      "code": {
+        "startLine": 83,
+        "length": 17,
+        "offset": 76,
+        "surroundingCode": "\tOptionTypeString\n\tOptionTypeInteger // Any integer between -2^53 and 2^53\n\tOptionTypeBoolean\n\tOptionTypeUser\n\tOptionTypeChannel // Includes all channel types + categories"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "1b799098ae25b8ce9781b95853e23d3d9f3757840e2089cfa2496640098499fd"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'OptionTypeUser'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/application_commands.go",
+      "language": "go",
+      "line": 86,
+      "offset": 2,
+      "length": 14,
+      "code": {
+        "startLine": 84,
+        "length": 14,
+        "offset": 77,
+        "surroundingCode": "\tOptionTypeInteger // Any integer between -2^53 and 2^53\n\tOptionTypeBoolean\n\tOptionTypeUser\n\tOptionTypeChannel // Includes all channel types + categories\n\tOptionTypeRole"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "f0382bb5bc89286452c0433ad238845cd466cc2153d0d735f702448ecd4c04ab"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'OptionTypeChannel'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/application_commands.go",
+      "language": "go",
+      "line": 87,
+      "offset": 2,
+      "length": 17,
+      "code": {
+        "startLine": 85,
+        "length": 17,
+        "offset": 36,
+        "surroundingCode": "\tOptionTypeBoolean\n\tOptionTypeUser\n\tOptionTypeChannel // Includes all channel types + categories\n\tOptionTypeRole\n\tOptionTypeMentionable // Includes users and roles"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "c7ad458c9b618051e2663c387fcdb059e5aa3f5db19b5b8f9881a0c71b7b23b6"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'OptionTypeRole'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/application_commands.go",
+      "language": "go",
+      "line": 88,
+      "offset": 2,
+      "length": 14,
+      "code": {
+        "startLine": 86,
+        "length": 14,
+        "offset": 79,
+        "surroundingCode": "\tOptionTypeUser\n\tOptionTypeChannel // Includes all channel types + categories\n\tOptionTypeRole\n\tOptionTypeMentionable // Includes users and roles\n\tOptionTypeNumber      // Any double between -2^53 and 2^53"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "92573e7cab5fe7e18c0da69aa1f04c01b23aa7c39d392375c2dd6a7b7f987155"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'OptionTypeMentionable'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/application_commands.go",
+      "language": "go",
+      "line": 89,
+      "offset": 2,
+      "length": 21,
+      "code": {
+        "startLine": 87,
+        "length": 21,
+        "offset": 79,
+        "surroundingCode": "\tOptionTypeChannel // Includes all channel types + categories\n\tOptionTypeRole\n\tOptionTypeMentionable // Includes users and roles\n\tOptionTypeNumber      // Any double between -2^53 and 2^53\n\tOptionTypeAttachment  // attachment object"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "0f5775fc599a3c440861a3169ba701140987e3a2e0a9b9c76b0bfbee9cb8fee5"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'OptionTypeNumber'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/application_commands.go",
+      "language": "go",
+      "line": 90,
+      "offset": 2,
+      "length": 16,
+      "code": {
+        "startLine": 88,
+        "length": 16,
+        "offset": 68,
+        "surroundingCode": "\tOptionTypeRole\n\tOptionTypeMentionable // Includes users and roles\n\tOptionTypeNumber      // Any double between -2^53 and 2^53\n\tOptionTypeAttachment  // attachment object\n)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "9ff4f7a5ba16d3032464627003a0bd0affcfd2000649854798dcc83d11b5233e"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'OptionTypeAttachment'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/application_commands.go",
+      "language": "go",
+      "line": 91,
+      "offset": 2,
+      "length": 20,
+      "code": {
+        "startLine": 89,
+        "length": 20,
+        "offset": 112,
+        "surroundingCode": "\tOptionTypeMentionable // Includes users and roles\n\tOptionTypeNumber      // Any double between -2^53 and 2^53\n\tOptionTypeAttachment  // attachment object\n)\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "abe81a1ad28987ec68ed27103bdddd8f97e561b329ccc08e60a2ba84ddfc59eb"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'ApplicationCommandOptionChoice'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/application_commands.go",
+      "language": "go",
+      "line": 95,
+      "offset": 6,
+      "length": 30,
+      "code": {
+        "startLine": 93,
+        "length": 30,
+        "offset": 130,
+        "surroundingCode": "\n// ApplicationCommandOptionChoice - If you specify choices for an option, they are the only valid values for a user to pick\ntype ApplicationCommandOptionChoice struct {\n\tName              string            `json:\"name\"`                         // 1-100 character choice name\n\tNameLocalizations *LocalizationDict `json:\"name_localizations,omitempty\"` // Localization dictionary for the name field. Values follow the same restrictions as name"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "a7d84e46e3e82e9ce3a7d236408058043ced6d18cae52c6e898c615d1136e5f8"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'GuildApplicationCommandPermissions'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/application_commands.go",
+      "language": "go",
+      "line": 102,
+      "offset": 6,
+      "length": 34,
+      "code": {
+        "startLine": 100,
+        "length": 34,
+        "offset": 111,
+        "surroundingCode": "\n// GuildApplicationCommandPermissions - Returned when fetching the permissions for a command in a guild.\ntype GuildApplicationCommandPermissions struct {\n\tID            Snowflake                        `json:\"id\"`             // the id of the command\n\tApplicationID Snowflake                        `json:\"application_id\"` // the id of the application the command belongs to"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "2c621279f01b7944b7736c66416209039ef3a1f2cf83293f9509b46998653fb6"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'ApplicationCommandPermissions'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/application_commands.go",
+      "language": "go",
+      "line": 110,
+      "offset": 6,
+      "length": 29,
+      "code": {
+        "startLine": 108,
+        "length": 29,
+        "offset": 156,
+        "surroundingCode": "\n// ApplicationCommandPermissions - Application command permissions allow you to enable or disable command for specific users or roles within a guild.\ntype ApplicationCommandPermissions struct {\n\tID         Snowflake                        `json:\"id\"`         // the id of the role or user\n\tType       ApplicationCommandPermissionType `json:\"type\"`       // role or user"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "80b4a265741e0dce4406020e824dbba781f0f58daf1ae9eff0a3d0a47f6a7f91"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'ApplicationCommandPermissionType'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/application_commands.go",
+      "language": "go",
+      "line": 117,
+      "offset": 6,
+      "length": 32,
+      "code": {
+        "startLine": 115,
+        "length": 32,
+        "offset": 80,
+        "surroundingCode": "\n// ApplicationCommandPermissionType - The permission type for the command\ntype ApplicationCommandPermissionType int\n\n//goland:noinspection GoUnusedConst"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "ba727d7c470abce7b6f7361a7bc5e8c2bb8e170f3f928d65b4dc820592bf6ad4"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'PermissionTypeRole'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/application_commands.go",
+      "language": "go",
+      "line": 121,
+      "offset": 2,
+      "length": 18,
+      "code": {
+        "startLine": 119,
+        "length": 18,
+        "offset": 45,
+        "surroundingCode": "//goland:noinspection GoUnusedConst\nconst (\n\tPermissionTypeRole    ApplicationCommandPermissionType = iota + 1 // ROLE\n\tPermissionTypeUser                                                // USER\n\tPermissionTypeChannel                                             // CHANNEL"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "f5d93ece9ff0924cc5a550e68955140af18ecaa34bc2e21e484bae296a61639e"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'PermissionTypeUser'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/application_commands.go",
+      "language": "go",
+      "line": 122,
+      "offset": 2,
+      "length": 18,
+      "code": {
+        "startLine": 120,
+        "length": 18,
+        "offset": 84,
+        "surroundingCode": "const (\n\tPermissionTypeRole    ApplicationCommandPermissionType = iota + 1 // ROLE\n\tPermissionTypeUser                                                // USER\n\tPermissionTypeChannel                                             // CHANNEL\n)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "dde547b57b1ed4874849676c59909363bb8330736bdb25812335e3085c558b77"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'PermissionTypeChannel'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/application_commands.go",
+      "language": "go",
+      "line": 123,
+      "offset": 2,
+      "length": 21,
+      "code": {
+        "startLine": 121,
+        "length": 21,
+        "offset": 151,
+        "surroundingCode": "\tPermissionTypeRole    ApplicationCommandPermissionType = iota + 1 // ROLE\n\tPermissionTypeUser                                                // USER\n\tPermissionTypeChannel                                             // CHANNEL\n)\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "250d7f7b43c3ffaf1d743f149a26ec079eb09a8bef5eac922d728e2ce26bd956"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported function 'PermissionConstantsEveryone'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/application_commands.go",
+      "language": "go",
+      "line": 130,
+      "offset": 6,
+      "length": 27,
+      "code": {
+        "startLine": 128,
+        "length": 27,
+        "offset": 55,
+        "surroundingCode": "//\n//goland:noinspection GoUnusedExportedFunction\nfunc PermissionConstantsEveryone(guildID Snowflake) *Snowflake {\n\treturn &guildID\n}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "3c2bda3915f5c06ddf1ee2ee600b9360a4fdba6c491062560c9962aa1c23773c"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported function 'PermissionsConstantsAllChannels'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/application_commands.go",
+      "language": "go",
+      "line": 138,
+      "offset": 6,
+      "length": 31,
+      "code": {
+        "startLine": 136,
+        "length": 31,
+        "offset": 55,
+        "surroundingCode": "//\n//goland:noinspection GoUnusedExportedFunction\nfunc PermissionsConstantsAllChannels(guildID Snowflake) *Snowflake {\n\tsnowflakeInt, err := strconv.ParseUint(string(guildID), 10, 64)\n\tif err != nil {"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "157d4042ecebe16a2b34a14f1bc045efdc11d899aff3cd1c5e6de2874f237174"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'Sticker'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 25,
+      "offset": 6,
+      "length": 7,
+      "code": {
+        "startLine": 23,
+        "length": 7,
+        "offset": 70,
+        "surroundingCode": "\n// Sticker - Represents a sticker that can be sent in messages.\ntype Sticker struct {\n\tID          Snowflake   `json:\"id\"`                   // id of the sticker\n\tPackID      Snowflake   `json:\"pack_id,omitempty\"`    // for standard stickers, id of the pack the sticker is from"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "82948f9efc7f9a1020b1b1d02895aa7bc1a54401281fe885c9f791fca4a10ec1"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'StickerType'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 41,
+      "offset": 6,
+      "length": 11,
+      "code": {
+        "startLine": 39,
+        "length": 11,
+        "offset": 39,
+        "surroundingCode": "\n// StickerType - type of sticker\ntype StickerType int\n\n//goland:noinspection GoUnusedConst"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "b28b979cb08e201422b0177ead091ccf483d3df74a586e9cd99797f0eb2f6cca"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'StickerTypeStandard'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 45,
+      "offset": 2,
+      "length": 19,
+      "code": {
+        "startLine": 43,
+        "length": 19,
+        "offset": 45,
+        "surroundingCode": "//goland:noinspection GoUnusedConst\nconst (\n\tStickerTypeStandard StickerType = iota + 1 // an official sticker in a pack, part of Nitro or in a removed purchasable pack\n\tStickerTypeGuild                           // a sticker uploaded to a Boosted guild for the guild's members\n)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "287c557b0c0d5456690d10d56b84c57efc50397ef29d64040a6044e026ca190d"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'StickerTypeGuild'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 46,
+      "offset": 2,
+      "length": 16,
+      "code": {
+        "startLine": 44,
+        "length": 16,
+        "offset": 134,
+        "surroundingCode": "const (\n\tStickerTypeStandard StickerType = iota + 1 // an official sticker in a pack, part of Nitro or in a removed purchasable pack\n\tStickerTypeGuild                           // a sticker uploaded to a Boosted guild for the guild's members\n)\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "d94c33a96ec555e705a0a1dd8616c4e8745daa70fad525631dc92d7a9c8aef66"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'StickerFormatType'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 50,
+      "offset": 6,
+      "length": 17,
+      "code": {
+        "startLine": 48,
+        "length": 17,
+        "offset": 55,
+        "surroundingCode": "\n// StickerFormatType - The format of the Sticker\ntype StickerFormatType int\n\n//goland:noinspection GoUnusedConst"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "2b4dee65731272c905e90d39dfe4b95cbf0def6e852c5962e9eb13a6bfc50571"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'StickerFormatTypePng'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 54,
+      "offset": 2,
+      "length": 20,
+      "code": {
+        "startLine": 52,
+        "length": 20,
+        "offset": 45,
+        "surroundingCode": "//goland:noinspection GoUnusedConst\nconst (\n\tStickerFormatTypePng         StickerFormatType = iota + 1 // PNG\n\tStickerFormatTypeAnimatedPng                              // APNG\n\tStickerFormatTypeLottie                                   // LOTTIE"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "da15e2fd6fa95d99beb07082ff77dadb8e9e8d4de5688c4725090824c14742e7"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'StickerFormatTypeAnimatedPng'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 55,
+      "offset": 2,
+      "length": 28,
+      "code": {
+        "startLine": 53,
+        "length": 28,
+        "offset": 75,
+        "surroundingCode": "const (\n\tStickerFormatTypePng         StickerFormatType = iota + 1 // PNG\n\tStickerFormatTypeAnimatedPng                              // APNG\n\tStickerFormatTypeLottie                                   // LOTTIE\n)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "8ff90c158b8ec9977e24d2449ae7ff36a01da7b72f419640222e8fccfb792423"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'StickerFormatTypeLottie'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 56,
+      "offset": 2,
+      "length": 23,
+      "code": {
+        "startLine": 54,
+        "length": 23,
+        "offset": 134,
+        "surroundingCode": "\tStickerFormatTypePng         StickerFormatType = iota + 1 // PNG\n\tStickerFormatTypeAnimatedPng                              // APNG\n\tStickerFormatTypeLottie                                   // LOTTIE\n)\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "f2524080d437d22429d77f2e4411c07643ebc8efb7fa521ccf5841de1f697f42"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'StickerItem'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 60,
+      "offset": 6,
+      "length": 11,
+      "code": {
+        "startLine": 58,
+        "length": 11,
+        "offset": 107,
+        "surroundingCode": "\n// StickerItem - The smallest amount of data required to render a sticker. A partial sticker object.\ntype StickerItem struct {\n\tID         Snowflake         `json:\"id\"`          // id of the sticker\n\tName       string            `json:\"name\"`        // name of the sticker"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "354d4a991a8c1b9d7c273d306eae7eb4838612fa2e1398721559e66cfb6f5a16"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'StickerPack'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 67,
+      "offset": 6,
+      "length": 11,
+      "code": {
+        "startLine": 65,
+        "length": 11,
+        "offset": 63,
+        "surroundingCode": "\n// StickerPack - Represents a pack of standard stickers.\ntype StickerPack struct {\n\tID             Snowflake  `json:\"id\"`                         // id of the sticker pack\n\tStickers       []*Sticker `json:\"stickers\"`                   // the stickers in the pack"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "6c1a1fe1149098d2cfec035747a2980b9bdeec673979417b560d6beac9a44072"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'GetSticker'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 78,
+      "offset": 19,
+      "length": 10,
+      "code": {
+        "startLine": 76,
+        "length": 10,
+        "offset": 86,
+        "surroundingCode": "\n// GetSticker - Returns a sticker object for the given sticker ID.\nfunc (s *Sticker) GetSticker() (*Sticker, error) {\n\tu := parseRoute(fmt.Sprintf(getSticker, api, s.ID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "2aae16af2d64d6de3ba002977e38d4af8f4d3140baa6ed4b910f41957890d5cb"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported function 'ListNitroStickerPacks'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 90,
+      "offset": 6,
+      "length": 21,
+      "code": {
+        "startLine": 88,
+        "length": 21,
+        "offset": 55,
+        "surroundingCode": "//\n//goland:noinspection GoUnusedExportedFunction\nfunc ListNitroStickerPacks() (*ListNitroStickerPacksResponse, error) {\n\tu := parseRoute(fmt.Sprintf(listNitroStickerPacks, api))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "65153548b58a4b305bd80e1c77c0473ff7d7e3a415b416b0c40eb342bc9542d7"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'ListNitroStickerPacksResponse'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 100,
+      "offset": 6,
+      "length": 29,
+      "code": {
+        "startLine": 98,
+        "length": 29,
+        "offset": 55,
+        "surroundingCode": "\n// ListNitroStickerPacksResponse - JSON response\ntype ListNitroStickerPacksResponse struct {\n\tStickerPacks []*StickerPack `json:\"sticker_packs\"`\n}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "ac30b4863acc772321fcb73f417bd8ca922b3bedaaae76928705b9c7dfb19db7"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'ListGuildStickers'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 107,
+      "offset": 17,
+      "length": 17,
+      "code": {
+        "startLine": 105,
+        "length": 17,
+        "offset": 98,
+        "surroundingCode": "//\n// Includes user fields if the bot has the ManageEmojisAndStickers permission.\nfunc (g *Guild) ListGuildStickers() ([]*Sticker, error) {\n\tu := parseRoute(fmt.Sprintf(listGuildStickers, api, g.ID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "bc88c54cd8b23a59de05ec0b5a40fae8dd4478b4c80da9e95258df1d12163017"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'GetGuildSticker'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 119,
+      "offset": 17,
+      "length": 15,
+      "code": {
+        "startLine": 117,
+        "length": 15,
+        "offset": 103,
+        "surroundingCode": "//\n// Includes the `user` field if the bot has the ManageEmojisAndStickers permission.\nfunc (g *Guild) GetGuildSticker(stickerID Snowflake) (*Sticker, error) {\n\tu := parseRoute(fmt.Sprintf(getGuildSticker, api, g.ID.String(), stickerID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "81c6eca56a3742d8a5a0e9ada85e08769578b40a532365500d14177a2de3dde2"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'CreateGuildSticker'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 136,
+      "offset": 17,
+      "length": 18,
+      "code": {
+        "startLine": 134,
+        "length": 18,
+        "offset": 87,
+        "surroundingCode": "// Returns the new sticker object on success.\n// TODO: FormData fields\nfunc (g *Guild) CreateGuildSticker() (*Sticker, error) {\n\tu := parseRoute(fmt.Sprintf(createGuildSticker, api, g.ID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "8c1ea45dbe89cadd291698110efbb409fcc03ffb3c93fb0f7b0e34f5f5efc6e6"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'ModifyGuildSticker'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 154,
+      "offset": 17,
+      "length": 18,
+      "code": {
+        "startLine": 152,
+        "length": 18,
+        "offset": 78,
+        "surroundingCode": "//\n// This endpoint supports the `X-Audit-Log-Reason` header.\nfunc (g *Guild) ModifyGuildSticker(stickerID Snowflake, payload ModifyGuildStickerJSON, reason *string) (*Sticker, error) {\n\tu := parseRoute(fmt.Sprintf(modifyGuildSticker, api, g.ID.String(), stickerID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "c85a043779d061f0d6387d12beed9dc083d7f98af48f97c83b5c5f8f557e9985"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'ModifyGuildStickerJSON'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 164,
+      "offset": 6,
+      "length": 22,
+      "code": {
+        "startLine": 162,
+        "length": 22,
+        "offset": 47,
+        "surroundingCode": "\n// ModifyGuildStickerJSON - JSON payload\ntype ModifyGuildStickerJSON struct {\n\tName        string  `json:\"name\"`        // name of the sticker (2-30 characters)\n\tDescription *string `json:\"description\"` // description of the sticker (2-100 characters)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "642145b32c978a87d93a742e250409ca594cdd23cf429f079724fc6648e88858"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported method 'DeleteGuildSticker'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/sticker.go",
+      "language": "go",
+      "line": 177,
+      "offset": 17,
+      "length": 18,
+      "code": {
+        "startLine": 175,
+        "length": 18,
+        "offset": 78,
+        "surroundingCode": "//\n// This endpoint supports the `X-Audit-Log-Reason` header.\nfunc (g *Guild) DeleteGuildSticker(stickerID Snowflake, reason *string) error {\n\tu := parseRoute(fmt.Sprintf(deleteGuildSticker, api, g.ID.String(), stickerID.String()))\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "da009df54a5ac1ce7a9412b3b44d48c99c9243f2ebdd59209d6a97ca5e8c1037"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported variable 'ApplicationID'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/settings.go",
+      "language": "go",
+      "line": 25,
+      "offset": 2,
+      "length": 13,
+      "code": {
+        "startLine": 23,
+        "length": 13,
+        "offset": 52,
+        "surroundingCode": "//goland:noinspection GoUnusedGlobalVariable\nvar (\n\tApplicationID Snowflake // ApplicationID -  The Snowflake of the application\n\tDefaultColor  int64     = 16711680\n\tLogLevel      logrus.Level"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "16879056e2dc0c3d76f778ab86999ca4d32c3261a64ad1883421a0342b3e760d"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported variable 'DefaultColor'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/settings.go",
+      "language": "go",
+      "line": 26,
+      "offset": 2,
+      "length": 12,
+      "code": {
+        "startLine": 24,
+        "length": 12,
+        "offset": 85,
+        "surroundingCode": "var (\n\tApplicationID Snowflake // ApplicationID -  The Snowflake of the application\n\tDefaultColor  int64     = 16711680\n\tLogLevel      logrus.Level\n\tToken         string // Token - The application's token"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "dfda5d66e5afcb1d527c6b905d7da88052751572e4ce0bb5106a97714e863b83"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported variable 'LogLevel'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/settings.go",
+      "language": "go",
+      "line": 27,
+      "offset": 2,
+      "length": 8,
+      "code": {
+        "startLine": 25,
+        "length": 8,
+        "offset": 115,
+        "surroundingCode": "\tApplicationID Snowflake // ApplicationID -  The Snowflake of the application\n\tDefaultColor  int64     = 16711680\n\tLogLevel      logrus.Level\n\tToken         string // Token - The application's token\n)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "ec2d6b7888f922d7d7c018f78cd1ab7a3294d849c71c2887495d3128ec050464"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported variable 'Token'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/settings.go",
+      "language": "go",
+      "line": 28,
+      "offset": 2,
+      "length": 5,
+      "code": {
+        "startLine": 26,
+        "length": 5,
+        "offset": 65,
+        "surroundingCode": "\tDefaultColor  int64     = 16711680\n\tLogLevel      logrus.Level\n\tToken         string // Token - The application's token\n)\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "2c1cda4b1e06388177b275de064885c9495def6f0b50a38fee43a2ade406e469"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'ComponentType'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components.go",
+      "language": "go",
+      "line": 43,
+      "offset": 6,
+      "length": 13,
+      "code": {
+        "startLine": 41,
+        "length": 13,
+        "offset": 47,
+        "surroundingCode": "\n// ComponentType - The type of component\ntype ComponentType int\n\n//goland:noinspection GoExportedElementShouldHaveComment, GoUnusedConst"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "b2f276468cb4c23723f9c122efe00e7f2f3d3f9601f76baa4e29866fd3cc463d"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'ComponentTypeActionRow'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components.go",
+      "language": "go",
+      "line": 47,
+      "offset": 2,
+      "length": 22,
+      "code": {
+        "startLine": 45,
+        "length": 22,
+        "offset": 81,
+        "surroundingCode": "//goland:noinspection GoExportedElementShouldHaveComment, GoUnusedConst\nconst (\n\tComponentTypeActionRow         ComponentType = iota + 1 // Container for other components\n\tComponentTypeButton                                     // Button object\n\tComponentTypeSelectMenu                                 // SelectMenu for picking from defined text options"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "bd21f227b353321ee24707d37cc13fcb135b3a8ef8ea0355c03a2a0030d7ab1c"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'ComponentTypeButton'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components.go",
+      "language": "go",
+      "line": 48,
+      "offset": 2,
+      "length": 19,
+      "code": {
+        "startLine": 46,
+        "length": 19,
+        "offset": 100,
+        "surroundingCode": "const (\n\tComponentTypeActionRow         ComponentType = iota + 1 // Container for other components\n\tComponentTypeButton                                     // Button object\n\tComponentTypeSelectMenu                                 // SelectMenu for picking from defined text options\n\tComponentTypeTextInput                                  // TextInput object"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "3d88fcb43116382c655aee93d899f8282f0a37fc8b4745111d4d279c833e8d39"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'ComponentTypeSelectMenu'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components.go",
+      "language": "go",
+      "line": 49,
+      "offset": 2,
+      "length": 23,
+      "code": {
+        "startLine": 47,
+        "length": 23,
+        "offset": 166,
+        "surroundingCode": "\tComponentTypeActionRow         ComponentType = iota + 1 // Container for other components\n\tComponentTypeButton                                     // Button object\n\tComponentTypeSelectMenu                                 // SelectMenu for picking from defined text options\n\tComponentTypeTextInput                                  // TextInput object\n\tComponentTypeUserSelect                                 // Select menu for users"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "ad6c87fadeddb26f1d48cfd7f88df358b63d2633182ac654c96b52dcf653283d"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'ComponentTypeTextInput'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components.go",
+      "language": "go",
+      "line": 50,
+      "offset": 2,
+      "length": 22,
+      "code": {
+        "startLine": 48,
+        "length": 22,
+        "offset": 184,
+        "surroundingCode": "\tComponentTypeButton                                     // Button object\n\tComponentTypeSelectMenu                                 // SelectMenu for picking from defined text options\n\tComponentTypeTextInput                                  // TextInput object\n\tComponentTypeUserSelect                                 // Select menu for users\n\tComponentTypeRoleSelect                                 // Select menu for roles"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "47e0e0595a5beb183d252fb4e9ec8a368231f3db42a094c4f8702b090c41c1f3"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'ComponentTypeUserSelect'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components.go",
+      "language": "go",
+      "line": 51,
+      "offset": 2,
+      "length": 23,
+      "code": {
+        "startLine": 49,
+        "length": 23,
+        "offset": 187,
+        "surroundingCode": "\tComponentTypeSelectMenu                                 // SelectMenu for picking from defined text options\n\tComponentTypeTextInput                                  // TextInput object\n\tComponentTypeUserSelect                                 // Select menu for users\n\tComponentTypeRoleSelect                                 // Select menu for roles\n\tComponentTypeMentionableSelect                          // Select menu for mentionables (users and roles)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "773208666e1c977387e68a7813a9fa85220deeceacd94eef5f36cc05e33d9a72"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'ComponentTypeRoleSelect'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components.go",
+      "language": "go",
+      "line": 52,
+      "offset": 2,
+      "length": 23,
+      "code": {
+        "startLine": 50,
+        "length": 23,
+        "offset": 160,
+        "surroundingCode": "\tComponentTypeTextInput                                  // TextInput object\n\tComponentTypeUserSelect                                 // Select menu for users\n\tComponentTypeRoleSelect                                 // Select menu for roles\n\tComponentTypeMentionableSelect                          // Select menu for mentionables (users and roles)\n\tComponentTypeChannelSelect                              // Select menu for channels"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "5bd7284e89f6b4a9cc55adc0538d2e8805a824edab61f3a94b5c4131b5afa8bf"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'ComponentTypeMentionableSelect'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components.go",
+      "language": "go",
+      "line": 53,
+      "offset": 2,
+      "length": 30,
+      "code": {
+        "startLine": 51,
+        "length": 30,
+        "offset": 165,
+        "surroundingCode": "\tComponentTypeUserSelect                                 // Select menu for users\n\tComponentTypeRoleSelect                                 // Select menu for roles\n\tComponentTypeMentionableSelect                          // Select menu for mentionables (users and roles)\n\tComponentTypeChannelSelect                              // Select menu for channels\n)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "5927023be8b06e759efec1c58b5749384af09c7727d38d0c712ec43e56bf86b3"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'ComponentTypeChannelSelect'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components.go",
+      "language": "go",
+      "line": 54,
+      "offset": 2,
+      "length": 26,
+      "code": {
+        "startLine": 52,
+        "length": 26,
+        "offset": 190,
+        "surroundingCode": "\tComponentTypeRoleSelect                                 // Select menu for roles\n\tComponentTypeMentionableSelect                          // Select menu for mentionables (users and roles)\n\tComponentTypeChannelSelect                              // Select menu for channels\n)\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "982713254024ca5d2b8bcc330d3c3f5eff229248a56f9c15ef3069cadefd7f25"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'Button'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components.go",
+      "language": "go",
+      "line": 63,
+      "offset": 6,
+      "length": 6,
+      "code": {
+        "startLine": 61,
+        "length": 6,
+        "offset": 126,
+        "surroundingCode": "//   - Buttons must be sent inside an ComponentTypeActionRow\n//   - A ComponentTypeActionRow can contain up to 5 buttons\ntype Button struct {\n\tType     ComponentType `json:\"type\"`                // ComponentType for a button\n\tStyle    ButtonStyle   `json:\"style\"`               // one of ButtonStyle"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "5899e38708f87deee7094fcbc515ac38b36094265abc733b03940c1e82aba554"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'ButtonStyle'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components.go",
+      "language": "go",
+      "line": 80,
+      "offset": 6,
+      "length": 11,
+      "code": {
+        "startLine": 78,
+        "length": 11,
+        "offset": 134,
+        "surroundingCode": "//\tLink buttons must have a URL, and cannot have a custom_id\n//\tLink buttons do not send an interaction to your app when clicked\ntype ButtonStyle int\n\n//goland:noinspection SpellCheckingInspection"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "c1be18fa25dd29ca400aba459046c8c83515432c78bfa0a8aabcf9feaff94dcd"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'ButtonPrimary'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components.go",
+      "language": "go",
+      "line": 84,
+      "offset": 2,
+      "length": 13,
+      "code": {
+        "startLine": 82,
+        "length": 13,
+        "offset": 55,
+        "surroundingCode": "//goland:noinspection SpellCheckingInspection\nconst (\n\tButtonPrimary   ButtonStyle = iota + 1 // color: blurple; requires field: custom_id\n\tButtonSecondary                        // color: grey; requires field: custom_id\n\tButtonSuccess                          // color: green; requires field: custom_id"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "02451d18e1e2afd60f6d20d27693fdca751b02e2e1ff79409eef36e10c12e9bd"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'ButtonSecondary'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components.go",
+      "language": "go",
+      "line": 85,
+      "offset": 2,
+      "length": 15,
+      "code": {
+        "startLine": 83,
+        "length": 15,
+        "offset": 94,
+        "surroundingCode": "const (\n\tButtonPrimary   ButtonStyle = iota + 1 // color: blurple; requires field: custom_id\n\tButtonSecondary                        // color: grey; requires field: custom_id\n\tButtonSuccess                          // color: green; requires field: custom_id\n\tButtonDanger                           // color: red; requires field: custom_id"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "207eddbc6d56d68e665455f3607dbb6565c68ca96ec3fcf98173c1a7cf353ac3"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'ButtonSuccess'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components.go",
+      "language": "go",
+      "line": 86,
+      "offset": 2,
+      "length": 13,
+      "code": {
+        "startLine": 84,
+        "length": 13,
+        "offset": 168,
+        "surroundingCode": "\tButtonPrimary   ButtonStyle = iota + 1 // color: blurple; requires field: custom_id\n\tButtonSecondary                        // color: grey; requires field: custom_id\n\tButtonSuccess                          // color: green; requires field: custom_id\n\tButtonDanger                           // color: red; requires field: custom_id\n\tButtonLink                             // color: grey; requires field: url"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "83c9f996710b559d37d46407825905361a0553176156a0c8c4452ec3579ebc3b"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'ButtonDanger'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components.go",
+      "language": "go",
+      "line": 87,
+      "offset": 2,
+      "length": 12,
+      "code": {
+        "startLine": 85,
+        "length": 12,
+        "offset": 166,
+        "surroundingCode": "\tButtonSecondary                        // color: grey; requires field: custom_id\n\tButtonSuccess                          // color: green; requires field: custom_id\n\tButtonDanger                           // color: red; requires field: custom_id\n\tButtonLink                             // color: grey; requires field: url\n)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "1ec3fcb2763fc001b31b432b7a49ff14c614d7316034a321464e93ef7faa3b0b"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'ButtonLink'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components.go",
+      "language": "go",
+      "line": 88,
+      "offset": 2,
+      "length": 10,
+      "code": {
+        "startLine": 86,
+        "length": 10,
+        "offset": 165,
+        "surroundingCode": "\tButtonSuccess                          // color: green; requires field: custom_id\n\tButtonDanger                           // color: red; requires field: custom_id\n\tButtonLink                             // color: grey; requires field: url\n)\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "3d2a80ac4312b53671abc1d00ef895f43230cb6704cbdd2817759e5978299233"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'SelectMenu'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components.go",
+      "language": "go",
+      "line": 98,
+      "offset": 6,
+      "length": 10,
+      "code": {
+        "startLine": 96,
+        "length": 10,
+        "offset": 125,
+        "surroundingCode": "//\tAn Action Row can contain only one select menu\n//\tAn Action Row containing a select menu cannot also contain buttons\ntype SelectMenu struct {\n\tType         ComponentType   `json:\"type\"`                  // ComponentTypeSelectMenu for a select menu\n\tCustomID     string          `json:\"custom_id\"`             // a developer-defined identifier for the button, max 100 characters"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "60749c9a852004804d61122921ca4a0a863ae54da6f0182c0acfa0edae37a97c"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'SelectOption'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components.go",
+      "language": "go",
+      "line": 110,
+      "offset": 6,
+      "length": 12,
+      "code": {
+        "startLine": 108,
+        "length": 12,
+        "offset": 63,
+        "surroundingCode": "\n// SelectOption - Represents a single select menu option\ntype SelectOption struct {\n\tLabel       string `json:\"label\"`                 // the user-facing name of the option, max 25 characters\n\tValue       string `json:\"value\"`                 // the dev-define value of the option, max 100 characters"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "cd0660529eea265913ad28e733651405d340c4c61aabd30e58db2cb2735a2046"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'TextInput'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components.go",
+      "language": "go",
+      "line": 119,
+      "offset": 6,
+      "length": 9,
+      "code": {
+        "startLine": 117,
+        "length": 9,
+        "offset": 143,
+        "surroundingCode": "\n// TextInput - Text inputs are an interactive component that render on modals. They can be used to collect short-form or long-form text.\ntype TextInput struct {\n\tType        ComponentType  `json:\"type\"`                  // ComponentTypeTextInput for a text input\n\tCustomID    string         `json:\"custom_id\"`             // a developer-defined identifier for the input, max 100 characters"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "30ec30fc26ded1cb13e6aa6bcd97a30a955a4a9f19f400fb95e2c65b04797906"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported type 'TextInputStyle'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components.go",
+      "language": "go",
+      "line": 132,
+      "offset": 6,
+      "length": 14,
+      "code": {
+        "startLine": 130,
+        "length": 14,
+        "offset": 82,
+        "surroundingCode": "\n// TextInputStyle - Denotes if a text input is short form or paragraph form\ntype TextInputStyle int\n\n//goland:noinspection GoExportedElementShouldHaveComment"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "bc8a6df010e6074d42724064eb98e6eea448a5759912db9999ad105a2ffae719"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'TextInputShort'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components.go",
+      "language": "go",
+      "line": 136,
+      "offset": 2,
+      "length": 14,
+      "code": {
+        "startLine": 134,
+        "length": 14,
+        "offset": 66,
+        "surroundingCode": "//goland:noinspection GoExportedElementShouldHaveComment\nconst (\n\tTextInputShort     TextInputStyle = iota + 1 // A single-line input\n\tTextInputParagraph                           // A multi-line input\n)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "87c0e70c65f226b433d406a1e94345ac15f20d809d8a100b2bb72d306f440a22"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Unnecessarily exported identifier",
+  "severity": "Moderate",
+  "comment": "Unnecessarily exported constant 'TextInputParagraph'",
+  "detailsInfo": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/message_components.go",
+      "language": "go",
+      "line": 137,
+      "offset": 2,
+      "length": 18,
+      "code": {
+        "startLine": 135,
+        "length": 18,
+        "offset": 78,
+        "surroundingCode": "const (\n\tTextInputShort     TextInputStyle = iota + 1 // A single-line input\n\tTextInputParagraph                           // A multi-line input\n)\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoUnnecessarilyExportedIdentifiers"
+  },
+  "hash": "bc5e0d174dddaa96a5fa40f44c5093851f644eaa4d111ecdbc231686246717c2"
 }]}

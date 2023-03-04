@@ -1,14 +1,19 @@
 {
-  "total": 5,
+  "total": 97,
   "tools inspection": {
-    "Code Inspection": 5
+    "Code Inspection": 97
   },
   "linter": "QDGO",
   "attributes": {
     "vcs": {
-      "sarifIdea": {}
+      "sarifIdea": {
+        "repositoryUri": "https://github.com/veteran-software/discord-api-wrapper",
+        "revisionId": "3c4fa2c7e9e1b8c3053fa56b2a2a3e285a9516a8",
+        "branch": "main"
+      }
     },
     "deviceId": "200820300000000-bb6d-3bba-1831-ac4c93d548d4",
-    "jobUrl": "https://github.com/veteran-software/discord-api-wrapper/actions/runs/4329623343"
+    "jobUrl": "https://github.com/veteran-software/discord-api-wrapper/actions/runs/4329627008",
+    "repoUrl": "https://github.com/veteran-software/discord-api-wrapper"
   }
 }
