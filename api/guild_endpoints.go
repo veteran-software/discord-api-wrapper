@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Veteran Software
+ * Copyright (c) 2022-2023. Veteran Software
  *
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
@@ -368,7 +368,7 @@ type ModifyCurrentMemberJSON struct {
 func (g *Guild) AddGuildMemberRole(user *User, role *Snowflake, reason *string) {
 	u := parseRoute(fmt.Sprintf(addGuildMemberRole, api, g.ID.String(), user.ID.String(), role.String()))
 
-	_ = firePatchRequest(u, nil, reason)
+	_ = firePutRequest(u, nil, reason)
 }
 
 // RemoveGuildMemberRole - Removes a role from a guild member.
