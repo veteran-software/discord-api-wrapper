@@ -367,7 +367,7 @@ type ModifyCurrentMemberJSON struct {
 func (g *Guild) AddGuildMemberRole(user *User, role *Snowflake, reason *string) {
 	u := parseRoute(fmt.Sprintf(addGuildMemberRole, api, g.ID.String(), user.ID.String(), role.String()))
 
-	_ = firePatchRequest(u, nil, reason)
+	_ = firePutRequest(u, nil, reason)
 }
 
 // RemoveGuildMemberRole - Removes a role from a guild member.
