@@ -25,7 +25,7 @@ import (
 )
 
 // ListGuildScheduledEvents - Returns a list of guild scheduled event objects for the given guild.
-func (g *Guild) ListGuildScheduledEvents(withUserCount *bool) ([]GuildScheduledEvent, error) {
+func (g *Guild) ListGuildScheduledEvents(withUserCount *bool) ([]*GuildScheduledEvent, error) {
 	u := parseRoute(fmt.Sprintf(listGuildScheduledEvents, api, g.ID.String()))
 
 	q := u.Query()
@@ -36,7 +36,7 @@ func (g *Guild) ListGuildScheduledEvents(withUserCount *bool) ([]GuildScheduledE
 		u.RawQuery = q.Encode()
 	}
 
-	var guildScheduledEvents []GuildScheduledEvent
+	var guildScheduledEvents []*GuildScheduledEvent
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &guildScheduledEvents)
 
 	return guildScheduledEvents, err
@@ -47,7 +47,10 @@ func (g *Guild) ListGuildScheduledEvents(withUserCount *bool) ([]GuildScheduledE
 //	A guild can have a maximum of 100 events with Scheduled or Active status at any time.
 //
 //	This endpoint supports the `X-Audit-Log-Reason` header.
-func (g *Guild) CreateGuildScheduledEvent(payload CreateGuildScheduledEventJSON, reason *string) (*GuildScheduledEvent, error) {
+func (g *Guild) CreateGuildScheduledEvent(payload *CreateGuildScheduledEventJSON, reason *string) (
+	*GuildScheduledEvent,
+	error,
+) {
 	u := parseRoute(fmt.Sprintf(createGuildScheduledEvent, api, g.ID.String()))
 
 	var guildScheduledEvent *GuildScheduledEvent
@@ -70,7 +73,10 @@ type CreateGuildScheduledEventJSON struct {
 }
 
 // GetGuildScheduledEvent - Get a guild scheduled event. Returns a guild scheduled event object on success.
-func (g *Guild) GetGuildScheduledEvent(guildScheduledEventID Snowflake, withUserCount *bool) (*GuildScheduledEvent, error) {
+func (g *Guild) GetGuildScheduledEvent(guildScheduledEventID *Snowflake, withUserCount *bool) (
+	*GuildScheduledEvent,
+	error,
+) {
 	u := parseRoute(fmt.Sprintf(getGuildScheduledEvent, api, g.ID.String(), guildScheduledEventID.String()))
 
 	q := u.Query()
@@ -100,7 +106,11 @@ func (g *Guild) GetGuildScheduledEvent(guildScheduledEventID Snowflake, withUser
 //	`channel_id` is required and must be set to null
 //	`entity_metadata` with a location field must be provided
 //	`scheduled_end_time` must be provided
-func (g *Guild) ModifyGuildScheduledEvent(guildScheduledEventID Snowflake, payload ModifyGuildScheduledEventJSON, reason *string) (*GuildScheduledEvent, error) {
+func (g *Guild) ModifyGuildScheduledEvent(
+	guildScheduledEventID Snowflake,
+	payload *ModifyGuildScheduledEventJSON,
+	reason *string,
+) (*GuildScheduledEvent, error) {
 	u := parseRoute(fmt.Sprintf(modifyGuildScheduledEvent, api, g.ID.String(), guildScheduledEventID.String()))
 
 	var guildScheduledEvent *GuildScheduledEvent
@@ -124,7 +134,7 @@ type ModifyGuildScheduledEventJSON struct {
 }
 
 // DeleteGuildScheduledEvent - Delete a guild scheduled event. Returns a 204 on success.
-func (g *Guild) DeleteGuildScheduledEvent(guildScheduledEventID Snowflake) error {
+func (g *Guild) DeleteGuildScheduledEvent(guildScheduledEventID *Snowflake) error {
 	u := parseRoute(fmt.Sprintf(deleteGuildScheduledEvent, api, g.ID.String(), guildScheduledEventID.String()))
 
 	return fireDeleteRequest(u, nil)
@@ -135,7 +145,13 @@ func (g *Guild) DeleteGuildScheduledEvent(guildScheduledEventID Snowflake) error
 // Returns a list of guild scheduled event user objects on success.
 //
 // GuildMember data, if it exists, is included if the `with_member` query parameter is set.
-func (g *Guild) GetGuildScheduledEventUsers(guildScheduledEventID Snowflake, limit *uint64, withMember *bool, before *Snowflake, after *Snowflake) (*GuildScheduledEventUser, error) {
+func (g *Guild) GetGuildScheduledEventUsers(
+	guildScheduledEventID *Snowflake,
+	limit *uint64,
+	withMember *bool,
+	before *Snowflake,
+	after *Snowflake,
+) (*GuildScheduledEventUser, error) {
 	u := parseRoute(fmt.Sprintf(getGuildScheduledEventUsers, api, g.ID.String(), guildScheduledEventID.String()))
 
 	q := u.Query()

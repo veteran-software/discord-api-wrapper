@@ -39,7 +39,7 @@ import (
 //	When using the channels parameter, the id field within each channel object may be set to an integer placeholder, and will be replaced by the API upon consumption. Its purpose is to allow you to create GUILD_CATEGORY channels by setting the parent_id field on any children to the category's id field. Category channels must be listed before any children.
 //
 //goland:noinspection GoUnusedExportedFunction
-func CreateGuild(payload CreateGuildJSON) (*Guild, error) {
+func CreateGuild(payload *CreateGuildJSON) (*Guild, error) {
 	u := parseRoute(fmt.Sprintf(createGuild, api))
 
 	var guild *Guild
@@ -54,8 +54,8 @@ type CreateGuildJSON struct {
 	VerificationLevel           VerificationLevel               `json:"verification_level"`            // verification level required for the guild
 	DefaultMessageNotifications DefaultMessageNotificationLevel `json:"default_message_notifications"` // default message notifications level
 	ExplicitContentFilter       ExplicitContentFilterLevel      `json:"explicit_content_filter"`       // explicit content filter level
-	Roles                       []Role                          `json:"roles"`                         // roles in the guild
-	Channels                    []Channel                       `json:"channels,omitempty"`            // channels in the guild
+	Roles                       []*Role                         `json:"roles"`                         // roles in the guild
+	Channels                    []*Channel                      `json:"channels,omitempty"`            // channels in the guild
 	AfkChannelID                Snowflake                       `json:"afk_channel_id,omitempty"`      // id of afk channel
 	AfkTimeout                  int64                           `json:"afk_timeout"`                   // afk timeout in seconds
 	SystemChannelID             *Snowflake                      `json:"system_channel_id"`             // the id of the channel where guild notices such as welcome messages and boost events are posted
@@ -131,7 +131,7 @@ type ModifyGuildJSON struct {
 	RulesChannelID              *Snowflake                       `json:"rules_channel_id"`              // the id of the channel where Community guilds can display rules and/or guidelines
 	PublicUpdatesChannelID      *Snowflake                       `json:"public_updates_channel_id"`     // the id of the channel where admins and moderators of Community guilds receive notices from Discord
 	PreferredLocale             string                           `json:"preferred_locale"`              // the preferred locale of a Community guild; used in server discovery and notices from Discord, and sent in interactions; defaults to "en-US"
-	Features                    []GuildFeatures                  `json:"features"`                      // enabled guild features
+	Features                    []*GuildFeatures                 `json:"features"`                      // enabled guild features
 	Description                 *string                          `json:"description"`                   // the description of a Community guild
 	PremiumProgressBarEnabled   bool                             `json:"premium_progress_bar_enabled"`  // whether the guild has the boost progress bar enabled
 }
@@ -144,10 +144,10 @@ func (g *Guild) DeleteGuild() error {
 }
 
 // GetGuildChannels - Returns a list of guild Channel objects. Does not include threads.
-func (g *Guild) GetGuildChannels() ([]Channel, error) {
+func (g *Guild) GetGuildChannels() ([]*Channel, error) {
 	u := parseRoute(fmt.Sprintf(getGuildChannels, api, g.ID.String()))
 
-	var channels []Channel
+	var channels []*Channel
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &channels)
 
 	return channels, err
@@ -176,17 +176,17 @@ func (g *Guild) CreateGuildChannel(payload CreateGuildChannelJSON, reason *strin
 }
 
 type CreateGuildChannelJSON struct {
-	Name                       string      `json:"name,omitempty"`                          // the name of the channel (1-100 characters)
-	Type                       ChannelType `json:"type"`                                    // the ChannelType
-	Topic                      *string     `json:"topic,omitempty"`                         // the channel topic (0-1024 characters)
-	Bitrate                    int64       `json:"bitrate,omitempty"`                       // the bitrate (in bits) of the voice channel
-	UserLimit                  int64       `json:"user_limit,omitempty"`                    // the user limit of the voice channel
-	RateLimitPerUser           int64       `json:"rate_limit_per_user,omitempty"`           // amount of seconds a user has to wait before sending another Message (0-21600); bots, as well as users with the permission ManageMessages or ManageChannels, are unaffected
-	Position                   int         `json:"position,omitempty"`                      // sorting position of the channel
-	PermissionOverwrites       []Overwrite `json:"permission_overwrites,omitempty"`         // explicit permission overwrites for members and roles
-	ParentID                   *Snowflake  `json:"parent_id,omitempty"`                     // for guild channels: id of the parent category for a channel (each parent category can contain up to 50 channels), for threads: id of the text channel this thread was created
-	Nsfw                       bool        `json:"nsfw,omitempty"`                          // whether the channel is nsfw
-	DefaultAutoArchiveDuration int         `json:"default_auto_archive_duration,omitempty"` // default duration that the clients (not the API) will use for newly created threads, in minutes, to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080
+	Name                       string       `json:"name,omitempty"`                          // the name of the channel (1-100 characters)
+	Type                       ChannelType  `json:"type"`                                    // the ChannelType
+	Topic                      *string      `json:"topic,omitempty"`                         // the channel topic (0-1024 characters)
+	Bitrate                    int64        `json:"bitrate,omitempty"`                       // the bitrate (in bits) of the voice channel
+	UserLimit                  int64        `json:"user_limit,omitempty"`                    // the user limit of the voice channel
+	RateLimitPerUser           int64        `json:"rate_limit_per_user,omitempty"`           // amount of seconds a user has to wait before sending another Message (0-21600); bots, as well as users with the permission ManageMessages or ManageChannels, are unaffected
+	Position                   int          `json:"position,omitempty"`                      // sorting position of the channel
+	PermissionOverwrites       []*Overwrite `json:"permission_overwrites,omitempty"`         // explicit permission overwrites for members and roles
+	ParentID                   *Snowflake   `json:"parent_id,omitempty"`                     // for guild channels: id of the parent category for a channel (each parent category can contain up to 50 channels), for threads: id of the text channel this thread was created
+	Nsfw                       bool         `json:"nsfw,omitempty"`                          // whether the channel is nsfw
+	DefaultAutoArchiveDuration int          `json:"default_auto_archive_duration,omitempty"` // default duration that the clients (not the API) will use for newly created threads, in minutes, to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080
 }
 
 // ModifyGuildChannelPositions - Modify the positions of a set of channel objects for the guild.
@@ -196,9 +196,8 @@ type CreateGuildChannelJSON struct {
 //	Only channels to be modified are required.
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
-func (g *Guild) ModifyGuildChannelPositions(payload ModifyGuildChannelPositionsJSON, reason *string) {
+func (g *Guild) ModifyGuildChannelPositions(payload *ModifyGuildChannelPositionsJSON, reason *string) {
 	u := parseRoute(fmt.Sprintf(modifyGuildChannelPositions, api, g.ID.String()))
-
 	_ = firePatchRequest(u, payload, reason)
 }
 
@@ -221,7 +220,7 @@ func (g *Guild) ListActiveThreads() (*ThreadListResponse, error) {
 }
 
 // GetGuildMember - Returns a GuildMember object for the specified User.
-func (g *Guild) GetGuildMember(userID Snowflake) (*GuildMember, error) {
+func (g *Guild) GetGuildMember(userID *Snowflake) (*GuildMember, error) {
 	u := parseRoute(fmt.Sprintf(getGuildMember, api, g.ID.String(), userID.String()))
 
 	var guildMember *GuildMember
@@ -256,7 +255,7 @@ func (g *Guild) ListGuildMembers(limit *uint64, after *Snowflake) ([]*GuildMembe
 // SearchGuildMembers - Returns a list of GuildMember objects whose username or nickname starts with a provided string.
 //
 //	All parameters to this endpoint except for `query` are optional
-func (g *Guild) SearchGuildMembers(query string, limit *uint64) ([]GuildMember, error) {
+func (g *Guild) SearchGuildMembers(query string, limit *uint64) ([]*GuildMember, error) {
 	u := parseRoute(fmt.Sprintf(searchGuildMembers, api, g.ID.String()))
 
 	q := u.Query()
@@ -266,7 +265,7 @@ func (g *Guild) SearchGuildMembers(query string, limit *uint64) ([]GuildMember, 
 	}
 	u.RawQuery = q.Encode()
 
-	var guildMembers []GuildMember
+	var guildMembers []*GuildMember
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &guildMembers)
 
 	return guildMembers, err
@@ -291,7 +290,7 @@ func (g *Guild) SearchGuildMembers(query string, limit *uint64) ([]GuildMember, 
 // A member with a role will bypass membership screening and the guild's verification level, and get immediate access to chat.
 //
 // Therefore, instead of assigning a role when the member joins, it is recommended to grant roles only after the user completes screening.
-func (g *Guild) AddGuildMember(userID Snowflake, payload AddGuildMemberJSON) (*GuildMember, error) {
+func (g *Guild) AddGuildMember(userID *Snowflake, payload *AddGuildMemberJSON) (*GuildMember, error) {
 	u := parseRoute(fmt.Sprintf(addGuildMember, api, g.ID.String(), userID.String()))
 
 	var guildMember *GuildMember
@@ -302,11 +301,11 @@ func (g *Guild) AddGuildMember(userID Snowflake, payload AddGuildMemberJSON) (*G
 
 // AddGuildMemberJSON - JSON payload
 type AddGuildMemberJSON struct {
-	AccessToken string      `json:"access_token"`    // an oauth2 access token granted with the `guilds.join` to the bots' application for the user you want to add to the guild
-	Nick        string      `json:"nick,omitempty"`  // value to set user's nickname to
-	Roles       []Snowflake `json:"roles,omitempty"` // array of role ids the member is assigned
-	Mute        bool        `json:"mute,omitempty"`  // whether the user is muted in voice channels
-	Deaf        bool        `json:"deaf,omitempty"`  // whether the user is deafened in voice channels
+	AccessToken string       `json:"access_token"`    // an oauth2 access token granted with the `guilds.join` to the bots' application for the user you want to add to the guild
+	Nick        string       `json:"nick,omitempty"`  // value to set user's nickname to
+	Roles       []*Snowflake `json:"roles,omitempty"` // array of role ids the member is assigned
+	Mute        bool         `json:"mute,omitempty"`  // whether the user is muted in voice channels
+	Deaf        bool         `json:"deaf,omitempty"`  // whether the user is deafened in voice channels
 }
 
 // ModifyGuildMember - Modify attributes of a guild member.
@@ -318,8 +317,10 @@ type AddGuildMemberJSON struct {
 //	All parameters to this endpoint are optional and nullable. When moving members to channels, the API user must have permissions to both connect to the channel and have the MoveMembers permission.
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
-func (g *Guild) ModifyGuildMember(userID Snowflake, payload ModifyGuildMemberJSON, reason *string) (*GuildMember,
-	error) {
+func (g *Guild) ModifyGuildMember(userID *Snowflake, payload *ModifyGuildMemberJSON, reason *string) (
+	*GuildMember,
+	error,
+) {
 	u := parseRoute(fmt.Sprintf(modifyGuildMember, api, g.ID.String(), userID.String()))
 
 	var guildMember *GuildMember
@@ -341,7 +342,7 @@ type ModifyGuildMemberJSON struct {
 // ModifyCurrentMember - Modifies the current member in a guild. Returns a 200 with the updated member object on success. Fires a Guild Member Update Gateway event.
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
-func (g *Guild) ModifyCurrentMember(payload ModifyCurrentMemberJSON, reason *string) (*GuildMember, error) {
+func (g *Guild) ModifyCurrentMember(payload *ModifyCurrentMemberJSON, reason *string) (*GuildMember, error) {
 	u := parseRoute(fmt.Sprintf(modifyCurrentMember, api, g.ID.String()))
 
 	var guildMember *GuildMember
@@ -401,7 +402,7 @@ func (g *Guild) RemoveGuildMember(user *User, reason *string) error {
 }
 
 // GetGuildBans - Returns a list of Ban objects for the users banned from this guild. Requires the BanMembers permission.
-func (g *Guild) GetGuildBans(limit *uint64, before *Snowflake, after *Snowflake) ([]Ban, error) {
+func (g *Guild) GetGuildBans(limit *uint64, before *Snowflake, after *Snowflake) ([]*Ban, error) {
 	u := parseRoute(fmt.Sprintf(getGuildBans, api, g.ID.String()))
 
 	q := u.Query()
@@ -418,7 +419,7 @@ func (g *Guild) GetGuildBans(limit *uint64, before *Snowflake, after *Snowflake)
 		u.RawQuery = q.Encode()
 	}
 
-	var bans []Ban
+	var bans []*Ban
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &bans)
 
 	return bans, err
@@ -437,7 +438,7 @@ func (g *Guild) GetGuildBan(userID Snowflake) (*Ban, error) {
 // CreateGuildBan - Create a guild ban, and optionally delete previous messages sent by the banned user. Requires the BanMembers permission. Returns a 204 empty response on success. Fires a GuildBanAdd Gateway event.
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
-func (g *Guild) CreateGuildBan(userID Snowflake, payload CreateGuildBanJSON, reason *string) {
+func (g *Guild) CreateGuildBan(userID *Snowflake, payload *CreateGuildBanJSON, reason *string) {
 	u := parseRoute(fmt.Sprintf(createGuildBan, api, g.ID.String(), userID.String()))
 
 	_ = firePutRequest(u, payload, reason)
@@ -451,26 +452,26 @@ type CreateGuildBanJSON struct {
 // RemoveGuildBan - Remove the ban for a user. Requires the BanMembers permissions. Returns a 204 empty response on success. Fires a GuildBanRemove Gateway event.
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
-func (g *Guild) RemoveGuildBan(userID Snowflake, reason *string) error {
+func (g *Guild) RemoveGuildBan(userID *Snowflake, reason *string) error {
 	u := parseRoute(fmt.Sprintf(removeGuildBan, api, g.ID.String(), userID.String()))
 
 	return fireDeleteRequest(u, reason)
 }
 
 // GetGuildRoles - Returns a list of role objects for the guild.
-func (g *Guild) GetGuildRoles() ([]Role, error) {
+func (g *Guild) GetGuildRoles() ([]*Role, error) {
 	u := parseRoute(fmt.Sprintf(getGuildRoles, api, g.ID.String()))
 
-	var roles []Role
+	var roles []*Role
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &roles)
 
 	return roles, err
 }
 
-func (g *Guild) CreateGuildRole(payload CreateGuildRoleJSON, reason *string) ([]Role, error) {
+func (g *Guild) CreateGuildRole(payload *CreateGuildRoleJSON, reason *string) ([]*Role, error) {
 	u := parseRoute(fmt.Sprintf(createGuildRole, api, g.ID.String()))
 
-	var roles []Role
+	var roles []*Role
 	err := json.Unmarshal(firePostRequest(u, payload, reason), &roles)
 
 	return roles, err
@@ -496,10 +497,10 @@ type CreateGuildRoleJSON struct {
 // Fires multiple Guild Role Update Gateway events.
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
-func (g *Guild) ModifyGuildRolePositions(payload ModifyGuildRolePositionsJSON, reason *string) ([]Role, error) {
+func (g *Guild) ModifyGuildRolePositions(payload *ModifyGuildRolePositionsJSON, reason *string) ([]*Role, error) {
 	u := parseRoute(fmt.Sprintf(modifyGuildRolePositions, api, g.ID.String()))
 
-	var roles []Role
+	var roles []*Role
 	err := json.Unmarshal(firePatchRequest(u, payload, reason), &roles)
 
 	return roles, err
@@ -522,7 +523,7 @@ type ModifyGuildRolePositionsJSON struct {
 //	All parameters to this endpoint are optional and nullable.
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
-func (g *Guild) ModifyGuildRole(roleID Snowflake, payload ModifyGuildRoleJSON, reason *string) (*Role, error) {
+func (g *Guild) ModifyGuildRole(roleID *Snowflake, payload *ModifyGuildRoleJSON, reason *string) (*Role, error) {
 	u := parseRoute(fmt.Sprintf(modifyGuildRole, api, g.ID.String(), roleID.String()))
 
 	var roles *Role
@@ -551,7 +552,7 @@ type ModifyGuildRoleJSON struct {
 // Fires a GuildRoleDelete Gateway event.
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
-func (g *Guild) DeleteGuildRole(roleID Snowflake, reason *string) error {
+func (g *Guild) DeleteGuildRole(roleID *Snowflake, reason *string) error {
 	u := parseRoute(fmt.Sprintf(deleteGuildRole, api, g.ID.String(), roleID.String()))
 
 	return fireDeleteRequest(u, reason)
@@ -609,7 +610,7 @@ type GetGuildPruneCountResponse struct {
 // Any inactive user that has a subset of the provided role(s) will be included in the prune and users with additional roles will not.
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
-func (g *Guild) BeginGuildPrune(payload BeginGuildPruneJSON, reason *string) (*GetGuildPruneCountResponse, error) {
+func (g *Guild) BeginGuildPrune(payload *BeginGuildPruneJSON, reason *string) (*GetGuildPruneCountResponse, error) {
 	if payload.Days < 1 || payload.Days > 30 {
 		return nil, errors.New("the number of days to prune must be >= 1 && <= 30")
 	}
@@ -624,18 +625,18 @@ func (g *Guild) BeginGuildPrune(payload BeginGuildPruneJSON, reason *string) (*G
 
 // BeginGuildPruneJSON - JSON payload
 type BeginGuildPruneJSON struct {
-	Days              uint64      `json:"days"`                // number of days to prune (1-30)
-	ComputePruneCount bool        `json:"compute_prune_count"` // whether `pruned` is returned, discouraged for large guilds
-	IncludeRoles      []Snowflake `json:"include_roles"`       // role(s) to include
+	Days              uint64       `json:"days"`                // number of days to prune (1-30)
+	ComputePruneCount bool         `json:"compute_prune_count"` // whether `pruned` is returned, discouraged for large guilds
+	IncludeRoles      []*Snowflake `json:"include_roles"`       // role(s) to include
 }
 
 // GetGuildVoiceRegions - Returns a list of voice region objects for the guild.
 //
 // Unlike the similar `/voice` route, this returns VIP servers when the guild is VIP-enabled.
-func (g *Guild) GetGuildVoiceRegions() ([]VoiceRegion, error) {
+func (g *Guild) GetGuildVoiceRegions() ([]*VoiceRegion, error) {
 	u := parseRoute(fmt.Sprintf(getGuildVoiceRegions, api, g.ID.String()))
 
-	var voiceRegions []VoiceRegion
+	var voiceRegions []*VoiceRegion
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &voiceRegions)
 
 	return voiceRegions, err
@@ -644,10 +645,10 @@ func (g *Guild) GetGuildVoiceRegions() ([]VoiceRegion, error) {
 // GetGuildInvites - Returns a list of invite objects (with invite metadata) for the guild.
 //
 // Requires the ManageGuild permission.
-func (g *Guild) GetGuildInvites() ([]Invite, error) {
+func (g *Guild) GetGuildInvites() ([]*Invite, error) {
 	u := parseRoute(fmt.Sprintf(getGuildInvites, api, g.ID.String()))
 
-	var invites []Invite
+	var invites []*Invite
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &invites)
 
 	return invites, err
@@ -656,10 +657,10 @@ func (g *Guild) GetGuildInvites() ([]Invite, error) {
 // GetGuildIntegrations - Returns a list of integration objects for the guild.
 //
 // Requires the ManageGuild permission.
-func (g *Guild) GetGuildIntegrations() ([]Integration, error) {
+func (g *Guild) GetGuildIntegrations() ([]*Integration, error) {
 	u := parseRoute(fmt.Sprintf(getGuildIntegrations, api, g.ID.String()))
 
-	var integrations []Integration
+	var integrations []*Integration
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &integrations)
 
 	return integrations, err
@@ -676,7 +677,7 @@ func (g *Guild) GetGuildIntegrations() ([]Integration, error) {
 // Fires a GuildIntegrationsUpdate Gateway event.
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
-func (g *Guild) DeleteGuildIntegration(integrationID Snowflake, reason *string) error {
+func (g *Guild) DeleteGuildIntegration(integrationID *Snowflake, reason *string) error {
 	u := parseRoute(fmt.Sprintf(deleteGuildIntegration, api, g.ID.String(), integrationID.String()))
 
 	return fireDeleteRequest(u, reason)
@@ -703,7 +704,7 @@ func (g *Guild) GetGuildWidgetSettings() (*GuildWidgetSettings, error) {
 // Returns the updated GuildWidgetSettings object.
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
-func (g *Guild) ModifyGuildWidget(payload GuildWidgetSettings, reason *string) (*GuildWidgetSettings, error) {
+func (g *Guild) ModifyGuildWidget(payload *GuildWidgetSettings, reason *string) (*GuildWidgetSettings, error) {
 	u := parseRoute(fmt.Sprintf(modifyGuildWidget, api, g.ID.String()))
 
 	var guildWidgetSettings *GuildWidgetSettings
@@ -712,11 +713,11 @@ func (g *Guild) ModifyGuildWidget(payload GuildWidgetSettings, reason *string) (
 	return guildWidgetSettings, err
 }
 
-// GuildWidget - Returns the widget for the guild.
-func (g *Guild) GetGuildWidget() (*GuildWidget, error) {
+// GetGuildWidget - Returns the widget for the guild.
+func (g *Guild) GetGuildWidget() (*GetGuildWidget, error) {
 	u := parseRoute(fmt.Sprintf(getGuildWidget, api, g.ID.String()))
 
-	var guildWidget *GuildWidget
+	var guildWidget *GetGuildWidget
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &guildWidget)
 
 	return guildWidget, err
@@ -753,7 +754,10 @@ func (g *Guild) GetGuildWelcomeScreen() (*WelcomeScreen, error) {
 //	All parameters to this endpoint are optional and nullable
 //
 //	This endpoint supports the `X-Audit-Log-Reason` header.
-func (g *Guild) ModifyGuildWelcomeScreen(payload ModifyGuildWelcomeScreenJSON, reason *string) (*WelcomeScreen, error) {
+func (g *Guild) ModifyGuildWelcomeScreen(payload *ModifyGuildWelcomeScreenJSON, reason *string) (
+	*WelcomeScreen,
+	error,
+) {
 	u := parseRoute(fmt.Sprintf(modifyGuildWelcomeScreen, api, g.ID.String()))
 
 	var welcomeScreen *WelcomeScreen
@@ -778,7 +782,7 @@ type ModifyGuildWelcomeScreenJSON struct {
 //   - You must have the MuteMembers permission to unsuppress yourself. You can always suppress yourself.
 //   - You must have the RequestToSpeak permission to request to speak. You can always clear your own request to speak.
 //   - You are able to set `request_to_speak_timestamp` to any present or future time.
-func (g *Guild) ModifyCurrentUserVoiceState(payload ModifyCurrentUserVoiceStateJSON) {
+func (g *Guild) ModifyCurrentUserVoiceState(payload *ModifyCurrentUserVoiceStateJSON) {
 	u := parseRoute(fmt.Sprintf(modifyCurrentUserVoiceState, api, g.ID.String()))
 
 	_ = firePatchRequest(u, payload, nil)
@@ -800,7 +804,7 @@ type ModifyCurrentUserVoiceStateJSON struct {
 //	You must have the MuteMembers permission. (Since suppression is the only thing that is available currently.)
 //	When unsuppressed, non-bot users will have their `request_to_speak_timestamp` set to the current time. Bot users will not.
 //	When suppressed, the user will have their `request_to_speak_timestamp` removed.
-func (g *Guild) ModifyUserVoiceState(userID Snowflake, payload ModifyUserVoiceStateJSON) {
+func (g *Guild) ModifyUserVoiceState(userID *Snowflake, payload *ModifyUserVoiceStateJSON) {
 	u := parseRoute(fmt.Sprintf(modifyUserVoiceState, api, g.ID.String(), userID.String()))
 
 	_ = firePatchRequest(u, payload, nil)

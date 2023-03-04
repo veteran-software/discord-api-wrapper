@@ -62,6 +62,6 @@ const (
 
 // InstallParams - settings for the application's default in-app authorization link, if enabled
 type InstallParams struct {
-	Scopes      []oauth2.Scopes `json:"scopes"`      // the scopes to add the application to the server with
-	Permissions string          `json:"permissions"` // the permissions to request for the bot role
+	Scopes      []*oauth2.Scopes `json:"scopes"`      // the scopes to add the application to the server with
+	Permissions string           `json:"permissions"` // the permissions to request for the bot role
 }

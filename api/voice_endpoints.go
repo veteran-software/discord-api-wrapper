@@ -24,10 +24,10 @@ import (
 // ListVoiceRegions - Returns an array of voice region objects that can be used when setting a voice or stage channel's `rtc_region`.
 //
 //goland:noinspection GoUnusedExportedFunction
-func ListVoiceRegions() ([]VoiceRegion, error) {
+func ListVoiceRegions() ([]*VoiceRegion, error) {
 	u := parseRoute(fmt.Sprintf(listVoiceRegions, api))
 
-	var voiceRegions []VoiceRegion
+	var voiceRegions []*VoiceRegion
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &voiceRegions)
 
 	return voiceRegions, err

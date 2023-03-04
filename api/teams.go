@@ -20,11 +20,11 @@ package api
 //
 // On other platforms, these may be referred to as "organizations", "companies", or "teams".
 type Team struct {
-	Icon        *string      `json:"icon"`          // a hash of the image of the team's icon
-	ID          Snowflake    `json:"id"`            // the unique id of the team
-	Members     []TeamMember `json:"members"`       // the members of the team
-	Name        string       `json:"name"`          // the name of the team
-	OwnerUserID Snowflake    `json:"owner_user_id"` // the user id of the current team owner
+	Icon        *string       `json:"icon"`          // a hash of the image of the team's icon
+	ID          Snowflake     `json:"id"`            // the unique id of the team
+	Members     []*TeamMember `json:"members"`       // the members of the team
+	Name        string        `json:"name"`          // the name of the team
+	OwnerUserID Snowflake     `json:"owner_user_id"` // the user id of the current team owner
 }
 
 // TeamMember - representation of a team member

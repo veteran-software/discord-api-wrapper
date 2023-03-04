@@ -36,9 +36,9 @@ type Guild struct {
 	VerificationLevel           VerificationLevel               `json:"verification_level"`                   // verification level required for the guild
 	DefaultMessageNotifications DefaultMessageNotificationLevel `json:"default_message_notifications"`        // default message notifications level
 	ExplicitContentFilter       ExplicitContentFilterLevel      `json:"explicit_content_filter"`              // explicit content filter level
-	Roles                       []Role                          `json:"roles"`                                // roles in the guild
-	Emojis                      []Emoji                         `json:"emojis"`                               // custom guild emojis
-	Features                    []GuildFeatures                 `json:"features"`                             // enabled guild features
+	Roles                       []*Role                         `json:"roles"`                                // roles in the guild
+	Emojis                      []*Emoji                        `json:"emojis"`                               // custom guild emojis
+	Features                    []*GuildFeatures                `json:"features"`                             // enabled guild features
 	MfaLevel                    MfaLevel                        `json:"mfa_level"`                            // required MFA level for the guild
 	ApplicationID               *Snowflake                      `json:"application_id"`                       // application id of the guild creator if it is bot-created
 	SystemChannelID             *Snowflake                      `json:"system_channel_id"`                    // the id of the channel where guild notices such as welcome messages and boost events are posted
@@ -58,22 +58,22 @@ type Guild struct {
 	ApproximatePresenceCount    uint64                          `json:"approximate_presence_count,omitempty"` // approximate number of non-offline members in this guild, returned from the GET /guilds/<id> endpoint when with_counts is true
 	WelcomeScreen               WelcomeScreen                   `json:"welcome_screen,omitempty"`             // the welcome screen of a Community guild, shown to new members, returned in an Invite's guild object
 	NsfwLevel                   GuildNsfwLevel                  `json:"nsfw_level"`                           // guild NSFW level
-	Stickers                    []Sticker                       `json:"stickers,omitempty"`                   // custom guild stickers
+	Stickers                    []*Sticker                      `json:"stickers,omitempty"`                   // custom guild stickers
 	PremiumProgressBarEnabled   bool                            `json:"premium_progress_bar_enabled"`         // whether the guild has the boost progress bar enabled
 
 	// TODO: These fields are only sent within the GUILD_CREATE event; move to Gateway.go
 
-	JoinedAt             time.Time             `json:"joined_at,omitempty"`              // when this guild was joined at
-	Large                bool                  `json:"large,omitempty"`                  // true if this is considered a large guild
-	Unavailable          bool                  `json:"unavailable,omitempty"`            // true if this guild is unavailable due to an outage
-	MemberCount          int64                 `json:"member_count,omitempty"`           // total number of members in this guild
-	VoiceStates          []VoiceState          `json:"voice_states,omitempty"`           // states of members currently in voice channels; lacks the guild_id key
-	Members              []GuildMember         `json:"members,omitempty"`                // users in the guild
-	Channels             []Channel             `json:"channels,omitempty"`               // channels in the guild
-	Threads              []Channel             `json:"threads,omitempty"`                // all active threads in the guild that current user has permission to view
-	Presences            []PresenceUpdateEvent `json:"presences,omitempty"`              // presences of the members in the guild, will only include non-offline members if the size is greater than large threshold
-	StageInstances       []StageInstance       `json:"stage_instances,omitempty"`        // Stage instances in the guild
-	GuildScheduledEvents []GuildScheduledEvent `json:"guild_scheduled_events,omitempty"` // the scheduled events in the guild
+	JoinedAt             time.Time              `json:"joined_at,omitempty"`              // when this guild was joined at
+	Large                bool                   `json:"large,omitempty"`                  // true if this is considered a large guild
+	Unavailable          bool                   `json:"unavailable,omitempty"`            // true if this guild is unavailable due to an outage
+	MemberCount          int64                  `json:"member_count,omitempty"`           // total number of members in this guild
+	VoiceStates          []*VoiceState          `json:"voice_states,omitempty"`           // states of members currently in voice channels; lacks the guild_id key
+	Members              []*GuildMember         `json:"members,omitempty"`                // users in the guild
+	Channels             []*Channel             `json:"channels,omitempty"`               // channels in the guild
+	Threads              []*Channel             `json:"threads,omitempty"`                // all active threads in the guild that current user has permission to view
+	Presences            []*PresenceUpdateEvent `json:"presences,omitempty"`              // presences of the members in the guild, will only include non-offline members if the size is greater than large threshold
+	StageInstances       []*StageInstance       `json:"stage_instances,omitempty"`        // Stage instances in the guild
+	GuildScheduledEvents []*GuildScheduledEvent `json:"guild_scheduled_events,omitempty"` // the scheduled events in the guild
 
 	// These fields are only sent when using the GET Current user Guilds endpoint and are relative to the requested user
 
@@ -200,17 +200,17 @@ type UnavailableGuild struct {
 
 // GuildPreview - preview object
 type GuildPreview struct {
-	ID                       Snowflake       `json:"id"`                         // guild id
-	Name                     string          `json:"name"`                       // guild name (2-100 characters)
-	Icon                     *string         `json:"icon"`                       // icon hash
-	Splash                   *string         `json:"splash"`                     // splash hash
-	DiscoverySplash          *string         `json:"discovery_splash"`           // discovery splash hash
-	Emojis                   []Emoji         `json:"emojis"`                     // custom guild emojis
-	Features                 []GuildFeatures `json:"features"`                   // enabled guild features
-	ApproximateMemberCount   int             `json:"approximate_member_count"`   // approximate number of members in this guild
-	ApproximatePresenceCount int             `json:"approximate_presence_count"` // approximate number of online members in this guild
-	Description              *string         `json:"description"`                // the description for the guild, if the guild is discoverable
-	Stickers                 []Sticker       `json:"stickers"`                   // custom guild stickers
+	ID                       Snowflake        `json:"id"`                         // guild id
+	Name                     string           `json:"name"`                       // guild name (2-100 characters)
+	Icon                     *string          `json:"icon"`                       // icon hash
+	Splash                   *string          `json:"splash"`                     // splash hash
+	DiscoverySplash          *string          `json:"discovery_splash"`           // discovery splash hash
+	Emojis                   []*Emoji         `json:"emojis"`                     // custom guild emojis
+	Features                 []*GuildFeatures `json:"features"`                   // enabled guild features
+	ApproximateMemberCount   int              `json:"approximate_member_count"`   // approximate number of members in this guild
+	ApproximatePresenceCount int              `json:"approximate_presence_count"` // approximate number of online members in this guild
+	Description              *string          `json:"description"`                // the description for the guild, if the guild is discoverable
+	Stickers                 []*Sticker       `json:"stickers"`                   // custom guild stickers
 }
 
 // GuildWidgetSettings - the guild widget status
@@ -219,16 +219,16 @@ type GuildWidgetSettings struct {
 	ChannelID *Snowflake `json:"channel_id"` // the widget channel id
 }
 
-// GuildWidget - the guild widget
+// GetGuildWidget - the guild widget
 //
 // The fields `id`, `discriminator` and `avatar` are anonymized to prevent abuse.
-type GuildWidget struct {
-	ID            Snowflake     `json:"id"`             // guild id
-	Name          string        `json:"name"`           // guild name (2-100 characters)
-	InstantInvite *string       `json:"instant_invite"` // instant invite for the guilds specified widget invite channel
-	Channels      []Channel     `json:"channels"`       // voice and stage channels which are accessible by @everyone
-	Members       []GuildMember `json:"members"`        // special widget user objects that includes users presence (Limit 100)
-	PresenceCount int           `json:"presence_count"` // number of online members in this guild
+type GetGuildWidget struct {
+	ID            Snowflake      `json:"id"`             // guild id
+	Name          string         `json:"name"`           // guild name (2-100 characters)
+	InstantInvite *string        `json:"instant_invite"` // instant invite for the guilds specified widget invite channel
+	Channels      []*Channel     `json:"channels"`       // voice and stage channels which are accessible by @everyone
+	Members       []*GuildMember `json:"members"`        // special widget user objects that includes users presence (Limit 100)
+	PresenceCount int            `json:"presence_count"` // number of online members in this guild
 }
 
 // GuildMember - Represents a member of a Guild
@@ -238,16 +238,16 @@ type GuildWidget struct {
 //	In GUILD_ events, pending will always be included as true or false.
 //	In non GUILD_ events which can only be triggered by non-pending users, pending will not be included.
 type GuildMember struct {
-	User                       User        `json:"user,omitempty"`                         // User - the user this guild member represents
-	Nick                       *string     `json:"nick,omitempty"`                         // Nick - the users' guild nickname
-	Avatar                     *string     `json:"avatar,omitempty"`                       // Avatar - guild specific avatar
-	Roles                      []Snowflake `json:"roles"`                                  // Roles - array of GuildRole id's
-	JoinedAt                   time.Time   `json:"joined_at"`                              // JoinedAt - when the user joined the guild
-	PremiumSince               *time.Time  `json:"premium_since,omitempty"`                // PremiumSince - when the user started boosting the guild
-	Deaf                       bool        `json:"deaf"`                                   // Deaf - whether the user is deafened in voice channels
-	Mute                       bool        `json:"mute"`                                   // Mute - whether the user is muted in voice channels
-	Pending                    bool        `json:"pending,omitempty"`                      // Pending - whether the user has not yet passed the guild's Membership Screening requirements
-	CommunicationDisabledUntil *time.Time  `json:"communication_disabled_until,omitempty"` // CommunicationDisabledUntil - when the user's timeout will expire and the user will be able to communicate in the guild again, null or a time in the past if the user is not timed out
+	User                       User         `json:"user,omitempty"`                         // User - the user this guild member represents
+	Nick                       *string      `json:"nick,omitempty"`                         // Nick - the users' guild nickname
+	Avatar                     *string      `json:"avatar,omitempty"`                       // Avatar - guild specific avatar
+	Roles                      []*Snowflake `json:"roles"`                                  // Roles - array of GuildRole id's
+	JoinedAt                   time.Time    `json:"joined_at"`                              // JoinedAt - when the user joined the guild
+	PremiumSince               *time.Time   `json:"premium_since,omitempty"`                // PremiumSince - when the user started boosting the guild
+	Deaf                       bool         `json:"deaf"`                                   // Deaf - whether the user is deafened in voice channels
+	Mute                       bool         `json:"mute"`                                   // Mute - whether the user is muted in voice channels
+	Pending                    bool         `json:"pending,omitempty"`                      // Pending - whether the user has not yet passed the guild's Membership Screening requirements
+	CommunicationDisabledUntil *time.Time   `json:"communication_disabled_until,omitempty"` // CommunicationDisabledUntil - when the user's timeout will expire and the user will be able to communicate in the guild again, null or a time in the past if the user is not timed out
 
 	// Undocumented as of 12/3/2022
 	Flags     UserFlags `json:"flags,omitempty"`
@@ -307,8 +307,8 @@ type Ban struct {
 
 // WelcomeScreen - the welcome screen object
 type WelcomeScreen struct {
-	Description     *string                `json:"description,omitempty"`      // the server description shown in the welcome screen
-	WelcomeChannels []WelcomeScreenChannel `json:"welcome_channels,omitempty"` // the channels shown in the welcome screen, up to 5
+	Description     *string                 `json:"description,omitempty"`      // the server description shown in the welcome screen
+	WelcomeChannels []*WelcomeScreenChannel `json:"welcome_channels,omitempty"` // the channels shown in the welcome screen, up to 5
 }
 
 // WelcomeScreenChannel - the channels shown in the welcome screen, up to 5

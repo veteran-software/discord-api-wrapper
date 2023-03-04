@@ -23,17 +23,17 @@ import (
 )
 
 // ListGuildEmojis - Returns a list of emoji objects for the given guild.
-func (g *Guild) ListGuildEmojis() ([]Emoji, error) {
+func (g *Guild) ListGuildEmojis() ([]*Emoji, error) {
 	u := parseRoute(fmt.Sprintf(listGuildEmojis, api, g.ID.String()))
 
-	var emojis []Emoji
+	var emojis []*Emoji
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &emojis)
 
 	return emojis, err
 }
 
 // GetGuildEmoji - Returns an emoji object for the given guild and emoji IDs.
-func (g *Guild) GetGuildEmoji(emoji Emoji) (*Emoji, error) {
+func (g *Guild) GetGuildEmoji(emoji *Emoji) (*Emoji, error) {
 	u := parseRoute(fmt.Sprintf(getGuildEmoji, api, g.ID.String(), emoji.ID.String()))
 
 	var e *Emoji
@@ -55,7 +55,7 @@ func (g *Guild) GetGuildEmoji(emoji Emoji) (*Emoji, error) {
 // Attempting to upload an emoji larger than this limit will fail and return "400 Bad Request" and an error message, but not a JSON status code.
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
-func (g *Guild) CreateGuildEmoji(payload CreateEmojiJSON, reason *string) (*Emoji, error) {
+func (g *Guild) CreateGuildEmoji(payload *CreateEmojiJSON, reason *string) (*Emoji, error) {
 	u := parseRoute(fmt.Sprintf(createGuildEmoji, api, g.ID.String()))
 
 	var emoji *Emoji
@@ -70,7 +70,7 @@ func (g *Guild) CreateGuildEmoji(payload CreateEmojiJSON, reason *string) (*Emoj
 type CreateEmojiJSON struct {
 	Name  string          `json:"name"`  // Name - name of the emoji
 	Image base64.Encoding `json:"image"` // Image - the 128x128 emoji image
-	Roles []Snowflake     `json:"roles"` // Roles - roles allowed to use this emoji
+	Roles []*Snowflake    `json:"roles"` // Roles - roles allowed to use this emoji
 }
 
 // ModifyGuildEmoji - Modify the given emoji.
@@ -84,7 +84,7 @@ type CreateEmojiJSON struct {
 // All JSON parameters to this endpoint are optional.
 //
 // This endpoint supports the X-Audit-Log-Reason header.
-func (g *Guild) ModifyGuildEmoji(emoji Emoji, payload ModifyGuildEmojiJSON, reason *string) (*Emoji, error) {
+func (g *Guild) ModifyGuildEmoji(emoji *Emoji, payload *ModifyGuildEmojiJSON, reason *string) (*Emoji, error) {
 	u := parseRoute(fmt.Sprintf(modifyGuildEmoji, api, g.ID.String(), emoji.ID.String()))
 
 	var e *Emoji
@@ -108,7 +108,7 @@ type ModifyGuildEmojiJSON struct {
 // Fires a GuildEmojisUpdate Gateway event.
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
-func (g *Guild) DeleteGuildEmoji(emoji Emoji, reason *string) error {
+func (g *Guild) DeleteGuildEmoji(emoji *Emoji, reason *string) error {
 	u := parseRoute(fmt.Sprintf(deleteGuildEmoji, api, g.ID.String(), emoji.ID.String()))
 
 	return fireDeleteRequest(u, reason)

@@ -61,24 +61,24 @@ func (c *Channel) CreateWebhook(name string, avatar *dataurl.DataURL, reason *st
 }
 
 // GetChannelWebhooks - Returns a list of channel webhook objects. Requires the ManageWebhooks permission.
-func (c *Channel) GetChannelWebhooks() (*[]Webhook, error) {
+func (c *Channel) GetChannelWebhooks() ([]*Webhook, error) {
 	// TODO: Check for ManageWebhooks permission
 
 	u := parseRoute(fmt.Sprintf(getChannelWebhooks, api, c.ID.String()))
 
-	var webhooks *[]Webhook
+	var webhooks []*Webhook
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &webhooks)
 
 	return webhooks, err
 }
 
 // GetGuildWebhooks - Returns a list of guild webhook objects. Requires the ManageWebhooks permission.
-func (g *Guild) GetGuildWebhooks() (*[]Webhook, error) {
+func (g *Guild) GetGuildWebhooks() ([]*Webhook, error) {
 	// TODO: Check for ManageWebhooks permission
 
 	u := parseRoute(fmt.Sprintf(getGuildWebhooks, api, g.ID.String()))
 
-	var webhooks *[]Webhook
+	var webhooks []*Webhook
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &webhooks)
 
 	return webhooks, err
@@ -109,7 +109,10 @@ func (w *Webhook) GetWebhookWithToken() (*Webhook, error) {
 // # All parameters to this endpoint are optional
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
-func (w *Webhook) ModifyWebhook(name *string, avatar *dataurl.DataURL, channelId *Snowflake, reason *string) (*Webhook, error) {
+func (w *Webhook) ModifyWebhook(name *string, avatar *dataurl.DataURL, channelId *Snowflake, reason *string) (
+	*Webhook,
+	error,
+) {
 	params := struct {
 		Name      string    `json:"name,omitempty"`
 		Avatar    string    `json:"avatar,omitempty"`
@@ -178,14 +181,12 @@ func (w *Webhook) DeleteWebhookWithToken(reason *string) error {
 //
 // Note that when sending a message, you must provide a value for at least one of content, embeds, or file.
 //
-// wait and threadID are optional; pass nil if not needed
-func (w *Webhook) ExecuteWebhook(wait *bool, threadID *Snowflake, params *ExecuteWebhookJSON) (*Message, error) {
+// wait is required; threadID is optional; pass nil if not needed
+func (w *Webhook) ExecuteWebhook(wait bool, threadID *Snowflake, params *ExecuteWebhookJSON) (*Message, error) {
 	u := parseRoute(fmt.Sprintf(executeWebhook, api, w.ID, w.Token))
 
 	q := u.Query()
-	if wait != nil {
-		q.Set("wait", strconv.FormatBool(*wait))
-	}
+	q.Set("wait", strconv.FormatBool(wait))
 	if threadID != nil {
 		q.Set("thread_id", threadID.String())
 	}
@@ -201,23 +202,23 @@ func (w *Webhook) ExecuteWebhook(wait *bool, threadID *Snowflake, params *Execut
 
 // ExecuteWebhookJSON - JSON payload structure
 type ExecuteWebhookJSON struct {
-	Content         string          `json:"content"`                    // the message contents (up to 2000 characters); Required - one of content, file, embeds
-	Username        string          `json:"username,omitempty"`         // override the default username of the webhook; Required - false
-	AvatarURL       string          `json:"avatar_url,omitempty"`       // override the default avatar of the webhook; Required - false
-	Tts             bool            `json:"tts,omitempty"`              // true if this is a TTS message; Required - false
-	Embeds          []Embed         `json:"embeds"`                     // embedded rich content; Required - one of content, file, embeds
-	AllowedMentions AllowedMentions `json:"allowed_mentions,omitempty"` // allowed mentions for the message; Required - false
-	Components      []Component     `json:"components,omitempty"`       // the components to include with the message - Required - false
-	PayloadJson     string          `json:"payload_json"`               // JSON encoded body of non-file params; Required - "multipart/form-data" only
-	Attachments     []Attachment    `json:"attachments,omitempty"`      // Attachment objects with filename and description; Required - false
-	Flags           MessageFlags    `json:"flags,omitempty"`            // MessageFlags combined as a bitfield (only SuppressEmbeds can be set)
-	ThreadName      string          `json:"thread_name"`                // name of thread to create (requires the webhook channel to be a forum channel)
+	Content         string           `json:"content"`                    // the message contents (up to 2000 characters); Required - one of content, file, embeds
+	Username        string           `json:"username,omitempty"`         // override the default username of the webhook; Required - false
+	AvatarURL       string           `json:"avatar_url,omitempty"`       // override the default avatar of the webhook; Required - false
+	Tts             bool             `json:"tts,omitempty"`              // true if this is a TTS message; Required - false
+	Embeds          []*Embed         `json:"embeds"`                     // embedded rich content; Required - one of content, file, embeds
+	AllowedMentions *AllowedMentions `json:"allowed_mentions,omitempty"` // allowed mentions for the message; Required - false
+	Components      []*Component     `json:"components,omitempty"`       // the components to include with the message - Required - false
+	PayloadJson     string           `json:"payload_json"`               // JSON encoded body of non-file params; Required - "multipart/form-data" only
+	Attachments     []*Attachment    `json:"attachments,omitempty"`      // Attachment objects with filename and description; Required - false
+	Flags           MessageFlags     `json:"flags,omitempty"`            // MessageFlags combined as a bitfield (only SuppressEmbeds can be set)
+	ThreadName      string           `json:"thread_name"`                // name of thread to create (requires the webhook channel to be a forum channel)
 }
 
 // GetWebhookMessage - Returns a previously-sent webhook message from the same token. Returns a message object on success.
 //
 // threadID is optional; pass nil if not needed
-func (w *Webhook) GetWebhookMessage(msgID Snowflake, threadID *Snowflake) (*Message, error) {
+func (w *Webhook) GetWebhookMessage(msgID *Snowflake, threadID *Snowflake) (*Message, error) {
 	u := parseRoute(fmt.Sprintf(getWebhookMessage, api, w.ID.String(), w.Token, msgID.String()))
 
 	q := u.Query()
@@ -249,7 +250,10 @@ func (w *Webhook) GetWebhookMessage(msgID Snowflake, threadID *Snowflake) (*Mess
 // All JSON parameters to this endpoint are optional and nullable.
 //
 // threadID is optional; pass nil if not needed
-func (w *Webhook) EditWebhookMessage(msgID Snowflake, threadID *Snowflake, payload EditWebhookMessageJSON) (*Message, error) {
+func (w *Webhook) EditWebhookMessage(msgID *Snowflake, threadID *Snowflake, payload *EditWebhookMessageJSON) (
+	*Message,
+	error,
+) {
 	u := parseRoute(fmt.Sprintf(editWebhookMessage, api, w.ID.String(), w.Token, msgID.String()))
 
 	q := u.Query()
@@ -269,17 +273,17 @@ func (w *Webhook) EditWebhookMessage(msgID Snowflake, threadID *Snowflake, paylo
 // EditWebhookMessageJSON - All parameters to this endpoint are optional and nullable.
 type EditWebhookMessageJSON struct {
 	Content         *string          `json:"content,omitempty"`          // the message contents (up to 2000 characters)
-	Embeds          *[]Embed         `json:"embeds,omitempty"`           // embedded rich content
+	Embeds          []*Embed         `json:"embeds,omitempty"`           // embedded rich content
 	AllowedMentions *AllowedMentions `json:"allowed_mentions,omitempty"` // allowed mentions for the message
-	Components      *[]Component     `json:"components,omitempty"`       // the components to include with the message
+	Components      []*Component     `json:"components,omitempty"`       // the components to include with the message
 	PayloadJson     *string          `json:"payload_json,omitempty"`     // JSON encoded body of non-file params (multipart/form-data only)
-	Attachments     *[]Attachment    `json:"attachments,omitempty"`      // attached files to keep and possible descriptions for new files
+	Attachments     []*Attachment    `json:"attachments,omitempty"`      // attached files to keep and possible descriptions for new files
 }
 
 // DeleteWebhookMessage - Deletes a message that was created by the webhook. Returns a 204 No Content response on success.
 //
 // threadID is optional; pass nil if not needed
-func (w *Webhook) DeleteWebhookMessage(msgID Snowflake, threadID *Snowflake) error {
+func (w *Webhook) DeleteWebhookMessage(msgID *Snowflake, threadID *Snowflake) error {
 	u := parseRoute(fmt.Sprintf(deleteWebhookMessage, api, w.ID.String(), w.Token, msgID.String()))
 
 	q := u.Query()

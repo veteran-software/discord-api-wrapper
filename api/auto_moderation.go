@@ -31,8 +31,8 @@ type AutoModerationRule struct {
 	TriggerMetadata TriggerMetadata `json:"trigger_metadata"` // the rule trigger metadata
 	Actions         []string        `json:"actions"`          // the actions which will execute when the rule is triggered
 	Enabled         bool            `json:"enabled"`          // whether the rule is enabled
-	ExemptRoles     []Snowflake     `json:"exempt_roles"`     // the role ids that should not be affected by the rule (Maximum of 20)
-	ExemptChannels  []Snowflake     `json:"exempt_channels"`  // the channel ids that should not be affected by the rule (Maximum of 50)
+	ExemptRoles     []*Snowflake    `json:"exempt_roles"`     // the role ids that should not be affected by the rule (Maximum of 20)
+	ExemptChannels  []*Snowflake    `json:"exempt_channels"`  // the channel ids that should not be affected by the rule (Maximum of 50)
 }
 
 // TriggerType - Characterizes the type of content which can trigger the rule.
@@ -48,11 +48,11 @@ const (
 
 // TriggerMetadata - Additional data used to determine whether a rule should be triggered. Different fields are relevant based on the value of trigger_type.
 type TriggerMetadata struct {
-	KeywordFilter     []string            `json:"keyword_filter"`      // substrings which will be searched for in content (Maximum of 1000)
-	RegexPatterns     []string            `json:"regex_patterns"`      // regular expression patterns which will be matched against content (Maximum of 10)
-	Presets           []KeyWordPresetType `json:"presets"`             // the internally pre-defined wordsets which will be searched for in content
-	AllowList         []string            `json:"allow_list"`          // substrings which will be exempt from triggering the preset trigger type (Maximum of 1000)
-	MentionTotalLimit int                 `json:"mention_total_limit"` // total number of unique role and user mentions allowed per message (Maximum of 50)
+	KeywordFilter     []string             `json:"keyword_filter"`      // substrings which will be searched for in content (Maximum of 1000)
+	RegexPatterns     []string             `json:"regex_patterns"`      // regular expression patterns which will be matched against content (Maximum of 10)
+	Presets           []*KeyWordPresetType `json:"presets"`             // the internally pre-defined wordsets which will be searched for in content
+	AllowList         []string             `json:"allow_list"`          // substrings which will be exempt from triggering the preset trigger type (Maximum of 1000)
+	MentionTotalLimit int                  `json:"mention_total_limit"` // total number of unique role and user mentions allowed per message (Maximum of 50)
 }
 
 // KeyWordPresetType - the internally pre-defined wordsets which will be searched for in content

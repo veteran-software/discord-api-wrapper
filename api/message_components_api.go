@@ -101,7 +101,7 @@ func (i *InteractionResponseModal) SetTitle(t string) *InteractionResponseModal 
 
 // AddComponent - adds a single Component to the InteractionResponseModal
 func (i *InteractionResponseModal) AddComponent(c *Component) *InteractionResponseModal {
-	i.Data.Components = append(i.Data.Components, *c)
+	i.Data.Components = append(i.Data.Components, c)
 
 	return i
 }
@@ -138,13 +138,13 @@ func (i *InteractionResponseMessages) SetContent(content string) *InteractionRes
 
 // AddEmbed - adds a single Embed to the response
 func (i *InteractionResponseMessages) AddEmbed(e *Embed) *InteractionResponseMessages {
-	i.Data.Embeds = append(i.Data.Embeds, *e)
+	i.Data.Embeds = append(i.Data.Embeds, e)
 
 	return i
 }
 
 // AddEmbeds - add multiple Embed objects (max 10) to the response
-func (i *InteractionResponseMessages) AddEmbeds(e []Embed) *InteractionResponseMessages {
+func (i *InteractionResponseMessages) AddEmbeds(e []*Embed) *InteractionResponseMessages {
 	i.Data.Embeds = append(i.Data.Embeds, e...)
 
 	return i
@@ -170,14 +170,14 @@ func (i *InteractionResponseMessages) AddFlag(f MessageFlags) *InteractionRespon
 
 // AddComponent - adds a single Component to the response message
 func (i *InteractionResponseMessages) AddComponent(c *Component) *InteractionResponseMessages {
-	i.Data.Components = append(i.Data.Components, *c)
+	i.Data.Components = append(i.Data.Components, c)
 
 	return i
 }
 
 // AddAttachment - adds a single attachment to the response message
 func (i *InteractionResponseMessages) AddAttachment(a *Attachment) *InteractionResponseMessages {
-	i.Data.Attachments = append(i.Data.Attachments, *a)
+	i.Data.Attachments = append(i.Data.Attachments, a)
 
 	return i
 }

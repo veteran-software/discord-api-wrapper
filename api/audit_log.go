@@ -27,20 +27,20 @@ This header supports url encoded utf8 characters.
 //
 // This header supports url encoded utf8 characters.
 type AuditLog struct {
-	ApplicationCommands  []ApplicationCommand  `json:"application_commands"`   // List of ApplicationCommands referenced in the audit log
-	AuditLogEntries      []AuditLogEntry       `json:"audit_log_entries"`      // List of AuditLog entries, sorted from most to least recent
-	AutoModerationRules  []string              `json:"auto_moderation_rules"`  // List of auto moderation rules referenced in the audit log
-	GuildScheduledEvents []GuildScheduledEvent `json:"guild_scheduled_events"` // List of GuildScheduledEvents referenced in the audit log
-	Integrations         []Integration         `json:"integrations"`           // List of partial Integration objects
-	Threads              []Channel             `json:"threads"`                // List of Threads referenced in the audit log
-	Users                []User                `json:"users"`                  // List of Users referenced in the audit log
-	Webhooks             []Webhook             `json:"webhooks"`               // List of Webhooks referenced in the audit log
+	ApplicationCommands  []*ApplicationCommand  `json:"application_commands"`   // List of ApplicationCommands referenced in the audit log
+	AuditLogEntries      []*AuditLogEntry       `json:"audit_log_entries"`      // List of AuditLog entries, sorted from most to least recent
+	AutoModerationRules  []string               `json:"auto_moderation_rules"`  // List of auto moderation rules referenced in the audit log
+	GuildScheduledEvents []*GuildScheduledEvent `json:"guild_scheduled_events"` // List of GuildScheduledEvents referenced in the audit log
+	Integrations         []*Integration         `json:"integrations"`           // List of partial Integration objects
+	Threads              []*Channel             `json:"threads"`                // List of Threads referenced in the audit log
+	Users                []*User                `json:"users"`                  // List of Users referenced in the audit log
+	Webhooks             []*Webhook             `json:"webhooks"`               // List of Webhooks referenced in the audit log
 }
 
 // AuditLogEntry - Representation of a single Audit Log
 type AuditLogEntry struct {
 	TargetID   *string            `json:"target_id"`         // id of the affected entity (webhook, user, role, etc.)
-	Changes    []AuditLogChange   `json:"changes,omitempty"` // changes made to the target_id
+	Changes    []*AuditLogChange  `json:"changes,omitempty"` // changes made to the target_id
 	UserID     *Snowflake         `json:"user_id"`           // the user who made the changes
 	ID         Snowflake          `json:"id"`                // id of the entry
 	ActionType AuditLogEvent      `json:"action_type"`       // type of action that occurred

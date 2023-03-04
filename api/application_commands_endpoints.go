@@ -27,14 +27,14 @@ import (
 // Returns an array of application command objects.
 //
 //goland:noinspection GoUnusedExportedFunction
-func GetGlobalApplicationCommands(applicationID Snowflake, withLocalizations bool) ([]ApplicationCommand, error) {
+func GetGlobalApplicationCommands(applicationID Snowflake, withLocalizations bool) ([]*ApplicationCommand, error) {
 	u := parseRoute(fmt.Sprintf(getGlobalApplicationCommands, api, applicationID.String()))
 
 	q := u.Query()
 	q.Set("with_localizations", strconv.FormatBool(withLocalizations))
 	u.RawQuery = q.Encode()
 
-	var commands []ApplicationCommand
+	var commands []*ApplicationCommand
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &commands)
 
 	return commands, err
@@ -47,7 +47,10 @@ func GetGlobalApplicationCommands(applicationID Snowflake, withLocalizations boo
 //	Creating a command with the same name as an existing command for your application will overwrite the old command.
 //
 //goland:noinspection GoUnusedExportedFunction
-func CreateGlobalApplicationCommand(applicationID Snowflake, payload CreateApplicationCommandJSON) (*ApplicationCommand, error) {
+func CreateGlobalApplicationCommand(applicationID Snowflake, payload CreateApplicationCommandJSON) (
+	*ApplicationCommand,
+	error,
+) {
 	u := parseRoute(fmt.Sprintf(createGlobalApplicationCommand, api, applicationID.String()))
 
 	var command *ApplicationCommand
@@ -62,7 +65,7 @@ type CreateApplicationCommandJSON struct {
 	NameLocalizations        *LocalizationDict           `json:"name_localizations,omitempty"`         // Localization dictionary for the name field. Values follow the same restrictions as name
 	Description              string                      `json:"description"`                          // 1-100 character description
 	DescriptionLocalizations *LocalizationDict           `json:"description_localizations,omitempty"`  // Localization dictionary for the description field. Values follow the same restrictions as description
-	Options                  *[]ApplicationCommandOption `json:"options,omitempty"`                    // the parameters for the command
+	Options                  []*ApplicationCommandOption `json:"options,omitempty"`                    // the parameters for the command
 	DefaultMemberPermissions *string                     `json:"default_member_permissions,omitempty"` // Set of permissions represented as a bit set
 	DmPermission             *bool                       `json:"dm_permission,omitempty"`              // Indicates whether the command is available in DMs with the app, only for globally-scoped commands. By default, commands are visible.
 	DefaultPermission        bool                        `json:"default_permission,omitempty"`         // whether the command is enabled by default when the app is added to a guild; default true
@@ -103,7 +106,7 @@ type EditApplicationCommandJSON struct {
 	NameLocalizations        *LocalizationDict           `json:"name_localizations,omitempty"`         // Localization dictionary for the name field. Values follow the same restrictions as name
 	Description              string                      `json:"description"`                          // 1-100 character description
 	DescriptionLocalizations *LocalizationDict           `json:"description_localizations,omitempty"`  // Localization dictionary for the description field. Values follow the same restrictions as description
-	Options                  *[]ApplicationCommandOption `json:"options,omitempty"`                    // the parameters for the command
+	Options                  []*ApplicationCommandOption `json:"options,omitempty"`                    // the parameters for the command
 	DefaultMemberPermissions *string                     `json:"default_member_permissions,omitempty"` // Set of permissions represented as a bit set
 	DmPermission             *bool                       `json:"dm_permission,omitempty"`              // Indicates whether the command is available in DMs with the app, only for globally-scoped commands. By default, commands are visible.
 	DefaultPermission        bool                        `json:"default_permission,omitempty"`         // whether the command is enabled by default when the app is added to a guild; default true
@@ -112,7 +115,7 @@ type EditApplicationCommandJSON struct {
 // DeleteGlobalApplicationCommand - Deletes a global command. Returns 204 No Content on success.
 //
 //goland:noinspection GoUnusedExportedFunction
-func DeleteGlobalApplicationCommand(applicationID Snowflake, commandID string) error {
+func DeleteGlobalApplicationCommand(applicationID *Snowflake, commandID string) error {
 	u := parseRoute(fmt.Sprintf(deleteGlobalApplicationCommand, api, applicationID.String(), commandID))
 
 	return fireDeleteRequest(u, nil)
@@ -127,10 +130,13 @@ func DeleteGlobalApplicationCommand(applicationID Snowflake, commandID string) e
 // Commands that do not already exist will count toward daily application command create limits.
 //
 //goland:noinspection GoUnusedExportedFunction
-func BulkOverwriteGlobalApplicationCommands(applicationID Snowflake, payload []ApplicationCommand) ([]ApplicationCommand, error) {
+func BulkOverwriteGlobalApplicationCommands(
+	applicationID *Snowflake,
+	payload []*ApplicationCommand,
+) ([]*ApplicationCommand, error) {
 	u := parseRoute(fmt.Sprintf(bulkOverwriteGlobalApplicationCommands, api, applicationID.String()))
 
-	var commands []ApplicationCommand
+	var commands []*ApplicationCommand
 	err := json.Unmarshal(firePutRequest(u, payload, nil), &commands)
 
 	return commands, err
@@ -139,14 +145,14 @@ func BulkOverwriteGlobalApplicationCommands(applicationID Snowflake, payload []A
 // GetGuildApplicationCommands - Fetch all the guild commands for your application for a specific guild.
 //
 // Returns an array of application command objects.
-func (i *Interaction) GetGuildApplicationCommands(withLocalizations bool) ([]ApplicationCommand, error) {
+func (i *Interaction) GetGuildApplicationCommands(withLocalizations bool) ([]*ApplicationCommand, error) {
 	u := parseRoute(fmt.Sprintf(getGuildApplicationCommands, api, i.ApplicationID.String(), i.GuildID.String()))
 
 	q := u.Query()
 	q.Set("with_localizations", strconv.FormatBool(withLocalizations))
 	u.RawQuery = q.Encode()
 
-	var commands []ApplicationCommand
+	var commands []*ApplicationCommand
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &commands)
 
 	return commands, err
@@ -157,14 +163,18 @@ func (i *Interaction) GetGuildApplicationCommands(withLocalizations bool) ([]App
 // Returns an array of application command objects.
 //
 //goland:noinspection GoUnusedExportedFunction
-func GetGuildApplicationCommands(applicationID Snowflake, guildID Snowflake, withLocalizations bool) ([]ApplicationCommand, error) {
+func GetGuildApplicationCommands(
+	applicationID *Snowflake,
+	guildID *Snowflake,
+	withLocalizations bool,
+) ([]*ApplicationCommand, error) {
 	u := parseRoute(fmt.Sprintf(getGuildApplicationCommands, api, applicationID.String(), guildID.String()))
 
 	q := u.Query()
 	q.Set("with_localizations", strconv.FormatBool(withLocalizations))
 	u.RawQuery = q.Encode()
 
-	var commands []ApplicationCommand
+	var commands []*ApplicationCommand
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &commands)
 
 	return commands, err
@@ -179,7 +189,11 @@ func GetGuildApplicationCommands(applicationID Snowflake, guildID Snowflake, wit
 // If the command did not already exist, it will count toward daily application command create limits.
 //
 //goland:noinspection GoUnusedExportedFunction
-func CreateGuildApplicationCommand(applicationID Snowflake, guildID Snowflake, payload CreateApplicationCommandJSON) (*ApplicationCommand, error) {
+func CreateGuildApplicationCommand(
+	applicationID *Snowflake,
+	guildID *Snowflake,
+	payload *CreateApplicationCommandJSON,
+) (*ApplicationCommand, error) {
 	u := parseRoute(fmt.Sprintf(createGuildApplicationCommand, api, applicationID.String(), guildID.String()))
 
 	var command *ApplicationCommand
@@ -190,7 +204,15 @@ func CreateGuildApplicationCommand(applicationID Snowflake, guildID Snowflake, p
 
 // GetGuildApplicationCommand - Fetch a guild command for your application. Returns an application command object.
 func (i *Interaction) GetGuildApplicationCommand() (*ApplicationCommand, error) {
-	u := parseRoute(fmt.Sprintf(getGuildApplicationCommand, api, i.ApplicationID.String(), i.GuildID.String(), i.Data.ID.String()))
+	u := parseRoute(
+		fmt.Sprintf(
+			getGuildApplicationCommand,
+			api,
+			i.ApplicationID.String(),
+			i.GuildID.String(),
+			i.Data.ID.String(),
+		),
+	)
 
 	var command *ApplicationCommand
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &command)
@@ -203,8 +225,16 @@ func (i *Interaction) GetGuildApplicationCommand() (*ApplicationCommand, error) 
 // Returns 200 and an application command object.
 //
 //	All parameters for this endpoint are optional.
-func (i *Interaction) EditGuildApplicationCommand(payload EditApplicationCommandJSON) (*ApplicationCommand, error) {
-	u := parseRoute(fmt.Sprintf(editGuildApplicationCommand, api, i.ApplicationID.String(), i.GuildID.String(), i.Data.ID.String()))
+func (i *Interaction) EditGuildApplicationCommand(payload *EditApplicationCommandJSON) (*ApplicationCommand, error) {
+	u := parseRoute(
+		fmt.Sprintf(
+			editGuildApplicationCommand,
+			api,
+			i.ApplicationID.String(),
+			i.GuildID.String(),
+			i.Data.ID.String(),
+		),
+	)
 
 	var command *ApplicationCommand
 	err := json.Unmarshal(firePatchRequest(u, payload, nil), &command)
@@ -215,8 +245,16 @@ func (i *Interaction) EditGuildApplicationCommand(payload EditApplicationCommand
 // DeleteGuildApplicationCommand - Delete a guild command. Returns 204 No Content on success.
 //
 //goland:noinspection GoUnusedExportedFunction
-func DeleteGuildApplicationCommand(applicationID Snowflake, guildID Snowflake, commandID string) error {
-	u := parseRoute(fmt.Sprintf(deleteGuildApplicationCommand, api, applicationID.String(), guildID.String(), commandID))
+func DeleteGuildApplicationCommand(applicationID *Snowflake, guildID *Snowflake, commandID string) error {
+	u := parseRoute(
+		fmt.Sprintf(
+			deleteGuildApplicationCommand,
+			api,
+			applicationID.String(),
+			guildID.String(),
+			commandID,
+		),
+	)
 
 	return fireDeleteRequest(u, nil)
 }
@@ -224,10 +262,20 @@ func DeleteGuildApplicationCommand(applicationID Snowflake, guildID Snowflake, c
 // BulkOverwriteGuildApplicationCommands - Takes a list of application commands, overwriting the existing command list for this application for the targeted guild.
 //
 // Returns 200 and a list of application command objects.
-func (i *Interaction) BulkOverwriteGuildApplicationCommands(payload []ApplicationCommand) ([]ApplicationCommand, error) {
-	u := parseRoute(fmt.Sprintf(bulkOverwriteGuildApplicationCommands, api, i.ApplicationID.String(), i.GuildID.String()))
+func (i *Interaction) BulkOverwriteGuildApplicationCommands(payload []*ApplicationCommand) (
+	[]*ApplicationCommand,
+	error,
+) {
+	u := parseRoute(
+		fmt.Sprintf(
+			bulkOverwriteGuildApplicationCommands,
+			api,
+			i.ApplicationID.String(),
+			i.GuildID.String(),
+		),
+	)
 
-	var commands []ApplicationCommand
+	var commands []*ApplicationCommand
 	err := json.Unmarshal(firePutRequest(u, payload, nil), &commands)
 
 	return commands, err
@@ -236,10 +284,17 @@ func (i *Interaction) BulkOverwriteGuildApplicationCommands(payload []Applicatio
 // GetGuildApplicationCommandPermissions - Fetches command permissions for all commands for your application in a guild.
 //
 // Returns an array of guild application command permissions objects.
-func (i *Interaction) GetGuildApplicationCommandPermissions() ([]GuildApplicationCommandPermissions, error) {
-	u := parseRoute(fmt.Sprintf(getGuildApplicationCommandPermissions, api, i.ApplicationID.String(), i.GuildID.String()))
+func (i *Interaction) GetGuildApplicationCommandPermissions() ([]*GuildApplicationCommandPermissions, error) {
+	u := parseRoute(
+		fmt.Sprintf(
+			getGuildApplicationCommandPermissions,
+			api,
+			i.ApplicationID.String(),
+			i.GuildID.String(),
+		),
+	)
 
-	var commandPerms []GuildApplicationCommandPermissions
+	var commandPerms []*GuildApplicationCommandPermissions
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &commandPerms)
 
 	return commandPerms, err
@@ -249,7 +304,15 @@ func (i *Interaction) GetGuildApplicationCommandPermissions() ([]GuildApplicatio
 //
 // Returns a guild application command permissions object.
 func (i *Interaction) GetApplicationCommandPermissions() (*GuildApplicationCommandPermissions, error) {
-	u := parseRoute(fmt.Sprintf(getApplicationCommandPermissions, api, i.ApplicationID.String(), i.GuildID.String(), i.Data.ID.String()))
+	u := parseRoute(
+		fmt.Sprintf(
+			getApplicationCommandPermissions,
+			api,
+			i.ApplicationID.String(),
+			i.GuildID.String(),
+			i.Data.ID.String(),
+		),
+	)
 
 	var commandPerms *GuildApplicationCommandPermissions
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &commandPerms)
@@ -270,8 +333,19 @@ func (i *Interaction) GetApplicationCommandPermissions() (*GuildApplicationComma
 //	Deleting or renaming a command will permanently delete all permissions for the command
 //
 // TODO: Find the best way to handle the requirement for needing a Bearer Token to use this endpoint
-func (i *Interaction) EditApplicationCommandPermissions(payload EditApplicationCommandPermissionsJSON) (*GuildApplicationCommandPermissions, error) {
-	u := parseRoute(fmt.Sprintf(editApplicationCommandPermissions, api, i.ApplicationID.String(), i.GuildID.String(), i.Data.ID.String()))
+func (i *Interaction) EditApplicationCommandPermissions(payload *EditApplicationCommandPermissionsJSON) (
+	*GuildApplicationCommandPermissions,
+	error,
+) {
+	u := parseRoute(
+		fmt.Sprintf(
+			editApplicationCommandPermissions,
+			api,
+			i.ApplicationID.String(),
+			i.GuildID.String(),
+			i.Data.ID.String(),
+		),
+	)
 
 	var commandPerms *GuildApplicationCommandPermissions
 	err := json.Unmarshal(firePutRequest(u, payload, nil), &commandPerms)
@@ -281,5 +355,5 @@ func (i *Interaction) EditApplicationCommandPermissions(payload EditApplicationC
 
 // EditApplicationCommandPermissionsJSON - JSON payload structure
 type EditApplicationCommandPermissionsJSON struct {
-	Permissions []ApplicationCommandPermissions `json:"permissions"` // the permissions for the command in the guild
+	Permissions []*ApplicationCommandPermissions `json:"permissions"` // the permissions for the command in the guild
 }

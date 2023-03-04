@@ -65,13 +65,13 @@ type StickerItem struct {
 
 // StickerPack - Represents a pack of standard stickers.
 type StickerPack struct {
-	ID             Snowflake `json:"id"`                         // id of the sticker pack
-	Stickers       []Sticker `json:"stickers"`                   // the stickers in the pack
-	Name           string    `json:"name"`                       // name of the sticker pack
-	SkuID          Snowflake `json:"sku_id"`                     // id of the pack's SKU
-	CoverStickerID Snowflake `json:"cover_sticker_id,omitempty"` // id of a sticker in the pack which is shown as the pack's icon
-	Description    string    `json:"description"`                // description of the sticker pack
-	BannerAssetID  Snowflake `json:"banner_asset_id,omitempty"`  // id of the sticker pack's banner image
+	ID             Snowflake  `json:"id"`                         // id of the sticker pack
+	Stickers       []*Sticker `json:"stickers"`                   // the stickers in the pack
+	Name           string     `json:"name"`                       // name of the sticker pack
+	SkuID          Snowflake  `json:"sku_id"`                     // id of the pack's SKU
+	CoverStickerID Snowflake  `json:"cover_sticker_id,omitempty"` // id of a sticker in the pack which is shown as the pack's icon
+	Description    string     `json:"description"`                // description of the sticker pack
+	BannerAssetID  Snowflake  `json:"banner_asset_id,omitempty"`  // id of the sticker pack's banner image
 }
 
 // GetSticker - Returns a sticker object for the given sticker ID.
@@ -98,16 +98,16 @@ func ListNitroStickerPacks() (*ListNitroStickerPacksResponse, error) {
 
 // ListNitroStickerPacksResponse - JSON response
 type ListNitroStickerPacksResponse struct {
-	StickerPacks []StickerPack `json:"sticker_packs"`
+	StickerPacks []*StickerPack `json:"sticker_packs"`
 }
 
 // ListGuildStickers - Returns an array of sticker objects for the given guild.
 //
 // Includes user fields if the bot has the ManageEmojisAndStickers permission.
-func (g *Guild) ListGuildStickers() ([]Sticker, error) {
+func (g *Guild) ListGuildStickers() ([]*Sticker, error) {
 	u := parseRoute(fmt.Sprintf(listGuildStickers, api, g.ID.String()))
 
-	var stickers []Sticker
+	var stickers []*Sticker
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &stickers)
 
 	return stickers, err

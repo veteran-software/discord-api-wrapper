@@ -19,7 +19,8 @@ package oauth2
 import (
 	"net/url"
 
-	"github.com/veteran-software/discord-api-wrapper/logging"
+	"github.com/veteran-software/discord-api-wrapper/v10/logging"
+	"github.com/veteran-software/discord-api-wrapper/v10/utilities"
 )
 
 // BaseAuthorizationURL - Base authorization URL
@@ -28,7 +29,7 @@ import (
 func BaseAuthorizationURL() *url.URL {
 	u, err := url.Parse("https://discord.com/api/oauth2/authorize")
 	if err != nil {
-		logging.Errorln(err)
+		logging.Errorln(utilities.FuncName(), err)
 	}
 
 	return u
@@ -40,7 +41,7 @@ func BaseAuthorizationURL() *url.URL {
 func TokenURL() *url.URL {
 	u, err := url.Parse("https://discord.com/api/oauth2/token")
 	if err != nil {
-		logging.Errorln(err)
+		logging.Errorln(utilities.FuncName(), err)
 	}
 
 	return u
@@ -52,7 +53,7 @@ func TokenURL() *url.URL {
 func TokenRevocationURL() *url.URL {
 	u, err := url.Parse("https://discord.com/api/oauth2/token/revoke")
 	if err != nil {
-		logging.Errorln(err)
+		logging.Errorln(utilities.FuncName(), err)
 	}
 
 	return u
