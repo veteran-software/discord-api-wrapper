@@ -6,6 +6,7 @@ require (
 	github.com/gojek/heimdall/v7 v7.0.2
 	github.com/sirupsen/logrus v1.9.0
 	github.com/t-tomalak/logrus-easy-formatter v0.0.0-20190827215021-c074f06c5816
+	github.com/veteran-software/discord-api-wrapper/v10 v10.0.16-REST
 	github.com/vincent-petithory/dataurl v1.0.0
 )
 
