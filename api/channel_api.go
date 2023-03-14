@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Veteran Software
+ * Copyright (c) 2022-2023. Veteran Software
  *
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
@@ -47,9 +47,9 @@ func (c *Channel) String() string {
 		chanType = "DM:"
 	case GroupDM:
 		chanType = "GDM:"
-	case GuildNews:
+	case GuildAnnouncement:
 		chanType = "GNC:"
-	case GuildNewsThread:
+	case GuildAnnouncementThread:
 		chanType = "GNT:"
 	case GuildPublicThread:
 		chanType = "GPuT:"

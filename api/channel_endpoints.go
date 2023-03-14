@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Veteran Software
+ * Copyright (c) 2022-2023. Veteran Software
  *
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
@@ -22,6 +22,20 @@ import (
 	"strconv"
 	"time"
 )
+
+// GetChannel - Get a Channel by ID. Returns a Channel object. If the channel is a thread, a thread member object is included in the returned result.
+//
+//goland:noinspection GoUnusedExportedFunction
+func GetChannel(channelID *Snowflake) (*Channel, error) {
+	u := parseRoute(fmt.Sprintf(getChannel, api, channelID.String()))
+
+	var c *Channel
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &c)
+
+	return c, err
+}
+
+// TODO: The rest of the channel endpoints
 
 // ListPrivateArchivedThreads - Returns archived threads in the channel that are of type GuildPrivateThread.
 //

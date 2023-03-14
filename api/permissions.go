@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Veteran Software
+ * Copyright (c) 2022-2023. Veteran Software
  *
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
@@ -18,6 +18,8 @@ package api
 
 import (
 	"strconv"
+
+	log "github.com/veteran-software/nowlive-logging"
 )
 
 // Permission - Permissions in Discord are a way to limit and grant certain abilities to users.
@@ -72,89 +74,625 @@ const (
 	CreatePrivateThreads    Permission = 1 << 36 // Allows for creating private threads
 	UseExternalStickers     Permission = 1 << 37 // Allows the usage of custom stickers from other servers
 	SendMessagesInThreads   Permission = 1 << 38 // Allows for sending messages in threads
-	StartEmbeddedActivities Permission = 1 << 39 // Allows for launching activities (applications with the EMBEDDED flag) in a voice channel
+	UseEmbeddedActivities   Permission = 1 << 39 // Allows for launching activities (applications with the EMBEDDED flag) in a voice channel
 	ModerateMembers         Permission = 1 << 40 // Allows for timing out users to prevent them from sending or reacting to messages in chat and threads, and from speaking in voice and stage channels
 )
 
-// HasAdmin checks to see if the bot has admin on the channel in question
-//
-//goland:noinspection GoUnusedExportedFunction
-func HasAdmin(p Permission) bool {
-	return p&Administrator == Administrator
-}
+/*
+Process all relevant permissions and return the correct effective permissions according to Discord's permissions hierarchy
 
-// CanManageWebhooks - checks for this permission
-//
-//goland:noinspection GoUnusedExportedFunction
-func CanManageWebhooks(channel *Channel) bool {
-	return rawPerms(channel)&ManageWebhooks == ManageWebhooks
-}
+    1. Base permissions given to @everyone are applied at a guild level
+    2. Permissions allowed to a user by their roles are applied at a guild level
+    3. Overwrites that deny permissions for @everyone are applied at a channel level
+    4. Overwrites that allow permissions for @everyone are applied at a channel level
+    5. Overwrites that deny permissions for specific roles are applied at a channel level
+    6. Overwrites that allow permissions for specific roles are applied at a channel level
+    7. Member-specific overwrites that deny permissions are applied at a channel level
+    8. Member-specific overwrites that allow permissions are applied at a channel level
+*/
 
-// CanManageRoles - checks for this permission
-//
-//goland:noinspection GoUnusedExportedFunction
-func CanManageRoles(channel *Channel) bool {
-	return rawPerms(channel)&ManageRoles == ManageRoles
-}
+// computeBasePermissions = computer the base guild level permissions
+func computeBasePermissions(guild *Guild, member *GuildMember) Permission {
+	if guild.OwnerID == member.User.ID {
+		return Administrator
+	}
 
-// CanUseExternalEmojis - checks for this permission
-//
-//goland:noinspection GoUnusedExportedFunction
-func CanUseExternalEmojis(channel *Channel) bool {
-	return rawPerms(channel)&UseExternalEmojis == UseExternalEmojis
-}
+	var everyone *Role
+	for _, role := range guild.Roles {
+		if role.ID == guild.ID {
+			everyone = role
+		}
+	}
 
-// CanMentionEveryone - checks for this permission
-//
-//goland:noinspection GoUnusedExportedFunction
-func CanMentionEveryone(channel *Channel) bool {
-	return rawPerms(channel)&MentionEveryone == MentionEveryone
-}
-
-// CanViewChannel - checks for this permission
-func CanViewChannel(channel *Channel) bool {
-	return rawPerms(channel)&ViewChannel == ViewChannel
-}
-
-// CanReadMessageHistory - checks for this permission
-func CanReadMessageHistory(channel *Channel) bool {
-	return rawPerms(channel)&ReadMessageHistory == ReadMessageHistory
-}
-
-// CanEmbedLinks - checks for this permission
-func CanEmbedLinks(channel *Channel) bool {
-	return rawPerms(channel)&EmbedLinks == EmbedLinks
-}
-
-// CanManageMessages - checks for this permission
-func CanManageMessages(channel *Channel) bool {
-	return rawPerms(channel)&ManageMessages == ManageMessages
-}
-
-// CanSendMessages - checks for this permission
-func CanSendMessages(channel *Channel) bool {
-	return rawPerms(channel)&SendMessages == SendMessages
-}
-
-func rawPerms(channel *Channel) Permission {
-	i, err := strconv.Atoi(channel.Permissions)
-	if err != nil {
+	if everyone == nil {
 		return 0
 	}
 
-	return Permission(i)
+	permissions := everyone.Permissions
+
+	for _, role := range member.Roles {
+		if r, ok := memberHasRole(role, guild.Roles); ok {
+			permissions |= r.Permissions
+		}
+	}
+
+	if permissions&Administrator == Administrator {
+		return Administrator
+	}
+
+	return permissions
 }
 
-// CanAnnounce
-// Deprecated: helper function for checking bas permissions for sending announcements
+func getOverwrite(channel *Channel, id *Snowflake, pType PermissionType) *Overwrite {
+	for _, overwrite := range channel.PermissionOverwrites {
+		if overwrite.Type == pType && overwrite.ID == *id {
+			return overwrite
+		}
+	}
+
+	return nil
+}
+
+// memberHasRole - Iterate through all the guild roles and return the role when it (if) is found
+func memberHasRole(roleID *Snowflake, guildRoles []*Role) (*Role, bool) {
+	for _, role := range guildRoles {
+		if role.ID == *roleID {
+			return role, true
+		}
+	}
+
+	return nil, false
+}
+
+func parseStringPermission(perm string) uint64 {
+	p, err := strconv.ParseUint(perm, 10, 64)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return 0
+	}
+
+	return p
+}
+
+// computeOverwrites - Compute permissions based on the above hierarchy
+func computeOverwrites(basePermissions Permission, member *GuildMember, channel *Channel) Permission {
+	if basePermissions&Administrator == Administrator {
+		return Administrator
+	}
+
+	permissions := basePermissions
+	overwriteEveryone := getOverwrite(channel, &channel.GuildID, PermissionRole)
+	if overwriteEveryone == nil {
+		// Do something here
+	} else {
+		permissions &= ^Permission(parseStringPermission(overwriteEveryone.Deny))
+		permissions |= Permission(parseStringPermission(overwriteEveryone.Allow))
+	}
+
+	var allow uint64
+	var deny uint64
+	for _, role := range member.Roles {
+		overwrite := getOverwrite(channel, role, PermissionRole)
+		if overwrite != nil {
+			allow |= parseStringPermission(overwrite.Allow)
+			deny |= parseStringPermission(overwrite.Deny)
+		}
+	}
+
+	permissions &= ^Permission(deny)
+	permissions |= ^Permission(allow)
+
+	for _, role := range member.Roles {
+		overwrite := getOverwrite(channel, role, PermissionMember)
+		if overwrite != nil {
+			permissions &= ^Permission(parseStringPermission(overwrite.Deny))
+			permissions |= Permission(parseStringPermission(overwrite.Allow))
+		}
+	}
+
+	return permissions
+}
+
+func computePermissions(member *GuildMember, channel *Channel) Permission {
+	g := Guild{ID: channel.GuildID}
+	guild, err := g.GetGuild(nil)
+	if err != nil {
+		return 0
+	}
+	basePerms := computeBasePermissions(guild, member)
+
+	return computeOverwrites(basePerms, member, channel)
+}
+
+// CanCreateInstantInvite - Allows creation of instant invites
 //
 //goland:noinspection GoUnusedExportedFunction
-func CanAnnounce(c *Channel) bool {
-	if CanEmbedLinks(c) && CanManageMessages(c) && CanSendMessages(c) && CanReadMessageHistory(c) && CanViewChannel(c) {
-		return true
+func CanCreateInstantInvite(member *GuildMember, channel *Channel) bool {
+	if isTextChannel(channel) || channel.Type == GuildVoice || channel.Type == GuildStageVoice {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&CreateInstantInvite == CreateInstantInvite
 	}
 
 	return false
+}
+
+// CanKickMembers - Allows kicking members
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanKickMembers(member *GuildMember, channel *Channel) bool {
+	permissions := computePermissions(member, channel)
+
+	return permissions&Administrator == Administrator || permissions&KickMembers == KickMembers
+}
+
+// CanBanMembers - Allows banning members
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanBanMembers(member *GuildMember, channel *Channel) bool {
+	permissions := computePermissions(member, channel)
+
+	return permissions&Administrator == Administrator || permissions&BanMembers == BanMembers
+}
+
+// CanAdminister - Allows all permissions and bypasses channel permission overwrites
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanAdminister(member *GuildMember, channel *Channel) bool {
+	return computePermissions(member, channel)&Administrator == Administrator
+}
+
+// CanManageChannels - Allows management and editing of channels
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanManageChannels(member *GuildMember, channel *Channel) bool {
+	if isTextChannel(channel) || channel.Type == GuildVoice || channel.Type == GuildStageVoice {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&ManageChannels == ManageChannels
+	}
+
+	return false
+}
+
+// CanManageGuild - Allows management and editing of the guild
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanManageGuild(member *GuildMember, channel *Channel) bool {
+	permissions := computePermissions(member, channel)
+
+	return permissions&Administrator == Administrator || permissions&ManageGuild == ManageGuild
+}
+
+// CanAddReactions - Allows for the addition of reactions to messages
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanAddReactions(member *GuildMember, channel *Channel) bool {
+	if isTextChannel(channel) || channel.Type == GuildVoice || channel.Type == GuildStageVoice {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&AddReactions == AddReactions
+	}
+
+	return false
+}
+
+// CanViewAuditLog - Allows for viewing of audit logs
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanViewAuditLog(member *GuildMember, channel *Channel) bool {
+	permissions := computePermissions(member, channel)
+
+	return permissions&Administrator == Administrator || permissions&ViewAuditLog == ViewAuditLog
+}
+
+// IsPrioritySpeaker - Allows for using priority speaker in a voice channel
+//
+//goland:noinspection GoUnusedExportedFunction
+func IsPrioritySpeaker(member *GuildMember, channel *Channel) bool {
+	if channel.Type == GuildVoice {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&PrioritySpeaker == PrioritySpeaker
+	}
+
+	return false
+}
+
+// CanStream - Allows the user to go live
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanStream(member *GuildMember, channel *Channel) bool {
+	if channel.Type == GuildVoice || channel.Type == GuildStageVoice {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&Stream == Stream
+	}
+
+	return false
+}
+
+// CanViewChannel - Allows guild members to view a channel, which includes reading messages in text channels and joining voice channels
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanViewChannel(member *GuildMember, channel *Channel) bool {
+	if isTextChannel(channel) || channel.Type == GuildVoice || channel.Type == GuildStageVoice {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&ViewChannel == ViewChannel
+	}
+
+	return false
+}
+
+// CanSendMessages - Allows for sending messages in a channel and creating threads in a forum (does not allow sending messages in threads)
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanSendMessages(member *GuildMember, channel *Channel) bool {
+	if isTextChannel(channel) || channel.Type == GuildVoice || channel.Type == GuildStageVoice {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&SendMessages == SendMessages
+	}
+
+	return false
+}
+
+// CanSendTtsMessages - Allows for sending of /tts messages
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanSendTtsMessages(member *GuildMember, channel *Channel) bool {
+	if isTextChannel(channel) || channel.Type == GuildVoice || channel.Type == GuildStageVoice {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&SendTtsMessages == SendTtsMessages
+	}
+
+	return false
+}
+
+// CanManageMessages - Allows for deletion of other users messages
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanManageMessages(member *GuildMember, channel *Channel) bool {
+	if isTextChannel(channel) || channel.Type == GuildVoice || channel.Type == GuildStageVoice {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&ManageMessages == ManageMessages
+	}
+
+	return false
+}
+
+// CanEmbedLinks - Links sent by users with this permission will be auto-embedded
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanEmbedLinks(member *GuildMember, channel *Channel) bool {
+	if isTextChannel(channel) || channel.Type == GuildVoice || channel.Type == GuildStageVoice {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&EmbedLinks == EmbedLinks
+	}
+
+	return false
+}
+
+// CanAttachFiles - Allows for uploading images and files
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanAttachFiles(member *GuildMember, channel *Channel) bool {
+	if isTextChannel(channel) || channel.Type == GuildVoice || channel.Type == GuildStageVoice {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&AttachFiles == AttachFiles
+	}
+
+	return false
+}
+
+// CanReadMessageHistory - Allows for reading of message history
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanReadMessageHistory(member *GuildMember, channel *Channel) bool {
+	if isTextChannel(channel) || channel.Type == GuildVoice || channel.Type == GuildStageVoice {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&ReadMessageHistory == ReadMessageHistory
+	}
+
+	return false
+}
+
+// CanMentionEveryone - Allows for using the @everyone tag to notify all users in a channel, and the @here tag to notify all online users in a channel
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanMentionEveryone(member *GuildMember, channel *Channel) bool {
+	if isTextChannel(channel) || channel.Type == GuildVoice || channel.Type == GuildStageVoice {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&MentionEveryone == MentionEveryone
+	}
+
+	return false
+}
+
+// CanUseExternalEmojis - Allows the usage of custom emojis from other servers
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanUseExternalEmojis(member *GuildMember, channel *Channel) bool {
+	if isTextChannel(channel) || channel.Type == GuildVoice || channel.Type == GuildStageVoice {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&UseExternalEmojis == UseExternalEmojis
+	}
+
+	return false
+}
+
+// CanViewGuildInsights - Allows for viewing guild insights
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanViewGuildInsights(member *GuildMember, channel *Channel) bool {
+	permissions := computePermissions(member, channel)
+
+	return permissions&Administrator == Administrator || permissions&ViewGuildInsights == ViewGuildInsights
+}
+
+// CanConnect - Allows for joining of a voice channel
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanConnect(member *GuildMember, channel *Channel) bool {
+	if channel.Type == GuildVoice || channel.Type == GuildStageVoice {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&Connect == Connect
+	}
+
+	return false
+}
+
+// CanSpeak - Allows for speaking in a voice channel
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanSpeak(member *GuildMember, channel *Channel) bool {
+	if channel.Type == GuildVoice {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&Speak == Speak
+	}
+
+	return false
+}
+
+// CanMuteMembers - Allows for muting members in a voice channel
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanMuteMembers(member *GuildMember, channel *Channel) bool {
+	if channel.Type == GuildVoice || channel.Type == GuildStageVoice {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&MuteMembers == MuteMembers
+	}
+
+	return false
+}
+
+// CanDeafenMembers - Allows for deafening of members in a voice channel
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanDeafenMembers(member *GuildMember, channel *Channel) bool {
+	if channel.Type == GuildVoice {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&DeafenMembers == DeafenMembers
+	}
+
+	return false
+}
+
+// CanMoveMembers - Allows for moving of members between voice channels
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanMoveMembers(member *GuildMember, channel *Channel) bool {
+	if channel.Type == GuildVoice || channel.Type == GuildStageVoice {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&MoveMembers == MoveMembers
+	}
+
+	return false
+}
+
+// CanUseVoiceActivity - Allows for using voice-activity-detection in a voice channel
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanUseVoiceActivity(member *GuildMember, channel *Channel) bool {
+	if channel.Type == GuildVoice {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&UseVoiceActivity == UseVoiceActivity
+	}
+
+	return false
+}
+
+// CanChangeNickname - Allows for modification of own nickname
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanChangeNickname(member *GuildMember, channel *Channel) bool {
+	permissions := computePermissions(member, channel)
+
+	return permissions&Administrator == Administrator || permissions&ChangeNickname == ChangeNickname
+}
+
+// CanManageNicknames - Allows for modification of other users nicknames
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanManageNicknames(member *GuildMember, channel *Channel) bool {
+	permissions := computePermissions(member, channel)
+
+	return permissions&Administrator == Administrator || permissions&ManageNicknames == ManageNicknames
+}
+
+// CanManageRoles - Allows management and editing of roles
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanManageRoles(member *GuildMember, channel *Channel) bool {
+	if isTextChannel(channel) || channel.Type == GuildVoice || channel.Type == GuildStageVoice {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&ManageRoles == ManageRoles
+	}
+
+	return false
+}
+
+// CanManageWebhooks - Allows management and editing of webhooks
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanManageWebhooks(member *GuildMember, channel *Channel) bool {
+	if isTextChannel(channel) || channel.Type == GuildVoice || channel.Type == GuildStageVoice {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&ManageWebhooks == ManageWebhooks
+	}
+
+	return false
+}
+
+// CanManageEmojisAndStickers - Allows management and editing of emojis and stickers
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanManageEmojisAndStickers(member *GuildMember, channel *Channel) bool {
+	permissions := computePermissions(member, channel)
+
+	return permissions&Administrator == Administrator || permissions&ManageEmojisAndStickers == ManageEmojisAndStickers
+}
+
+// CanUseApplicationCommands - Allows members to use application commands, including slash commands and context menu commands.
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanUseApplicationCommands(member *GuildMember, channel *Channel) bool {
+	if isTextChannel(channel) || channel.Type == GuildVoice || channel.Type == GuildStageVoice {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&UseApplicationCommands == UseApplicationCommands
+	}
+
+	return false
+}
+
+// CanRequestToSpeak - Allows for requesting to speak in stage channels. (This permission is under active development and may be changed or removed.)
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanRequestToSpeak(member *GuildMember, channel *Channel) bool {
+	if channel.Type == GuildStageVoice {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&RequestToSpeak == RequestToSpeak
+	}
+
+	return false
+}
+
+// CanManageEvents - Allows for creating, editing, and deleting scheduled events
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanManageEvents(member *GuildMember, channel *Channel) bool {
+	if channel.Type == GuildVoice || channel.Type == GuildStageVoice {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&ManageEvents == ManageEvents
+	}
+
+	return false
+}
+
+// CanManageThreads - Allows for deleting and archiving threads, and viewing all private threads
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanManageThreads(member *GuildMember, channel *Channel) bool {
+	if isTextChannel(channel) {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&ManageThreads == ManageThreads
+	}
+
+	return false
+}
+
+// CanCreatePublicThreads - Allows for creating public and announcement threads
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanCreatePublicThreads(member *GuildMember, channel *Channel) bool {
+	if isTextChannel(channel) {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&CreatePublicThreads == CreatePublicThreads
+	}
+
+	return false
+}
+
+// CanCreatePrivateThreads - Allows for creating private threads
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanCreatePrivateThreads(member *GuildMember, channel *Channel) bool {
+	if isTextChannel(channel) {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&CreatePrivateThreads == CreatePrivateThreads
+	}
+
+	return false
+}
+
+// CanUseExternalStickers - Allows the usage of custom stickers from other servers
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanUseExternalStickers(member *GuildMember, channel *Channel) bool {
+	if isTextChannel(channel) || channel.Type == GuildVoice || channel.Type == GuildStageVoice {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&UseExternalStickers == UseExternalStickers
+	}
+
+	return false
+}
+
+// CanSendMessagesInThreads - Allows for sending messages in threads
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanSendMessagesInThreads(member *GuildMember, channel *Channel) bool {
+	if isTextChannel(channel) {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&SendMessagesInThreads == SendMessagesInThreads
+	}
+
+	return false
+}
+
+// CanUseEmbeddedActivities - Allows for using Activities (applications with the Embedded flag) in a voice channel
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanUseEmbeddedActivities(member *GuildMember, channel *Channel) bool {
+	if channel.Type == GuildVoice {
+		permissions := computePermissions(member, channel)
+
+		return permissions&Administrator == Administrator || permissions&UseEmbeddedActivities == UseEmbeddedActivities
+	}
+
+	return false
+}
+
+// CanModerateMembers - Allows for timing out users to prevent them from sending or reacting to messages in chat and threads, and from speaking in voice and stage channels
+//
+//goland:noinspection GoUnusedExportedFunction
+func CanModerateMembers(member *GuildMember, channel *Channel) bool {
+	permissions := computePermissions(member, channel)
+
+	return permissions&Administrator == Administrator || permissions&ModerateMembers == ModerateMembers
 }
 
 // Role - Roles represent a set of permissions attached to a group of users.

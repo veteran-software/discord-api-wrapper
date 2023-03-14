@@ -148,12 +148,12 @@ type SystemChannelFlags int
 
 //goland:noinspection GoUnusedConst
 const (
-	SuppressJoinNotifications                            SystemChannelFlags = 1 << 0 // Suppress member join notifications
-	SuppressPremiumSubscriptions                         SystemChannelFlags = 1 << 1 // Suppress server boost notifications
-	SuppressGuildReminderNotifications                   SystemChannelFlags = 1 << 2 // Suppress server setup tips
-	SuppressJoinNotificationReplies                      SystemChannelFlags = 1 << 3 // Hide member join sticker reply buttons
-	SuppressRoleSubscriptionPurchaseNotifications        SystemChannelFlags = 1 << 4 // Suppress role subscription purchase and renewal notifications
-	SuppresssRoleSubscriptionPurchaseNotificationReplies SystemChannelFlags = 1 << 5 // Hide role subscription sticker reply buttons
+	SuppressJoinNotifications                           SystemChannelFlags = 1 << 0 // Suppress member join notifications
+	SuppressPremiumSubscriptions                        SystemChannelFlags = 1 << 1 // Suppress server boost notifications
+	SuppressGuildReminderNotifications                  SystemChannelFlags = 1 << 2 // Suppress server setup tips
+	SuppressJoinNotificationReplies                     SystemChannelFlags = 1 << 3 // Hide member join sticker reply buttons
+	SuppressRoleSubscriptionPurchaseNotifications       SystemChannelFlags = 1 << 4 // Suppress role subscription purchase and renewal notifications
+	SuppressRoleSubscriptionPurchaseNotificationReplies SystemChannelFlags = 1 << 5 // Hide role subscription sticker reply buttons
 )
 
 // GuildFeatures - enabled guild features

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Veteran Software
+ * Copyright (c) 2022-2023. Veteran Software
  *
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
@@ -27,33 +27,41 @@ import (
 
 // Channel - Represents a guild or DM channel within Discord.
 type Channel struct {
-	ID                         Snowflake      `json:"id"`                                      // the id of this channel
-	Type                       ChannelType    `json:"type"`                                    // the ChannelType
-	GuildID                    Snowflake      `json:"guild_id,omitempty"`                      // the id of the guild (may be missing for some channel objects received over gateway guild dispatches)
-	Position                   int            `json:"position,omitempty"`                      // sorting position of the channel
-	PermissionOverwrites       []*Overwrite   `json:"permission_overwrites,omitempty"`         // explicit permission overwrites for members and roles
-	Name                       string         `json:"name,omitempty"`                          // the name of the channel (1-100 characters)
-	Topic                      *string        `json:"topic,omitempty"`                         // the channel topic (0-1024 characters)
-	Nsfw                       bool           `json:"nsfw,omitempty"`                          // whether the channel is nsfw
-	LastMessageID              *Snowflake     `json:"last_message_id,omitempty"`               // the id of the last message sent in this channel (may not point to an existing or valid message)
-	Bitrate                    int64          `json:"bitrate,omitempty"`                       // the bitrate (in bits) of the voice channel
-	UserLimit                  int64          `json:"user_limit,omitempty"`                    // the user limit of the voice channel
-	RateLimitPerUser           int64          `json:"rate_limit_per_user,omitempty"`           // amount of seconds a user has to wait before sending another Message (0-21600); bots, as well as users with the permission ManageMessages or ManageChannels, are unaffected
-	Recipients                 []*User        `json:"recipients,omitempty"`                    // the recipients of the DM
-	Icon                       *string        `json:"icon,omitempty"`                          // icon hash of the group DM
-	OwnerID                    Snowflake      `json:"owner_id,omitempty"`                      // id of the creator of the group DM or thread
-	ApplicationID              Snowflake      `json:"application_id,omitempty"`                // application id of the group DM creator if it is bot-created
-	ParentID                   *Snowflake     `json:"parent_id,omitempty"`                     // for guild channels: id of the parent category for a channel (each parent category can contain up to 50 channels), for threads: id of the text channel this thread was created
-	LastPinTimestamp           *time.Time     `json:"last_pin_timestamp,omitempty"`            // when the last pinned message was pinned. This may be null in events such as GUILD_CREATE when a message is not pinned.
-	RtcRegion                  *string        `json:"rtc_region,omitempty"`                    // voice region id for the voice channel, automatic when set to null
-	VideoQualityMode           int64          `json:"video_quality_mode,omitempty"`            // the camera video quality mode of the voice channel, 1 when not present
-	MessageCount               int64          `json:"message_count,omitempty"`                 // an approximate count of messages in a thread, stops counting at 50
-	MemberCount                int64          `json:"member_count,omitempty"`                  // an approximate count of users in a thread, stops counting at 50
-	ThreadMetadata             ThreadMetadata `json:"thread_metadata,omitempty"`               // thread-specific fields not needed by other channels
-	Member                     ThreadMember   `json:"member,omitempty"`                        // ThreadMember for the current User, if they have joined the thread, only included on certain API endpoints
-	DefaultAutoArchiveDuration int            `json:"default_auto_archive_duration,omitempty"` // default duration that the clients (not the API) will use for newly created threads, in minutes, to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080
-	Permissions                string         `json:"permissions"`                             // computed permissions for the invoking user in the channel, including overwrites, only included when part of the resolved data received on a slash command interaction
-	Flags                      ChannelFlag    `json:"flags,omitempty"`                         // channel flags combined as a bitfield
+	ID                            Snowflake        `json:"id"`                                           // the id of this channel
+	Type                          ChannelType      `json:"type"`                                         // the ChannelType
+	GuildID                       Snowflake        `json:"guild_id,omitempty"`                           // the id of the guild (may be missing for some channel objects received over gateway guild dispatches)
+	Position                      int              `json:"position,omitempty"`                           // sorting position of the channel
+	PermissionOverwrites          []*Overwrite     `json:"permission_overwrites,omitempty"`              // explicit permission overwrites for members and roles
+	Name                          string           `json:"name,omitempty"`                               // the name of the channel (1-100 characters)
+	Topic                         *string          `json:"topic,omitempty"`                              // the channel topic (0-1024 characters)
+	Nsfw                          bool             `json:"nsfw,omitempty"`                               // whether the channel is nsfw
+	LastMessageID                 *Snowflake       `json:"last_message_id,omitempty"`                    // the id of the last message sent in this channel (may not point to an existing or valid message)
+	Bitrate                       int64            `json:"bitrate,omitempty"`                            // the bitrate (in bits) of the voice channel
+	UserLimit                     int64            `json:"user_limit,omitempty"`                         // the user limit of the voice channel
+	RateLimitPerUser              int64            `json:"rate_limit_per_user,omitempty"`                // amount of seconds a user has to wait before sending another Message (0-21600); bots, as well as users with the permission ManageMessages or ManageChannels, are unaffected
+	Recipients                    []*User          `json:"recipients,omitempty"`                         // the recipients of the DM
+	Icon                          *string          `json:"icon,omitempty"`                               // icon hash of the group DM
+	OwnerID                       Snowflake        `json:"owner_id,omitempty"`                           // id of the creator of the group DM or thread
+	ApplicationID                 Snowflake        `json:"application_id,omitempty"`                     // application id of the group DM creator if it is bot-created
+	Managed                       bool             `json:"managed,omitempty"`                            // for group DM channels: whether the channel is managed by an application via the gdm.join OAuth2 scope
+	ParentID                      *Snowflake       `json:"parent_id,omitempty"`                          // for guild channels: id of the parent category for a channel (each parent category can contain up to 50 channels), for threads: id of the text channel this thread was created
+	LastPinTimestamp              *time.Time       `json:"last_pin_timestamp,omitempty"`                 // when the last pinned message was pinned. This may be null in events such as GUILD_CREATE when a message is not pinned.
+	RtcRegion                     *string          `json:"rtc_region,omitempty"`                         // voice region id for the voice channel, automatic when set to null
+	VideoQualityMode              int64            `json:"video_quality_mode,omitempty"`                 // the camera video quality mode of the voice channel, 1 when not present
+	MessageCount                  int64            `json:"message_count,omitempty"`                      // an approximate count of messages in a thread, stops counting at 50
+	MemberCount                   int64            `json:"member_count,omitempty"`                       // an approximate count of users in a thread, stops counting at 50
+	ThreadMetadata                ThreadMetadata   `json:"thread_metadata,omitempty"`                    // thread-specific fields not needed by other channels
+	Member                        ThreadMember     `json:"member,omitempty"`                             // ThreadMember for the current User, if they have joined the thread, only included on certain API endpoints
+	DefaultAutoArchiveDuration    int              `json:"default_auto_archive_duration,omitempty"`      // default duration that the clients (not the API) will use for newly created threads, in minutes, to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080
+	Permissions                   string           `json:"permissions"`                                  // computed permissions for the invoking user in the channel, including overwrites, only included when part of the resolved data received on a slash command interaction
+	Flags                         ChannelFlag      `json:"flags,omitempty"`                              // channel flags combined as a bitfield
+	TotalMessagesSent             int64            `json:"total_messages_sent,omitempty"`                // number of messages ever sent in a thread, it's similar to MessageCount on message creation, but will not decrement the number when a message is deleted
+	AvailableTags                 []*ForumTag      `json:"available_tags,omitempty"`                     // the set of tags that can be used in a GuildForum channel
+	AppliedTags                   []*Snowflake     `json:"applied_tags,omitempty"`                       // the IDs of the set of tags that have been applied to a thread in a GuildForum channel
+	DefaultReactionEmoji          *DefaultReaction `json:"default_reaction_emoji,omitempty"`             // the emoji to show in the add reaction button on a thread in a GuildForum channel
+	DefaultThreadRateLimitPerUser uint             `json:"default_thread_rate_limit_per_user,omitempty"` // the initial RateLimitPerUser to set on newly created threads in a channel. this field is copied to the thread at creation time and does not live update.
+	DefaultSortOrder              *SortOrderType   `json:"default_sort_order,omitempty"`                 // the default sort order type used to order posts in GuildForum channels. Defaults to null, which indicates a preferred sort order hasn't been set by a channel admin
+	DefaultForumLayout            *ForumLayoutType `json:"default_forum_layout,omitempty"`               // the default forum layout view used to display posts in GuildForum channels. Defaults to NotSet (0), which indicates a layout view has not been set by a channel admin
 }
 
 // ChannelType - the type of channel
@@ -61,20 +69,24 @@ type ChannelType int
 
 //goland:noinspection SpellCheckingInspection,GoUnusedConst
 const (
-	GuildText          ChannelType = iota     // a text channel within a server
-	DM                                        // a direct message between users
-	GuildVoice                                // a voice channel within a server
-	GroupDM                                   // a direct message between multiple users
-	GuildCategory                             // an organizational category that contains up to 50 channels
-	GuildNews                                 // a channel that users can follow and crosspost into their own server
-	GuildStore                                // a channel in which game developers can sell their game on Discord
-	GuildNewsThread    ChannelType = iota + 3 // a temporary sub-channel within a GuildNews channel
-	GuildPublicThread                         // a temporary sub-channel within a GuildText channel
-	GuildPrivateThread                        // a temporary sub-channel within a GuildText channel that is only viewable by those invited and those with the ManageThreads permission
-	GuildStageVoice                           // a voice channel for hosting events with an audience
-	GuildDirectory                            // the channel in a hub containing the listed servers
-	GuildForum                                // Channel that can only contain threads
+	GuildText               ChannelType = iota     // a text channel within a server
+	DM                                             // a direct message between users
+	GuildVoice                                     // a voice channel within a server
+	GroupDM                                        // a direct message between multiple users
+	GuildCategory                                  // an organizational category that contains up to 50 channels
+	GuildAnnouncement                              // a channel that users can follow and crosspost into their own server (formerly news channels)
+	GuildAnnouncementThread ChannelType = iota + 3 // a temporary sub-channel within a GuildAnnouncement channel
+	GuildPublicThread                              // a temporary sub-channel within a GuildText channel
+	GuildPrivateThread                             // a temporary sub-channel within a GuildText channel that is only viewable by those invited and those with the ManageThreads permission
+	GuildStageVoice                                // a voice channel for hosting events with an audience
+	GuildDirectory                                 // the channel in a hub containing the listed servers
+	GuildForum                                     // Channel that can only contain threads
 )
+
+func isTextChannel(channel *Channel) bool {
+	return channel.Type == GuildText || channel.Type == GuildAnnouncement || channel.Type == GuildAnnouncementThread || channel.Type == GuildPublicThread ||
+		channel.Type == GuildPrivateThread || channel.Type == GuildDirectory || channel.Type == GuildForum
+}
 
 // VideoQualityMode - the camera video quality mode of the voice channel, 1 when not present
 type VideoQualityMode int
@@ -91,7 +103,7 @@ type ChannelFlag int
 //goland:noinspection GoUnusedConst
 const (
 	Pinned     ChannelFlag = 1 << 1 // this thread is pinned to the top of its parent GuildForum channel
-	RequireTag ChannelFlag = 1 << 4 // whether a tag is required to be specified when creating a thread in a GuildForum channel. Tags are specified in the applied_tags field.
+	RequireTag ChannelFlag = 1 << 4 // whether a tag is required to be specified when creating a thread in a GuildForum channel. Tags are specified in the AppliedTags field.
 )
 
 // SortOrderType - the default sort order type used to order posts in GuildForum channels.
@@ -103,42 +115,51 @@ const (
 	CreationDate                        // Sort forum posts by creation time (from most recent to oldest)
 )
 
+// ForumLayoutType - the default forum layout view used to display posts in GuildForum channels.
+type ForumLayoutType int
+
+//goland:noinspection GoUnusedConst
+const (
+	NotSet      ForumLayoutType = iota // No default has been set for forum channel
+	ListView                           // Display posts as a list
+	GalleryView                        // Display posts as a collection of tiles
+)
+
 // Message - Represents a message sent in a channel within Discord.
 //
 //goland:noinspection SpellCheckingInspection
 type Message struct {
-	ID                Snowflake          `json:"id,omitempty"`                 // id of the message
-	ChannelID         Snowflake          `json:"channel_id,omitempty"`         // id of the Channel the message was sent in
-	GuildID           Snowflake          `json:"guild_id,omitempty"`           // id of the Guild the message was sent in
-	Author            User               `json:"author,omitempty"`             // the author of this message (not guaranteed to be a valid user)
-	Member            GuildMember        `json:"member,omitempty"`             // member properties for this message's author
-	Content           string             `json:"content,omitempty"`            // contents of the message
-	Timestamp         time.Time          `json:"timestamp,omitempty"`          // when this message was sent
-	EditedTimestamp   *time.Time         `json:"edited_timestamp,omitempty"`   // when this message was edited (or null if never)
-	TTS               bool               `json:"tts,omitempty"`                // whether this was a TTS message
-	MentionEveryone   bool               `json:"mention_everyone,omitempty"`   // whether this message mentions everyone
-	Mentions          []*User            `json:"mentions,omitempty"`           // users specifically mentioned in the message
-	MentionRoles      []*Snowflake       `json:"mention_roles,omitempty"`      // roles specifically mentioned in this message
-	MentionChannels   []*Channel         `json:"mention_channels,omitempty"`   // channels specifically mentioned in this message
-	Attachments       []*Attachment      `json:"attachments,omitempty"`        // any attached files
-	Embeds            []*Embed           `json:"embeds,omitempty"`             // any embedded content
-	Reactions         []*Reaction        `json:"reactions,omitempty"`          // reactions to the message
-	Nonce             any                `json:"nonce,omitempty"`              // used for validating a message was sent
-	Pinned            bool               `json:"pinned,omitempty"`             // whether this message is pinned
-	WebhookID         Snowflake          `json:"webhook_id,omitempty"`         // if the message is generated by a Webhook, this is the webhook's id
-	Type              MessageType        `json:"type,omitempty"`               // the MessageType
-	Activity          MessageActivity    `json:"activity,omitempty"`           // sent with Rich Presence-related chat embeds
-	Application       Application        `json:"application,omitempty"`        // sent with Rich Presence-related chat embeds
-	ApplicationID     Snowflake          `json:"application_id,omitempty"`     // if the message is an Interaction or application-owned webhook, this is the id of the application
-	MessageReference  MessageReference   `json:"message_reference,omitempty"`  // data showing the source of a crosspost, channel follow add, pin, or reply message
-	Flags             MessageFlags       `json:"flags,omitempty"`              // MessageFlags combined as a bitfield
-	ReferencedMessage *Message           `json:"referenced_message,omitempty"` // the message associated with the MessageReference
-	Interaction       MessageInteraction `json:"interaction,omitempty"`        // sent if the message is a response to an Interaction
-	Thread            Channel            `json:"thread,omitempty"`             // the thread that was started from this message, includes ThreadMember object
-	Components        []*Component       `json:"components,omitempty"`         // sent if the message contains components like buttons, action rows, or other interactive components
-	StickerItems      []string           `json:"sticker_items,omitempty"`      // sent if the message contains stickers
-	Stickers          []string           `json:"stickers,omitempty"`           // Deprecated: the stickers sent with the message
-	Position          int                `json:"position,omitempty"`           // 	A generally increasing integer (there may be gaps or duplicates) that represents the approximate position of the message in a thread, it can be used to estimate the relative position of the message in a thread in company with total_message_sent on parent thread
+	ID                   Snowflake          `json:"id,omitempty"`                     // id of the message
+	ChannelID            Snowflake          `json:"channel_id,omitempty"`             // id of the Channel the message was sent in
+	Author               User               `json:"author,omitempty"`                 // the author of this message (not guaranteed to be a valid user)
+	Content              string             `json:"content,omitempty"`                // contents of the message
+	Timestamp            time.Time          `json:"timestamp,omitempty"`              // when this message was sent
+	EditedTimestamp      *time.Time         `json:"edited_timestamp,omitempty"`       // when this message was edited (or null if never)
+	TTS                  bool               `json:"tts,omitempty"`                    // whether this was a TTS message
+	MentionEveryone      bool               `json:"mention_everyone,omitempty"`       // whether this message mentions everyone
+	Mentions             []*User            `json:"mentions,omitempty"`               // users specifically mentioned in the message
+	MentionRoles         []*Snowflake       `json:"mention_roles,omitempty"`          // roles specifically mentioned in this message
+	MentionChannels      []*Channel         `json:"mention_channels,omitempty"`       // channels specifically mentioned in this message
+	Attachments          []*Attachment      `json:"attachments,omitempty"`            // any attached files
+	Embeds               []*Embed           `json:"embeds,omitempty"`                 // any embedded content
+	Reactions            []*Reaction        `json:"reactions,omitempty"`              // reactions to the message
+	Nonce                any                `json:"nonce,omitempty"`                  // used for validating a message was sent
+	Pinned               bool               `json:"pinned,omitempty"`                 // whether this message is pinned
+	WebhookID            Snowflake          `json:"webhook_id,omitempty"`             // if the message is generated by a Webhook, this is the webhook's id
+	Type                 MessageType        `json:"type,omitempty"`                   // the MessageType
+	Activity             MessageActivity    `json:"activity,omitempty"`               // sent with Rich Presence-related chat embeds
+	Application          Application        `json:"application,omitempty"`            // sent with Rich Presence-related chat embeds
+	ApplicationID        Snowflake          `json:"application_id,omitempty"`         // if the message is an Interaction or application-owned webhook, this is the id of the application
+	MessageReference     MessageReference   `json:"message_reference,omitempty"`      // data showing the source of a crosspost, channel follow add, pin, or reply message
+	Flags                MessageFlags       `json:"flags,omitempty"`                  // MessageFlags combined as a bitfield
+	ReferencedMessage    *Message           `json:"referenced_message,omitempty"`     // the message associated with the MessageReference
+	Interaction          MessageInteraction `json:"interaction,omitempty"`            // sent if the message is a response to an Interaction
+	Thread               Channel            `json:"thread,omitempty"`                 // the thread that was started from this message, includes ThreadMember object
+	Components           []*Component       `json:"components,omitempty"`             // sent if the message contains components like buttons, action rows, or other interactive components
+	StickerItems         []string           `json:"sticker_items,omitempty"`          // sent if the message contains stickers
+	Stickers             []string           `json:"stickers,omitempty"`               // Deprecated: the stickers sent with the message
+	Position             int                `json:"position,omitempty"`               // A generally increasing integer (there may be gaps or duplicates) that represents the approximate position of the message in a thread, it can be used to estimate the relative position of the message in a thread in company with total_message_sent on parent thread
+	RoleSubscriptionData any                `json:"role_subscription_data,omitempty"` // data of the role subscription purchase or renewal that prompted this RoleSubscriptionPurchase message
 }
 
 // MessageType - type of message
@@ -153,7 +174,7 @@ const (
 	ChannelNameChange                                              // CHANNEL_NAME_CHANGE
 	ChannelIconChange                                              // CHANNEL_ICON_CHANGE
 	ChannelPinnedMessage                                           // CHANNEL_PINNED_MESSAGE
-	GuildMemberJoin                                                // GUILD_MEMBER_JOIN
+	UserJoin                                                       // USER_JOIN
 	GuildBoost                                                     // GUILD_BOOST
 	GuildBoostTier1                                                // GUILD_BOOST_TIER_1
 	GuildBoostTier2                                                // GUILD_BOOST_TIER_2
@@ -170,12 +191,19 @@ const (
 	GuildInviteReminder                                            // GUILD_INVITE_REMINDER
 	ContextMenuCommand                                             // CONTEXT_MENU_COMMAND
 	AutoModerationAction                                           // AUTO_MODERATION_ACTION
+	RoleSubscriptionPurchase                                       // ROLE_SUBSCRIPTION_PURCHASE
+	InteractionPremiumUpsell                                       // INTERACTION_PREMIUM_UPSELL
+	StageStart                                                     // STAGE_START
+	StageEnd                                                       // STAGE_END
+	StageSpeaker                                                   // STAGE_SPEAKER
+	StageTopic                              MessageType = iota + 2 // STAGE_TOPIC
+	GuildApplicationPremiumSubscription                            // GUILD_APPLICATION_PREMIUM_SUBSCRIPTION
 )
 
 // MessageActivity - sent with Rich Presence-related chat embeds
 type MessageActivity struct {
-	Type    MessageActivityType `json:"type"`     // type of message activity
-	PartyID string              `json:"party_id"` // party_id from a Rich Presence event
+	Type    MessageActivityType `json:"type"`               // type of message activity
+	PartyID string              `json:"party_id,omitempty"` // party_id from a Rich Presence event
 }
 
 // MessageActivityType - type of message activity
@@ -194,15 +222,16 @@ type MessageFlags int
 
 //goland:noinspection GoUnusedConst,SpellCheckingInspection
 const (
-	CrossPosted                      MessageFlags = 1 << 0 // this message has been published to subscribed channels (via Channel Following)
-	IsCrossPost                      MessageFlags = 1 << 1 // this message originated from a message in another channel (via Channel Following)
-	SuppressEmbeds                   MessageFlags = 1 << 2 // do not include any embeds when serializing this message
-	SourceMessageDeleted             MessageFlags = 1 << 3 // the source message for this crosspost has been deleted (via Channel Following)
-	Urgent                           MessageFlags = 1 << 4 // this message came from the urgent message system
-	HasThread                        MessageFlags = 1 << 5 // this message has an associated thread, with the same id as the message
-	Ephemeral                        MessageFlags = 1 << 6 // this message is only visible to the user who invoked the Interaction
-	Loading                          MessageFlags = 1 << 7 // this message is an Interaction Response and the bot is "thinking"
-	FailedToMentionSomeRolesInThread MessageFlags = 1 << 8 // this message failed to mention some roles and add their members to the thread
+	CrossPosted                      MessageFlags = 1 << 0  // this message has been published to subscribed channels (via Channel Following)
+	IsCrossPost                      MessageFlags = 1 << 1  // this message originated from a message in another channel (via Channel Following)
+	SuppressEmbeds                   MessageFlags = 1 << 2  // do not include any embeds when serializing this message
+	SourceMessageDeleted             MessageFlags = 1 << 3  // the source message for this crosspost has been deleted (via Channel Following)
+	Urgent                           MessageFlags = 1 << 4  // this message came from the urgent message system
+	HasThread                        MessageFlags = 1 << 5  // this message has an associated thread, with the same id as the message
+	Ephemeral                        MessageFlags = 1 << 6  // this message is only visible to the user who invoked the Interaction
+	Loading                          MessageFlags = 1 << 7  // this message is an Interaction Response and the bot is "thinking"
+	FailedToMentionSomeRolesInThread MessageFlags = 1 << 8  // this message failed to mention some roles and add their members to the thread
+	SuppressNotifications            MessageFlags = 1 << 12 // this message will not trigger push and desktop notifications
 )
 
 // MessageReference - ChannelID is optional when creating a reply, but will always be present when receiving an event/response that includes this data model.
@@ -257,10 +286,11 @@ type ThreadMetadata struct {
 
 // ThreadMember - A thread member is used to indicate whether a user has joined a thread or not.
 type ThreadMember struct {
-	ID            Snowflake `json:"id,omitempty"`      // the id of the thread
-	UserID        Snowflake `json:"user_id,omitempty"` // the id of the User
-	JoinTimestamp time.Time `json:"join_timestamp"`    // the time the current user last joined the thread
-	Flags         int64     `json:"flags"`             // any user-thread settings, currently only used for notifications
+	ID            Snowflake   `json:"id,omitempty"`      // ID of the thread
+	UserID        Snowflake   `json:"user_id,omitempty"` // ID of the user
+	JoinTimestamp time.Time   `json:"join_timestamp"`    // Time the user last joined the thread
+	Flags         int64       `json:"flags"`             // Any user-thread settings, currently only used for notifications
+	Member        GuildMember `json:"member,omitempty"`  // Additional information about the user
 }
 
 // DefaultReaction - An object that specifies the emoji to use as the default way to react to a forum post. Exactly one of emoji_id and emoji_name must be set.
@@ -406,6 +436,14 @@ const (
 	UserMentions     AllowedMentionType = "users"    // Controls user mentions
 	EveryoneMentions AllowedMentionType = "everyone" // Controls @everyone and @here mentions
 )
+
+// RoleSubscriptionData - data of the role subscription purchase or renewal that prompted this RoleSubscriptionData message
+type RoleSubscriptionData struct {
+	RoleSubscriptionListingID Snowflake `json:"role_subscription_listing_id"` // the id of the sku and listing that the user is subscribed to
+	TierName                  string    `json:"tier_name"`                    // the name of the tier that the user is subscribed to
+	TotalMonthsSubscribed     uint      `json:"total_months_subscribed"`      // the cumulative number of months that the user has been subscribed for
+	IsRenewal                 bool      `json:"is_renewal"`                   // whether this notification is for a renewal rather than a new purchase
+}
 
 // Additionally, the combined sum of characters in all title, description, field.name, field.value, footer.text, and author.name fields across all embeds attached to a message must not exceed 6000 characters.
 //

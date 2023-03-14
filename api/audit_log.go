@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Veteran Software
+ * Copyright (c) 2022-2023. Veteran Software
  *
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
@@ -16,20 +16,25 @@
 
 package api
 
-/* Whenever an admin action is performed on the API, an entry is added to the respective guild's audit log.
+/*
+Whenever an admin action is performed on the API, an entry is added to the respective guild's audit log.
 You can specify the reason by attaching the X-Audit-Log-Reason request header.
 This header supports url encoded utf8 characters.
 */
 
-// AuditLog - Whenever an admin action is performed on the API, an entry is added to the respective guild's audit log.
+// AuditLog - When an administrative action is performed in a Guild, an entry is added to its AuditLog.
 //
-// You can specify the reason by attaching the "X-Audit-Log-Reason" request header.
+// Viewing audit logs requires the ViewAuditLog permission and can be fetched by apps using the GetGuildAuditLog endpoint, or seen by users in the guild's Server Settings.
 //
-// This header supports url encoded utf8 characters.
+// All audit log entries are stored for 45 days.
+//
+// When an app is performing an eligible action using the APIs, it can pass an X-Audit-Log-Reason header to indicate why the action was taken.
+//
+// More information is in the audit log entry section.
 type AuditLog struct {
 	ApplicationCommands  []*ApplicationCommand  `json:"application_commands"`   // List of ApplicationCommands referenced in the audit log
 	AuditLogEntries      []*AuditLogEntry       `json:"audit_log_entries"`      // List of AuditLog entries, sorted from most to least recent
-	AutoModerationRules  []string               `json:"auto_moderation_rules"`  // List of auto moderation rules referenced in the audit log
+	AutoModerationRules  []AutoModerationRule   `json:"auto_moderation_rules"`  // List of AutoModerationRule referenced in the audit log
 	GuildScheduledEvents []*GuildScheduledEvent `json:"guild_scheduled_events"` // List of GuildScheduledEvents referenced in the audit log
 	Integrations         []*Integration         `json:"integrations"`           // List of partial Integration objects
 	Threads              []*Channel             `json:"threads"`                // List of Threads referenced in the audit log
@@ -61,6 +66,7 @@ const (
 	ChannelCreate AuditLogEvent = iota + 9
 	ChannelUpdate
 	ChannelDelete
+
 	ChannelOverwriteCreate
 	ChannelOverwriteUpdate
 	ChannelOverwriteDelete
