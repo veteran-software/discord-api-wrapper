@@ -16,7 +16,7 @@
 
 package api
 
-import "github.com/veteran-software/discord-api-wrapper/v10/oauth2"
+import "github.com/veteran-software/discord-api-wrapper/oauth2"
 
 // Application - an application which operates on Discord, commonly referred to as bots
 //

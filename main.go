@@ -17,8 +17,8 @@
 package main
 
 import (
-	_ "github.com/veteran-software/discord-api-wrapper/v10/api"
-	_ "github.com/veteran-software/discord-api-wrapper/v10/logging"
+	_ "github.com/veteran-software/discord-api-wrapper/api"
+	_ "github.com/veteran-software/discord-api-wrapper/logging"
 )
 
 func main() {
