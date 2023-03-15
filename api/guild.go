@@ -169,13 +169,12 @@ const (
 	Community                             GuildFeatures = "COMMUNITY"                                 // Mutable; guild can enable welcome screen, Membership Screening, stage channels and discovery, and receives community updates
 	CreatorMonetizableProvisional         GuildFeatures = "CREATOR_MONETIZABLE_PROVISIONAL"           // guild has enabled monetization
 	CreatorStorePage                      GuildFeatures = "CREATOR_STORE_PAGE"                        // guild has enabled the role subscription promo page
-	DeveloperSupportServer                GuildFeatures = "DEVELOPER_SUPPORT_SERVER"                  //	guild has been set as a support server on the App Directory
+	DeveloperSupportServer                GuildFeatures = "DEVELOPER_SUPPORT_SERVER"                  // guild has been set as a support server on the App Directory
 	Discoverable                          GuildFeatures = "DISCOVERABLE"                              // Mutable; guild is able to be discovered in the directory
 	Featurable                            GuildFeatures = "FEATURABLE"                                // guild is able to be featured in the directory
 	InvitesDisabled                       GuildFeatures = "INVITES_DISABLED"                          // Mutable; Pauses all invites/access to the server
 	InviteSplash                          GuildFeatures = "INVITE_SPLASH"                             // guild has access to set an invite splash background
 	MemberVerificationGateEnabled         GuildFeatures = "MEMBER_VERIFICATION_GATE_ENABLED"          // guild has enabled Membership Screening
-	MonetizationEnabled                   GuildFeatures = "MONETIZATION_ENABLED"                      // guild has enabled monetization
 	MoreStickers                          GuildFeatures = "MORE_STICKERS"                             // guild has increased custom sticker slots
 	News                                  GuildFeatures = "NEWS"                                      // guild has access to create news channels
 	Partnered                             GuildFeatures = "PARTNERED"                                 // guild is partnered
@@ -238,21 +237,32 @@ type GetGuildWidget struct {
 //	In GUILD_ events, pending will always be included as true or false.
 //	In non GUILD_ events which can only be triggered by non-pending users, pending will not be included.
 type GuildMember struct {
-	User                       User         `json:"user,omitempty"`                         // User - the user this guild member represents
-	Nick                       *string      `json:"nick,omitempty"`                         // Nick - the users' guild nickname
-	Avatar                     *string      `json:"avatar,omitempty"`                       // Avatar - guild specific avatar
-	Roles                      []*Snowflake `json:"roles"`                                  // Roles - array of GuildRole id's
-	JoinedAt                   time.Time    `json:"joined_at"`                              // JoinedAt - when the user joined the guild
-	PremiumSince               *time.Time   `json:"premium_since,omitempty"`                // PremiumSince - when the user started boosting the guild
-	Deaf                       bool         `json:"deaf"`                                   // Deaf - whether the user is deafened in voice channels
-	Mute                       bool         `json:"mute"`                                   // Mute - whether the user is muted in voice channels
-	Pending                    bool         `json:"pending,omitempty"`                      // Pending - whether the user has not yet passed the guild's Membership Screening requirements
-	CommunicationDisabledUntil *time.Time   `json:"communication_disabled_until,omitempty"` // CommunicationDisabledUntil - when the user's timeout will expire and the user will be able to communicate in the guild again, null or a time in the past if the user is not timed out
+	User                       User            `json:"user,omitempty"`                         // User - the user this guild member represents
+	Nick                       *string         `json:"nick,omitempty"`                         // Nick - the users' guild nickname
+	Avatar                     *string         `json:"avatar,omitempty"`                       // Avatar - guild specific avatar
+	Roles                      []*Snowflake    `json:"roles"`                                  // Roles - array of GuildRole id's
+	JoinedAt                   time.Time       `json:"joined_at"`                              // JoinedAt - when the user joined the guild
+	PremiumSince               *time.Time      `json:"premium_since,omitempty"`                // PremiumSince - when the user started boosting the guild
+	Deaf                       bool            `json:"deaf"`                                   // Deaf - whether the user is deafened in voice channels
+	Mute                       bool            `json:"mute"`                                   // Mute - whether the user is muted in voice channels
+	Flags                      GuildMemberFlag `json:"flags,omitempty"`                        // Flags - guild member flags represented as a bit set, defaults to 0
+	Pending                    bool            `json:"pending,omitempty"`                      // Pending - whether the user has not yet passed the guild's Membership Screening requirements
+	Permissions                *string         `json:"permissions"`                            // Permissions - total permissions of the member in the channel, including overwrites, returned when in the interaction object
+	CommunicationDisabledUntil *time.Time      `json:"communication_disabled_until,omitempty"` // CommunicationDisabledUntil - when the user's timeout will expire and the user will be able to communicate in the guild again, null or a time in the past if the user is not timed out
 
 	// Undocumented as of 12/3/2022
-	Flags     UserFlags `json:"flags,omitempty"`
-	IsPending bool      `json:"is_pending,omitempty"`
+	IsPending bool `json:"is_pending,omitempty"`
 }
+
+// GuildMemberFlag - guild member flags represented as a bit set, defaults to 0
+type GuildMemberFlag int
+
+const (
+	DidRejoin            GuildMemberFlag = 1 << 0 // DidRejoin - Member has left and rejoined the guild
+	CompletedOnboarding  GuildMemberFlag = 1 << 1 // CompletedOnboarding - Member has completed onboarding
+	BypassesVerification GuildMemberFlag = 1 << 2 // BypassesVerification - Member is exempt from guild verification requirements
+	StartedOnboarding    GuildMemberFlag = 1 << 3 // StartedOnboarding - Member has started onboarding
+)
 
 // Integration - a guild integration
 type Integration struct {

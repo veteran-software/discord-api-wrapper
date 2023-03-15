@@ -39,7 +39,7 @@ const (
 	getChannel                                     = "%s/channels/%s"
 	modifyChannel                                  = getChannel
 	deleteChannel                                  = getChannel
-	followNewsChannel                              = "%s/channels/%s/followers"
+	followAnnouncementChannel                      = "%s/channels/%s/followers"
 	getChannelInvites                              = "%s/channels/%s/invites"
 	createMessage                                  = "%s/channels/%s/messages"
 	getChannelMessages                             = createMessage
