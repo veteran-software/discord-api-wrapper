@@ -20,6 +20,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+
+	utils "github.com/veteran-software/discord-api-wrapper/v10/utilities"
 )
 
 // ListAutoModerationRulesForGuild - Get a list of all rules currently configured for the guild. Returns a list of auto moderation rule objects for the given guild.
@@ -37,7 +39,7 @@ func ListAutoModerationRulesForGuild(guildID string, channel *Channel, userID *S
 	}
 
 	if !CanManageGuild(member, channel) {
-		return nil, errors.New("manage guild permissions are required to use this endpoint")
+		return nil, errors.New(utils.ManageGuildPermissionsAreRequired)
 	}
 
 	u := parseRoute(fmt.Sprintf(listAutoModerationRulesForGuild, api, guildID))
@@ -63,7 +65,7 @@ func GetAutoModerationRule(guildID string, channel *Channel, userID, ruleID *Sno
 	}
 
 	if !CanManageGuild(member, channel) {
-		return nil, errors.New("manage guild permissions are required to use this endpoint")
+		return nil, errors.New(utils.ManageGuildPermissionsAreRequired)
 	}
 
 	u := parseRoute(fmt.Sprintf(getAutoModerationRule, api, guildID, ruleID.String()))
@@ -93,7 +95,7 @@ func CreateAutoModerationRule(guildID string,
 	}
 
 	if !CanManageGuild(member, channel) {
-		return nil, errors.New("manage guild permissions are required to use this endpoint")
+		return nil, errors.New(utils.ManageGuildPermissionsAreRequired)
 	}
 
 	u := parseRoute(fmt.Sprintf(getAutoModerationRule, api, guildID, ruleID.String()))
@@ -134,7 +136,7 @@ func ModifyAutoModerationRule(guildID string,
 	}
 
 	if !CanManageGuild(member, channel) {
-		return nil, errors.New("manage guild permissions are required to use this endpoint")
+		return nil, errors.New(utils.ManageGuildPermissionsAreRequired)
 	}
 
 	u := parseRoute(fmt.Sprintf(modifyAutoModerationRule, api, guildID, ruleID.String()))
@@ -163,7 +165,7 @@ func DeleteAutoModerationRule(guildID string,
 	}
 
 	if !CanManageGuild(member, channel) {
-		return nil, errors.New("manage guild permissions are required to use this endpoint")
+		return nil, errors.New(utils.ManageGuildPermissionsAreRequired)
 	}
 
 	u := parseRoute(fmt.Sprintf(deleteAutoModerationRule, api, guildID, ruleID.String()))
