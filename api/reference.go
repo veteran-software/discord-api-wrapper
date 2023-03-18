@@ -28,7 +28,7 @@ var (
 
 const (
 	// UserAgent - header value to be sent with each API request
-	UserAgent = "NowLiveCustomLib (https://nowlivebot.com, 1.0)"
+	UserAgent = "NowLiveCustomLib (https://nowlivebot.com, 10.0.19)"
 )
 
 // Format - Discord utilizes a subset of markdown for rendering message content on its clients, while also adding some custom functionality to enable things like mentioning users and channels.

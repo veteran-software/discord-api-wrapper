@@ -76,7 +76,16 @@ func (g *Guild) GetGuild(withCounts *bool) (*Guild, error) {
 		u.RawQuery = q.Encode()
 	}
 
+	// Some testing script for moving to a channel based request system
+	// Going to use this on internal calls first to make sure it works fine
+	//ch := make(chan []byte)
+	//
+	//go fireGetRequest(u, nil, nil, ch)
+	//
+	//by := <-ch
+
 	var guild *Guild
+	//err := json.Unmarshal(by, &guild)
 	err := json.Unmarshal(fireGetRequest(u, nil, nil), &guild)
 
 	return guild, err
@@ -855,4 +864,14 @@ type ModifyUserVoiceStateJSON struct {
 
 func (g *Guild) getSelfMember() (*GuildMember, error) {
 	return g.GetGuildMember(&ApplicationID)
+}
+
+func (g *Guild) GetGuildWidgetImage() []byte {
+	u := parseRoute(fmt.Sprintf("%s/guilds/%s/widget.png", api, g.ID.String()))
+
+	//ch := make(chan []byte)
+
+	b := fireGetRequest(u, nil, nil)
+
+	return b
 }
