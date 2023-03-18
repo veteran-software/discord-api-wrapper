@@ -114,29 +114,35 @@ func (g *Guild) ModifyGuild(payload ModifyGuildJSON, reason *string) (*Guild, er
 	return guild, err
 }
 
+// ModifyGuildJSON
+// All parameters to this endpoint are optional
+//
+// This endpoint supports the `X-Audit-Log-Reason` header.
+//
+// Attempting to add or remove the COMMUNITY guild feature requires the Administrator permission.
 type ModifyGuildJSON struct {
-	Name                        string                           `json:"name"`                          // guild name (2-100 characters, excluding trailing and leading whitespace)
-	VerificationLevel           *VerificationLevel               `json:"verification_level"`            // verification level required for the guild
-	DefaultMessageNotifications *DefaultMessageNotificationLevel `json:"default_message_notifications"` // default message notifications level
-	ExplicitContentFilter       *ExplicitContentFilterLevel      `json:"explicit_content_filter"`       // explicit content filter level
-	AfkChannelID                *Snowflake                       `json:"afk_channel_id,omitempty"`      // id of afk channel
-	AfkTimeout                  int64                            `json:"afk_timeout"`                   // afk timeout in seconds
-	Icon                        *string                          `json:"icon"`                          // icon hash
-	OwnerID                     Snowflake                        `json:"owner_id"`                      // id of owner
-	Splash                      *string                          `json:"splash,omitempty"`              // splash hash
-	DiscoverySplash             *string                          `json:"discovery_splash"`              // discovery splash hash; only present for guilds with the "DISCOVERABLE" feature
-	Banner                      *string                          `json:"banner"`                        // banner hash
-	SystemChannelID             *Snowflake                       `json:"system_channel_id"`             // the id of the channel where guild notices such as welcome messages and boost events are posted
-	SystemChannelFlags          SystemChannelFlags               `json:"system_channel_flags"`          // system channel flags
-	RulesChannelID              *Snowflake                       `json:"rules_channel_id"`              // the id of the channel where Community guilds can display rules and/or guidelines
-	PublicUpdatesChannelID      *Snowflake                       `json:"public_updates_channel_id"`     // the id of the channel where admins and moderators of Community guilds receive notices from Discord
-	PreferredLocale             string                           `json:"preferred_locale"`              // the preferred locale of a Community guild; used in server discovery and notices from Discord, and sent in interactions; defaults to "en-US"
-	Features                    []*GuildFeatures                 `json:"features"`                      // enabled guild features
-	Description                 *string                          `json:"description"`                   // the description of a Community guild
-	PremiumProgressBarEnabled   bool                             `json:"premium_progress_bar_enabled"`  // whether the guild has the boost progress bar enabled
+	Name                        string                           `json:"name,omitempty"`                          // guild name (2-100 characters, excluding trailing and leading whitespace)
+	VerificationLevel           *VerificationLevel               `json:"verification_level,omitempty"`            // verification level required for the guild
+	DefaultMessageNotifications *DefaultMessageNotificationLevel `json:"default_message_notifications,omitempty"` // default message notifications level
+	ExplicitContentFilter       *ExplicitContentFilterLevel      `json:"explicit_content_filter,omitempty"`       // explicit content filter level
+	AfkChannelID                *Snowflake                       `json:"afk_channel_id,omitempty,omitempty"`      // id of afk channel
+	AfkTimeout                  int64                            `json:"afk_timeout,omitempty"`                   // afk timeout in seconds
+	Icon                        *string                          `json:"icon,omitempty"`                          // icon hash
+	OwnerID                     Snowflake                        `json:"owner_id,omitempty"`                      // id of owner
+	Splash                      *string                          `json:"splash,omitempty,omitempty"`              // splash hash
+	DiscoverySplash             *string                          `json:"discovery_splash,omitempty"`              // discovery splash hash; only present for guilds with the "DISCOVERABLE" feature
+	Banner                      *string                          `json:"banner,omitempty"`                        // banner hash
+	SystemChannelID             *Snowflake                       `json:"system_channel_id,omitempty"`             // the id of the channel where guild notices such as welcome messages and boost events are posted
+	SystemChannelFlags          SystemChannelFlags               `json:"system_channel_flags,omitempty"`          // system channel flags
+	RulesChannelID              *Snowflake                       `json:"rules_channel_id,omitempty"`              // the id of the channel where Community guilds can display rules and/or guidelines
+	PublicUpdatesChannelID      *Snowflake                       `json:"public_updates_channel_id,omitempty"`     // the id of the channel where admins and moderators of Community guilds receive notices from Discord
+	PreferredLocale             string                           `json:"preferred_locale,omitempty"`              // the preferred locale of a Community guild; used in server discovery and notices from Discord, and sent in interactions; defaults to "en-US"
+	Features                    []*GuildFeatures                 `json:"features,omitempty"`                      // enabled guild features
+	Description                 *string                          `json:"description,omitempty"`                   // the description of a Community guild
+	PremiumProgressBarEnabled   bool                             `json:"premium_progress_bar_enabled,omitempty"`  // whether the guild has the boost progress bar enabled
 }
 
-// DeleteGuild - Delete a guild permanently. User must be owner. Returns 204 No Content on success. Fires a GuildDelete Gateway event.
+// DeleteGuild - Delete a guild permanently. User must be Owner. Returns `204 No Content` on success. Fires a GuildDelete Gateway event.
 func (g *Guild) DeleteGuild() error {
 	u := parseRoute(fmt.Sprintf(deleteGuild, api, g.ID.String()))
 
@@ -161,7 +167,7 @@ func (g *Guild) GetGuildChannels() ([]*Channel, error) {
 //
 // Setting ManageRoles permission in channels is only possible for guild administrators.
 //
-// Returns the new channel object on success. Fires a Channel Create Gateway event.
+// Returns the new channel object on success. Fires a ChannelCreate Gateway event.
 //
 //	All parameters to this endpoint are optional excluding name
 //
@@ -176,17 +182,22 @@ func (g *Guild) CreateGuildChannel(payload CreateGuildChannelJSON, reason *strin
 }
 
 type CreateGuildChannelJSON struct {
-	Name                       string       `json:"name,omitempty"`                          // the name of the channel (1-100 characters)
-	Type                       ChannelType  `json:"type"`                                    // the ChannelType
-	Topic                      *string      `json:"topic,omitempty"`                         // the channel topic (0-1024 characters)
-	Bitrate                    int64        `json:"bitrate,omitempty"`                       // the bitrate (in bits) of the voice channel
-	UserLimit                  int64        `json:"user_limit,omitempty"`                    // the user limit of the voice channel
-	RateLimitPerUser           int64        `json:"rate_limit_per_user,omitempty"`           // amount of seconds a user has to wait before sending another Message (0-21600); bots, as well as users with the permission ManageMessages or ManageChannels, are unaffected
-	Position                   int          `json:"position,omitempty"`                      // sorting position of the channel
-	PermissionOverwrites       []*Overwrite `json:"permission_overwrites,omitempty"`         // explicit permission overwrites for members and roles
-	ParentID                   *Snowflake   `json:"parent_id,omitempty"`                     // for guild channels: id of the parent category for a channel (each parent category can contain up to 50 channels), for threads: id of the text channel this thread was created
-	Nsfw                       bool         `json:"nsfw,omitempty"`                          // whether the channel is nsfw
-	DefaultAutoArchiveDuration int          `json:"default_auto_archive_duration,omitempty"` // default duration that the clients (not the API) will use for newly created threads, in minutes, to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080
+	Name                       *string          `json:"name"`                                    // the name of the channel (1-100 characters)
+	Type                       *ChannelType     `json:"type,omitempty"`                          // the ChannelType
+	Topic                      *string          `json:"topic,omitempty"`                         // the channel topic (0-1024 characters)
+	Bitrate                    *int64           `json:"bitrate,omitempty"`                       // the bitrate (in bits) of the voice channel
+	UserLimit                  *int64           `json:"user_limit,omitempty"`                    // the user limit of the voice channel
+	RateLimitPerUser           *int64           `json:"rate_limit_per_user,omitempty"`           // amount of seconds a user has to wait before sending another Message (0-21600); bots, as well as users with the permission ManageMessages or ManageChannels, are unaffected
+	Position                   *int             `json:"position,omitempty"`                      // sorting position of the channel
+	PermissionOverwrites       []*Overwrite     `json:"permission_overwrites,omitempty"`         // explicit permission overwrites for members and roles
+	ParentID                   *Snowflake       `json:"parent_id,omitempty"`                     // for guild channels: id of the parent category for a channel (each parent category can contain up to 50 channels), for threads: id of the text channel this thread was created
+	Nsfw                       *bool            `json:"nsfw,omitempty"`                          // whether the channel is nsfw
+	RtcRegion                  *string          `json:"rtc_region,omitempty"`                    // channel voice region id of the voice or stage channel, automatic when set to null
+	VideoQualityMode           VideoQualityMode `json:"video_quality_mode,omitempty"`            // the camera video quality mode of the voice channel
+	DefaultAutoArchiveDuration *int             `json:"default_auto_archive_duration,omitempty"` // default duration that the clients (not the API) will use for newly created threads, in minutes, to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080
+	DefaultReactionEmoji       DefaultReaction  `json:"default_reaction_emoji,omitempty"`        // Emoji to show in the add Reaction button on a thread in a GuildForum channel
+	AvailableTags              []*ForumTag      `json:"available_tags,omitempty"`                // set of tags that can be used in a GuildForum channel
+	DefaultSortOrder           SortOrderType    `json:"default_sort_order,omitempty"`            // the default SortOrderType used to order posts in GuildForum channels
 }
 
 // ModifyGuildChannelPositions - Modify the positions of a set of channel objects for the guild.
@@ -331,29 +342,31 @@ func (g *Guild) ModifyGuildMember(userID *Snowflake, payload *ModifyGuildMemberJ
 
 // ModifyGuildMemberJSON - JSON payload
 type ModifyGuildMemberJSON struct {
-	Nick                       *string      `json:"nick,omitempty"`                         // value to set user's nickname to
-	Roles                      []*Snowflake `json:"roles,omitempty"`                        // array of role ids the member is assigned
-	Mute                       *bool        `json:"mute,omitempty"`                         // whether the user is muted in voice channels. Will throw a 400 error if the user is not in a voice channel
-	Deaf                       *bool        `json:"deaf,omitempty"`                         // whether the user is deafened in voice channels. Will throw a 400 error if the user is not in a voice channel
-	ChannelID                  *Snowflake   `json:"channel_id,omitempty"`                   // id of channel to move user to (if they are connected to voice)
-	CommunicationDisabledUntil *time.Time   `json:"communication_disabled_until,omitempty"` // when the user's timeout will expire and the User will be able to communicate in the guild again (up to 28 days in the future), set to null to remove timeout. Will throw a 403 error if the user has the Administrator permission or is the owner of the guild
+	Nick                       *string         `json:"nick,omitempty"`                         // value to set user's nickname to
+	Roles                      []*Snowflake    `json:"roles,omitempty"`                        // array of role ids the member is assigned
+	Mute                       *bool           `json:"mute,omitempty"`                         // whether the user is muted in voice channels. Will throw a 400 error if the user is not in a voice channel
+	Deaf                       *bool           `json:"deaf,omitempty"`                         // whether the user is deafened in voice channels. Will throw a 400 error if the user is not in a voice channel
+	ChannelID                  *Snowflake      `json:"channel_id,omitempty"`                   // id of channel to move user to (if they are connected to voice)
+	CommunicationDisabledUntil *time.Time      `json:"communication_disabled_until,omitempty"` // when the user's timeout will expire and the User will be able to communicate in the guild again (up to 28 days in the future), set to null to remove timeout. Will throw a 403 error if the user has the Administrator permission or is the owner of the guild
+	Flags                      GuildMemberFlag `json:"flags"`                                  // guild member flags
 }
 
 // ModifyCurrentMember - Modifies the current member in a guild. Returns a 200 with the updated member object on success. Fires a Guild Member Update Gateway event.
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
-func (g *Guild) ModifyCurrentMember(payload *ModifyCurrentMemberJSON, reason *string) (*GuildMember, error) {
+func (g *Guild) ModifyCurrentMember(nick *string, reason *string) (*GuildMember, error) {
 	u := parseRoute(fmt.Sprintf(modifyCurrentMember, api, g.ID.String()))
+
+	payload := struct {
+		Nick *string
+	}{
+		nick,
+	}
 
 	var guildMember *GuildMember
 	err := json.Unmarshal(firePatchRequest(u, payload, reason), &guildMember)
 
 	return guildMember, err
-}
-
-// ModifyCurrentMemberJSON - JSON payload
-type ModifyCurrentMemberJSON struct {
-	Nick *string `json:"nick,omitempty"` // value to set user's nickname to
 }
 
 // AddGuildMemberRole - Adds a role to a guild member.
@@ -365,8 +378,8 @@ type ModifyCurrentMemberJSON struct {
 // Fires a Guild Member Update Gateway event.
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
-func (g *Guild) AddGuildMemberRole(user *User, role *Snowflake, reason *string) {
-	u := parseRoute(fmt.Sprintf(addGuildMemberRole, api, g.ID.String(), user.ID.String(), role.String()))
+func (g *Guild) AddGuildMemberRole(user *User, roleID *Snowflake, reason *string) {
+	u := parseRoute(fmt.Sprintf(addGuildMemberRole, api, g.ID.String(), user.ID.String(), roleID.String()))
 
 	_ = firePutRequest(u, nil, reason)
 }
@@ -438,15 +451,16 @@ func (g *Guild) GetGuildBan(userID Snowflake) (*Ban, error) {
 // CreateGuildBan - Create a guild ban, and optionally delete previous messages sent by the banned user. Requires the BanMembers permission. Returns a 204 empty response on success. Fires a GuildBanAdd Gateway event.
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
-func (g *Guild) CreateGuildBan(userID *Snowflake, payload *CreateGuildBanJSON, reason *string) {
+func (g *Guild) CreateGuildBan(userID *Snowflake, deleteMessageSeconds *uint64, reason *string) {
 	u := parseRoute(fmt.Sprintf(createGuildBan, api, g.ID.String(), userID.String()))
 
-	_ = firePutRequest(u, payload, reason)
-}
+	payload := struct {
+		DeleteMessageSeconds *uint64 `json:"delete_message_seconds"`
+	}{
+		deleteMessageSeconds,
+	}
 
-// CreateGuildBanJSON - JSON payload
-type CreateGuildBanJSON struct {
-	DeleteMessageDays uint64 `json:"delete_message_days,omitempty"`
+	_ = firePutRequest(u, payload, reason)
 }
 
 // RemoveGuildBan - Remove the ban for a user. Requires the BanMembers permissions. Returns a 204 empty response on success. Fires a GuildBanRemove Gateway event.
@@ -497,7 +511,7 @@ type CreateGuildRoleJSON struct {
 // Fires multiple Guild Role Update Gateway events.
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
-func (g *Guild) ModifyGuildRolePositions(payload *ModifyGuildRolePositionsJSON, reason *string) ([]*Role, error) {
+func (g *Guild) ModifyGuildRolePositions(payload []*ModifyGuildRolePositionsJSON, reason *string) ([]*Role, error) {
 	u := parseRoute(fmt.Sprintf(modifyGuildRolePositions, api, g.ID.String()))
 
 	var roles []*Role
@@ -523,7 +537,8 @@ type ModifyGuildRolePositionsJSON struct {
 //	All parameters to this endpoint are optional and nullable.
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
-func (g *Guild) ModifyGuildRole(roleID *Snowflake, payload *ModifyGuildRoleJSON, reason *string) (*Role, error) {
+func (g *Guild) ModifyGuildRole(roleID *Snowflake, payload *ModifyGuildRoleJSON, reason *string) (*Role,
+	error) {
 	u := parseRoute(fmt.Sprintf(modifyGuildRole, api, g.ID.String(), roleID.String()))
 
 	var roles *Role
@@ -541,6 +556,28 @@ type ModifyGuildRoleJSON struct {
 	Icon         *string `json:"icon,omitempty"`
 	UnicodeEmoji *string `json:"unicode_emoji,omitempty"`
 	Mentionable  *bool   `json:"mentionable,omitempty"`
+}
+
+// ModifyGuildMfaLevel - Modify a guild's MFA level.
+//
+// Requires guild ownership.
+//
+// Returns the updated level on success.
+//
+// Fires a GuildUpdate Gateway event.
+func (g *Guild) ModifyGuildMfaLevel(level MfaLevel, reason *string) (*MfaLevel, error) {
+	u := parseRoute(fmt.Sprintf(modifyGuildMfaLevel, api, g.ID.String()))
+
+	payload := struct {
+		Level MfaLevel `json:"level"`
+	}{
+		level,
+	}
+
+	var mfaLevel *MfaLevel
+	err := json.Unmarshal(firePatchRequest(u, payload, reason), &mfaLevel)
+
+	return mfaLevel, err
 }
 
 // DeleteGuildRole - Delete a guild role.
@@ -567,7 +604,7 @@ func (g *Guild) DeleteGuildRole(roleID *Snowflake, reason *string) error {
 // You can optionally include specific roles in your prune by providing the `include_roles` parameter.
 //
 // Any inactive user that has a subset of the provided role(s) will be counted in the prune and users with additional roles will not.
-func (g *Guild) GetGuildPruneCount(days uint64, includeRoles *string) (*GetGuildPruneCountResponse, error) {
+func (g *Guild) GetGuildPruneCount(days uint, includeRoles *string) (*GetGuildPruneCountResponse, error) {
 	if days < 1 || days > 30 {
 		return nil, errors.New("the number of days to prune must be >= 1 && <= 30")
 	}
@@ -575,7 +612,7 @@ func (g *Guild) GetGuildPruneCount(days uint64, includeRoles *string) (*GetGuild
 	u := parseRoute(fmt.Sprintf(getGuildPruneCount, api, g.ID.String()))
 
 	q := u.Query()
-	q.Set("days", strconv.FormatUint(days, 10))
+	q.Set("days", strconv.Itoa(int(days)))
 	if includeRoles != nil {
 		q.Set("include_Roles", *includeRoles)
 	}
@@ -625,7 +662,7 @@ func (g *Guild) BeginGuildPrune(payload *BeginGuildPruneJSON, reason *string) (*
 
 // BeginGuildPruneJSON - JSON payload
 type BeginGuildPruneJSON struct {
-	Days              uint64       `json:"days"`                // number of days to prune (1-30)
+	Days              uint         `json:"days"`                // number of days to prune (1-30)
 	ComputePruneCount bool         `json:"compute_prune_count"` // whether `pruned` is returned, discouraged for large guilds
 	IncludeRoles      []*Snowflake `json:"include_roles"`       // role(s) to include
 }
@@ -790,7 +827,7 @@ func (g *Guild) ModifyCurrentUserVoiceState(payload *ModifyCurrentUserVoiceState
 
 // ModifyCurrentUserVoiceStateJSON - JSON payload
 type ModifyCurrentUserVoiceStateJSON struct {
-	ChannelID               Snowflake  `json:"channel_id"`                           // the id of the channel the user is currently in
+	ChannelID               Snowflake  `json:"channel_id,omitempty"`                 // the id of the channel the user is currently in
 	Suppress                bool       `json:"suppress,omitempty"`                   // toggles the user's suppress state
 	RequestToSpeakTimestamp *time.Time `json:"request_to_speak_timestamp,omitempty"` // sets the user's request to speak
 }
@@ -814,4 +851,8 @@ func (g *Guild) ModifyUserVoiceState(userID *Snowflake, payload *ModifyUserVoice
 type ModifyUserVoiceStateJSON struct {
 	ChannelID Snowflake `json:"channel_id"`         // the id of the channel the user is currently in
 	Suppress  bool      `json:"suppress,omitempty"` // toggles the user's suppress state
+}
+
+func (g *Guild) getSelfMember() (*GuildMember, error) {
+	return g.GetGuildMember(&ApplicationID)
 }

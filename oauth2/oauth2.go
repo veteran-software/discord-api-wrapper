@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Veteran Software
+ * Copyright (c) 2022-2023. Veteran Software
  *
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
@@ -19,8 +19,7 @@ package oauth2
 import (
 	"net/url"
 
-	"github.com/veteran-software/discord-api-wrapper/v10/logging"
-	"github.com/veteran-software/discord-api-wrapper/v10/utilities"
+	log "github.com/veteran-software/nowlive-logging"
 )
 
 // BaseAuthorizationURL - Base authorization URL
@@ -29,7 +28,7 @@ import (
 func BaseAuthorizationURL() *url.URL {
 	u, err := url.Parse("https://discord.com/api/oauth2/authorize")
 	if err != nil {
-		logging.Errorln(utilities.FuncName(), err)
+		log.Errorln(log.FuncName(), err)
 	}
 
 	return u
@@ -41,7 +40,7 @@ func BaseAuthorizationURL() *url.URL {
 func TokenURL() *url.URL {
 	u, err := url.Parse("https://discord.com/api/oauth2/token")
 	if err != nil {
-		logging.Errorln(utilities.FuncName(), err)
+		log.Errorln(log.FuncName(), err)
 	}
 
 	return u
@@ -53,7 +52,7 @@ func TokenURL() *url.URL {
 func TokenRevocationURL() *url.URL {
 	u, err := url.Parse("https://discord.com/api/oauth2/token/revoke")
 	if err != nil {
-		logging.Errorln(utilities.FuncName(), err)
+		log.Errorln(log.FuncName(), err)
 	}
 
 	return u
@@ -93,6 +92,7 @@ const (
 	Identify                              Scopes = "identify"                                 // allows `/users/@me` without email
 	MessagesRead                          Scopes = "messages.read"                            // for local rpc server api access, this allows you to read messages from all client channels (otherwise restricted to channels/guilds your app creates)
 	RelationshipsRead                     Scopes = "relationships.read"                       // allows your app to know a user's friends and implicit relationships - requires Discord approval
+	RoleConnectionsWrite                  Scopes = "role_connections.write"                   // allows your app to update a user's connection and metadata for the app
 	Rpc                                   Scopes = "rpc"                                      // for local rpc server access, this allows you to control a user's local Discord client - requires Discord approval
 	RpcActivitiesWrite                    Scopes = "rpc.activities.write"                     // for local rpc server access, this allows you to update a user's activity - requires Discord approval
 	RpcNotificationsRead                  Scopes = "rpc.notifications.read"                   // for local rpc server access, this allows you to receive notifications pushed out to the user - requires Discord approval

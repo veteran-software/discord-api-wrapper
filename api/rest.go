@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Veteran Software
+ * Copyright (c) 2022-2023. Veteran Software
  *
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
@@ -29,8 +29,7 @@ import (
 
 	"github.com/gojek/heimdall/v7"
 	"github.com/gojek/heimdall/v7/httpclient"
-	"github.com/veteran-software/discord-api-wrapper/v10/logging"
-	"github.com/veteran-software/discord-api-wrapper/v10/utilities"
+	log "github.com/veteran-software/nowlive-logging"
 )
 
 //goland:noinspection SpellCheckingInspection
@@ -126,7 +125,7 @@ func (r *RateLimiter) lockedRequest(method, route, contentType string,
 
 	req.Header.Set("User-Agent", UserAgent)
 
-	ctx, cancel := context.WithDeadline(req.Context(), time.Now().Add(5*time.Second))
+	ctx, cancel := context.WithDeadline(req.Context(), time.Now().Add(10*time.Second))
 	handleContextCancel(ctx, cancel)
 
 	resp, err := httpClient.Do(req.WithContext(ctx))
@@ -143,9 +142,9 @@ func (r *RateLimiter) lockedRequest(method, route, contentType string,
 
 	switch resp.StatusCode {
 	case http.StatusTooManyRequests:
-		logging.Warnln(utilities.FuncName(), "Rate Limited!")
-		logging.Infoln(utilities.FuncName(), route)
-		logging.Infoln(utilities.FuncName(), resp.Status)
+		log.Warnln(log.FuncName(), "Rate Limited!")
+		log.Infoln(log.FuncName(), route)
+		log.Infoln(log.FuncName(), resp.Status)
 
 		var rlr rateLimitResponse
 		err = json.NewDecoder(resp.Body).Decode(&rlr)
@@ -169,9 +168,9 @@ func handleContextCancel(ctx context.Context, cancel context.CancelFunc) {
 
 		switch ctx.Err() {
 		case context.DeadlineExceeded:
-			logging.Traceln(utilities.FuncName(), "context timeout exceeded")
+			log.Traceln(log.FuncName(), "context timeout exceeded")
 		case context.Canceled:
-			logging.Traceln(utilities.FuncName(), "context cancelled; process complete")
+			log.Traceln(log.FuncName(), "context cancelled; process complete")
 		}
 	}(ctx)
 }
@@ -179,7 +178,7 @@ func handleContextCancel(ctx context.Context, cancel context.CancelFunc) {
 func parseRoute(route string) *url.URL {
 	u, err := url.Parse(route)
 	if err != nil {
-		logging.Errorln(utilities.FuncName(), err)
+		log.Errorln(log.FuncName(), err)
 		return nil
 	}
 
@@ -189,7 +188,7 @@ func parseRoute(route string) *url.URL {
 func fireGetRequest(u *url.URL, data any, reason *string) []byte {
 	resp, err := Rest.Request(http.MethodGet, u.String(), data, reason)
 	if err != nil {
-		logging.Errorln(utilities.FuncName(), err)
+		log.Errorln(log.FuncName(), err)
 		return nil
 	}
 	defer func(Body io.ReadCloser) {
@@ -198,7 +197,7 @@ func fireGetRequest(u *url.URL, data any, reason *string) []byte {
 
 	b, err := io.ReadAll(resp.Body)
 	if err != nil {
-		logging.Errorln(utilities.FuncName(), err)
+		log.Errorln(log.FuncName(), err)
 		return []byte{} // we return an empty byte slice here to avoid nil pointer problems
 	}
 
@@ -208,7 +207,7 @@ func fireGetRequest(u *url.URL, data any, reason *string) []byte {
 func firePostRequest(u *url.URL, data any, reason *string) []byte {
 	resp, err := Rest.Request(http.MethodPost, u.String(), data, reason)
 	if err != nil {
-		logging.Errorln(utilities.FuncName(), err)
+		log.Errorln(log.FuncName(), err)
 		return nil
 	}
 	defer func(Body io.ReadCloser) {
@@ -217,7 +216,7 @@ func firePostRequest(u *url.URL, data any, reason *string) []byte {
 
 	b, err := io.ReadAll(resp.Body)
 	if err != nil {
-		logging.Errorln(utilities.FuncName(), err)
+		log.Errorln(log.FuncName(), err)
 		return []byte{} // we return an empty byte slice here to avoid nil pointer problems
 	}
 
@@ -228,7 +227,7 @@ func firePostRequest(u *url.URL, data any, reason *string) []byte {
 func firePutRequest(u *url.URL, data any, reason *string) []byte {
 	resp, err := Rest.Request(http.MethodPut, u.String(), data, reason)
 	if err != nil {
-		logging.Errorln(utilities.FuncName(), err)
+		log.Errorln(log.FuncName(), err)
 		return nil
 	}
 	defer func(Body io.ReadCloser) {
@@ -237,7 +236,7 @@ func firePutRequest(u *url.URL, data any, reason *string) []byte {
 
 	b, err := io.ReadAll(resp.Body)
 	if err != nil {
-		logging.Errorln(utilities.FuncName(), err)
+		log.Errorln(log.FuncName(), err)
 		return []byte{} // we return an empty byte slice here to avoid nil pointer problems
 	}
 
@@ -247,7 +246,7 @@ func firePutRequest(u *url.URL, data any, reason *string) []byte {
 func firePatchRequest(u *url.URL, data any, reason *string) []byte {
 	resp, err := Rest.Request(http.MethodPatch, u.String(), data, reason)
 	if err != nil {
-		logging.Errorln(utilities.FuncName(), err)
+		log.Errorln(log.FuncName(), err)
 		return nil
 	}
 	defer func(Body io.ReadCloser) {
@@ -256,7 +255,7 @@ func firePatchRequest(u *url.URL, data any, reason *string) []byte {
 
 	b, err := io.ReadAll(resp.Body)
 	if err != nil {
-		logging.Errorln(utilities.FuncName(), err)
+		log.Errorln(log.FuncName(), err)
 		return []byte{} // we return an empty byte slice here to avoid nil pointer problems
 	}
 
@@ -266,7 +265,7 @@ func firePatchRequest(u *url.URL, data any, reason *string) []byte {
 func fireDeleteRequest(u *url.URL, reason *string) error {
 	resp, err := Rest.Request(http.MethodDelete, u.String(), nil, reason)
 	if err != nil {
-		logging.Errorln(utilities.FuncName(), err)
+		log.Errorln(log.FuncName(), err)
 		return err
 	}
 	defer func(Body io.ReadCloser) {

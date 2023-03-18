@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Veteran Software
+ * Copyright (c) 2022-2023. Veteran Software
  *
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
@@ -19,8 +19,7 @@ package api
 import (
 	"strconv"
 
-	"github.com/veteran-software/discord-api-wrapper/v10/logging"
-	"github.com/veteran-software/discord-api-wrapper/v10/utilities"
+	log "github.com/veteran-software/nowlive-logging"
 )
 
 // ApplicationCommand - A command, or each individual subcommand, can have a maximum of 25 options
@@ -138,7 +137,7 @@ func PermissionConstantsEveryone(guildID Snowflake) *Snowflake {
 func PermissionsConstantsAllChannels(guildID Snowflake) *Snowflake {
 	snowflakeInt, err := strconv.ParseUint(string(guildID), 10, 64)
 	if err != nil {
-		logging.Errorln(utilities.FuncName(), err)
+		log.Errorln(log.FuncName(), err)
 		return new(Snowflake)
 	}
 

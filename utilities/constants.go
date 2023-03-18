@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023. Veteran Software
+ * Copyright (c) 2023. Veteran Software
  *
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
@@ -14,12 +14,6 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-package main
+package utilities
 
-import (
-	_ "github.com/veteran-software/discord-api-wrapper/v10/api"
-)
-
-func main() {
-	// Unneeded until we add websockets
-}
+const ManageGuildPermissionsAreRequired = "manage guild permissions are required to use this endpoint"

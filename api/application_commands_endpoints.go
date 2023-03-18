@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Veteran Software
+ * Copyright (c) 2022-2023. Veteran Software
  *
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
@@ -27,7 +27,8 @@ import (
 // Returns an array of application command objects.
 //
 //goland:noinspection GoUnusedExportedFunction
-func GetGlobalApplicationCommands(applicationID Snowflake, withLocalizations bool) ([]*ApplicationCommand, error) {
+func GetGlobalApplicationCommands(applicationID Snowflake, withLocalizations bool) ([]*ApplicationCommand,
+	error) {
 	u := parseRoute(fmt.Sprintf(getGlobalApplicationCommands, api, applicationID.String()))
 
 	q := u.Query()
@@ -245,7 +246,9 @@ func (i *Interaction) EditGuildApplicationCommand(payload *EditApplicationComman
 // DeleteGuildApplicationCommand - Delete a guild command. Returns 204 No Content on success.
 //
 //goland:noinspection GoUnusedExportedFunction
-func DeleteGuildApplicationCommand(applicationID *Snowflake, guildID *Snowflake, commandID string) error {
+func DeleteGuildApplicationCommand(applicationID *Snowflake,
+	guildID *Snowflake,
+	commandID string) error {
 	u := parseRoute(
 		fmt.Sprintf(
 			deleteGuildApplicationCommand,

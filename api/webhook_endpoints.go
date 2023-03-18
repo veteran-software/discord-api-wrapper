@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Veteran Software
+ * Copyright (c) 2022-2023. Veteran Software
  *
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
@@ -44,42 +44,63 @@ func (c *Channel) CreateWebhook(name string, avatar *dataurl.DataURL, reason *st
 
 	params := struct {
 		Name   string `json:"name"`
-		Avatar string `json:"avatar"`
+		Avatar string `json:"avatar,omitempty"`
 	}{
 		Name:   name,
 		Avatar: avatar.String(),
 	}
 
-	// TODO: Check for ManageWebhooks permission
+	self, err := c.getSelfMember()
+	if err != nil {
+		return nil, err
+	}
+
+	if !CanManageWebhooks(self, c) {
+		return nil, errors.New("manage webhooks permission is required to create a new webhook")
+	}
 
 	u := parseRoute(fmt.Sprintf(createWebhook, api, c.ID.String()))
 
 	var webhook *Webhook
-	err := json.Unmarshal(firePostRequest(u, params, reason), &webhook)
+	err = json.Unmarshal(firePostRequest(u, params, reason), &webhook)
 
 	return webhook, err
 }
 
 // GetChannelWebhooks - Returns a list of channel webhook objects. Requires the ManageWebhooks permission.
 func (c *Channel) GetChannelWebhooks() ([]*Webhook, error) {
-	// TODO: Check for ManageWebhooks permission
+	self, err := c.getSelfMember()
+	if err != nil {
+		return nil, err
+	}
+
+	if !CanManageWebhooks(self, c) {
+		return nil, errors.New("manage webhooks permission is required to get channel webhooks")
+	}
 
 	u := parseRoute(fmt.Sprintf(getChannelWebhooks, api, c.ID.String()))
 
 	var webhooks []*Webhook
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &webhooks)
+	err = json.Unmarshal(fireGetRequest(u, nil, nil), &webhooks)
 
 	return webhooks, err
 }
 
 // GetGuildWebhooks - Returns a list of guild webhook objects. Requires the ManageWebhooks permission.
-func (g *Guild) GetGuildWebhooks() ([]*Webhook, error) {
-	// TODO: Check for ManageWebhooks permission
+func (g *Guild) GetGuildWebhooks(c *Channel) ([]*Webhook, error) {
+	self, err := g.getSelfMember()
+	if err != nil {
+		return nil, err
+	}
+
+	if !CanManageWebhooks(self, c) {
+		return nil, errors.New("manage webhooks permission is required to get guild webhooks")
+	}
 
 	u := parseRoute(fmt.Sprintf(getGuildWebhooks, api, g.ID.String()))
 
 	var webhooks []*Webhook
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &webhooks)
+	err = json.Unmarshal(fireGetRequest(u, nil, nil), &webhooks)
 
 	return webhooks, err
 }
@@ -109,7 +130,7 @@ func (w *Webhook) GetWebhookWithToken() (*Webhook, error) {
 // # All parameters to this endpoint are optional
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
-func (w *Webhook) ModifyWebhook(name *string, avatar *dataurl.DataURL, channelId *Snowflake, reason *string) (
+func (w *Webhook) ModifyWebhook(name *string, avatar *dataurl.DataURL, channel *Channel, reason *string) (
 	*Webhook,
 	error,
 ) {
@@ -125,16 +146,24 @@ func (w *Webhook) ModifyWebhook(name *string, avatar *dataurl.DataURL, channelId
 	if avatar != nil {
 		params.Avatar = avatar.String()
 	}
-	if channelId != nil {
-		params.ChannelId = *channelId
+	if &channel.ID != nil {
+		params.ChannelId = channel.ID
 	}
 
-	// TODO: Check for ManageWebhooks permission
+	guild := &Guild{ID: *w.GuildID}
+	self, err := guild.getSelfMember()
+	if err != nil {
+		return nil, err
+	}
+
+	if !CanManageWebhooks(self, channel) {
+		return nil, errors.New("manage webhooks permission is required to modify webhooks")
+	}
 
 	u := parseRoute(fmt.Sprintf(modifyWebhook, api, w.ID.String()))
 
 	var webhook *Webhook
-	err := json.Unmarshal(firePatchRequest(u, params, reason), &webhook)
+	err = json.Unmarshal(firePatchRequest(u, params, reason), &webhook)
 
 	return webhook, err
 }
@@ -164,7 +193,17 @@ func (w *Webhook) ModifyWebhookWithToken(name *string, avatar *dataurl.DataURL, 
 // DeleteWebhook - Delete a webhook permanently. Requires the ManageWebhooks permission. Returns a 204 No Content response on success.
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
-func (w *Webhook) DeleteWebhook(reason *string) error {
+func (w *Webhook) DeleteWebhook(channel *Channel, reason *string) error {
+	guild := &Guild{ID: *w.GuildID}
+	self, err := guild.getSelfMember()
+	if err != nil {
+		return err
+	}
+
+	if !CanManageWebhooks(self, channel) {
+		return errors.New("manage webhooks permission is required to delete webhooks")
+	}
+
 	u := parseRoute(fmt.Sprintf(deleteWebhook, api, w.ID.String()))
 
 	return fireDeleteRequest(u, reason)
@@ -182,7 +221,8 @@ func (w *Webhook) DeleteWebhookWithToken(reason *string) error {
 // Note that when sending a message, you must provide a value for at least one of content, embeds, or file.
 //
 // wait is required; threadID is optional; pass nil if not needed
-func (w *Webhook) ExecuteWebhook(wait bool, threadID *Snowflake, params *ExecuteWebhookJSON) (*Message, error) {
+func (w *Webhook) ExecuteWebhook(wait bool, threadID *Snowflake, params *ExecuteWebhookJSON) (*Message,
+	error) {
 	u := parseRoute(fmt.Sprintf(executeWebhook, api, w.ID, w.Token))
 
 	q := u.Query()
@@ -250,7 +290,9 @@ func (w *Webhook) GetWebhookMessage(msgID *Snowflake, threadID *Snowflake) (*Mes
 // All JSON parameters to this endpoint are optional and nullable.
 //
 // threadID is optional; pass nil if not needed
-func (w *Webhook) EditWebhookMessage(msgID *Snowflake, threadID *Snowflake, payload *EditWebhookMessageJSON) (
+func (w *Webhook) EditWebhookMessage(msgID *Snowflake,
+	threadID *Snowflake,
+	payload *EditWebhookMessageJSON) (
 	*Message,
 	error,
 ) {

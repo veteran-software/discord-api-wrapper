@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Veteran Software
+ * Copyright (c) 2022-2023. Veteran Software
  *
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
@@ -129,8 +129,8 @@ type ModifyGuildScheduledEventJSON struct {
 	ScheduledEndTime   time.Time                          `json:"scheduled_end_time,omitempty"`
 	Description        *string                            `json:"description,omitempty"`
 	EntityType         GuildScheduledEventType            `json:"entity_type"`
-	Image              string                             `json:"image,omitempty"`
 	Status             GuildScheduledEventStatus          `json:"status,omitempty"`
+	Image              string                             `json:"image,omitempty"`
 }
 
 // DeleteGuildScheduledEvent - Delete a guild scheduled event. Returns a 204 on success.

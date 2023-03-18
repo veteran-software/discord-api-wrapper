@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Veteran Software
+ * Copyright (c) 2022-2023. Veteran Software
  *
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
@@ -29,7 +29,7 @@ type AutoModerationRule struct {
 	EventType       EventType       `json:"event_type"`       // the rule event type
 	TriggerType     TriggerType     `json:"trigger_type"`     // the rule trigger type
 	TriggerMetadata TriggerMetadata `json:"trigger_metadata"` // the rule trigger metadata
-	Actions         []string        `json:"actions"`          // the actions which will execute when the rule is triggered
+	Actions         []AutoModAction `json:"actions"`          // the actions which will execute when the rule is triggered
 	Enabled         bool            `json:"enabled"`          // whether the rule is enabled
 	ExemptRoles     []*Snowflake    `json:"exempt_roles"`     // the role ids that should not be affected by the rule (Maximum of 20)
 	ExemptChannels  []*Snowflake    `json:"exempt_channels"`  // the channel ids that should not be affected by the rule (Maximum of 50)
@@ -76,7 +76,7 @@ const (
 // AutoModAction - An action which will execute whenever a rule is triggered.
 type AutoModAction struct {
 	Type     AutoModerationActionType `json:"type"`     // the type of action
-	Metadata string                   `json:"metadata"` // additional metadata needed during execution for this specific action type
+	Metadata AutoModActionMetadata    `json:"metadata"` // additional metadata needed during execution for this specific action type
 }
 
 // AutoModerationActionType - the type of action
@@ -89,10 +89,8 @@ const (
 	Timeout
 )
 
-// AutoModerationActionMetadata - Additional data used when an action is executed. Different fields are relevant based on the value of action type.
-type AutoModerationActionMetadata struct {
+// AutoModActionMetadata - Additional data used when an action is executed. Different fields are relevant based on the value of action type.
+type AutoModActionMetadata struct {
 	ChannelID       Snowflake `json:"channel_id"`
 	DurationSeconds int       `json:"duration_seconds"`
 }
-
-// TODO: Endpoints

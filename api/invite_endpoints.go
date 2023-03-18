@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Veteran Software
+ * Copyright (c) 2022-2023. Veteran Software
  *
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
@@ -23,7 +23,8 @@ import (
 )
 
 // GetInvite - Returns an Invite object for the given code.
-func (i *Invite) GetInvite(withCounts *bool, withExpiration *bool, guildScheduledEventID *Snowflake) (*Invite, error) {
+func (i *Invite) GetInvite(withCounts *bool, withExpiration *bool, guildScheduledEventID *Snowflake) (*Invite,
+	error) {
 	u := parseRoute(fmt.Sprintf(getInvite, api, *i.Code))
 
 	q := u.Query()

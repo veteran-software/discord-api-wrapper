@@ -16,32 +16,33 @@
 
 package api
 
-import "github.com/veteran-software/discord-api-wrapper/oauth2"
+import "github.com/veteran-software/discord-api-wrapper/v10/oauth2"
 
 // Application - an application which operates on Discord, commonly referred to as bots
 //
 //goland:noinspection SpellCheckingInspection
 type Application struct {
-	ID                  Snowflake        `json:"id"`                             // the id of the app
-	Name                string           `json:"name"`                           // the name of the app
-	Icon                *string          `json:"icon"`                           // the icon hash of the app
-	Description         string           `json:"description"`                    // the description of the app
-	RpcOrigins          []string         `json:"rpc_origins"`                    // an array of rpc origin urls, if rpc is enabled
-	BotPublic           bool             `json:"bot_public"`                     // when false only app owner can join the app's bot to guilds
-	BotRequireCodeGrant bool             `json:"bot_require_code_grant"`         // when true the app's bot will only join upon completion of the full oauth2 code grant flow
-	TermsOfServiceURL   string           `json:"terms_of_service_url,omitempty"` // the url of the app's terms of service
-	PrivacyPolicyURL    string           `json:"privacy_policy_url,omitempty"`   // the url of the app's privacy policy
-	Owner               User             `json:"owner,omitempty"`                // partial user object containing info on the owner of the application
-	VerifyKey           string           `json:"verify_key"`                     // the hex encoded key for verification in interactions and the GameSDK's GetTicket
-	Team                *Team            `json:"team"`                           // if the application belongs to a team, this will be a list of the members of that team
-	GuildID             Snowflake        `json:"guild_id,omitempty"`             // if this application is a game sold on Discord, this field will be the guild to which it has been linked
-	PrimarySkuID        Snowflake        `json:"primary_sku_id"`                 // if this application is a game sold on Discord, this field will be the id of the "Game SKU" that is created, if exists
-	Slug                string           `json:"slug,omitempty"`                 // if this application is a game sold on Discord, this field will be the URL slug that links to the store page
-	CoverImage          string           `json:"cover_image,omitempty"`          // the application's default rich presence invite cover image hash
-	Flags               ApplicationFlags `json:"flags,omitempty"`                // the application's public ApplicationFlags
-	Tags                []string         `json:"tags,omitempty"`                 // up to 5 tags describing the content and functionality of the application
-	InstallParams       InstallParams    `json:"install_params,omitempty"`       // settings for the application's default in-app authorization link, if enabled
-	CustomInstallURL    string           `json:"custom_install_url,omitempty"`   // the application's default custom authorization link, if enabled
+	ID                             Snowflake        `json:"id"`                                // the id of the app
+	Name                           string           `json:"name"`                              // the name of the app
+	Icon                           *string          `json:"icon"`                              // the icon hash of the app
+	Description                    string           `json:"description"`                       // the description of the app
+	RpcOrigins                     []string         `json:"rpc_origins"`                       // an array of rpc origin urls, if rpc is enabled
+	BotPublic                      bool             `json:"bot_public"`                        // when false only app owner can join the app's bot to guilds
+	BotRequireCodeGrant            bool             `json:"bot_require_code_grant"`            // when true the app's bot will only join upon completion of the full oauth2 code grant flow
+	TermsOfServiceURL              string           `json:"terms_of_service_url,omitempty"`    // the url of the app's terms of service
+	PrivacyPolicyURL               string           `json:"privacy_policy_url,omitempty"`      // the url of the app's privacy policy
+	Owner                          User             `json:"owner,omitempty"`                   // partial user object containing info on the owner of the application
+	VerifyKey                      string           `json:"verify_key"`                        // the hex encoded key for verification in interactions and the GameSDK's GetTicket
+	Team                           *Team            `json:"team"`                              // if the application belongs to a team, this will be a list of the members of that team
+	GuildID                        Snowflake        `json:"guild_id,omitempty"`                // if this application is a game sold on Discord, this field will be the guild to which it has been linked
+	PrimarySkuID                   Snowflake        `json:"primary_sku_id"`                    // if this application is a game sold on Discord, this field will be the id of the "Game SKU" that is created, if exists
+	Slug                           string           `json:"slug,omitempty"`                    // if this application is a game sold on Discord, this field will be the URL slug that links to the store page
+	CoverImage                     string           `json:"cover_image,omitempty"`             // the application's default rich presence invite cover image hash
+	Flags                          ApplicationFlags `json:"flags,omitempty"`                   // the application's public ApplicationFlags
+	Tags                           []string         `json:"tags,omitempty"`                    // up to 5 tags describing the content and functionality of the application
+	InstallParams                  InstallParams    `json:"install_params,omitempty"`          // settings for the application's default in-app authorization link, if enabled
+	CustomInstallURL               string           `json:"custom_install_url,omitempty"`      // the application's default custom authorization link, if enabled
+	RoleConnectionsVerificationURL string           `json:"role_connections_verification_url"` // the application's role connection verification entry point, which when configured will render the app as a verification method in the guild role verification configuration
 }
 
 // ApplicationFlags - the application's public ApplicationFlags

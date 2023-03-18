@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Veteran Software
+ * Copyright (c) 2022-2023. Veteran Software
  *
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
@@ -47,9 +47,9 @@ func (c *Channel) String() string {
 		chanType = "DM:"
 	case GroupDM:
 		chanType = "GDM:"
-	case GuildNews:
+	case GuildAnnouncement:
 		chanType = "GNC:"
-	case GuildNewsThread:
+	case GuildAnnouncementThread:
 		chanType = "GNT:"
 	case GuildPublicThread:
 		chanType = "GPuT:"
@@ -303,4 +303,10 @@ func (f *Field) SetInline(inline bool) *Field {
 // IsInline - Helper function for testing is inline
 func (f *Field) IsInline() bool {
 	return f.Inline
+}
+
+func (c *Channel) getSelfMember() (*GuildMember, error) {
+	g := &Guild{ID: c.GuildID}
+
+	return g.GetGuildMember(&ApplicationID)
 }

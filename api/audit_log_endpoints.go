@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Veteran Software
+ * Copyright (c) 2022-2023. Veteran Software
  *
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
@@ -23,10 +23,20 @@ import (
 	"strconv"
 )
 
-// GetGuildAuditLog - Returns an audit log object for the guild.
+// GetGuildAuditLog - Returns an audit log object for the Guild. Requires the ViewAuditLog permission.
 //
-// Requires the ViewAuditLog permission.
-func (g *Guild) GetGuildAuditLog(userID *Snowflake, actionType *uint64, before *Snowflake, limit *uint64) (*AuditLog, error) {
+// The returned list of AuditLogEntry is ordered based on whether you use before or after.
+//
+// When using before, the list is ordered by the audit log entry ID descending (newer entries first).
+//
+// If after is used, the list is reversed and appears in ascending order (older entries first).
+//
+// Omitting both before and after defaults to before the current timestamp and will show the most recent entries in descending order by ID, the opposite can be achieved using after=0 (showing oldest entries).
+func (g *Guild) GetGuildAuditLog(userID *Snowflake,
+	actionType *uint64,
+	before, after *Snowflake,
+	limit *uint64) (*AuditLog,
+	error) {
 	u := parseRoute(fmt.Sprintf(getGuildAuditLog, api, g.ID.String()))
 
 	// Set the optional qsp
@@ -39,6 +49,9 @@ func (g *Guild) GetGuildAuditLog(userID *Snowflake, actionType *uint64, before *
 	}
 	if before != nil {
 		q.Set("before", before.String())
+	}
+	if after != nil {
+		q.Set("after", after.String())
 	}
 	if limit != nil {
 		if *limit >= 1 && *limit <= 100 {

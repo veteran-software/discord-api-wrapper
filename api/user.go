@@ -47,7 +47,7 @@ type User struct {
 	PremiumType   PremiumType `json:"premium_type,omitempty"`  // the type of Nitro subscription on a user's account
 	PublicFlags   UserFlags   `json:"public_flags,omitempty"`  // the public flags on a user's account
 
-	// Below required `email` OAuth2 scope
+	// Below require `email` OAuth2 scope
 	Verified bool    `json:"verified,omitempty"` // whether the email on this account has been verified
 	Email    *string `json:"email,omitempty"`    // the user's email
 }
@@ -106,17 +106,19 @@ type Service string
 //goland:noinspection SpellCheckingInspection,GoUnusedConst
 const (
 	BattleNet       Service = "battlenet"
+	CrunchyRoll     Service = "crunchyroll" // Undocumented as of 03/17/2023
 	Ebay            Service = "ebay"
 	EpicGames       Service = "epicgames"
 	Facebook        Service = "facebook"
 	GitHub          Service = "github"
+	Instagram       Service = "instagram"
 	LeagueOfLegends Service = "leagueoflegends"
 	PayPal          Service = "paypal"
 	PlayStation     Service = "playstation"
 	Reddit          Service = "reddit"
 	RiotGames       Service = "riotgames"
 	Spotify         Service = "spotify"
-	Skype           Service = "skype"
+	Skype           Service = "skype" // No longer to be added by users
 	Steam           Service = "steam"
 	TikTok          Service = "tiktok"
 	Twitch          Service = "twitch"
@@ -133,3 +135,9 @@ const (
 	ConnectionVisibilityTypeNone     ConnectionVisibilityType = iota // invisible to everyone except the user themselves
 	ConnectionVisibilityTypeEveryone                                 // visible to everyone
 )
+
+type ApplicationRoleConnection struct {
+	PlatformName     *string                           `json:"platform_name"`
+	PlatformUsername *string                           `json:"platform_username"`
+	Metadata         ApplicationRoleConnectionMetadata `json:"metadata"`
+}
