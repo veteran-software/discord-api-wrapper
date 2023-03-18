@@ -1,2 +1,2 @@
 version: "1.0"
-linter: jetbrains/qodana-go:2022.3.4
+linter: jetbrains/qodana-go:2022.3-eap
