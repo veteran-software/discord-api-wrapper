@@ -1,34 +1,654 @@
 {"version":"3","listProblem":[{
   "tool": "Code Inspection",
-  "category": "General",
-  "type": "Deprecated element",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
   "tags": [
     "go"
   ],
-  "severity": "High",
-  "comment": "'Component' is deprecated",
-  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "severity": "Moderate",
+  "comment": "Exported type 'ModifyGroupDmJSON' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
   "sources": [
     {
       "type": "file",
-      "path": "api/channel.go",
+      "path": "api/channel_endpoints.go",
       "language": "go",
-      "line": 158,
-      "offset": 26,
-      "length": 9,
+      "line": 59,
+      "offset": 6,
+      "length": 17,
       "code": {
-        "startLine": 156,
-        "length": 9,
-        "offset": 325,
-        "surroundingCode": "\tInteraction          MessageInteraction `json:\"interaction,omitempty\"`            // sent if the message is a response to an Interaction\n\tThread               Channel            `json:\"thread,omitempty\"`                 // the thread that was started from this message, includes ThreadMember object\n\tComponents           []*Component       `json:\"components,omitempty\"`             // sent if the message contains components like buttons, action rows, or other interactive components\n\tStickerItems         []string           `json:\"sticker_items,omitempty\"`          // sent if the message contains stickers\n\tStickers             []string           `json:\"stickers,omitempty\"`               // Deprecated: the stickers sent with the message"
+        "startLine": 57,
+        "length": 17,
+        "offset": 8,
+        "surroundingCode": "}\n\ntype ModifyGroupDmJSON struct {\n\tName string `json:\"name\"` // 1-100 character channel name\n\tIcon string `json:\"icon\"` // base64 encoded icon"
       }
     }
   ],
   "attributes": {
     "module": "project",
-    "inspectionName": "GoDeprecation"
+    "inspectionName": "GoExportedElementShouldHaveComment"
   },
-  "hash": "8ea4d8e04a7c4db124924d427864c5f61ef08638d305908379ee397e9120089c"
+  "hash": "bc93fc0009cbe431324a3e3d912fb286abb62d60cc581b7350f2b54e212d3538"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported method 'ModifyGuildTextChannel' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel_endpoints.go",
+      "language": "go",
+      "line": 64,
+      "offset": 19,
+      "length": 22,
+      "code": {
+        "startLine": 62,
+        "length": 22,
+        "offset": 21,
+        "surroundingCode": "}\n\nfunc (c *Channel) ModifyGuildTextChannel(payload ModifyTextChannelJSON, reason *string) (*Channel, error) {\n\treturn c.modifyChannel(payload, reason)\n}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "36014e2e8a9a673ed2a837187078d4bd3ad8e62696bd3eb344c14f0b1168b232"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported method 'ModifyGuildAnnouncementChannel' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel_endpoints.go",
+      "language": "go",
+      "line": 68,
+      "offset": 19,
+      "length": 30,
+      "code": {
+        "startLine": 66,
+        "length": 30,
+        "offset": 21,
+        "surroundingCode": "}\n\nfunc (c *Channel) ModifyGuildAnnouncementChannel(payload ModifyAnnouncementChannelJSON, reason *string) (*Channel,\n\terror) {\n\treturn c.modifyChannel(payload, reason)"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "84e0b4a7780dd132b46ed0990fe762f79dd8056e5aec50dcad80521e5a844213"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported method 'ModifyThread' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel_endpoints.go",
+      "language": "go",
+      "line": 73,
+      "offset": 19,
+      "length": 12,
+      "code": {
+        "startLine": 71,
+        "length": 12,
+        "offset": 21,
+        "surroundingCode": "}\n\nfunc (c *Channel) ModifyThread(payload ModifyThreadJSON, reason *string) (*Channel, error) {\n\treturn c.modifyChannel(payload, reason)\n}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "c4b57d007b318e8c97c547047cd10ceb0950c2686d4bcb2ba00c8bfee3f7d2c4"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported method 'ModifyGuildVoiceChannel' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel_endpoints.go",
+      "language": "go",
+      "line": 77,
+      "offset": 19,
+      "length": 23,
+      "code": {
+        "startLine": 75,
+        "length": 23,
+        "offset": 21,
+        "surroundingCode": "}\n\nfunc (c *Channel) ModifyGuildVoiceChannel(payload ModifyGuildVoiceChannelJSON, reason *string) (*Channel, error) {\n\treturn c.modifyChannel(payload, reason)\n}"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "513542da92e4e29de1dc6be6f9478c825b8acb645e91c940f94ee25404527472"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported type 'ModifyAllChannelJSON' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel_endpoints.go",
+      "language": "go",
+      "line": 81,
+      "offset": 6,
+      "length": 20,
+      "code": {
+        "startLine": 79,
+        "length": 20,
+        "offset": 8,
+        "surroundingCode": "}\n\ntype ModifyAllChannelJSON struct {\n\tName                 string       `json:\"name\"`                  // 1-100 character channel name\n\tPosition             *int         `json:\"position\"`              // the position of the channel in the left-hand listing"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "fff009a6ffc922c1dfb49ce406fbbbf7fd3e5eea1c94ffab5f11fedd38662c47"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported type 'ModifyAnnouncementChannelJSON' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel_endpoints.go",
+      "language": "go",
+      "line": 87,
+      "offset": 6,
+      "length": 29,
+      "code": {
+        "startLine": 85,
+        "length": 29,
+        "offset": 8,
+        "surroundingCode": "}\n\ntype ModifyAnnouncementChannelJSON struct {\n\tModifyAllChannelJSON\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "d230efff599a78246a6bd079829ed168f7440061910e54075881f0f48821a19e"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported type 'ModifyTextChannelJSON' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel_endpoints.go",
+      "language": "go",
+      "line": 97,
+      "offset": 6,
+      "length": 21,
+      "code": {
+        "startLine": 95,
+        "length": 21,
+        "offset": 8,
+        "surroundingCode": "}\n\ntype ModifyTextChannelJSON struct {\n\tModifyAnnouncementChannelJSON\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "57cd35ebf50b8582b3f5c529de06a9c0d0ec176e9878e82b7c186210b8d7f567"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported type 'ModifyGuildVoiceChannelJSON' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel_endpoints.go",
+      "language": "go",
+      "line": 103,
+      "offset": 6,
+      "length": 27,
+      "code": {
+        "startLine": 101,
+        "length": 27,
+        "offset": 8,
+        "surroundingCode": "}\n\ntype ModifyGuildVoiceChannelJSON struct {\n\tModifyAllChannelJSON\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "5f4e75cd135018ff0ac3668831d45c4b922bf0e38b120c80c403aa2a6b6d1838"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported type 'ThreadListResponse' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel_endpoints.go",
+      "language": "go",
+      "line": 897,
+      "offset": 6,
+      "length": 18,
+      "code": {
+        "startLine": 895,
+        "length": 18,
+        "offset": 8,
+        "surroundingCode": "}\n\ntype ThreadListResponse struct {\n\tThreads []*Channel      `json:\"threads\"`            // the archived threads\n\tMembers []*ThreadMember `json:\"members\"`            // a thread member object for each returned thread the current user has joined"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "69a806a5f49a0a1e1da91466cf0fac705f661032f425823780b99160301f2bbf"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported type 'ApplicationRoleConnection' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/user.go",
+      "language": "go",
+      "line": 139,
+      "offset": 6,
+      "length": 25,
+      "code": {
+        "startLine": 137,
+        "length": 25,
+        "offset": 8,
+        "surroundingCode": ")\n\ntype ApplicationRoleConnection struct {\n\tPlatformName     *string                           `json:\"platform_name\"`\n\tPlatformUsername *string                           `json:\"platform_username\"`"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "630c9f9d7287d75c62722d63f66bb155c3964a075da5d4e988043319bcb54696"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported type 'GuildTextChannel' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel.go",
+      "language": "go",
+      "line": 62,
+      "offset": 6,
+      "length": 16,
+      "code": {
+        "startLine": 60,
+        "length": 16,
+        "offset": 8,
+        "surroundingCode": "}\n\ntype GuildTextChannel struct {\n\t*Channel\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "3173a3e392e93e37fd5e6d36fcd3cf2edca95b64aac63aaeff5a6e29963c08b6"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported type 'GuildVoiceChannel' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel.go",
+      "language": "go",
+      "line": 77,
+      "offset": 6,
+      "length": 17,
+      "code": {
+        "startLine": 75,
+        "length": 17,
+        "offset": 8,
+        "surroundingCode": "}\n\ntype GuildVoiceChannel struct {\n\t*Channel\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "cce494eedc167afcd9f9df70dcfd2fe06a14e95af196c9c6f793ed021c48f6e5"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported type 'GuildCategoryChannel' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel.go",
+      "language": "go",
+      "line": 93,
+      "offset": 6,
+      "length": 20,
+      "code": {
+        "startLine": 91,
+        "length": 20,
+        "offset": 8,
+        "surroundingCode": "}\n\ntype GuildCategoryChannel struct {\n\t*Channel\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "363dddd22696d2183518404af7071f152514b3e8832745566a9d8fda4c4a6810"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported type 'GuildAnnouncementChannel' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel.go",
+      "language": "go",
+      "line": 103,
+      "offset": 6,
+      "length": 24,
+      "code": {
+        "startLine": 101,
+        "length": 24,
+        "offset": 8,
+        "surroundingCode": "}\n\ntype GuildAnnouncementChannel struct {\n\t*Channel\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "36871146ae2502faf247ed40fc56c7667b88e69cc3bd8e366e366ca297d1280e"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported type 'GuildAnnouncementThreadChannel' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel.go",
+      "language": "go",
+      "line": 118,
+      "offset": 6,
+      "length": 30,
+      "code": {
+        "startLine": 116,
+        "length": 30,
+        "offset": 8,
+        "surroundingCode": "}\n\ntype GuildAnnouncementThreadChannel struct {\n\t*Channel\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "361a891c0c5f714d84972b33a6c07b648d619c44ede8e4b5b31c563452e2e9e3"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported type 'GuildPublicThreadChannel' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel.go",
+      "language": "go",
+      "line": 133,
+      "offset": 6,
+      "length": 24,
+      "code": {
+        "startLine": 131,
+        "length": 24,
+        "offset": 8,
+        "surroundingCode": "}\n\ntype GuildPublicThreadChannel struct {\n\t*Channel\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "f78d2f10a7c5b3749e34afa9e53173d0eae5df017d20a135867f560fdb34c431"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported type 'GuildPrivateThreadChannel' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel.go",
+      "language": "go",
+      "line": 149,
+      "offset": 6,
+      "length": 25,
+      "code": {
+        "startLine": 147,
+        "length": 25,
+        "offset": 8,
+        "surroundingCode": "}\n\ntype GuildPrivateThreadChannel struct {\n\t*Channel\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "a0b51baf730252b215e4859e973b5200fe709b70a290feb4984cacd54b0bb616"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported type 'GuildStageVoiceChannel' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel.go",
+      "language": "go",
+      "line": 164,
+      "offset": 6,
+      "length": 22,
+      "code": {
+        "startLine": 162,
+        "length": 22,
+        "offset": 8,
+        "surroundingCode": "}\n\ntype GuildStageVoiceChannel struct {\n\t*Channel\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "568724de7e2a63edb0d6f4db1c20bf5d6f250defa09963e568a2027fbb314df8"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported type 'GuildForumChannel' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel.go",
+      "language": "go",
+      "line": 181,
+      "offset": 6,
+      "length": 17,
+      "code": {
+        "startLine": 179,
+        "length": 17,
+        "offset": 8,
+        "surroundingCode": "}\n\ntype GuildForumChannel struct {\n\t*Channel\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "37c715c406257d9f7f9cbdf1ef600a659fef67f5640b38ff67d4005f1a2a9d8b"
+},{
+  "tool": "Code Inspection",
+  "category": "Code style issues",
+  "type": "Exported element should have a comment",
+  "tags": [
+    "go"
+  ],
+  "severity": "Moderate",
+  "comment": "Exported constant 'ManageGuildPermissionsAreRequired' should have a comment or be unexported",
+  "detailsInfo": "Reports exported declarations without a documentation comment. According to [Doc Comments at golang.org](https://golang.org/wiki/CodeReviewComments#doc-comments), all top-level exported names should have doc comments.\n\nAlso, for more information about comment sentences, see [Comment\nSentences at golang.org](https://golang.org/wiki/CodeReviewComments#comment-sentences).\n\nTo add a comment, you can apply the **Add comment** quick-fix.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "utilities/constants.go",
+      "language": "go",
+      "line": 19,
+      "offset": 7,
+      "length": 33,
+      "code": {
+        "startLine": 17,
+        "length": 33,
+        "offset": 25,
+        "surroundingCode": "package utilities\n\nconst ManageGuildPermissionsAreRequired = \"manage guild permissions are required to use this endpoint\"\n"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoExportedElementShouldHaveComment"
+  },
+  "hash": "e4eb2e49ad2fcf97621f4b04706e465726d3c75d394cd6fc04ebf9dd6a39ab2d"
 },{
   "tool": "Code Inspection",
   "category": "General",
@@ -42,13 +662,13 @@
   "sources": [
     {
       "type": "file",
-      "path": "api/channel.go",
+      "path": "api/channel_endpoints.go",
       "language": "go",
-      "line": 683,
+      "line": 266,
       "offset": 22,
       "length": 9,
       "code": {
-        "startLine": 681,
+        "startLine": 264,
         "length": 9,
         "offset": 221,
         "surroundingCode": "\tAllowedMentions  AllowedMentions  `json:\"allowed_mentions\"`  // allowed mentions for the message\n\tMessageReference MessageReference `json:\"message_reference\"` // include to make your message a reply\n\tComponents       []*Component     `json:\"components\"`        // the components to include with the message\n\tStickerIDs       []*Snowflake     `json:\"sticker_ids\"`       // IDs of up to 3 stickers in the server to send in the message\n\tPayloadJson      string           `json:\"payload_json\"`      // JSON encoded body of non-file params"
@@ -59,7 +679,7 @@
     "module": "project",
     "inspectionName": "GoDeprecation"
   },
-  "hash": "2b3964166d12217b1a12259bb6c1013894594c5baae8574e51d2f6b7810c781e"
+  "hash": "c9dd69fdedc0b5145f6f543308db61494c5bba210715ee7e130eb6383bc6df78"
 },{
   "tool": "Code Inspection",
   "category": "General",
@@ -73,13 +693,13 @@
   "sources": [
     {
       "type": "file",
-      "path": "api/channel.go",
+      "path": "api/channel_endpoints.go",
       "language": "go",
-      "line": 854,
+      "line": 440,
       "offset": 21,
       "length": 9,
       "code": {
-        "startLine": 852,
+        "startLine": 438,
         "length": 9,
         "offset": 149,
         "surroundingCode": "\tFlags           *int             `json:\"flags,omitempty\"`\n\tAllowedMentions *AllowedMentions `json:\"allowed_mentions,omitempty\"`\n\tComponents      []*Component     `json:\"components,omitempty\"`\n\tPayloadJson     *string          `json:\"payload_json,omitempty\"`\n\tAttachments     []*Attachment    `json:\"attachments,omitempty\"`"
@@ -90,7 +710,38 @@
     "module": "project",
     "inspectionName": "GoDeprecation"
   },
-  "hash": "5f69f34a8e5a010b0790d48b24984ee79a3d43b0de1c8d32cf4f4c2df33c7efc"
+  "hash": "5c3a9f3f9be0d405848fe52cc2986e358bf1734d1fd8f5511bb0f3b12bb96870"
+},{
+  "tool": "Code Inspection",
+  "category": "General",
+  "type": "Deprecated element",
+  "tags": [
+    "go"
+  ],
+  "severity": "High",
+  "comment": "'Component' is deprecated",
+  "detailsInfo": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated.",
+  "sources": [
+    {
+      "type": "file",
+      "path": "api/channel_endpoints.go",
+      "language": "go",
+      "line": 783,
+      "offset": 21,
+      "length": 9,
+      "code": {
+        "startLine": 781,
+        "length": 9,
+        "offset": 223,
+        "surroundingCode": "\tEmbeds          []*Embed        `json:\"embeds\"`           // embedded rich content (up to 6000 characters)\n\tAllowedMentions AllowedMentions `json:\"allowed_mentions\"` // allowed mentions for the message\n\tComponents      []*Component    `json:\"components\"`       // the components to include with the message\n\tStickerIDs      []*Snowflake    `json:\"sticker_ids\"`      // IDs of up to 3 stickers in the server to send in the message\n\tPayloadJson     string          `json:\"payload_json\"`     // JSON encoded body of non-file params"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "GoDeprecation"
+  },
+  "hash": "d3d951a1a3a4c75046fba2f0e7d0f64894bbf4b74628af2facbefe5e08567d9e"
 },{
   "tool": "Code Inspection",
   "category": "General",
@@ -106,14 +757,14 @@
       "type": "file",
       "path": "api/channel.go",
       "language": "go",
-      "line": 1195,
-      "offset": 21,
+      "line": 293,
+      "offset": 26,
       "length": 9,
       "code": {
-        "startLine": 1193,
+        "startLine": 291,
         "length": 9,
-        "offset": 223,
-        "surroundingCode": "\tEmbeds          []*Embed        `json:\"embeds\"`           // embedded rich content (up to 6000 characters)\n\tAllowedMentions AllowedMentions `json:\"allowed_mentions\"` // allowed mentions for the message\n\tComponents      []*Component    `json:\"components\"`       // the components to include with the message\n\tStickerIDs      []*Snowflake    `json:\"sticker_ids\"`      // IDs of up to 3 stickers in the server to send in the message\n\tPayloadJson     string          `json:\"payload_json\"`     // JSON encoded body of non-file params"
+        "offset": 325,
+        "surroundingCode": "\tInteraction          MessageInteraction `json:\"interaction,omitempty\"`            // sent if the message is a response to an Interaction\n\tThread               Channel            `json:\"thread,omitempty\"`                 // the thread that was started from this message, includes ThreadMember object\n\tComponents           []*Component       `json:\"components,omitempty\"`             // sent if the message contains components like buttons, action rows, or other interactive components\n\tStickerItems         []string           `json:\"sticker_items,omitempty\"`          // sent if the message contains stickers\n\tStickers             []string           `json:\"stickers,omitempty\"`               // Deprecated: the stickers sent with the message"
       }
     }
   ],
@@ -121,5 +772,36 @@
     "module": "project",
     "inspectionName": "GoDeprecation"
   },
-  "hash": "04a961eef841288ed0bdf6d7f12bd83d991a2e84fae9015e2cf5dfccb0e52808"
+  "hash": "ab39aa074e4dedbd2f7ce59ece8335a326a4248247759095f19c0fd033f1d6e0"
+},{
+  "tool": "Code Inspection",
+  "category": "Declaration redundancy",
+  "type": "Unused dependency",
+  "tags": [
+    "vgo"
+  ],
+  "severity": "High",
+  "comment": "Unused dependency",
+  "detailsInfo": "Reports unused dependencies.\n\nFor each dependency in the current *go.mod* file, this inspection searches for any import statement starting with the dependency\nname in\nall GO files.\nIf no such imports found then the dependency is considered unused.\nThis inspection is an equivalent of the [`go mod why` command](https://golang.org/ref/mod#go-mod-why).\n\nThe inspection processes `require` and `replace` directives.\nThe `require` directives with `// indirect` comments are also processed.\n\nThe inspection might not accurately determine that a replaced or indirectly-required dependency is unused in the following cases:\n\n* Vendoring mode is enabled\n* Some dependencies are not downloaded",
+  "sources": [
+    {
+      "type": "file",
+      "path": "go.mod",
+      "language": "vgo",
+      "line": 8,
+      "offset": 2,
+      "length": 77,
+      "code": {
+        "startLine": 6,
+        "length": 77,
+        "offset": 73,
+        "surroundingCode": "\tgithub.com/gojek/heimdall/v7 v7.0.2\n\tgithub.com/sirupsen/logrus v1.9.0\n\tgithub.com/t-tomalak/logrus-easy-formatter v0.0.0-20190827215021-c074f06c5816\n\tgithub.com/veteran-software/nowlive-logging v1.0.4\n\tgithub.com/vincent-petithory/dataurl v1.0.0"
+      }
+    }
+  ],
+  "attributes": {
+    "module": "project",
+    "inspectionName": "VgoUnusedDependency"
+  },
+  "hash": "d4f3d9e121bbd9c6ad2f96c1340a451634c592d8312b49f385fbbef92c133d1a"
 }]}
