@@ -125,7 +125,7 @@ func (r *RateLimiter) lockedRequest(method, route, contentType string,
 
 	req.Header.Set("User-Agent", UserAgent)
 
-	ctx, cancel := context.WithDeadline(req.Context(), time.Now().Add(5*time.Second))
+	ctx, cancel := context.WithDeadline(req.Context(), time.Now().Add(10*time.Second))
 	handleContextCancel(ctx, cancel)
 
 	resp, err := httpClient.Do(req.WithContext(ctx))

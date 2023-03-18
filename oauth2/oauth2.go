@@ -92,6 +92,7 @@ const (
 	Identify                              Scopes = "identify"                                 // allows `/users/@me` without email
 	MessagesRead                          Scopes = "messages.read"                            // for local rpc server api access, this allows you to read messages from all client channels (otherwise restricted to channels/guilds your app creates)
 	RelationshipsRead                     Scopes = "relationships.read"                       // allows your app to know a user's friends and implicit relationships - requires Discord approval
+	RoleConnectionsWrite                  Scopes = "role_connections.write"                   // allows your app to update a user's connection and metadata for the app
 	Rpc                                   Scopes = "rpc"                                      // for local rpc server access, this allows you to control a user's local Discord client - requires Discord approval
 	RpcActivitiesWrite                    Scopes = "rpc.activities.write"                     // for local rpc server access, this allows you to update a user's activity - requires Discord approval
 	RpcNotificationsRead                  Scopes = "rpc.notifications.read"                   // for local rpc server access, this allows you to receive notifications pushed out to the user - requires Discord approval
