@@ -18,7 +18,6 @@ package api
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -34,21 +33,13 @@ import (
 
 //goland:noinspection SpellCheckingInspection
 var (
-	initialTimeout        = 500 * time.Millisecond
-	maxTimeout            = 25 * time.Second
-	exponentFactor        = 2.0
-	maximumJitterInterval = 2 * time.Millisecond
-	retryCount            = 2
-
-	backoff = heimdall.NewExponentialBackoff(initialTimeout, maxTimeout, exponentFactor, maximumJitterInterval)
-
-	// Create a new retry mechanism with the backoff
-	retrier = heimdall.NewRetrier(backoff)
+	timeout = 1000 * time.Millisecond
 
 	httpClient = httpclient.NewClient(
-		httpclient.WithRetrier(retrier),
-		httpclient.WithRetryCount(retryCount),
-	)
+		httpclient.WithHTTPTimeout(timeout),
+		httpclient.WithRetryCount(2),
+		httpclient.WithRetrier(heimdall.NewRetrier(heimdall.NewConstantBackoff(100*time.Millisecond,
+			500*time.Millisecond))))
 )
 
 var (
@@ -67,12 +58,11 @@ func (r *RateLimiter) Request(method, route string, data any, reason *string) (*
 
 func (r *RateLimiter) requestWithBucketID(method, route, bucketID string, data any, reason *string) (*http.Response,
 	error) {
-	return r.request(method, route, "application/json", data, bucketID, 0, reason)
+	return r.request(method, route, "application/json", bucketID, data, 0, reason)
 }
 
-func (r *RateLimiter) request(method, route, contentType string,
+func (r *RateLimiter) request(method, route, contentType, bucketID string,
 	b any,
-	bucketID string,
 	sequence int,
 	reason *string) (*http.Response, error) {
 	if bucketID == "" {
@@ -125,10 +115,7 @@ func (r *RateLimiter) lockedRequest(method, route, contentType string,
 
 	req.Header.Set("User-Agent", UserAgent)
 
-	ctx, cancel := context.WithDeadline(req.Context(), time.Now().Add(10*time.Second))
-	handleContextCancel(ctx, cancel)
-
-	resp, err := httpClient.Do(req.WithContext(ctx))
+	resp, err := httpClient.Do(req)
 
 	if err != nil {
 		_ = bucket.release(nil)
@@ -160,21 +147,6 @@ func (r *RateLimiter) lockedRequest(method, route, contentType string,
 	return resp, nil
 }
 
-func handleContextCancel(ctx context.Context, cancel context.CancelFunc) {
-	go func(ctx context.Context) {
-		defer cancel()
-
-		<-ctx.Done()
-
-		switch ctx.Err() {
-		case context.DeadlineExceeded:
-			log.Traceln(log.FuncName(), "context timeout exceeded")
-		case context.Canceled:
-			log.Traceln(log.FuncName(), "context cancelled; process complete")
-		}
-	}(ctx)
-}
-
 func parseRoute(route string) *url.URL {
 	u, err := url.Parse(route)
 	if err != nil {
@@ -200,6 +172,8 @@ func fireGetRequest(u *url.URL, data any, reason *string) []byte {
 		log.Errorln(log.FuncName(), err)
 		return []byte{} // we return an empty byte slice here to avoid nil pointer problems
 	}
+
+	//ch <- b
 
 	return b
 }
