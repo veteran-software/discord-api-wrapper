@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Veteran Software
+ * Copyright (c) 2022-2023. Veteran Software
  *
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
@@ -31,3 +31,12 @@ type Emoji struct {
 	Animated      bool       `json:"animated,omitempty"`       // Animated - whether this emoji is animated
 	Available     bool       `json:"available,omitempty"`      // Available - whether this emoji can be used, may be false due to loss of Server Boosts
 }
+
+/*
+Premium Emoji
+
+Roles with the integration_id tag being the guild's guild_subscription integration are considered subscription roles.
+An emoji cannot have both subscription roles and non-subscription roles.
+Emojis with subscription roles are considered premium emoji, and count toward a separate limit of 25.
+Emojis cannot be converted between normal and premium after creation.
+*/

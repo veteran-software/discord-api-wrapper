@@ -29,7 +29,9 @@ import (
 // This endpoint requires the ManageGuild permission.
 //
 //goland:noinspection GoUnusedExportedFunction
-func ListAutoModerationRulesForGuild(guildID string, channel *Channel, userID *Snowflake) ([]*AutoModerationRule,
+func ListAutoModerationRulesForGuild(guildID string,
+	channel *Channel,
+	userID *Snowflake) ([]*AutoModerationRule,
 	error) {
 	g := &Guild{ID: *StringToSnowflake(guildID)}
 

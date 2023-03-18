@@ -168,7 +168,10 @@ func (c *Channel) DeleteChannel(reason *string) error {
 //	The before, after, and around keys are mutually exclusive, only one may be passed at a time.
 //
 // TODO: Check permissions; required ViewChannel and ReadMessageHistory
-func (c *Channel) GetChannelMessages(around *Snowflake, before *Snowflake, after *Snowflake, limit *int) (
+func (c *Channel) GetChannelMessages(around *Snowflake,
+	before *Snowflake,
+	after *Snowflake,
+	limit *int) (
 	[]*Message,
 	error,
 ) {
@@ -344,7 +347,10 @@ func (c *Channel) DeleteUserReaction(messageID Snowflake, emoji string, userID S
 // To use custom emoji, you must encode it in the format name:id with the emoji name and emoji id.
 //
 // OPTS SUPPORTS: "after : Snowflake"; "limit : int", nil
-func (c *Channel) GetReactions(messageID Snowflake, emoji string, after *Snowflake, limit *int) ([]*User, error) {
+func (c *Channel) GetReactions(messageID Snowflake,
+	emoji string,
+	after *Snowflake,
+	limit *int) ([]*User, error) {
 	u := parseRoute(fmt.Sprintf(getReactions, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji)))
 
 	q := u.Query()
@@ -498,7 +504,9 @@ type BulkDeleteJSON struct {
 // For more information about permissions, see permissions.
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
-func (c *Channel) EditChannelPermissions(overwriteID Snowflake, payload EditChannelPermissionsJSON, reason *string) {
+func (c *Channel) EditChannelPermissions(overwriteID Snowflake,
+	payload EditChannelPermissionsJSON,
+	reason *string) {
 	u := parseRoute(fmt.Sprintf(editChannelPermissions, api, c.ID.String(), overwriteID.String()))
 
 	_ = firePutRequest(u, payload, reason)
@@ -922,7 +930,8 @@ func (c *Channel) ListPrivateArchivedThreads(before *time.Time, limit *int) (*Th
 // Threads are ordered by their id, in descending order.
 //
 // Requires the READ_MESSAGE_HISTORY permission.
-func (c *Channel) ListJoinedPrivateArchivedThreads(before *Snowflake, limit *int) (*ThreadListResponse, error) {
+func (c *Channel) ListJoinedPrivateArchivedThreads(before *Snowflake, limit *int) (*ThreadListResponse,
+	error) {
 	u := parseRoute(fmt.Sprintf(listJoinedPrivateArchivedThreads, api, c.ID.String()))
 
 	q := u.Query()

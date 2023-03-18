@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Veteran Software
+ * Copyright (c) 2022-2023. Veteran Software
  *
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
@@ -189,4 +189,33 @@ func (u *User) GetDefaultUserAvatarUrl() string {
 	}
 
 	return ImageBaseURL + fmt.Sprintf(getDefaultUserAvatarUrl, strconv.Itoa(discriminator%5))
+}
+
+// GetUserApplicationRoleConnection - Returns the application role connection for the user.
+//
+// Requires an OAuth2 access token with role_connections.write scope for the application specified in the path.
+//
+//goland:noinspection GoUnusedExportedFunction
+func GetUserApplicationRoleConnection(applicationID *Snowflake) (*ApplicationRoleConnection, error) {
+	u := parseRoute(fmt.Sprintf(getUserApplicationRoleConnection, api, applicationID.String()))
+
+	var connection *ApplicationRoleConnection
+	err := json.Unmarshal(fireGetRequest(u, nil, nil), &connection)
+
+	return connection, err
+}
+
+// UpdateUserApplicationRoleConnection - Updates and returns the application role connection for the user.
+//
+// Requires an OAuth2 access token with role_connections.write scope for the application specified in the path.
+//
+//goland:noinspection GoUnusedExportedFunction
+func UpdateUserApplicationRoleConnection(applicationID *Snowflake,
+	payload *ApplicationRoleConnection) (*ApplicationRoleConnection, error) {
+	u := parseRoute(fmt.Sprintf(modifyUserApplicationRoleConnection, api, applicationID.String()))
+
+	var connection *ApplicationRoleConnection
+	err := json.Unmarshal(firePutRequest(u, payload, nil), &connection)
+
+	return connection, err
 }

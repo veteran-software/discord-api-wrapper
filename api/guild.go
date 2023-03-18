@@ -75,7 +75,7 @@ type Guild struct {
 	StageInstances       []*StageInstance       `json:"stage_instances,omitempty"`        // Stage instances in the guild
 	GuildScheduledEvents []*GuildScheduledEvent `json:"guild_scheduled_events,omitempty"` // the scheduled events in the guild
 
-	// These fields are only sent when using the GET Current user Guilds endpoint and are relative to the requested user
+	// These fields are only sent when using the GET CurrentUserGuilds endpoint and are relative to the requested user
 
 	Owner       bool   `json:"owner,omitempty"`       // true if the user is the owner of the guild
 	Permissions string `json:"permissions,omitempty"` // total permissions for the user in the guild (excludes overwrites)
@@ -257,6 +257,7 @@ type GuildMember struct {
 // GuildMemberFlag - guild member flags represented as a bit set, defaults to 0
 type GuildMemberFlag int
 
+//goland:noinspection GoUnusedConst
 const (
 	DidRejoin            GuildMemberFlag = 1 << 0 // DidRejoin - Member has left and rejoined the guild
 	CompletedOnboarding  GuildMemberFlag = 1 << 1 // CompletedOnboarding - Member has completed onboarding

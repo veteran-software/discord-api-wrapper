@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Veteran Software
+ * Copyright (c) 2022-2023. Veteran Software
  *
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
@@ -24,10 +24,10 @@ const (
 
 // GatewayPayload - S and T are null when Op is not 0 (Gateway Dispatch Opcode).
 type GatewayPayload struct {
-	Op int     `json:"op"` // opcode for the payload
-	D  *any    `json:"d"`  // event data
-	S  *int    `json:"s"`  // sequence number, used for resuming sessions and heartbeats
-	T  *string `json:"t"`  // the event name for this payload
+	Op int     `json:"op"` // Gateway opcode, which indicates the payload type
+	D  *any    `json:"d"`  // Event data
+	S  *int    `json:"s"`  // Sequence number, used for resuming sessions and heartbeats
+	T  *string `json:"t"`  // Event name
 }
 
 // OpCode
@@ -61,7 +61,7 @@ const (
 // When identifying to the gateway, you can specify an intents parameter which allows you to conditionally subscribe to pre-defined "intents", groups of events defined by Discord.
 //
 // If you do not specify a certain intent, you will not receive any of the gateway events that are batched into that group.
-type GatewayIntents int64
+type GatewayIntents uint64
 
 //goland:noinspection GoUnusedConst
 const (

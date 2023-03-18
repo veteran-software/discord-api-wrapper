@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Veteran Software
+ * Copyright (c) 2022-2023. Veteran Software
  *
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
@@ -34,7 +34,13 @@ func Contains[T comparable](slice []T, e T) bool {
 	return false
 }
 
+//goland:noinspection GoUnusedExportedFunction
 func FuncName() string {
 	pc, _, line, _ := runtime.Caller(1)
 	return fmt.Sprintf("(%s:L%d)", runtime.FuncForPC(pc).Name(), line)
+}
+
+//goland:noinspection GoUnusedExportedFunction
+func ToPtr[T any](p T) *T {
+	return &p
 }

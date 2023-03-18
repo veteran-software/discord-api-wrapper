@@ -111,6 +111,7 @@ const (
 	createGuildRole                                = getGuildRoles
 	modifyGuildRolePositions                       = createGuildRole
 	modifyGuildRole                                = "%s/guilds/%s/roles/%s"
+	modifyGuildMfaLevel                            = "%s/guilds/%s/mfa"
 	deleteGuildRole                                = modifyGuildRole
 	listGuildScheduledEvents                       = "%s/guilds/%s/scheduled-events"
 	createGuildScheduledEvent                      = listGuildScheduledEvents
@@ -150,6 +151,8 @@ const (
 	createDM                                       = "%s/users/@me/channels"
 	createGroupDM                                  = createDM
 	getUserConnections                             = "%s/users/@me/connections"
+	getUserApplicationRoleConnection               = "%s/users/@me/applications/%s/role-connection"
+	modifyUserApplicationRoleConnection            = getUserApplicationRoleConnection
 	getCurrentUserGuilds                           = "%s/users/@me/guilds"
 	leaveGuild                                     = "%s/users/@me/guilds/%s"
 	getCurrentUserGuildMember                      = "%s/users/@me/guilds/%s/member"

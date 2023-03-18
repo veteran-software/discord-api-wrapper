@@ -304,3 +304,9 @@ func (f *Field) SetInline(inline bool) *Field {
 func (f *Field) IsInline() bool {
 	return f.Inline
 }
+
+func (c *Channel) getSelfMember() (*GuildMember, error) {
+	g := &Guild{ID: c.GuildID}
+
+	return g.GetGuildMember(&ApplicationID)
+}

@@ -124,9 +124,11 @@ func computeBasePermissions(guild *Guild, member *GuildMember) Permission {
 }
 
 func getOverwrite(channel *Channel, id *Snowflake, pType OverwriteType) *Overwrite {
-	for _, overwrite := range channel.PermissionOverwrites {
-		if overwrite.Type == pType && overwrite.ID == *id {
-			return overwrite
+	if channel != nil {
+		for _, overwrite := range channel.PermissionOverwrites {
+			if overwrite.Type == pType && overwrite.ID == *id {
+				return overwrite
+			}
 		}
 	}
 
