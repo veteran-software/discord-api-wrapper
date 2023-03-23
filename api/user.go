@@ -32,20 +32,23 @@ package api
 //
 // It's important to properly handle all error messages returned by Discord when editing or updating names.
 type User struct {
-	ID            Snowflake   `json:"id,omitempty"`            // the user's id
-	Username      string      `json:"username,omitempty"`      // the user's username, not unique across the platform
-	Discriminator string      `json:"discriminator,omitempty"` // the user's 4-digit discord-tag
-	Avatar        *string     `json:"avatar"`                  // the user's avatar hash
-	Bot           bool        `json:"bot,omitempty"`           // whether the user belongs to an OAuth2 application
-	System        bool        `json:"system,omitempty"`        // whether the user is an Official Discord System user (part of the urgent message system)
-	MfaEnabled    bool        `json:"mfa_enabled,omitempty"`   // whether the user has two factor enabled on their account
-	Banner        *string     `json:"banner,omitempty"`        // the user's banner hash
-	BannerColor   string      `json:"banner_color,omitempty"`  // Undocumented as of 10/31/21
-	AccentColor   *uint       `json:"accent_color,omitempty"`  // the user's banner color encoded as an integer representation of hexadecimal color code
-	Locale        string      `json:"locale,omitempty"`        // the user's chosen language option
-	Flags         UserFlags   `json:"flags,omitempty"`         // the flags on a user's account
-	PremiumType   PremiumType `json:"premium_type,omitempty"`  // the type of Nitro subscription on a user's account
-	PublicFlags   UserFlags   `json:"public_flags,omitempty"`  // the public flags on a user's account
+	ID               Snowflake   `json:"id,omitempty"`                // the user's id
+	Username         string      `json:"username,omitempty"`          // the user's username, not unique across the platform
+	Discriminator    string      `json:"discriminator,omitempty"`     // the user's 4-digit discord-tag
+	Avatar           *string     `json:"avatar"`                      // the user's avatar hash
+	Bot              bool        `json:"bot,omitempty"`               // whether the user belongs to an OAuth2 application
+	System           bool        `json:"system,omitempty"`            // whether the user is an Official Discord System user (part of the urgent message system)
+	MfaEnabled       bool        `json:"mfa_enabled,omitempty"`       // whether the user has two factor enabled on their account
+	Banner           *string     `json:"banner,omitempty"`            // the user's banner hash
+	BannerColor      string      `json:"banner_color,omitempty"`      // Undocumented as of 10/31/21
+	AccentColor      *uint       `json:"accent_color,omitempty"`      // the user's banner color encoded as an integer representation of hexadecimal color code
+	Locale           string      `json:"locale,omitempty"`            // the user's chosen language option
+	Flags            UserFlags   `json:"flags,omitempty"`             // the flags on a user's account
+	PremiumType      PremiumType `json:"premium_type,omitempty"`      // the type of Nitro subscription on a user's account
+	PublicFlags      UserFlags   `json:"public_flags,omitempty"`      // the public flags on a user's account
+	GlobalName       *string     `json:"global_name,omitempty"`       // UNDOCUMENTED AS OF 3/23/2023
+	DisplayName      *string     `json:"display_name,omitempty"`      // UNDOCUMENTED AS OF 3/23/2023
+	AvatarDecoration *string     `json:"avatar_decoration,omitempty"` // UNDOCUMENTED AS OF 3/23/2023
 
 	// Below require `email` OAuth2 scope
 	Verified bool    `json:"verified,omitempty"` // whether the email on this account has been verified

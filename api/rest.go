@@ -92,6 +92,7 @@ func (r *RateLimiter) lockedRequest(method, route, contentType string,
 	bucket *bucket,
 	sequence int,
 	reason *string) (*http.Response, error) {
+
 	buffer, err := processBody(b, bucket)
 	if err != nil {
 		return nil, err
