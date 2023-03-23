@@ -26,20 +26,15 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gojek/heimdall/v7"
 	"github.com/gojek/heimdall/v7/httpclient"
 	log "github.com/veteran-software/nowlive-logging"
 )
 
 //goland:noinspection SpellCheckingInspection
 var (
-	timeout = 1000 * time.Millisecond
+	timeout = 1200 * time.Millisecond
 
-	httpClient = httpclient.NewClient(
-		httpclient.WithHTTPTimeout(timeout),
-		httpclient.WithRetryCount(2),
-		httpclient.WithRetrier(heimdall.NewRetrier(heimdall.NewConstantBackoff(100*time.Millisecond,
-			500*time.Millisecond))))
+	httpClient = httpclient.NewClient(httpclient.WithHTTPTimeout(timeout))
 )
 
 var (
