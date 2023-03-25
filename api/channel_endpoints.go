@@ -23,6 +23,8 @@ import (
 	"net/url"
 	"strconv"
 	"time"
+
+	log "github.com/veteran-software/nowlive-logging"
 )
 
 // GetChannel - Get a Channel by ID. Returns a Channel object. If the channel is a thread, a thread member object is included in the returned result.
@@ -31,10 +33,16 @@ import (
 func GetChannel(channelID *Snowflake) (*Channel, error) {
 	u := parseRoute(fmt.Sprintf(getChannel, api, channelID.String()))
 
-	var c *Channel
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &c)
+	var channel *Channel
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
 
-	return c, err
+	err = json.Unmarshal(responseBytes, &channel)
+
+	return channel, err
 }
 
 // GetChannel - Get a channel by ID.
@@ -45,10 +53,16 @@ func GetChannel(channelID *Snowflake) (*Channel, error) {
 func (c *Channel) GetChannel() (*Channel, error) {
 	u := parseRoute(fmt.Sprintf(getChannel, api, c.ID.String()))
 
-	var channel Channel
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &channel)
+	var channel *Channel
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
 
-	return &channel, err
+	err = json.Unmarshal(responseBytes, &channel)
+
+	return channel, err
 }
 
 // ModifyGroupDm - Fires a ChannelUpdate Gateway event.
@@ -115,10 +129,16 @@ func (c *Channel) modifyChannel(payload any, reason *string) (*Channel, error) {
 	// TODO: verify types on payload
 	u := parseRoute(fmt.Sprintf(modifyChannel, api, c.ID.String()))
 
-	var channel Channel
-	err := json.Unmarshal(firePatchRequest(u, &payload, reason), &channel)
+	var channel *Channel
+	responseBytes, err := firePatchRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
 
-	return &channel, err
+	err = json.Unmarshal(responseBytes, &channel)
+
+	return channel, err
 }
 
 // ModifyThreadJSON - When setting archived to false, when locked is also false, only the SEND_MESSAGES permission is required.
@@ -195,7 +215,13 @@ func (c *Channel) GetChannelMessages(around *Snowflake,
 	}
 
 	var messages []*Message
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &messages)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &messages)
 
 	return messages, err
 }
@@ -209,7 +235,13 @@ func (c *Channel) GetChannelMessage(messageID string) (*Message, error) {
 	u := parseRoute(fmt.Sprintf(getChannelMessage, api, c.ID.String(), messageID))
 
 	var message *Message
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &message)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &message)
 
 	return message, err
 }
@@ -250,7 +282,13 @@ func (c *Channel) CreateMessage(payload CreateMessageJSON) (*Message, error) {
 	u := parseRoute(fmt.Sprintf(createMessage, api, c.ID.String()))
 
 	var message *Message
-	err := json.Unmarshal(firePostRequest(u, payload, nil), &message)
+	responseBytes, err := firePostRequest(u, payload, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &message)
 
 	return message, err
 }
@@ -281,7 +319,13 @@ func (c *Channel) CrosspostMessage(messageID string) (*Message, error) {
 	u := parseRoute(fmt.Sprintf(crosspostMessage, api, c.ID.String(), messageID))
 
 	var message *Message
-	err := json.Unmarshal(firePostRequest(u, nil, nil), &message)
+	responseBytes, err := firePostRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &message)
 
 	return message, err
 }
@@ -297,10 +341,16 @@ func (c *Channel) CrosspostMessage(messageID string) (*Message, error) {
 // The emoji must be URL Encoded or the request will fail with 10014: Unknown Emoji.
 //
 // To use custom emoji, you must encode it in the format name:id with the emoji name and emoji id.
-func (c *Channel) CreateReaction(messageID Snowflake, emoji string) {
+func (c *Channel) CreateReaction(messageID Snowflake, emoji string) error {
 	u := parseRoute(fmt.Sprintf(createReaction, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji)))
 
-	_ = firePutRequest(u, nil, nil)
+	_, err := firePutRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return err
+	}
+
+	return nil
 }
 
 // DeleteOwnReaction - Delete a reaction the current user has made for the message.
@@ -365,7 +415,13 @@ func (c *Channel) GetReactions(messageID Snowflake,
 	}
 
 	var users []*User
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &users)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &users)
 
 	return users, err
 }
@@ -422,7 +478,13 @@ func (c *Channel) EditMessage(messageID string, payload EditMessageJSON) (*Messa
 	u := parseRoute(fmt.Sprintf(editMessage, api, c.ID.String(), messageID))
 
 	var message *Message
-	err := json.Unmarshal(firePatchRequest(u, payload, nil), &message)
+	responseBytes, err := firePatchRequest(u, payload, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &message)
 
 	return message, err
 }
@@ -481,7 +543,11 @@ func (c *Channel) BulkDeleteMessages(payload BulkDeleteJSON, reason *string) err
 	}
 	u := parseRoute(fmt.Sprintf(bulkDeleteMessages, api, c.ID.String()))
 
-	_ = firePostRequest(u, payload, reason)
+	_, err := firePostRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return err
+	}
 
 	return nil
 }
@@ -506,10 +572,16 @@ type BulkDeleteJSON struct {
 // This endpoint supports the "X-Audit-Log-Reason" header.
 func (c *Channel) EditChannelPermissions(overwriteID Snowflake,
 	payload EditChannelPermissionsJSON,
-	reason *string) {
+	reason *string) error {
 	u := parseRoute(fmt.Sprintf(editChannelPermissions, api, c.ID.String(), overwriteID.String()))
 
-	_ = firePutRequest(u, payload, reason)
+	_, err := firePutRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return err
+	}
+
+	return nil
 }
 
 // EditChannelPermissionsJSON - JSON payload structure
@@ -528,7 +600,13 @@ func (c *Channel) GetChannelInvites() ([]*Invite, error) {
 	u := parseRoute(fmt.Sprintf(getChannelInvites, api, c.ID.String()))
 
 	var invites []*Invite
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &invites)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &invites)
 
 	return invites, err
 }
@@ -550,7 +628,13 @@ func (c *Channel) CreateChannelInvite(payload CreateChannelInviteJSON, reason *s
 	u := parseRoute(fmt.Sprintf(getChannelInvites, api, c.ID.String()))
 
 	var invite *Invite
-	err := json.Unmarshal(firePostRequest(u, payload, reason), &invite)
+	responseBytes, err := firePostRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &invite)
 
 	return invite, err
 }
@@ -592,7 +676,13 @@ func (c *Channel) FollowAnnouncementChannel(payload FollowAnnouncementChannelJSO
 	u := parseRoute(fmt.Sprintf(followAnnouncementChannel, api, c.ID.String()))
 
 	var followedChannel *FollowedChannel
-	err := json.Unmarshal(firePostRequest(u, payload, nil), &followedChannel)
+	responseBytes, err := firePostRequest(u, payload, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &followedChannel)
 
 	return followedChannel, err
 }
@@ -610,10 +700,16 @@ type FollowAnnouncementChannelJSON struct {
 // Returns a 204 empty response on success.
 //
 // Fires a Typing Start Gateway event.
-func (c *Channel) TriggerTypingIndicator() {
+func (c *Channel) TriggerTypingIndicator() error {
 	u := parseRoute(fmt.Sprintf(triggerTypingIndicator, api, c.ID.String()))
 
-	_ = firePostRequest(u, nil, nil)
+	_, err := firePostRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return err
+	}
+
+	return nil
 }
 
 // GetPinnedMessages - Returns all pinned messages in the channel as an array of message objects.
@@ -621,7 +717,13 @@ func (c *Channel) GetPinnedMessages() ([]*Message, error) {
 	u := parseRoute(fmt.Sprintf(getPinnedMessages, api, c.ID.String()))
 
 	var messages []*Message
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &messages)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &messages)
 
 	return messages, err
 }
@@ -635,10 +737,26 @@ func (c *Channel) GetPinnedMessages() ([]*Message, error) {
 //	The max pinned messages is 50.
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
-func (c *Channel) PinMessage(messageID Snowflake, reason *string) {
+func (c *Channel) PinMessage(messageID Snowflake, reason *string) error {
+	numPinned, err := c.GetPinnedMessages()
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return err
+	}
+
+	if len(numPinned) == 50 {
+		return errors.New("cannot pin more than 50 messages per channel")
+	}
+
 	u := parseRoute(fmt.Sprintf(pinMessage, api, c.ID.String(), messageID.String()))
 
-	_ = firePutRequest(u, nil, reason)
+	_, err = firePutRequest(u, nil, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return err
+	}
+
+	return nil
 }
 
 // UnpinMessage - Unpin a message in a channel.
@@ -657,10 +775,16 @@ func (c *Channel) UnpinMessage(messageID Snowflake, reason *string) error {
 // GroupDmAddRecipient - Adds a recipient to a Group DM using their access token.
 //
 // REQUIRES: gdm.join SCOPE
-func (c *Channel) GroupDmAddRecipient(userID Snowflake, payload GroupDmAddRecipientJSON) {
+func (c *Channel) GroupDmAddRecipient(userID Snowflake, payload GroupDmAddRecipientJSON) error {
 	u := parseRoute(fmt.Sprintf(groupDmAddRecipient, api, c.ID.String(), userID.String()))
 
-	_ = firePutRequest(u, payload, nil)
+	_, err := firePutRequest(u, payload, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return err
+	}
+
+	return nil
 }
 
 // GroupDmAddRecipientJSON - JSON payload structure
@@ -698,10 +822,16 @@ func (c *Channel) StartThreadWithMessage(
 ) (*Channel, error) {
 	u := parseRoute(fmt.Sprintf(startThreadWithMessage, api, c.ID.String(), messageID.String()))
 
-	var channel Channel
-	err := json.Unmarshal(firePostRequest(u, payload, reason), &channel)
+	var channel *Channel
+	responseBytes, err := firePostRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
 
-	return &channel, err
+	err = json.Unmarshal(responseBytes, &channel)
+
+	return channel, err
 }
 
 // StartThreadWithMessageJSON - JSON payload structure
@@ -725,10 +855,16 @@ type StartThreadWithMessageJSON struct {
 func (c *Channel) StartThreadWithoutMessage(payload StartThreadWithoutMessageJSON, reason *string) (*Channel, error) {
 	u := parseRoute(fmt.Sprintf(startThreadWithoutMessage, api, c.ID.String()))
 
-	var channel Channel
-	err := json.Unmarshal(firePostRequest(u, payload, reason), &channel)
+	var channel *Channel
+	responseBytes, err := firePostRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
 
-	return &channel, err
+	err = json.Unmarshal(responseBytes, &channel)
+
+	return channel, err
 }
 
 // StartThreadWithoutMessageJSON - JSON payload structure
@@ -759,10 +895,16 @@ type StartThreadWithoutMessageJSON struct {
 func (c *Channel) StartThreadInForumChannel(payload StartThreadWithoutMessageJSON, reason *string) (*Channel, error) {
 	u := parseRoute(fmt.Sprintf(startThreadInForumChannel, api, c.ID.String()))
 
-	var channel Channel
-	err := json.Unmarshal(firePostRequest(u, payload, reason), &channel)
+	var channel *Channel
+	responseBytes, err := firePostRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
 
-	return &channel, err
+	err = json.Unmarshal(responseBytes, &channel)
+
+	return channel, err
 }
 
 // StartThreadInForumJSON - JSON payload structure
@@ -794,10 +936,16 @@ type ForumThreadMessageParams struct {
 // Returns a 204 empty response on success.
 //
 // Fires a ThreadMembersUpdate Gateway event.
-func (c *Channel) JoinThread() {
+func (c *Channel) JoinThread() error {
 	u := parseRoute(fmt.Sprintf(joinThread, api, c.ID.String()))
 
-	_ = firePutRequest(u, nil, nil)
+	_, err := firePutRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return err
+	}
+
+	return nil
 }
 
 // AddThreadMember - Adds another member to a thread.
@@ -809,10 +957,16 @@ func (c *Channel) JoinThread() {
 // Returns a 204 empty response if the member is successfully added or was already a member of the thread.
 //
 // Fires a Thread Members Update Gateway event.
-func (c *Channel) AddThreadMember(userID Snowflake) {
+func (c *Channel) AddThreadMember(userID Snowflake) error {
 	u := parseRoute(fmt.Sprintf(addThreadMember, api, c.ID.String(), userID.String()))
 
-	_ = firePutRequest(u, nil, nil)
+	_, err := firePutRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return err
+	}
+
+	return nil
 }
 
 // LeaveThread - Removes the current user from a thread.
@@ -848,7 +1002,13 @@ func (c *Channel) GetThreadMember(userID Snowflake) (*ThreadMember, error) {
 	u := parseRoute(fmt.Sprintf(getThreadMember, api, c.ID.String(), userID.String()))
 
 	var threadMember *ThreadMember
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &threadMember)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &threadMember)
 
 	return threadMember, err
 }
@@ -860,7 +1020,13 @@ func (c *Channel) ListThreadMembers() ([]*ThreadMember, error) {
 	u := parseRoute(fmt.Sprintf(listThreadMembers, api, c.ID.String()))
 
 	var threadMembers []*ThreadMember
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &threadMembers)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &threadMembers)
 
 	return threadMembers, err
 }
@@ -889,7 +1055,13 @@ func (c *Channel) ListPublicArchivedThreads(before *time.Time, limit *int) (*Thr
 	}
 
 	var threadListResponse *ThreadListResponse
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &threadListResponse)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &threadListResponse)
 
 	return threadListResponse, err
 }
@@ -920,7 +1092,13 @@ func (c *Channel) ListPrivateArchivedThreads(before *time.Time, limit *int) (*Th
 	}
 
 	var threadListResponse *ThreadListResponse
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &threadListResponse)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &threadListResponse)
 
 	return threadListResponse, err
 }
@@ -946,7 +1124,13 @@ func (c *Channel) ListJoinedPrivateArchivedThreads(before *Snowflake, limit *int
 	}
 
 	var threadListResponse *ThreadListResponse
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &threadListResponse)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &threadListResponse)
 
 	return threadListResponse, err
 }

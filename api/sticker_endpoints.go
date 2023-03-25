@@ -19,6 +19,8 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+
+	log "github.com/veteran-software/nowlive-logging"
 )
 
 // GetSticker - Returns a sticker object for the given sticker ID.
@@ -26,7 +28,13 @@ func (s *Sticker) GetSticker() (*Sticker, error) {
 	u := parseRoute(fmt.Sprintf(getSticker, api, s.ID.String()))
 
 	var sticker *Sticker
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &sticker)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &sticker)
 
 	return sticker, err
 }
@@ -38,7 +46,13 @@ func ListNitroStickerPacks() (*ListNitroStickerPacksResponse, error) {
 	u := parseRoute(fmt.Sprintf(listNitroStickerPacks, api))
 
 	var listNitroStickerPacksResponse *ListNitroStickerPacksResponse
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &listNitroStickerPacksResponse)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &listNitroStickerPacksResponse)
 
 	return listNitroStickerPacksResponse, err
 }
@@ -55,7 +69,13 @@ func (g *Guild) ListGuildStickers() ([]*Sticker, error) {
 	u := parseRoute(fmt.Sprintf(listGuildStickers, api, g.ID.String()))
 
 	var stickers []*Sticker
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &stickers)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &stickers)
 
 	return stickers, err
 }
@@ -67,7 +87,13 @@ func (g *Guild) GetGuildSticker(stickerID Snowflake) (*Sticker, error) {
 	u := parseRoute(fmt.Sprintf(getGuildSticker, api, g.ID.String(), stickerID.String()))
 
 	var sticker *Sticker
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &sticker)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &sticker)
 
 	return sticker, err
 }
@@ -84,7 +110,13 @@ func (g *Guild) CreateGuildSticker() (*Sticker, error) {
 	u := parseRoute(fmt.Sprintf(createGuildSticker, api, g.ID.String()))
 
 	var sticker *Sticker
-	err := json.Unmarshal(firePostRequest(u, nil, nil), &sticker)
+	responseBytes, err := firePostRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &sticker)
 
 	return sticker, err
 }
@@ -105,7 +137,13 @@ func (g *Guild) ModifyGuildSticker(stickerID Snowflake,
 	u := parseRoute(fmt.Sprintf(modifyGuildSticker, api, g.ID.String(), stickerID.String()))
 
 	var sticker *Sticker
-	err := json.Unmarshal(firePatchRequest(u, payload, reason), &sticker)
+	responseBytes, err := firePatchRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &sticker)
 
 	return sticker, err
 }

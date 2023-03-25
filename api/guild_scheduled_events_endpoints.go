@@ -22,6 +22,8 @@ import (
 	"fmt"
 	"strconv"
 	"time"
+
+	log "github.com/veteran-software/nowlive-logging"
 )
 
 // ListGuildScheduledEvents - Returns a list of guild scheduled event objects for the given guild.
@@ -37,7 +39,13 @@ func (g *Guild) ListGuildScheduledEvents(withUserCount *bool) ([]*GuildScheduled
 	}
 
 	var guildScheduledEvents []*GuildScheduledEvent
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &guildScheduledEvents)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &guildScheduledEvents)
 
 	return guildScheduledEvents, err
 }
@@ -54,7 +62,13 @@ func (g *Guild) CreateGuildScheduledEvent(payload *CreateGuildScheduledEventJSON
 	u := parseRoute(fmt.Sprintf(createGuildScheduledEvent, api, g.ID.String()))
 
 	var guildScheduledEvent *GuildScheduledEvent
-	err := json.Unmarshal(firePostRequest(u, payload, reason), &guildScheduledEvent)
+	responseBytes, err := firePostRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &guildScheduledEvent)
 
 	return guildScheduledEvent, err
 }
@@ -88,7 +102,13 @@ func (g *Guild) GetGuildScheduledEvent(guildScheduledEventID *Snowflake, withUse
 	}
 
 	var guildScheduledEvent *GuildScheduledEvent
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &guildScheduledEvent)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &guildScheduledEvent)
 
 	return guildScheduledEvent, err
 }
@@ -114,7 +134,13 @@ func (g *Guild) ModifyGuildScheduledEvent(
 	u := parseRoute(fmt.Sprintf(modifyGuildScheduledEvent, api, g.ID.String(), guildScheduledEventID.String()))
 
 	var guildScheduledEvent *GuildScheduledEvent
-	err := json.Unmarshal(firePatchRequest(u, payload, reason), &guildScheduledEvent)
+	responseBytes, err := firePatchRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &guildScheduledEvent)
 
 	return guildScheduledEvent, err
 }
@@ -175,7 +201,13 @@ func (g *Guild) GetGuildScheduledEventUsers(
 	}
 
 	var guildScheduledEvent *GuildScheduledEventUser
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &guildScheduledEvent)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &guildScheduledEvent)
 
 	return guildScheduledEvent, err
 }

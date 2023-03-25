@@ -21,6 +21,8 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+
+	log "github.com/veteran-software/nowlive-logging"
 )
 
 // GetGuildAuditLog - Returns an audit log object for the Guild. Requires the ViewAuditLog permission.
@@ -65,8 +67,14 @@ func (g *Guild) GetGuildAuditLog(userID *Snowflake,
 		u.RawQuery = q.Encode()
 	}
 
-	var log AuditLog
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &log)
+	var auditLog *AuditLog
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
 
-	return &log, err
+	err = json.Unmarshal(responseBytes, &auditLog)
+
+	return auditLog, err
 }

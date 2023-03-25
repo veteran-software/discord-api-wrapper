@@ -19,6 +19,8 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+
+	log "github.com/veteran-software/nowlive-logging"
 )
 
 // GetGuildTemplate - Returns a GuildTemplate object for the given code.
@@ -28,7 +30,13 @@ func GetGuildTemplate(templateCode string) (*GuildTemplate, error) {
 	u := parseRoute(fmt.Sprintf(getGuildTemplate, api, templateCode))
 
 	var guildTemplate *GuildTemplate
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &guildTemplate)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &guildTemplate)
 
 	return guildTemplate, err
 }
@@ -42,7 +50,13 @@ func CreateGuildFromGuildTemplate(templateCode string, payload *CreateGuildFromG
 	u := parseRoute(fmt.Sprintf(createGuildFromGuildTemplate, api, templateCode))
 
 	var guild *Guild
-	err := json.Unmarshal(firePostRequest(u, payload, nil), &guild)
+	responseBytes, err := firePostRequest(u, payload, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &guild)
 
 	return guild, err
 }
@@ -58,7 +72,13 @@ func (g *Guild) GetGuildTemplates() ([]*GuildTemplate, error) {
 	u := parseRoute(fmt.Sprintf(getGuildTemplates, api, g.ID.String()))
 
 	var guildTemplates []*GuildTemplate
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &guildTemplates)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &guildTemplates)
 
 	return guildTemplates, err
 }
@@ -67,7 +87,13 @@ func (g *Guild) CreateGuildTemplate(payload *CreateGuildTemplateJSON) (*GuildTem
 	u := parseRoute(fmt.Sprintf(createGuildTemplate, api, g.ID.String()))
 
 	var guildTemplate *GuildTemplate
-	err := json.Unmarshal(firePostRequest(u, payload, nil), &guildTemplate)
+	responseBytes, err := firePostRequest(u, payload, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &guildTemplate)
 
 	return guildTemplate, err
 }
@@ -85,7 +111,13 @@ func (g *Guild) SyncGuildTemplate(templateCode string) (*GuildTemplate, error) {
 	u := parseRoute(fmt.Sprintf(syncGuildTemplate, api, g.ID.String(), templateCode))
 
 	var guildTemplate *GuildTemplate
-	err := json.Unmarshal(firePutRequest(u, nil, nil), &guildTemplate)
+	responseBytes, err := firePutRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &guildTemplate)
 
 	return guildTemplate, err
 }
@@ -99,7 +131,13 @@ func (g *Guild) ModifyGuildTemplate(templateCode string, payload *ModifyGuildTem
 	u := parseRoute(fmt.Sprintf(modifyGuildTemplate, api, g.ID.String(), templateCode))
 
 	var guildTemplate *GuildTemplate
-	err := json.Unmarshal(firePatchRequest(u, payload, nil), &guildTemplate)
+	responseBytes, err := firePatchRequest(u, payload, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &guildTemplate)
 
 	return guildTemplate, err
 }

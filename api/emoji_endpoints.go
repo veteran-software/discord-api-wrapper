@@ -20,6 +20,8 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+
+	log "github.com/veteran-software/nowlive-logging"
 )
 
 // ListGuildEmojis - Returns a list of emoji objects for the given guild.
@@ -27,7 +29,13 @@ func (g *Guild) ListGuildEmojis() ([]*Emoji, error) {
 	u := parseRoute(fmt.Sprintf(listGuildEmojis, api, g.ID.String()))
 
 	var emojis []*Emoji
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &emojis)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &emojis)
 
 	return emojis, err
 }
@@ -37,7 +45,13 @@ func (g *Guild) GetGuildEmoji(emoji *Emoji) (*Emoji, error) {
 	u := parseRoute(fmt.Sprintf(getGuildEmoji, api, g.ID.String(), emoji.ID.String()))
 
 	var e *Emoji
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &e)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &e)
 
 	return e, err
 }
@@ -59,7 +73,13 @@ func (g *Guild) CreateGuildEmoji(payload *CreateEmojiJSON, reason *string) (*Emo
 	u := parseRoute(fmt.Sprintf(createGuildEmoji, api, g.ID.String()))
 
 	var emoji *Emoji
-	err := json.Unmarshal(firePostRequest(u, payload, reason), &emoji)
+	responseBytes, err := firePostRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &emoji)
 
 	return emoji, err
 }
@@ -88,7 +108,13 @@ func (g *Guild) ModifyGuildEmoji(emoji *Emoji, payload *ModifyGuildEmojiJSON, re
 	u := parseRoute(fmt.Sprintf(modifyGuildEmoji, api, g.ID.String(), emoji.ID.String()))
 
 	var e *Emoji
-	err := json.Unmarshal(firePatchRequest(u, payload, reason), &e)
+	responseBytes, err := firePatchRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &e)
 
 	return e, err
 }

@@ -22,6 +22,8 @@ import (
 	"fmt"
 	"strconv"
 	"time"
+
+	log "github.com/veteran-software/nowlive-logging"
 )
 
 // CreateGuild
@@ -43,7 +45,13 @@ func CreateGuild(payload *CreateGuildJSON) (*Guild, error) {
 	u := parseRoute(fmt.Sprintf(createGuild, api))
 
 	var guild *Guild
-	err := json.Unmarshal(firePostRequest(u, payload, nil), &guild)
+	responseBytes, err := firePostRequest(u, payload, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &guild)
 
 	return guild, err
 }
@@ -85,8 +93,13 @@ func (g *Guild) GetGuild(withCounts *bool) (*Guild, error) {
 	//by := <-ch
 
 	var guild *Guild
-	//err := json.Unmarshal(by, &guild)
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &guild)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &guild)
 
 	return guild, err
 }
@@ -96,7 +109,13 @@ func (g *Guild) GetGuildPreview() (*GuildPreview, error) {
 	u := parseRoute(fmt.Sprintf(getGuildPreview, api, g.ID.String()))
 
 	var guildPreview *GuildPreview
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &guildPreview)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &guildPreview)
 
 	return guildPreview, err
 }
@@ -118,7 +137,13 @@ func (g *Guild) ModifyGuild(payload ModifyGuildJSON, reason *string) (*Guild, er
 	u := parseRoute(fmt.Sprintf(modifyGuild, api, g.ID.String()))
 
 	var guild *Guild
-	err := json.Unmarshal(firePatchRequest(u, payload, reason), &guild)
+	responseBytes, err := firePatchRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &guild)
 
 	return guild, err
 }
@@ -163,7 +188,13 @@ func (g *Guild) GetGuildChannels() ([]*Channel, error) {
 	u := parseRoute(fmt.Sprintf(getGuildChannels, api, g.ID.String()))
 
 	var channels []*Channel
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &channels)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &channels)
 
 	return channels, err
 }
@@ -185,7 +216,13 @@ func (g *Guild) CreateGuildChannel(payload CreateGuildChannelJSON, reason *strin
 	u := parseRoute(fmt.Sprintf(createGuildChannel, api, g.ID.String()))
 
 	var channel *Channel
-	err := json.Unmarshal(firePostRequest(u, payload, reason), &channel)
+	responseBytes, err := firePostRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &channel)
 
 	return channel, err
 }
@@ -216,9 +253,15 @@ type CreateGuildChannelJSON struct {
 //	Only channels to be modified are required.
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
-func (g *Guild) ModifyGuildChannelPositions(payload *ModifyGuildChannelPositionsJSON, reason *string) {
+func (g *Guild) ModifyGuildChannelPositions(payload *ModifyGuildChannelPositionsJSON, reason *string) error {
 	u := parseRoute(fmt.Sprintf(modifyGuildChannelPositions, api, g.ID.String()))
-	_ = firePatchRequest(u, payload, reason)
+	_, err := firePatchRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return err
+	}
+
+	return nil
 }
 
 // ModifyGuildChannelPositionsJSON - JSON payload
@@ -234,7 +277,13 @@ func (g *Guild) ListActiveThreads() (*ThreadListResponse, error) {
 	u := parseRoute(fmt.Sprintf(listActiveThreads, api, g.ID.String()))
 
 	var threadListResponse *ThreadListResponse
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &threadListResponse)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &threadListResponse)
 
 	return threadListResponse, err
 }
@@ -244,7 +293,13 @@ func (g *Guild) GetGuildMember(userID *Snowflake) (*GuildMember, error) {
 	u := parseRoute(fmt.Sprintf(getGuildMember, api, g.ID.String(), userID.String()))
 
 	var guildMember *GuildMember
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &guildMember)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &guildMember)
 
 	return guildMember, err
 }
@@ -267,7 +322,13 @@ func (g *Guild) ListGuildMembers(limit *uint64, after *Snowflake) ([]*GuildMembe
 	}
 
 	var guildMembers []*GuildMember
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &guildMembers)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &guildMembers)
 
 	return guildMembers, err
 }
@@ -286,7 +347,13 @@ func (g *Guild) SearchGuildMembers(query string, limit *uint64) ([]*GuildMember,
 	u.RawQuery = q.Encode()
 
 	var guildMembers []*GuildMember
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &guildMembers)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &guildMembers)
 
 	return guildMembers, err
 }
@@ -314,7 +381,13 @@ func (g *Guild) AddGuildMember(userID *Snowflake, payload *AddGuildMemberJSON) (
 	u := parseRoute(fmt.Sprintf(addGuildMember, api, g.ID.String(), userID.String()))
 
 	var guildMember *GuildMember
-	err := json.Unmarshal(firePutRequest(u, payload, nil), &guildMember)
+	responseBytes, err := firePutRequest(u, payload, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &guildMember)
 
 	return guildMember, err
 }
@@ -344,7 +417,13 @@ func (g *Guild) ModifyGuildMember(userID *Snowflake, payload *ModifyGuildMemberJ
 	u := parseRoute(fmt.Sprintf(modifyGuildMember, api, g.ID.String(), userID.String()))
 
 	var guildMember *GuildMember
-	err := json.Unmarshal(firePatchRequest(u, payload, reason), &guildMember)
+	responseBytes, err := firePatchRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &guildMember)
 
 	return guildMember, err
 }
@@ -373,7 +452,13 @@ func (g *Guild) ModifyCurrentMember(nick *string, reason *string) (*GuildMember,
 	}
 
 	var guildMember *GuildMember
-	err := json.Unmarshal(firePatchRequest(u, payload, reason), &guildMember)
+	responseBytes, err := firePatchRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &guildMember)
 
 	return guildMember, err
 }
@@ -387,10 +472,16 @@ func (g *Guild) ModifyCurrentMember(nick *string, reason *string) (*GuildMember,
 // Fires a Guild Member Update Gateway event.
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
-func (g *Guild) AddGuildMemberRole(user *User, roleID *Snowflake, reason *string) {
+func (g *Guild) AddGuildMemberRole(user *User, roleID *Snowflake, reason *string) error {
 	u := parseRoute(fmt.Sprintf(addGuildMemberRole, api, g.ID.String(), user.ID.String(), roleID.String()))
 
-	_ = firePutRequest(u, nil, reason)
+	_, err := firePutRequest(u, nil, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return err
+	}
+
+	return nil
 }
 
 // RemoveGuildMemberRole - Removes a role from a guild member.
@@ -442,7 +533,13 @@ func (g *Guild) GetGuildBans(limit *uint64, before *Snowflake, after *Snowflake)
 	}
 
 	var bans []*Ban
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &bans)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &bans)
 
 	return bans, err
 }
@@ -452,7 +549,13 @@ func (g *Guild) GetGuildBan(userID Snowflake) (*Ban, error) {
 	u := parseRoute(fmt.Sprintf(getGuildBan, api, g.ID.String(), userID.String()))
 
 	var ban *Ban
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &ban)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &ban)
 
 	return ban, err
 }
@@ -460,7 +563,7 @@ func (g *Guild) GetGuildBan(userID Snowflake) (*Ban, error) {
 // CreateGuildBan - Create a guild ban, and optionally delete previous messages sent by the banned user. Requires the BanMembers permission. Returns a 204 empty response on success. Fires a GuildBanAdd Gateway event.
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
-func (g *Guild) CreateGuildBan(userID *Snowflake, deleteMessageSeconds *uint64, reason *string) {
+func (g *Guild) CreateGuildBan(userID *Snowflake, deleteMessageSeconds *uint64, reason *string) error {
 	u := parseRoute(fmt.Sprintf(createGuildBan, api, g.ID.String(), userID.String()))
 
 	payload := struct {
@@ -469,7 +572,13 @@ func (g *Guild) CreateGuildBan(userID *Snowflake, deleteMessageSeconds *uint64, 
 		deleteMessageSeconds,
 	}
 
-	_ = firePutRequest(u, payload, reason)
+	_, err := firePutRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return err
+	}
+
+	return nil
 }
 
 // RemoveGuildBan - Remove the ban for a user. Requires the BanMembers permissions. Returns a 204 empty response on success. Fires a GuildBanRemove Gateway event.
@@ -486,7 +595,13 @@ func (g *Guild) GetGuildRoles() ([]*Role, error) {
 	u := parseRoute(fmt.Sprintf(getGuildRoles, api, g.ID.String()))
 
 	var roles []*Role
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &roles)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &roles)
 
 	return roles, err
 }
@@ -495,7 +610,13 @@ func (g *Guild) CreateGuildRole(payload *CreateGuildRoleJSON, reason *string) ([
 	u := parseRoute(fmt.Sprintf(createGuildRole, api, g.ID.String()))
 
 	var roles []*Role
-	err := json.Unmarshal(firePostRequest(u, payload, reason), &roles)
+	responseBytes, err := firePostRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &roles)
 
 	return roles, err
 }
@@ -524,7 +645,13 @@ func (g *Guild) ModifyGuildRolePositions(payload []*ModifyGuildRolePositionsJSON
 	u := parseRoute(fmt.Sprintf(modifyGuildRolePositions, api, g.ID.String()))
 
 	var roles []*Role
-	err := json.Unmarshal(firePatchRequest(u, payload, reason), &roles)
+	responseBytes, err := firePatchRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &roles)
 
 	return roles, err
 }
@@ -551,7 +678,13 @@ func (g *Guild) ModifyGuildRole(roleID *Snowflake, payload *ModifyGuildRoleJSON,
 	u := parseRoute(fmt.Sprintf(modifyGuildRole, api, g.ID.String(), roleID.String()))
 
 	var roles *Role
-	err := json.Unmarshal(firePatchRequest(u, payload, reason), &roles)
+	responseBytes, err := firePatchRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &roles)
 
 	return roles, err
 }
@@ -584,7 +717,13 @@ func (g *Guild) ModifyGuildMfaLevel(level MfaLevel, reason *string) (*MfaLevel, 
 	}
 
 	var mfaLevel *MfaLevel
-	err := json.Unmarshal(firePatchRequest(u, payload, reason), &mfaLevel)
+	responseBytes, err := firePatchRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &mfaLevel)
 
 	return mfaLevel, err
 }
@@ -629,10 +768,16 @@ func (g *Guild) GetGuildPruneCount(days uint, includeRoles *string) (*GetGuildPr
 		u.RawQuery = q.Encode()
 	}
 
-	var roles *GetGuildPruneCountResponse
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &roles)
+	var pruneCountResponse *GetGuildPruneCountResponse
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
 
-	return roles, err
+	err = json.Unmarshal(responseBytes, &pruneCountResponse)
+
+	return pruneCountResponse, err
 }
 
 type GetGuildPruneCountResponse struct {
@@ -664,7 +809,13 @@ func (g *Guild) BeginGuildPrune(payload *BeginGuildPruneJSON, reason *string) (*
 	u := parseRoute(fmt.Sprintf(beginGuildPrune, api, g.ID.String()))
 
 	var response *GetGuildPruneCountResponse
-	err := json.Unmarshal(firePostRequest(u, payload, reason), &response)
+	responseBytes, err := firePostRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &response)
 
 	return response, err
 }
@@ -683,7 +834,13 @@ func (g *Guild) GetGuildVoiceRegions() ([]*VoiceRegion, error) {
 	u := parseRoute(fmt.Sprintf(getGuildVoiceRegions, api, g.ID.String()))
 
 	var voiceRegions []*VoiceRegion
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &voiceRegions)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &voiceRegions)
 
 	return voiceRegions, err
 }
@@ -695,7 +852,13 @@ func (g *Guild) GetGuildInvites() ([]*Invite, error) {
 	u := parseRoute(fmt.Sprintf(getGuildInvites, api, g.ID.String()))
 
 	var invites []*Invite
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &invites)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &invites)
 
 	return invites, err
 }
@@ -707,7 +870,13 @@ func (g *Guild) GetGuildIntegrations() ([]*Integration, error) {
 	u := parseRoute(fmt.Sprintf(getGuildIntegrations, api, g.ID.String()))
 
 	var integrations []*Integration
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &integrations)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &integrations)
 
 	return integrations, err
 }
@@ -736,7 +905,13 @@ func (g *Guild) GetGuildWidgetSettings() (*GuildWidgetSettings, error) {
 	u := parseRoute(fmt.Sprintf(getGuildWidgetSettings, api, g.ID.String()))
 
 	var guildWidgetSettings *GuildWidgetSettings
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &guildWidgetSettings)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &guildWidgetSettings)
 
 	return guildWidgetSettings, err
 }
@@ -754,7 +929,13 @@ func (g *Guild) ModifyGuildWidget(payload *GuildWidgetSettings, reason *string) 
 	u := parseRoute(fmt.Sprintf(modifyGuildWidget, api, g.ID.String()))
 
 	var guildWidgetSettings *GuildWidgetSettings
-	err := json.Unmarshal(firePatchRequest(u, payload, reason), &guildWidgetSettings)
+	responseBytes, err := firePatchRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &guildWidgetSettings)
 
 	return guildWidgetSettings, err
 }
@@ -764,7 +945,13 @@ func (g *Guild) GetGuildWidget() (*GetGuildWidget, error) {
 	u := parseRoute(fmt.Sprintf(getGuildWidget, api, g.ID.String()))
 
 	var guildWidget *GetGuildWidget
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &guildWidget)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &guildWidget)
 
 	return guildWidget, err
 }
@@ -778,7 +965,13 @@ func (g *Guild) GetGuildVanityURL() (*Invite, error) {
 	u := parseRoute(fmt.Sprintf(getGuildVanityURL, api, g.ID.String()))
 
 	var invite *Invite
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &invite)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &invite)
 
 	return invite, err
 }
@@ -790,7 +983,13 @@ func (g *Guild) GetGuildWelcomeScreen() (*WelcomeScreen, error) {
 	u := parseRoute(fmt.Sprintf(getGuildWelcomeScreen, api, g.ID.String()))
 
 	var welcomeScreen *WelcomeScreen
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &welcomeScreen)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &welcomeScreen)
 
 	return welcomeScreen, err
 }
@@ -807,7 +1006,13 @@ func (g *Guild) ModifyGuildWelcomeScreen(payload *ModifyGuildWelcomeScreenJSON, 
 	u := parseRoute(fmt.Sprintf(modifyGuildWelcomeScreen, api, g.ID.String()))
 
 	var welcomeScreen *WelcomeScreen
-	err := json.Unmarshal(firePatchRequest(u, payload, reason), &welcomeScreen)
+	responseBytes, err := firePatchRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &welcomeScreen)
 
 	return welcomeScreen, err
 }
@@ -828,10 +1033,16 @@ type ModifyGuildWelcomeScreenJSON struct {
 //   - You must have the MuteMembers permission to unsuppress yourself. You can always suppress yourself.
 //   - You must have the RequestToSpeak permission to request to speak. You can always clear your own request to speak.
 //   - You are able to set `request_to_speak_timestamp` to any present or future time.
-func (g *Guild) ModifyCurrentUserVoiceState(payload *ModifyCurrentUserVoiceStateJSON) {
+func (g *Guild) ModifyCurrentUserVoiceState(payload *ModifyCurrentUserVoiceStateJSON) error {
 	u := parseRoute(fmt.Sprintf(modifyCurrentUserVoiceState, api, g.ID.String()))
 
-	_ = firePatchRequest(u, payload, nil)
+	_, err := firePatchRequest(u, payload, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return err
+	}
+
+	return nil
 }
 
 // ModifyCurrentUserVoiceStateJSON - JSON payload
@@ -850,10 +1061,16 @@ type ModifyCurrentUserVoiceStateJSON struct {
 //	You must have the MuteMembers permission. (Since suppression is the only thing that is available currently.)
 //	When unsuppressed, non-bot users will have their `request_to_speak_timestamp` set to the current time. Bot users will not.
 //	When suppressed, the user will have their `request_to_speak_timestamp` removed.
-func (g *Guild) ModifyUserVoiceState(userID *Snowflake, payload *ModifyUserVoiceStateJSON) {
+func (g *Guild) ModifyUserVoiceState(userID *Snowflake, payload *ModifyUserVoiceStateJSON) error {
 	u := parseRoute(fmt.Sprintf(modifyUserVoiceState, api, g.ID.String(), userID.String()))
 
-	_ = firePatchRequest(u, payload, nil)
+	_, err := firePatchRequest(u, payload, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return err
+	}
+
+	return nil
 }
 
 // ModifyUserVoiceStateJSON - JSON payload
@@ -866,12 +1083,14 @@ func (g *Guild) getSelfMember() (*GuildMember, error) {
 	return g.GetGuildMember(&ApplicationID)
 }
 
-func (g *Guild) GetGuildWidgetImage() []byte {
+func (g *Guild) GetGuildWidgetImage() ([]byte, error) {
 	u := parseRoute(fmt.Sprintf("%s/guilds/%s/widget.png", api, g.ID.String()))
 
-	//ch := make(chan []byte)
+	b, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
 
-	b := fireGetRequest(u, nil, nil)
-
-	return b
+	return b, nil
 }
