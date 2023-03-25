@@ -20,6 +20,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
+
+	log "github.com/veteran-software/nowlive-logging"
 )
 
 // GetInvite - Returns an Invite object for the given code.
@@ -42,7 +44,13 @@ func (i *Invite) GetInvite(withCounts *bool, withExpiration *bool, guildSchedule
 	}
 
 	var invite *Invite
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &invite)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &invite)
 
 	return invite, err
 }

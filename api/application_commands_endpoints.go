@@ -20,6 +20,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
+
+	log "github.com/veteran-software/nowlive-logging"
 )
 
 // GetGlobalApplicationCommands - Fetch all the global commands for your application.
@@ -36,7 +38,13 @@ func GetGlobalApplicationCommands(applicationID Snowflake, withLocalizations boo
 	u.RawQuery = q.Encode()
 
 	var commands []*ApplicationCommand
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &commands)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &commands)
 
 	return commands, err
 }
@@ -55,7 +63,13 @@ func CreateGlobalApplicationCommand(applicationID Snowflake, payload CreateAppli
 	u := parseRoute(fmt.Sprintf(createGlobalApplicationCommand, api, applicationID.String()))
 
 	var command *ApplicationCommand
-	err := json.Unmarshal(firePostRequest(u, payload, nil), &command)
+	responseBytes, err := firePostRequest(u, payload, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &command)
 
 	return command, err
 }
@@ -82,7 +96,13 @@ func (i *Interaction) GetGlobalApplicationCommand() (*ApplicationCommand, error)
 	u := parseRoute(fmt.Sprintf(getGlobalApplicationCommand, api, i.ApplicationID.String(), i.Data.ID.String()))
 
 	var commands *ApplicationCommand
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &commands)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &commands)
 
 	return commands, err
 }
@@ -96,7 +116,13 @@ func (i *Interaction) EditGlobalApplicationCommand(payload EditApplicationComman
 	u := parseRoute(fmt.Sprintf(editGlobalApplicationCommand, api, i.ApplicationID.String(), i.Data.ID.String()))
 
 	var commands *ApplicationCommand
-	err := json.Unmarshal(firePatchRequest(u, payload, nil), &commands)
+	responseBytes, err := firePatchRequest(u, payload, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &commands)
 
 	return commands, err
 }
@@ -138,7 +164,13 @@ func BulkOverwriteGlobalApplicationCommands(
 	u := parseRoute(fmt.Sprintf(bulkOverwriteGlobalApplicationCommands, api, applicationID.String()))
 
 	var commands []*ApplicationCommand
-	err := json.Unmarshal(firePutRequest(u, payload, nil), &commands)
+	responseBytes, err := firePutRequest(u, payload, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &commands)
 
 	return commands, err
 }
@@ -154,7 +186,13 @@ func (i *Interaction) GetGuildApplicationCommands(withLocalizations bool) ([]*Ap
 	u.RawQuery = q.Encode()
 
 	var commands []*ApplicationCommand
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &commands)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &commands)
 
 	return commands, err
 }
@@ -176,7 +214,13 @@ func GetGuildApplicationCommands(
 	u.RawQuery = q.Encode()
 
 	var commands []*ApplicationCommand
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &commands)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &commands)
 
 	return commands, err
 }
@@ -198,7 +242,13 @@ func CreateGuildApplicationCommand(
 	u := parseRoute(fmt.Sprintf(createGuildApplicationCommand, api, applicationID.String(), guildID.String()))
 
 	var command *ApplicationCommand
-	err := json.Unmarshal(firePostRequest(u, payload, nil), &command)
+	responseBytes, err := firePostRequest(u, payload, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &command)
 
 	return command, err
 }
@@ -216,7 +266,13 @@ func (i *Interaction) GetGuildApplicationCommand() (*ApplicationCommand, error) 
 	)
 
 	var command *ApplicationCommand
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &command)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &command)
 
 	return command, err
 }
@@ -238,7 +294,13 @@ func (i *Interaction) EditGuildApplicationCommand(payload *EditApplicationComman
 	)
 
 	var command *ApplicationCommand
-	err := json.Unmarshal(firePatchRequest(u, payload, nil), &command)
+	responseBytes, err := firePatchRequest(u, payload, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &command)
 
 	return command, err
 }
@@ -279,7 +341,13 @@ func (i *Interaction) BulkOverwriteGuildApplicationCommands(payload []*Applicati
 	)
 
 	var commands []*ApplicationCommand
-	err := json.Unmarshal(firePutRequest(u, payload, nil), &commands)
+	responseBytes, err := firePutRequest(u, payload, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &commands)
 
 	return commands, err
 }
@@ -298,7 +366,13 @@ func (i *Interaction) GetGuildApplicationCommandPermissions() ([]*GuildApplicati
 	)
 
 	var commandPerms []*GuildApplicationCommandPermissions
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &commandPerms)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &commandPerms)
 
 	return commandPerms, err
 }
@@ -318,7 +392,13 @@ func (i *Interaction) GetApplicationCommandPermissions() (*GuildApplicationComma
 	)
 
 	var commandPerms *GuildApplicationCommandPermissions
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &commandPerms)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &commandPerms)
 
 	return commandPerms, err
 }
@@ -351,7 +431,13 @@ func (i *Interaction) EditApplicationCommandPermissions(payload *EditApplication
 	)
 
 	var commandPerms *GuildApplicationCommandPermissions
-	err := json.Unmarshal(firePutRequest(u, payload, nil), &commandPerms)
+	responseBytes, err := firePutRequest(u, payload, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &commandPerms)
 
 	return commandPerms, err
 }

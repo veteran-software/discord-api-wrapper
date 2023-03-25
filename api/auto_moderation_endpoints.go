@@ -22,6 +22,7 @@ import (
 	"fmt"
 
 	utils "github.com/veteran-software/discord-api-wrapper/v10/utilities"
+	log "github.com/veteran-software/nowlive-logging"
 )
 
 // ListAutoModerationRulesForGuild - Get a list of all rules currently configured for the guild. Returns a list of auto moderation rule objects for the given guild.
@@ -47,7 +48,13 @@ func ListAutoModerationRulesForGuild(guildID string,
 	u := parseRoute(fmt.Sprintf(listAutoModerationRulesForGuild, api, guildID))
 
 	var rules []*AutoModerationRule
-	err = json.Unmarshal(fireGetRequest(u, nil, nil), &rules)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &rules)
 
 	return rules, err
 }
@@ -73,7 +80,13 @@ func GetAutoModerationRule(guildID string, channel *Channel, userID, ruleID *Sno
 	u := parseRoute(fmt.Sprintf(getAutoModerationRule, api, guildID, ruleID.String()))
 
 	var rule *AutoModerationRule
-	err = json.Unmarshal(fireGetRequest(u, nil, nil), &rule)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &rule)
 
 	return rule, err
 }
@@ -103,7 +116,13 @@ func CreateAutoModerationRule(guildID string,
 	u := parseRoute(fmt.Sprintf(getAutoModerationRule, api, guildID, ruleID.String()))
 
 	var rule *AutoModerationRule
-	err = json.Unmarshal(firePostRequest(u, payload, reason), &rule)
+	responseBytes, err := firePostRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &rule)
 
 	return rule, err
 }
@@ -144,7 +163,13 @@ func ModifyAutoModerationRule(guildID string,
 	u := parseRoute(fmt.Sprintf(modifyAutoModerationRule, api, guildID, ruleID.String()))
 
 	var rule *AutoModerationRule
-	err = json.Unmarshal(firePatchRequest(u, payload, reason), &rule)
+	responseBytes, err := firePatchRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &rule)
 
 	return rule, err
 }
@@ -154,26 +179,19 @@ func ModifyAutoModerationRule(guildID string,
 // This endpoint requires the ManageGuild permission.
 //
 //goland:noinspection GoUnusedExportedFunction
-func DeleteAutoModerationRule(guildID string,
-	channel *Channel,
-	userID,
-	ruleID *Snowflake,
-	reason *string) (*AutoModerationRule, error) {
+func DeleteAutoModerationRule(guildID string, channel *Channel, userID, ruleID *Snowflake, reason *string) error {
 	g := &Guild{ID: *StringToSnowflake(guildID)}
 
 	member, err := g.GetGuildMember(userID)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	if !CanManageGuild(member, channel) {
-		return nil, errors.New(utils.ManageGuildPermissionsAreRequired)
+		return errors.New(utils.ManageGuildPermissionsAreRequired)
 	}
 
 	u := parseRoute(fmt.Sprintf(deleteAutoModerationRule, api, guildID, ruleID.String()))
 
-	var rule *AutoModerationRule
-	err = json.Unmarshal(firePatchRequest(u, nil, reason), &rule)
-
-	return rule, err
+	return fireDeleteRequest(u, reason)
 }

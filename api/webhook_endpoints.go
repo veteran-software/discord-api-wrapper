@@ -23,6 +23,7 @@ import (
 	"strconv"
 	"strings"
 
+	log "github.com/veteran-software/nowlive-logging"
 	"github.com/vincent-petithory/dataurl"
 )
 
@@ -62,7 +63,13 @@ func (c *Channel) CreateWebhook(name string, avatar *dataurl.DataURL, reason *st
 	u := parseRoute(fmt.Sprintf(createWebhook, api, c.ID.String()))
 
 	var webhook *Webhook
-	err = json.Unmarshal(firePostRequest(u, params, reason), &webhook)
+	responseBytes, err := firePostRequest(u, params, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &webhook)
 
 	return webhook, err
 }
@@ -81,7 +88,13 @@ func (c *Channel) GetChannelWebhooks() ([]*Webhook, error) {
 	u := parseRoute(fmt.Sprintf(getChannelWebhooks, api, c.ID.String()))
 
 	var webhooks []*Webhook
-	err = json.Unmarshal(fireGetRequest(u, nil, nil), &webhooks)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &webhooks)
 
 	return webhooks, err
 }
@@ -100,7 +113,13 @@ func (g *Guild) GetGuildWebhooks(c *Channel) ([]*Webhook, error) {
 	u := parseRoute(fmt.Sprintf(getGuildWebhooks, api, g.ID.String()))
 
 	var webhooks []*Webhook
-	err = json.Unmarshal(fireGetRequest(u, nil, nil), &webhooks)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &webhooks)
 
 	return webhooks, err
 }
@@ -110,7 +129,13 @@ func (w *Webhook) GetWebhook() (*Webhook, error) {
 	u := parseRoute(fmt.Sprintf(getWebhook, api, w.ID.String()))
 
 	var webhook *Webhook
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &webhook)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &webhook)
 
 	return webhook, err
 }
@@ -120,7 +145,13 @@ func (w *Webhook) GetWebhookWithToken() (*Webhook, error) {
 	u := parseRoute(fmt.Sprintf(getWebhookWithToken, api, w.ID.String(), w.Token))
 
 	var webhook *Webhook
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &webhook)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &webhook)
 
 	return webhook, err
 }
@@ -134,20 +165,20 @@ func (w *Webhook) ModifyWebhook(name *string, avatar *dataurl.DataURL, channel *
 	*Webhook,
 	error,
 ) {
-	params := struct {
+	payload := struct {
 		Name      string    `json:"name,omitempty"`
 		Avatar    string    `json:"avatar,omitempty"`
 		ChannelId Snowflake `json:"channel_id,omitempty"`
 	}{}
 
 	if name != nil {
-		params.Name = *name
+		payload.Name = *name
 	}
 	if avatar != nil {
-		params.Avatar = avatar.String()
+		payload.Avatar = avatar.String()
 	}
 	if &channel.ID != nil {
-		params.ChannelId = channel.ID
+		payload.ChannelId = channel.ID
 	}
 
 	guild := &Guild{ID: *w.GuildID}
@@ -163,29 +194,41 @@ func (w *Webhook) ModifyWebhook(name *string, avatar *dataurl.DataURL, channel *
 	u := parseRoute(fmt.Sprintf(modifyWebhook, api, w.ID.String()))
 
 	var webhook *Webhook
-	err = json.Unmarshal(firePatchRequest(u, params, reason), &webhook)
+	responseBytes, err := firePatchRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &webhook)
 
 	return webhook, err
 }
 
 // ModifyWebhookWithToken - Same as above, except this call does not require authentication, does not accept a channel_id parameter in the body, and does not return a user in the webhook object.
 func (w *Webhook) ModifyWebhookWithToken(name *string, avatar *dataurl.DataURL, reason *string) (*Webhook, error) {
-	params := struct {
+	payload := struct {
 		Name   string `json:"name,omitempty"`
 		Avatar string `json:"avatar,omitempty"`
 	}{}
 
 	if name != nil {
-		params.Name = *name
+		payload.Name = *name
 	}
 	if avatar != nil {
-		params.Avatar = avatar.String()
+		payload.Avatar = avatar.String()
 	}
 
 	u := parseRoute(fmt.Sprintf(modifyWebhookWithToken, api, w.ID.String(), w.Token))
 
 	var webhook *Webhook
-	err := json.Unmarshal(firePatchRequest(u, params, reason), &webhook)
+	responseBytes, err := firePatchRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &webhook)
 
 	return webhook, err
 }
@@ -221,7 +264,7 @@ func (w *Webhook) DeleteWebhookWithToken(reason *string) error {
 // Note that when sending a message, you must provide a value for at least one of content, embeds, or file.
 //
 // wait is required; threadID is optional; pass nil if not needed
-func (w *Webhook) ExecuteWebhook(wait bool, threadID *Snowflake, params *ExecuteWebhookJSON) (*Message,
+func (w *Webhook) ExecuteWebhook(wait bool, threadID *Snowflake, payload *ExecuteWebhookJSON) (*Message,
 	error) {
 	u := parseRoute(fmt.Sprintf(executeWebhook, api, w.ID, w.Token))
 
@@ -235,7 +278,13 @@ func (w *Webhook) ExecuteWebhook(wait bool, threadID *Snowflake, params *Execute
 	}
 
 	var message *Message
-	err := json.Unmarshal(firePostRequest(u, params, nil), &message)
+	messageBytes, err := firePostRequest(u, payload, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(messageBytes, &message)
 
 	return message, err
 }
@@ -270,7 +319,13 @@ func (w *Webhook) GetWebhookMessage(msgID *Snowflake, threadID *Snowflake) (*Mes
 	}
 
 	var message *Message
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &message)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &message)
 
 	return message, err
 }
@@ -307,7 +362,13 @@ func (w *Webhook) EditWebhookMessage(msgID *Snowflake,
 	}
 
 	var message *Message
-	err := json.Unmarshal(firePatchRequest(u, payload, nil), &message)
+	responseBytes, err := firePatchRequest(u, payload, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &message)
 
 	return message, err
 }

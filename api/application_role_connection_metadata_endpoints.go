@@ -19,6 +19,8 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+
+	log "github.com/veteran-software/nowlive-logging"
 )
 
 // GetApplicationRoleConnectionMetadataRecords - Returns a list of ApplicationRoleConnectionMetadata objects for the given Application.
@@ -28,7 +30,13 @@ func GetApplicationRoleConnectionMetadataRecords(appID string) ([]*ApplicationRo
 	u := parseRoute(fmt.Sprintf(getApplicationRoleConnectionMetadataRecords, api, appID))
 
 	var m []*ApplicationRoleConnectionMetadata
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &m)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &m)
 
 	return m, err
 }
@@ -40,7 +48,13 @@ func UpdateApplicationRoleConnectionMetadataRecords(appID string) ([]*Applicatio
 	u := parseRoute(fmt.Sprintf(updateApplicationRoleConnectionMetadataRecords, api, appID))
 
 	var m []*ApplicationRoleConnectionMetadata
-	err := json.Unmarshal(firePutRequest(u, nil, nil), &m)
+	responseBytes, err := firePutRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &m)
 
 	return m, err
 }

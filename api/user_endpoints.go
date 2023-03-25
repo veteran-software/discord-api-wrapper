@@ -20,6 +20,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
+
+	log "github.com/veteran-software/nowlive-logging"
 )
 
 // GetCurrentUser - Returns the user object of the requesters account.
@@ -31,7 +33,13 @@ func GetCurrentUser() (*User, error) {
 	u := parseRoute(fmt.Sprintf(getCurrentUser, api))
 
 	var user *User
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &user)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &user)
 
 	return user, err
 }
@@ -43,7 +51,13 @@ func (u *User) GetUser() (*User, error) {
 	route := parseRoute(fmt.Sprintf(getUser, api, u.ID.String()))
 
 	var user *User
-	err := json.Unmarshal(fireGetRequest(route, nil, nil), &user)
+	responseBytes, err := fireGetRequest(route, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &user)
 
 	return user, err
 }
@@ -57,7 +71,13 @@ func ModifyCurrentUser(payload *ModifyCurrentUserJSON) (*User, error) {
 	u := parseRoute(fmt.Sprintf(modifyCurrentUser, api))
 
 	var user *User
-	err := json.Unmarshal(firePatchRequest(u, payload, nil), &user)
+	responseBytes, err := firePatchRequest(u, payload, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &user)
 
 	return user, err
 }
@@ -89,7 +109,13 @@ func GetCurrentUserGuilds(before *Snowflake, after *Snowflake, limit *uint64) ([
 	}
 
 	var guilds []*Guild
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &guilds)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &guilds)
 
 	return guilds, err
 }
@@ -99,7 +125,13 @@ func (g *Guild) GetCurrentUserGuildMember() (*GuildMember, error) {
 	u := parseRoute(fmt.Sprintf(getCurrentUserGuildMember, api, g.ID.String()))
 
 	var guildMember *GuildMember
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &guildMember)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &guildMember)
 
 	return guildMember, err
 }
@@ -124,7 +156,13 @@ func CreateDM(payload *CreateDmJSON) (*Channel, error) {
 	u := parseRoute(fmt.Sprintf(createDM, api))
 
 	var channel *Channel
-	err := json.Unmarshal(firePostRequest(u, payload, nil), &channel)
+	responseBytes, err := firePostRequest(u, payload, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &channel)
 
 	return channel, err
 }
@@ -147,7 +185,13 @@ func CreateGroupDM(payload *CreateDmJSON) (*Channel, error) {
 	u := parseRoute(fmt.Sprintf(createGroupDM, api))
 
 	var channel *Channel
-	err := json.Unmarshal(firePostRequest(u, payload, nil), &channel)
+	responseBytes, err := firePostRequest(u, payload, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &channel)
 
 	return channel, err
 }
@@ -165,7 +209,13 @@ func GetUserConnections() ([]*Connection, error) {
 	u := parseRoute(fmt.Sprintf(getUserConnections, api))
 
 	var connections []*Connection
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &connections)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &connections)
 
 	return connections, err
 }
@@ -200,7 +250,13 @@ func GetUserApplicationRoleConnection(applicationID *Snowflake) (*ApplicationRol
 	u := parseRoute(fmt.Sprintf(getUserApplicationRoleConnection, api, applicationID.String()))
 
 	var connection *ApplicationRoleConnection
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &connection)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &connection)
 
 	return connection, err
 }
@@ -215,7 +271,13 @@ func UpdateUserApplicationRoleConnection(applicationID *Snowflake,
 	u := parseRoute(fmt.Sprintf(modifyUserApplicationRoleConnection, api, applicationID.String()))
 
 	var connection *ApplicationRoleConnection
-	err := json.Unmarshal(firePutRequest(u, payload, nil), &connection)
+	responseBytes, err := firePutRequest(u, payload, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &connection)
 
 	return connection, err
 }

@@ -19,6 +19,8 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+
+	log "github.com/veteran-software/nowlive-logging"
 )
 
 // ListVoiceRegions - Returns an array of voice region objects that can be used when setting a voice or stage channel's `rtc_region`.
@@ -28,7 +30,13 @@ func ListVoiceRegions() ([]*VoiceRegion, error) {
 	u := parseRoute(fmt.Sprintf(listVoiceRegions, api))
 
 	var voiceRegions []*VoiceRegion
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &voiceRegions)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &voiceRegions)
 
 	return voiceRegions, err
 }

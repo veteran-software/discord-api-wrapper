@@ -19,6 +19,8 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+
+	log "github.com/veteran-software/nowlive-logging"
 )
 
 // CreateStageInstance - Creates a new Stage instance associated to a Stage channel.
@@ -32,7 +34,13 @@ func CreateStageInstance(payload CreateStageInstanceJSON, reason *string) (*Stag
 	u := parseRoute(fmt.Sprintf(createStageInstance, api))
 
 	var stageInstance *StageInstance
-	err := json.Unmarshal(firePostRequest(u, payload, reason), &stageInstance)
+	responseBytes, err := firePostRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &stageInstance)
 
 	return stageInstance, err
 }
@@ -50,7 +58,13 @@ func (s *StageInstance) GetStageInstance() (*StageInstance, error) {
 	u := parseRoute(fmt.Sprintf(getStageInstance, api, s.ChannelID.String()))
 
 	var stageInstance *StageInstance
-	err := json.Unmarshal(fireGetRequest(u, nil, nil), &stageInstance)
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &stageInstance)
 
 	return stageInstance, err
 }
@@ -64,7 +78,13 @@ func (s *StageInstance) ModifyStageInstance(payload ModifyStageInstanceJSON, rea
 	u := parseRoute(fmt.Sprintf(modifyStageInstance, api, s.ChannelID.String()))
 
 	var stageInstance *StageInstance
-	err := json.Unmarshal(firePatchRequest(u, payload, reason), &stageInstance)
+	responseBytes, err := firePatchRequest(u, payload, reason)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &stageInstance)
 
 	return stageInstance, err
 }
