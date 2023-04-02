@@ -34,3 +34,11 @@ it. The Discord REST API changes frequently, so updating can be daunting at time
 ## Pull Requests
 
 If you wish to contribute to this wrapper, feel free to submit Pull Requests
+
+## Stargazers
+
+[![Stargazers repo roster for @veteran-software/discord-api-wrapper](https://reporoster.com/stars/veteran-software/discord-api-wrapper)](https://github.com/veteran-software/discord-api-wrapper/stargazers)
+
+## Forkers
+
+[![Forkers repo roster for @veteran-software/discord-api-wrapper](https://reporoster.com/forks/veteran-software/discord-api-wrapper)](https://github.com/veteran-software/discord-api-wrapper/network/members)

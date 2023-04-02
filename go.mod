@@ -7,6 +7,7 @@ require (
 	github.com/sirupsen/logrus v1.9.0
 	github.com/veteran-software/nowlive-logging v1.0.4
 	github.com/vincent-petithory/dataurl v1.0.0
+	golang.org/x/net v0.8.0
 )
 
 require (

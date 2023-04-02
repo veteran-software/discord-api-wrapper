@@ -61,20 +61,6 @@ type Guild struct {
 	Stickers                    []*Sticker                      `json:"stickers,omitempty"`                   // custom guild stickers
 	PremiumProgressBarEnabled   bool                            `json:"premium_progress_bar_enabled"`         // whether the guild has the boost progress bar enabled
 
-	// TODO: These fields are only sent within the GUILD_CREATE event; move to Gateway.go
-
-	JoinedAt             time.Time              `json:"joined_at,omitempty"`              // when this guild was joined at
-	Large                bool                   `json:"large,omitempty"`                  // true if this is considered a large guild
-	Unavailable          bool                   `json:"unavailable,omitempty"`            // true if this guild is unavailable due to an outage
-	MemberCount          int64                  `json:"member_count,omitempty"`           // total number of members in this guild
-	VoiceStates          []*VoiceState          `json:"voice_states,omitempty"`           // states of members currently in voice channels; lacks the guild_id key
-	Members              []*GuildMember         `json:"members,omitempty"`                // users in the guild
-	Channels             []*Channel             `json:"channels,omitempty"`               // channels in the guild
-	Threads              []*Channel             `json:"threads,omitempty"`                // all active threads in the guild that current user has permission to view
-	Presences            []*PresenceUpdateEvent `json:"presences,omitempty"`              // presences of the members in the guild, will only include non-offline members if the size is greater than large threshold
-	StageInstances       []*StageInstance       `json:"stage_instances,omitempty"`        // Stage instances in the guild
-	GuildScheduledEvents []*GuildScheduledEvent `json:"guild_scheduled_events,omitempty"` // the scheduled events in the guild
-
 	// These fields are only sent when using the GET CurrentUserGuilds endpoint and are relative to the requested user
 
 	Owner       bool   `json:"owner,omitempty"`       // true if the user is the owner of the guild
