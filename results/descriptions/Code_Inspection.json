@@ -602,16 +602,16 @@
           "description": "Reports optional blank variables in range loops.\n\nWhen you use the `range` loop to iterate over a slice, two values are returned for each iteration. The first is the index\nnumber, and the second is a copy of the element at that index. If you do not need the second value, you can skip this element instead of\nusing a blank identifier.\n\nExample:\n\n    for a, _ = range v {} // `for a, _ =` is the same as `for a =`\n\nTo remove the blank identifier, you can use the **Delete blank argument** quick-fix. After the quick-fix is applied, the code will\nlook as follows:\n\n    for a = range v {}\n"
         },
         {
-          "shortName": "GoUnusedFunction",
-          "displayName": "Unused function",
-          "enabled": true,
-          "description": "Reports unused unexported functions.\n\nIn Go, a function is unexported if it begins with a small letter. Names of unexported functions that were defined but never used are\ngrayed out.\n\n    // Unused unexported function\n    func unExportedUnusedFunc()  {\n\n    }\n\n    func main() {\n     fmt.Println(\"Hello\")\n    }\n"
-        },
-        {
           "shortName": "GoUnusedConst",
           "displayName": "Unused constant",
           "enabled": true,
           "description": "Reports constants that are defined but are never used in code.\n\n    func main() {\n     const i = 100\n    }\n\nUnlike unused variables and imports, this code will compile. Unused constants might increase your code base and\nslow down program compilation. To delete the unused constant, consider using the **Delete constant** quick-fix."
+        },
+        {
+          "shortName": "GoUnusedFunction",
+          "displayName": "Unused function",
+          "enabled": true,
+          "description": "Reports unused unexported functions.\n\nIn Go, a function is unexported if it begins with a small letter. Names of unexported functions that were defined but never used are\ngrayed out.\n\n    // Unused unexported function\n    func unExportedUnusedFunc()  {\n\n    }\n\n    func main() {\n     fmt.Println(\"Hello\")\n    }\n"
         },
         {
           "shortName": "GoEmptyDeclaration",
@@ -904,16 +904,16 @@
           "description": "Reports escaped meta characters. Some RegExp coding styles specify that meta characters should be placed inside a character class, to make the regular expression easier to understand. This inspection does not warn about the meta character `[`, `]` and `^`, because those would need additional escaping inside a character class.\n\n**Example:**\n\n\n      \\d+\\.\\d+\n\nAfter the quick-fix is applied:\n\n\n      \\d+[.]\\d+\n\nNew in 2017.1"
         },
         {
-          "shortName": "RegExpDuplicateAlternationBranch",
-          "displayName": "Duplicate branch in alternation",
-          "enabled": true,
-          "description": "Reports duplicate branches in a RegExp alternation. Duplicate branches slow down matching and obscure the intent of the expression.\n\n**Example:**\n\n\n      (alpha|bravo|charlie|alpha)\n\nAfter the quick-fix is applied:\n\n\n      (alpha|bravo|charlie)\n\nNew in 2017.1"
-        },
-        {
           "shortName": "RegExpRepeatedSpace",
           "displayName": "Consecutive spaces",
           "enabled": true,
           "description": "Reports multiple consecutive spaces in a RegExp. Because spaces are not visible by default, it can be hard to see how many spaces are required. The RegExp can be made more clear by replacing the consecutive spaces with a single space and a counted quantifier.\n\n**Example:**\n\n\n      (     )\n\nAfter the quick-fix is applied:\n\n\n      ( {5})\n\n\nNew in 2017.1"
+        },
+        {
+          "shortName": "RegExpDuplicateAlternationBranch",
+          "displayName": "Duplicate branch in alternation",
+          "enabled": true,
+          "description": "Reports duplicate branches in a RegExp alternation. Duplicate branches slow down matching and obscure the intent of the expression.\n\n**Example:**\n\n\n      (alpha|bravo|charlie|alpha)\n\nAfter the quick-fix is applied:\n\n\n      (alpha|bravo|charlie)\n\nNew in 2017.1"
         }
       ]
     },
