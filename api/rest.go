@@ -32,7 +32,7 @@ import (
 
 //goland:noinspection SpellCheckingInspection
 var (
-	timeout = 1200 * time.Millisecond
+	timeout = 2000 * time.Millisecond
 
 	httpClient = httpclient.NewClient(httpclient.WithHTTPTimeout(timeout))
 )
