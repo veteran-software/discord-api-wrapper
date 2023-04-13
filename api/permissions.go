@@ -35,6 +35,7 @@ type Permission uint64
 
 //goland:noinspection GoUnusedConst
 const (
+	NoPermissions           Permission = 0 << 0  // For Vanity Roles that have no other permissions attached to them
 	CreateInstantInvite     Permission = 1 << 0  // Allows creation of instant invites
 	KickMembers             Permission = 1 << 1  // Allows kicking members
 	BanMembers              Permission = 1 << 2  // Allows banning members
