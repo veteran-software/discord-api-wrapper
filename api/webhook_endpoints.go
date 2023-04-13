@@ -39,8 +39,11 @@ import (
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
 func (c *Channel) CreateWebhook(name string, avatar *dataurl.DataURL, reason *string) (*Webhook, error) {
-	if len(name) < 1 || len(name) > 80 || strings.Contains(strings.ToLower(name), "clyde") {
-		return nil, errors.New("webhook length is incorrect or the name contains \"Clyde\"")
+	if len(name) < 1 ||
+		len(name) > 80 ||
+		strings.Contains(strings.ToLower(name), "clyde") ||
+		strings.Contains(strings.ToLower(name), "discord") {
+		return nil, errors.New("webhook length is incorrect or the name contains a prohibited phrase")
 	}
 
 	params := struct {

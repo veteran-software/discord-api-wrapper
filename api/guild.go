@@ -22,44 +22,45 @@ import (
 
 // Guild - Guilds in Discord represent an isolated collection of users and channels, and are often referred to as "servers" in the UI.
 type Guild struct {
-	ID                          Snowflake                       `json:"id"`                                   // guild id
-	Name                        string                          `json:"name"`                                 // guild name (2-100 characters, excluding trailing and leading whitespace)
-	Icon                        *string                         `json:"icon"`                                 // icon hash
-	IconHash                    *string                         `json:"icon_hash,omitempty"`                  // icon hash, returned when in the template object
-	Splash                      *string                         `json:"splash,omitempty"`                     // splash hash
-	DiscoverySplash             *string                         `json:"discovery_splash"`                     // discovery splash hash; only present for guilds with the "DISCOVERABLE" feature
-	OwnerID                     Snowflake                       `json:"owner_id"`                             // id of owner
-	AfkChannelID                Snowflake                       `json:"afk_channel_id,omitempty"`             // id of afk channel
-	AfkTimeout                  int                             `json:"afk_timeout"`                          // afk timeout in seconds
-	WidgetEnabled               bool                            `json:"widget_enabled,omitempty"`             // true if the server widget is enabled
-	WidgetChannelID             *Snowflake                      `json:"widget_channel_id,omitempty"`          // the channel id that the widget will generate an "invite" to, or null if set to no invite
-	VerificationLevel           VerificationLevel               `json:"verification_level"`                   // verification level required for the guild
-	DefaultMessageNotifications DefaultMessageNotificationLevel `json:"default_message_notifications"`        // default message notifications level
-	ExplicitContentFilter       ExplicitContentFilterLevel      `json:"explicit_content_filter"`              // explicit content filter level
-	Roles                       []*Role                         `json:"roles"`                                // roles in the guild
-	Emojis                      []*Emoji                        `json:"emojis"`                               // custom guild emojis
-	Features                    []*GuildFeatures                `json:"features"`                             // enabled guild features
-	MfaLevel                    MfaLevel                        `json:"mfa_level"`                            // required MFA level for the guild
-	ApplicationID               *Snowflake                      `json:"application_id"`                       // application id of the guild creator if it is bot-created
-	SystemChannelID             *Snowflake                      `json:"system_channel_id"`                    // the id of the channel where guild notices such as welcome messages and boost events are posted
-	SystemChannelFlags          SystemChannelFlags              `json:"system_channel_flags"`                 // system channel flags
-	RulesChannelID              *Snowflake                      `json:"rules_channel_id"`                     // the id of the channel where Community guilds can display rules and/or guidelines
-	MaxPresences                *int64                          `json:"max_presences,omitempty"`              // the maximum number of presences for the guild (null is always returned, apart from the largest of guilds)
-	MaxMembers                  int64                           `json:"max_members,omitempty"`                // the maximum number of members for the guild
-	VanityUrlCode               *string                         `json:"vanity_url_code"`                      // the vanity url code for the guild
-	Description                 *string                         `json:"description"`                          // the description of a Community guild
-	Banner                      *string                         `json:"banner"`                               // banner hash
-	PremiumTier                 PremiumTier                     `json:"premium_tier"`                         // premium tier (Server Boost level)
-	PremiumSubscriptionCount    uint64                          `json:"premium_subscription_count,omitempty"` // the number of boosts this guild currently has
-	PreferredLocale             string                          `json:"preferred_locale"`                     // the preferred locale of a Community guild; used in server discovery and notices from Discord, and sent in interactions; defaults to "en-US"
-	PublicUpdatesChannelID      *Snowflake                      `json:"public_updates_channel_id"`            // the id of the channel where admins and moderators of Community guilds receive notices from Discord
-	MaxVideoChannelUsers        uint64                          `json:"max_video_channel_users,omitempty"`    // the maximum amount of users in a video channel
-	ApproximateMemberCount      uint64                          `json:"approximate_member_count,omitempty"`   // approximate number of members in this guild, returned from the GET /guilds/<id> endpoint when with_counts is true
-	ApproximatePresenceCount    uint64                          `json:"approximate_presence_count,omitempty"` // approximate number of non-offline members in this guild, returned from the GET /guilds/<id> endpoint when with_counts is true
-	WelcomeScreen               WelcomeScreen                   `json:"welcome_screen,omitempty"`             // the welcome screen of a Community guild, shown to new members, returned in an Invite's guild object
-	NsfwLevel                   GuildNsfwLevel                  `json:"nsfw_level"`                           // guild NSFW level
-	Stickers                    []*Sticker                      `json:"stickers,omitempty"`                   // custom guild stickers
-	PremiumProgressBarEnabled   bool                            `json:"premium_progress_bar_enabled"`         // whether the guild has the boost progress bar enabled
+	ID                          Snowflake                       `json:"id"`                                      // guild id
+	Name                        string                          `json:"name"`                                    // guild name (2-100 characters, excluding trailing and leading whitespace)
+	Icon                        *string                         `json:"icon"`                                    // icon hash
+	IconHash                    *string                         `json:"icon_hash,omitempty"`                     // icon hash, returned when in the template object
+	Splash                      *string                         `json:"splash,omitempty"`                        // splash hash
+	DiscoverySplash             *string                         `json:"discovery_splash"`                        // discovery splash hash; only present for guilds with the "DISCOVERABLE" feature
+	OwnerID                     Snowflake                       `json:"owner_id"`                                // id of owner
+	AfkChannelID                Snowflake                       `json:"afk_channel_id,omitempty"`                // id of afk channel
+	AfkTimeout                  int                             `json:"afk_timeout"`                             // afk timeout in seconds
+	WidgetEnabled               bool                            `json:"widget_enabled,omitempty"`                // true if the server widget is enabled
+	WidgetChannelID             *Snowflake                      `json:"widget_channel_id,omitempty"`             // the channel id that the widget will generate an "invite" to, or null if set to no invite
+	VerificationLevel           VerificationLevel               `json:"verification_level"`                      // verification level required for the guild
+	DefaultMessageNotifications DefaultMessageNotificationLevel `json:"default_message_notifications"`           // default message notifications level
+	ExplicitContentFilter       ExplicitContentFilterLevel      `json:"explicit_content_filter"`                 // explicit content filter level
+	Roles                       []*Role                         `json:"roles"`                                   // roles in the guild
+	Emojis                      []*Emoji                        `json:"emojis"`                                  // custom guild emojis
+	Features                    []*GuildFeatures                `json:"features"`                                // enabled guild features
+	MfaLevel                    MfaLevel                        `json:"mfa_level"`                               // required MFA level for the guild
+	ApplicationID               *Snowflake                      `json:"application_id"`                          // application id of the guild creator if it is bot-created
+	SystemChannelID             *Snowflake                      `json:"system_channel_id"`                       // the id of the channel where guild notices such as welcome messages and boost events are posted
+	SystemChannelFlags          SystemChannelFlags              `json:"system_channel_flags"`                    // system channel flags
+	RulesChannelID              *Snowflake                      `json:"rules_channel_id"`                        // the id of the channel where Community guilds can display rules and/or guidelines
+	MaxPresences                *int64                          `json:"max_presences,omitempty"`                 // the maximum number of presences for the guild (null is always returned, apart from the largest of guilds)
+	MaxMembers                  int64                           `json:"max_members,omitempty"`                   // the maximum number of members for the guild
+	VanityUrlCode               *string                         `json:"vanity_url_code"`                         // the vanity url code for the guild
+	Description                 *string                         `json:"description"`                             // the description of a Community guild
+	Banner                      *string                         `json:"banner"`                                  // banner hash
+	PremiumTier                 PremiumTier                     `json:"premium_tier"`                            // premium tier (Server Boost level)
+	PremiumSubscriptionCount    uint64                          `json:"premium_subscription_count,omitempty"`    // the number of boosts this guild currently has
+	PreferredLocale             string                          `json:"preferred_locale"`                        // the preferred locale of a Community guild; used in server discovery and notices from Discord, and sent in interactions; defaults to "en-US"
+	PublicUpdatesChannelID      *Snowflake                      `json:"public_updates_channel_id"`               // the id of the channel where admins and moderators of Community guilds receive notices from Discord
+	MaxVideoChannelUsers        uint64                          `json:"max_video_channel_users,omitempty"`       // the maximum amount of users in a video channel
+	MaxStageVideoChannelUsers   uint64                          `json:"max_stage_video_channel_users,omitempty"` // the maximum amount of users in a stage video channel
+	ApproximateMemberCount      uint64                          `json:"approximate_member_count,omitempty"`      // approximate number of members in this guild, returned from the GET /guilds/<id> endpoint when with_counts is true
+	ApproximatePresenceCount    uint64                          `json:"approximate_presence_count,omitempty"`    // approximate number of non-offline members in this guild, returned from the GET /guilds/<id> endpoint when with_counts is true
+	WelcomeScreen               WelcomeScreen                   `json:"welcome_screen,omitempty"`                // the welcome screen of a Community guild, shown to new members, returned in an Invite's guild object
+	NsfwLevel                   GuildNsfwLevel                  `json:"nsfw_level"`                              // guild NSFW level
+	Stickers                    []*Sticker                      `json:"stickers,omitempty"`                      // custom guild stickers
+	PremiumProgressBarEnabled   bool                            `json:"premium_progress_bar_enabled"`            // whether the guild has the boost progress bar enabled
 
 	// These fields are only sent when using the GET CurrentUserGuilds endpoint and are relative to the requested user
 
@@ -315,6 +316,44 @@ type WelcomeScreenChannel struct {
 	EmojiID     *Snowflake `json:"emoji_id,omitempty"`    // the emoji id, if the emoji is custom
 	EmojiName   *string    `json:"emoji_name,omitempty"`  // the emoji name if custom, the unicode character if standard, or null if no emoji is set
 }
+
+// GuildOnboarding - Represents the onboarding flow for a guild.
+type GuildOnboarding struct {
+	GuildID          Snowflake          `json:"guild_id"`           // ID of the guild this onboarding is part of
+	Prompts          []OnboardingPrompt `json:"prompts"`            // Prompts shown during onboarding and in customize community
+	DefaultChanelIds []Snowflake        `json:"default_chanel_ids"` // Channel IDs that members get opted into automatically
+	Enabled          bool               `json:"enabled"`            // Whether onboarding is enabled in the guild
+}
+
+// OnboardingPrompt - 	Prompts shown during onboarding and in customize community
+type OnboardingPrompt struct {
+	ID           Snowflake      `json:"id"`            // ID of the prompt
+	Type         PromptType     `json:"type"`          // Type of prompt
+	Options      []PromptOption `json:"options"`       // Options available within the prompt
+	Title        string         `json:"title"`         // Title of the prompt
+	SingleSelect bool           `json:"single_select"` // Indicates whether users are limited to selecting one option for the prompt
+	Required     bool           `json:"required"`      // Indicates whether the prompt is required before a user completes the onboarding flow
+	InOnboarding bool           `json:"in_onboarding"` // Indicates whether the prompt is present in the onboarding flow. If false, the prompt will only appear in the Channels & Roles tab
+}
+
+// PromptOption - Options available within the prompt
+type PromptOption struct {
+	ID          Snowflake   `json:"id"`          // ID of the prompt option
+	ChannelIds  []Snowflake `json:"channel_ids"` // IDs for channels a member is added to when the option is selected
+	RoleIds     []Snowflake `json:"role_ids"`    // IDs for roles assigned to a member when the option is selected
+	Emoji       Emoji       `json:"emoji"`       // Emoji of the option
+	Title       string      `json:"title"`       // Title of the option
+	Description *string     `json:"description"` // Description of the option
+}
+
+// PromptType - Type of prompt
+type PromptType int
+
+//goland:noinspection GoUnusedConst
+const (
+	MultipleChoice PremiumType = iota
+	Dropdown
+)
 
 // String - Helper function to convert basic Guild data into string form
 func (g *Guild) String() string {

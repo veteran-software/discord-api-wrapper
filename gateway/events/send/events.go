@@ -59,7 +59,7 @@ type Heartbeat struct {
 	D  int `json:"d"`
 }
 
-// GuildRequestMembers - Used to request all members for a guild or a list of guilds.
+// RequestGuildMembers - Used to request all members for a guild or a list of guilds.
 //
 // When initially connecting, if you don't have the GuildPresences Gateway Intent, or if the guild is over 75k members, it will only send members who are in voice, plus the member for you (the connecting user).
 //
@@ -76,7 +76,7 @@ type Heartbeat struct {
 //	You will be limited to requesting 1 `guild_id` per request
 //	Requesting a prefix (`query` parameter) will return a maximum of 100 members
 //	Requesting `user_ids` will continue to be limited to returning 100 members
-type GuildRequestMembers struct {
+type RequestGuildMembers struct {
 	GuildID   api.Snowflake    `json:"guild_id"`            // id of the guild to get members for
 	Query     string           `json:"query,omitempty"`     // string that username starts with, or an empty string to return all members
 	Limit     int              `json:"limit"`               // maximum number of members to send matching the query; a limit of 0 can be used with an empty string query to return all members

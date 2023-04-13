@@ -126,7 +126,7 @@ type (
 		CommunicationDisabledUntil *time.Time      `json:"communication_disabled_until,omitempty"`
 	}
 
-	// GuildMemberChunk - Sent in response to GuildRequestMembers. You can use the `chunk_index` and `chunk_count` to calculate how many chunks are left for your request.
+	// GuildMemberChunk - Sent in response to RequestGuildMembers. You can use the `chunk_index` and `chunk_count` to calculate how many chunks are left for your request.
 	GuildMemberChunk struct {
 		GuildID    api.Snowflake       `json:"guild_id"`
 		Members    []api.GuildMember   `json:"members"`

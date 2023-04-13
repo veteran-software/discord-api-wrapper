@@ -38,6 +38,7 @@ type Interaction struct {
 	Type           InteractionType        `json:"type"`                      // Type of interaction
 	Data           ApplicationCommandData `json:"data,omitempty"`            // Interaction data payload
 	GuildID        Snowflake              `json:"guild_id,omitempty"`        // Guild that the interaction was sent from
+	Channel        Channel                `json:"channel,omitempty"`         // Channel that the interaction was sent from
 	ChannelID      Snowflake              `json:"channel_id,omitempty"`      // Channel that the interaction was sent from
 	Member         GuildMember            `json:"member,omitempty"`          // GuildMember data for the invoking user, including permissions
 	User           *User                  `json:"user,omitempty"`            // User object for the invoking user, if invoked in a DM

@@ -1024,6 +1024,21 @@ type ModifyGuildWelcomeScreenJSON struct {
 	Description     *string                 `json:"description,omitempty"`      // the server description to show in the welcome screen
 }
 
+func (g *Guild) GetGuildOnboarding() (*GuildOnboarding, error) {
+	u := parseRoute(fmt.Sprintf(getGuildOnboarding, api, g.ID.String()))
+
+	var onboarding *GuildOnboarding
+	responseBytes, err := fireGetRequest(u, nil, nil)
+	if err != nil {
+		log.Errorln(log.Discord, log.FuncName(), err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(responseBytes, &onboarding)
+
+	return onboarding, err
+}
+
 // ModifyCurrentUserVoiceState - Updates the current user's voice state. Returns 204 No Content on success.
 //
 // There are currently several caveats for this endpoint:

@@ -131,6 +131,7 @@ const (
 	modifyCurrentUserVoiceState                    = "%s/guilds/%s/voice-states/@me"
 	getGuildWelcomeScreen                          = "%s/guilds/%s/welcome-screen"
 	modifyGuildWelcomeScreen                       = getGuildWelcomeScreen
+	getGuildOnboarding                             = "%s/guilds/%s/onboarding"
 	getGuildWidgetSettings                         = "%s/guilds/%s/widget"
 	modifyGuildWidget                              = getGuildWidgetSettings
 	getGuildWidget                                 = "%s/guilds/%s/widget.json"
