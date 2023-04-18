@@ -175,6 +175,167 @@
       ]
     },
     {
+      "name": "General",
+      "inspections": [
+        {
+          "shortName": "GoUnnecessarilyExportedIdentifiers",
+          "displayName": "Unnecessarily exported identifier",
+          "enabled": true,
+          "description": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package."
+        },
+        {
+          "shortName": "GoRedundantParens",
+          "displayName": "Redundant parentheses",
+          "enabled": true,
+          "description": "Reports redundant parentheses in expressions and types.\n\nExample:\n\n    func _(x (int), y ((string))) {\n    }\n    func _() {\n     _ = (1 + 1)\n     _ = (((1 + 1)))\n     _ = (((1 + 1))) + (((2 + 2)))\n    }\n\nAfter the **Unwrap parentheses** quick-fix is applied:\n\n    func _(x int, y string) {\n    }\n    func _() {\n     _ = 1 + 1\n     _ = 1 + 1\n     _ = (1 + 1) + (2 + 2)\n    }\n"
+        },
+        {
+          "shortName": "GoDisabledGopathIndexing",
+          "displayName": "Disabled GOPATH indexing",
+          "enabled": true,
+          "description": "Reports disabled GOPATH indexing that might prevent proper resolution of code references.\n\nGOPATH stores your code base and all the files that are necessary for your development. Also, it includes packages that you download and\ninstall. If you disabled GOPATH indexing, only project and vendored packages are indexed. It might improve the overall performance but\nmakes it impossible to use packages from GOPATH."
+        },
+        {
+          "shortName": "GoDeprecation",
+          "displayName": "Deprecated element",
+          "enabled": true,
+          "description": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated."
+        },
+        {
+          "shortName": "GoTestName",
+          "displayName": "Malformed test function name",
+          "enabled": true,
+          "description": "Reports malformed names of tests, benchmarks, and examples.\n\nAccording to [Package testing at golang.org](https://golang.org/pkg/testing/), names must follow a special convention\nin order to make the go tool process them correctly.\n\nExample:\n\n    func Testfoo(*testing.T) {} // the 'go' tool will not run this test\n\nAfter the **Rename to** quick-fix is applied:\n\n    func TestFoo(*testing.T) {}\n"
+        },
+        {
+          "shortName": "GoExportedFuncWithUnexportedType",
+          "displayName": "Unexported return type of the exported function",
+          "enabled": true,
+          "description": "Reports exported functions with unexported return types.\n\nUnexported types can be difficult to use when viewing documentation under **go doc**.\n\nExample:\n\n    type hidden struct{}\n\n    func Exported() hidden { // Exported function with the `hidden` unexported return type\n     return hidden{}\n    }\n\nYou can apply **Export** quick-fix to export the type. After the quick-fix is applied,\ntype name will be capitalized:\n\n    type Hidden struct{}\n\n    func Exported() Hidden { // Fixed\n     return Hidden{}\n    }\n"
+        },
+        {
+          "shortName": "GoMissingTrailingComma",
+          "displayName": "Missing trailing comma before a newline in a composite literal",
+          "enabled": false,
+          "description": "Reports a missing trailing comma before a newline in composite literals, function call arguments, and function parameter lists.\n\nExample:\n\n    func f(f int) (\n     int,\n     bool   // missing a trailing comma\n    ){\n     println(1, 2  // missing a trailing comma\n     )\n    }\n"
+        },
+        {
+          "shortName": "GoInterfaceToAny",
+          "displayName": "Usage of 'interface{}' as a type",
+          "enabled": true,
+          "description": "Reports usages of the empty interface as a type or type constraint.\n\n\nThe empty interface denotes the set of all types.\nGo 1.18 introduced the more explicit alias `any` for `interface{}`,\nwhich is equivalent to `interface{}` in all ways.\n\nThe inspection is triggered for any usage of an empty interface as a type or type constraint.\nAliases of the empty interface and interfaces that exclusively embed other empty interfaces do not trigger the inspection.\n\nConsider using the more explicit alias `any` instead."
+        },
+        {
+          "shortName": "GoContextTodo",
+          "displayName": "Usage of context.TODO()",
+          "enabled": false,
+          "description": "Reports usages of `context.TODO()`.\n\nAccording to the [documentation at pkg.go.dev](https://pkg.go.dev/context#TODO),\nyou need to use `context.TODO` when it is unclear what\n`Context` to use, or `Context` is not yet available.\n`Context` might not be available because of the surrounding function that\nhas not yet been extended to accept the `Context` parameter.\n\nNote that it is a temporary placeholder, and you must change it in the future to a more meaningful\ncontext (for example, `context.Background()`)."
+        },
+        {
+          "shortName": "GoFuzzingSupport",
+          "displayName": "Fuzzing is supported starting with Go 1.18",
+          "enabled": true,
+          "description": "Reports presence of fuzz tests when Go SDK version is less than 1.18\n\nFuzz testing is a method of automated testing that involves a directed search for input data that may cause a program crash\nor expose invalid behavior. Go supports fuzz testing starting from Go 1.18.\n\nExample of a fuzz test:\n\n\n    func Div(a, b int) int {\n    \treturn a / b\n    }\n\n    func FuzzDiv(f *testing.F) {\n    \tf.Fuzz(func(t *testing.T, a, b int) {\n    \t\tDiv(a, b) // reports runtime error: integer divide by zero\n    \t})\n    }\n\n\nSee [Go Fuzzing](https://go.dev/doc/fuzz/) for more information."
+        },
+        {
+          "shortName": "DuplicatedCode",
+          "displayName": "Duplicated code fragment",
+          "enabled": false,
+          "description": "Reports duplicated blocks of code from the selected scope: the same file or the entire project. The inspection features quick-fixes that help you to set the size of detected duplicates, navigate to repetitive code fragments, and compare them in a tool window. The inspection options allow you to select the scope of the reported duplicated fragments and set the initial size for the duplicated language constructs. You can also configure the constructs that you want to anonymize in [File \\| Settings \\| Editor \\| Duplicates](settings://duplicates.index)."
+        },
+        {
+          "shortName": "InconsistentLineSeparators",
+          "displayName": "Inconsistent line separators",
+          "enabled": false,
+          "description": "Reports files with line separators different from the ones that are specified in the project's settings.\n\nFor example, the inspection will be triggered if you set the line separator to `\\n` in\n[Settings \\| Editor \\| Code Style \\| Line separator](settings://preferences.sourceCode?Line%20separator),\nwhile the file you are editing uses `\\r\\n` as a line separator.\n\nThe inspection also warns you about mixed line separators within a file."
+        },
+        {
+          "shortName": "ReassignedToPlainText",
+          "displayName": "Reassigned to plain text",
+          "enabled": false,
+          "description": "Reports files that were explicitly re-assigned to Plain Text File Type. This association is unnecessary because the platform auto-detects text files by content automatically.\n\nYou can dismiss this warning by removing the file type association\nin **Settings \\| Editor \\| File Types \\| Text**."
+        },
+        {
+          "shortName": "RedundantSuppression",
+          "displayName": "Redundant suppression",
+          "enabled": false,
+          "description": "Reports usages of the following elements that can be safely removed because the inspection they affect is no longer applicable in this context:\n\n* `@SuppressWarning` annotation, or\n* `// noinspection` line comment, or\n* `/** noinspection */` JavaDoc comment\n\nExample:\n\n\n    public class C {\n     // symbol is already private,\n     // but annotation is still around\n      @SuppressWarnings({\"WeakerAccess\"})\n     private boolean CONST = true;\n     void f() {\n        CONST = false;\n      }\n    }\n"
+        },
+        {
+          "shortName": "ProblematicWhitespace",
+          "displayName": "Problematic whitespace",
+          "enabled": false,
+          "description": "Reports the following problems:\n\n* Tabs used for indentation when the code style is configured to use only spaces.\n* Spaces used for indentation when the code style is configured to use only tabs.\n* Spaces used for indentation and tabs used for alignment when the code style is configured to use smart tabs."
+        },
+        {
+          "shortName": "LongLine",
+          "displayName": "Line is longer than allowed by code style",
+          "enabled": false,
+          "description": "Reports lines that are longer than the **Hard wrap at** parameter specified in [Settings \\| Editor \\| Code Style \\| General](settings://preferences.sourceCode?Hard%20wrap%20at)."
+        },
+        {
+          "shortName": "Annotator",
+          "displayName": "Annotator",
+          "enabled": false,
+          "description": "Reports problems that are found by language annotators in the result of a batch code inspection run."
+        },
+        {
+          "shortName": "TodoComment",
+          "displayName": "TODO comment",
+          "enabled": false,
+          "description": "Reports **TODO** comments in your code.\n\nYou can configure the format for **TODO** comments in [Settings \\| Editor \\| TODO](settings://preferences.toDoOptions).\n\nEnable the **Only warn on TODO comments without any details** option to only warn on empty TODO comments, that\ndon't provide any description on the task that should be done. Disable to report all TODO comments."
+        },
+        {
+          "shortName": "IncorrectFormatting",
+          "displayName": "Incorrect formatting",
+          "enabled": false,
+          "description": "Reports formatting issues that appear if your code doesn't\nfollow your project's code style settings.\n\n\nThis inspection is not compatible with languages that require\nthird-party formatters for code formatting, for example, Go or\nC with CLangFormat enabled."
+        },
+        {
+          "shortName": "EmptyDirectory",
+          "displayName": "Empty directory",
+          "enabled": false,
+          "description": "Reports empty directories.\n\nAvailable only from **Code \\| Inspect Code** or\n**Code \\| Analyze Code \\| Run Inspection by Name** and isn't reported in the editor.\n\nUse the **Only report empty directories located under a source folder** option to have only directories under source\nroots reported."
+        },
+        {
+          "shortName": "SyntaxError",
+          "displayName": "Syntax error",
+          "enabled": false,
+          "description": "Reports syntax errors that have been found in the result of a batch code inspection run."
+        },
+        {
+          "shortName": "InjectedReferences",
+          "displayName": "Injected references",
+          "enabled": false,
+          "description": "Reports unresolved references injected by [Language Injections](https://www.jetbrains.com/help/idea/using-language-injections.html).\n\nExample:\n\n```\n    @Language(\"file-reference\")\n    String fileName = \"/home/user/nonexistent.file\"; // highlighted if file doesn't exist\n```"
+        },
+        {
+          "shortName": "QodanaServiceMessage",
+          "displayName": "Qodana service message",
+          "enabled": false,
+          "description": "Reports the Qodana service messages such as suspending a particular inspection due to a large number of reported problems."
+        },
+        {
+          "shortName": "VgoMigrateFromReplacesToWorkspace",
+          "displayName": "Migration to Go workspace is possible",
+          "enabled": false,
+          "description": "Generates 'go.work' files using 'replace' directives.\n\n\nGo workspaces is a feature introduced in Go 1.18 that allows working simultaneously on several modules.  \n\nWorkspaces are a modern alternative to 'replace' directives pointing to local directories.  \n\nAll modules in a workspace have the same set of dependencies, thus making the configuration simpler, more robust,\nand requiring fewer 'go list' calls to scan the project structure.  \n\nThe fix for this inspection generates a new 'go.work' file and does not change existing files.\n\n\nBy default, warning severity is used. If a generated workspace would include Go modules that were not replaced\nin the original 'go.mod', no warning is shown due to possible side effects caused by migration, but the fix still can be run manually.\n\n\nFor more information about workspaces, see [Go Modules Reference](https://go.dev/ref/mod#workspaces).  \n\nFor Go workspaces introduction, see [Tutorial: Getting started with multi-module\nworkspaces](https://go.dev/doc/tutorial/workspaces)."
+        },
+        {
+          "shortName": "GoTemplateUnknownVariable",
+          "displayName": "Unknown variable",
+          "enabled": false,
+          "description": "Reports usages of unknown variables in Go Templates.\n\nParsing of such templates will cause panic because variables must be declared before usage.\n\nExample:\n\n    {{$v}} is zero. {{/* bad, $v is unknown */}}\n    {{$v := 0}}{{$v}} is zero. {{/* good */}}\n"
+        },
+        {
+          "shortName": "GoTemplateDuplicateVariable",
+          "displayName": "Duplicate variable",
+          "enabled": false,
+          "description": "Reports duplicate Go Template variables that are declared in the same scope.\n\nDuplicating a variable reassigns the existing variable with the same name. This operation might lead to different\nunpredicatable issues.\n\nExample:\n\n    {{$v := 0}}{{$v := 1}}{{$v}} is 0. {{/* evaluates to '1 is 0' */}}\n    {{$v := 0}}{{$w := 1}}{{$v}} is 0. {{/* works as expected */}}\n"
+        }
+      ]
+    },
+    {
       "name": "Probable bugs",
       "inspections": [
         {
@@ -350,167 +511,6 @@
           "displayName": "Missing comma in selector list",
           "enabled": false,
           "description": "Reports a multi-line selector. Most likely this means that several single-line selectors are actually intended but a comma is missing at the end of one or several lines.\n\n**Example:**\n\n\n    input /* comma has probably been forgotten */\n    .button {\n      margin: 1px;\n    }\n"
-        }
-      ]
-    },
-    {
-      "name": "General",
-      "inspections": [
-        {
-          "shortName": "GoUnnecessarilyExportedIdentifiers",
-          "displayName": "Unnecessarily exported identifier",
-          "enabled": true,
-          "description": "Reports exported identifiers that are used only in the package where they are defined but are not used in other packages.\n\nMaking them exported is redundant and may clutter the API of the package."
-        },
-        {
-          "shortName": "GoRedundantParens",
-          "displayName": "Redundant parentheses",
-          "enabled": true,
-          "description": "Reports redundant parentheses in expressions and types.\n\nExample:\n\n    func _(x (int), y ((string))) {\n    }\n    func _() {\n     _ = (1 + 1)\n     _ = (((1 + 1)))\n     _ = (((1 + 1))) + (((2 + 2)))\n    }\n\nAfter the **Unwrap parentheses** quick-fix is applied:\n\n    func _(x int, y string) {\n    }\n    func _() {\n     _ = 1 + 1\n     _ = 1 + 1\n     _ = (1 + 1) + (2 + 2)\n    }\n"
-        },
-        {
-          "shortName": "GoDisabledGopathIndexing",
-          "displayName": "Disabled GOPATH indexing",
-          "enabled": true,
-          "description": "Reports disabled GOPATH indexing that might prevent proper resolution of code references.\n\nGOPATH stores your code base and all the files that are necessary for your development. Also, it includes packages that you download and\ninstall. If you disabled GOPATH indexing, only project and vendored packages are indexed. It might improve the overall performance but\nmakes it impossible to use packages from GOPATH."
-        },
-        {
-          "shortName": "GoDeprecation",
-          "displayName": "Deprecated element",
-          "enabled": true,
-          "description": "Reports usages of deprecated elements.\n\nExample:\n\n    // Deprecated: Use io.SeekStart, io.SeekCurrent, and io.SeekEnd.\n    const (\n     SEEK_SET int = 0 // seek relative to the origin of the file\n     SEEK_CUR int = 1 // seek relative to the current offset\n     SEEK_END int = 2 // seek relative to the end\n    )\n\nAccording to [Constants at golang.org](https://golang.org/pkg/os/#pkg-constants), `SEEK_SET`, `SEEK_CUR`,\nand `SEEK_END` are deprecated."
-        },
-        {
-          "shortName": "GoTestName",
-          "displayName": "Malformed test function name",
-          "enabled": true,
-          "description": "Reports malformed names of tests, benchmarks, and examples.\n\nAccording to [Package testing at golang.org](https://golang.org/pkg/testing/), names must follow a special convention\nin order to make the go tool process them correctly.\n\nExample:\n\n    func Testfoo(*testing.T) {} // the 'go' tool will not run this test\n\nAfter the **Rename to** quick-fix is applied:\n\n    func TestFoo(*testing.T) {}\n"
-        },
-        {
-          "shortName": "GoExportedFuncWithUnexportedType",
-          "displayName": "Unexported return type of the exported function",
-          "enabled": true,
-          "description": "Reports exported functions with unexported return types.\n\nUnexported types can be difficult to use when viewing documentation under **go doc**.\n\nExample:\n\n    type hidden struct{}\n\n    func Exported() hidden { // Exported function with the `hidden` unexported return type\n     return hidden{}\n    }\n\nYou can apply **Export** quick-fix to export the type. After the quick-fix is applied,\ntype name will be capitalized:\n\n    type Hidden struct{}\n\n    func Exported() Hidden { // Fixed\n     return Hidden{}\n    }\n"
-        },
-        {
-          "shortName": "GoMissingTrailingComma",
-          "displayName": "Missing trailing comma before a newline in a composite literal",
-          "enabled": false,
-          "description": "Reports a missing trailing comma before a newline in composite literals, function call arguments, and function parameter lists.\n\nExample:\n\n    func f(f int) (\n     int,\n     bool   // missing a trailing comma\n    ){\n     println(1, 2  // missing a trailing comma\n     )\n    }\n"
-        },
-        {
-          "shortName": "GoInterfaceToAny",
-          "displayName": "Usage of 'interface{}' as a type",
-          "enabled": true,
-          "description": "Reports usages of the empty interface as a type or type constraint.\n\n\nThe empty interface denotes the set of all types.\nGo 1.18 introduced the more explicit alias `any` for `interface{}`,\nwhich is equivalent to `interface{}` in all ways.\n\nThe inspection is triggered for any usage of an empty interface as a type or type constraint.\nAliases of the empty interface and interfaces that exclusively embed other empty interfaces do not trigger the inspection.\n\nConsider using the more explicit alias `any` instead."
-        },
-        {
-          "shortName": "GoContextTodo",
-          "displayName": "Usage of context.TODO()",
-          "enabled": false,
-          "description": "Reports usages of `context.TODO()`.\n\nAccording to the [documentation at pkg.go.dev](https://pkg.go.dev/context#TODO),\nyou need to use `context.TODO` when it is unclear what\n`Context` to use, or `Context` is not yet available.\n`Context` might not be available because of the surrounding function that\nhas not yet been extended to accept the `Context` parameter.\n\nNote that it is a temporary placeholder, and you must change it in the future to a more meaningful\ncontext (for example, `context.Background()`)."
-        },
-        {
-          "shortName": "GoFuzzingSupport",
-          "displayName": "Fuzzing is supported starting with Go 1.18",
-          "enabled": true,
-          "description": "Reports presence of fuzz tests when Go SDK version is less than 1.18\n\nFuzz testing is a method of automated testing that involves a directed search for input data that may cause a program crash\nor expose invalid behavior. Go supports fuzz testing starting from Go 1.18.\n\nExample of a fuzz test:\n\n\n    func Div(a, b int) int {\n    \treturn a / b\n    }\n\n    func FuzzDiv(f *testing.F) {\n    \tf.Fuzz(func(t *testing.T, a, b int) {\n    \t\tDiv(a, b) // reports runtime error: integer divide by zero\n    \t})\n    }\n\n\nSee [Go Fuzzing](https://go.dev/doc/fuzz/) for more information."
-        },
-        {
-          "shortName": "DuplicatedCode",
-          "displayName": "Duplicated code fragment",
-          "enabled": false,
-          "description": "Reports duplicated blocks of code from the selected scope: the same file or the entire project. The inspection features quick-fixes that help you to set the size of detected duplicates, navigate to repetitive code fragments, and compare them in a tool window. The inspection options allow you to select the scope of the reported duplicated fragments and set the initial size for the duplicated language constructs. You can also configure the constructs that you want to anonymize in [File \\| Settings \\| Editor \\| Duplicates](settings://duplicates.index)."
-        },
-        {
-          "shortName": "InconsistentLineSeparators",
-          "displayName": "Inconsistent line separators",
-          "enabled": false,
-          "description": "Reports files with line separators different from the ones that are specified in the project's settings.\n\nFor example, the inspection will be triggered if you set the line separator to `\\n` in\n[Settings \\| Editor \\| Code Style \\| Line separator](settings://preferences.sourceCode?Line%20separator),\nwhile the file you are editing uses `\\r\\n` as a line separator.\n\nThe inspection also warns you about mixed line separators within a file."
-        },
-        {
-          "shortName": "ReassignedToPlainText",
-          "displayName": "Reassigned to plain text",
-          "enabled": false,
-          "description": "Reports files that were explicitly re-assigned to Plain Text File Type. This association is unnecessary because the platform auto-detects text files by content automatically.\n\nYou can dismiss this warning by removing the file type association\nin **Settings \\| Editor \\| File Types \\| Text**."
-        },
-        {
-          "shortName": "RedundantSuppression",
-          "displayName": "Redundant suppression",
-          "enabled": false,
-          "description": "Reports usages of the following elements that can be safely removed because the inspection they affect is no longer applicable in this context:\n\n* `@SuppressWarning` annotation, or\n* `// noinspection` line comment, or\n* `/** noinspection */` JavaDoc comment\n\nExample:\n\n\n    public class C {\n     // symbol is already private,\n     // but annotation is still around\n      @SuppressWarnings({\"WeakerAccess\"})\n     private boolean CONST = true;\n     void f() {\n        CONST = false;\n      }\n    }\n"
-        },
-        {
-          "shortName": "ProblematicWhitespace",
-          "displayName": "Problematic whitespace",
-          "enabled": false,
-          "description": "Reports the following problems:\n\n* Tabs used for indentation when the code style is configured to use only spaces.\n* Spaces used for indentation when the code style is configured to use only tabs.\n* Spaces used for indentation and tabs used for alignment when the code style is configured to use smart tabs."
-        },
-        {
-          "shortName": "LongLine",
-          "displayName": "Line is longer than allowed by code style",
-          "enabled": false,
-          "description": "Reports lines that are longer than the **Hard wrap at** parameter specified in [Settings \\| Editor \\| Code Style \\| General](settings://preferences.sourceCode?Hard%20wrap%20at)."
-        },
-        {
-          "shortName": "Annotator",
-          "displayName": "Annotator",
-          "enabled": false,
-          "description": "Reports problems that are found by language annotators in the result of a batch code inspection run."
-        },
-        {
-          "shortName": "TodoComment",
-          "displayName": "TODO comment",
-          "enabled": false,
-          "description": "Reports **TODO** comments in your code.\n\nYou can configure the format for **TODO** comments in [Settings \\| Editor \\| TODO](settings://preferences.toDoOptions).\n\nEnable the **Only warn on TODO comments without any details** option to only warn on empty TODO comments, that\ndon't provide any description on the task that should be done. Disable to report all TODO comments."
-        },
-        {
-          "shortName": "IncorrectFormatting",
-          "displayName": "Incorrect formatting",
-          "enabled": false,
-          "description": "Reports formatting issues that appear if your code doesn't\nfollow your project's code style settings.\n\n\nThis inspection is not compatible with languages that require\nthird-party formatters for code formatting, for example, Go or\nC with CLangFormat enabled."
-        },
-        {
-          "shortName": "EmptyDirectory",
-          "displayName": "Empty directory",
-          "enabled": false,
-          "description": "Reports empty directories.\n\nAvailable only from **Code \\| Inspect Code** or\n**Code \\| Analyze Code \\| Run Inspection by Name** and isn't reported in the editor.\n\nUse the **Only report empty directories located under a source folder** option to have only directories under source\nroots reported."
-        },
-        {
-          "shortName": "SyntaxError",
-          "displayName": "Syntax error",
-          "enabled": false,
-          "description": "Reports syntax errors that have been found in the result of a batch code inspection run."
-        },
-        {
-          "shortName": "InjectedReferences",
-          "displayName": "Injected references",
-          "enabled": false,
-          "description": "Reports unresolved references injected by [Language Injections](https://www.jetbrains.com/help/idea/using-language-injections.html).\n\nExample:\n\n```\n    @Language(\"file-reference\")\n    String fileName = \"/home/user/nonexistent.file\"; // highlighted if file doesn't exist\n```"
-        },
-        {
-          "shortName": "QodanaServiceMessage",
-          "displayName": "Qodana service message",
-          "enabled": false,
-          "description": "Reports the Qodana service messages such as suspending a particular inspection due to a large number of reported problems."
-        },
-        {
-          "shortName": "VgoMigrateFromReplacesToWorkspace",
-          "displayName": "Migration to Go workspace is possible",
-          "enabled": false,
-          "description": "Generates 'go.work' files using 'replace' directives.\n\n\nGo workspaces is a feature introduced in Go 1.18 that allows working simultaneously on several modules.  \n\nWorkspaces are a modern alternative to 'replace' directives pointing to local directories.  \n\nAll modules in a workspace have the same set of dependencies, thus making the configuration simpler, more robust,\nand requiring fewer 'go list' calls to scan the project structure.  \n\nThe fix for this inspection generates a new 'go.work' file and does not change existing files.\n\n\nBy default, warning severity is used. If a generated workspace would include Go modules that were not replaced\nin the original 'go.mod', no warning is shown due to possible side effects caused by migration, but the fix still can be run manually.\n\n\nFor more information about workspaces, see [Go Modules Reference](https://go.dev/ref/mod#workspaces).  \n\nFor Go workspaces introduction, see [Tutorial: Getting started with multi-module\nworkspaces](https://go.dev/doc/tutorial/workspaces)."
-        },
-        {
-          "shortName": "GoTemplateUnknownVariable",
-          "displayName": "Unknown variable",
-          "enabled": false,
-          "description": "Reports usages of unknown variables in Go Templates.\n\nParsing of such templates will cause panic because variables must be declared before usage.\n\nExample:\n\n    {{$v}} is zero. {{/* bad, $v is unknown */}}\n    {{$v := 0}}{{$v}} is zero. {{/* good */}}\n"
-        },
-        {
-          "shortName": "GoTemplateDuplicateVariable",
-          "displayName": "Duplicate variable",
-          "enabled": false,
-          "description": "Reports duplicate Go Template variables that are declared in the same scope.\n\nDuplicating a variable reassigns the existing variable with the same name. This operation might lead to different\nunpredicatable issues.\n\nExample:\n\n    {{$v := 0}}{{$v := 1}}{{$v}} is 0. {{/* evaluates to '1 is 0' */}}\n    {{$v := 0}}{{$w := 1}}{{$v}} is 0. {{/* works as expected */}}\n"
         }
       ]
     },
@@ -904,16 +904,16 @@
           "description": "Reports escaped meta characters. Some RegExp coding styles specify that meta characters should be placed inside a character class, to make the regular expression easier to understand. This inspection does not warn about the meta character `[`, `]` and `^`, because those would need additional escaping inside a character class.\n\n**Example:**\n\n\n      \\d+\\.\\d+\n\nAfter the quick-fix is applied:\n\n\n      \\d+[.]\\d+\n\nNew in 2017.1"
         },
         {
-          "shortName": "RegExpDuplicateAlternationBranch",
-          "displayName": "Duplicate branch in alternation",
-          "enabled": true,
-          "description": "Reports duplicate branches in a RegExp alternation. Duplicate branches slow down matching and obscure the intent of the expression.\n\n**Example:**\n\n\n      (alpha|bravo|charlie|alpha)\n\nAfter the quick-fix is applied:\n\n\n      (alpha|bravo|charlie)\n\nNew in 2017.1"
-        },
-        {
           "shortName": "RegExpRepeatedSpace",
           "displayName": "Consecutive spaces",
           "enabled": true,
           "description": "Reports multiple consecutive spaces in a RegExp. Because spaces are not visible by default, it can be hard to see how many spaces are required. The RegExp can be made more clear by replacing the consecutive spaces with a single space and a counted quantifier.\n\n**Example:**\n\n\n      (     )\n\nAfter the quick-fix is applied:\n\n\n      ( {5})\n\n\nNew in 2017.1"
+        },
+        {
+          "shortName": "RegExpDuplicateAlternationBranch",
+          "displayName": "Duplicate branch in alternation",
+          "enabled": true,
+          "description": "Reports duplicate branches in a RegExp alternation. Duplicate branches slow down matching and obscure the intent of the expression.\n\n**Example:**\n\n\n      (alpha|bravo|charlie|alpha)\n\nAfter the quick-fix is applied:\n\n\n      (alpha|bravo|charlie)\n\nNew in 2017.1"
         }
       ]
     },
