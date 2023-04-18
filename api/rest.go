@@ -26,15 +26,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gojek/heimdall/v7/httpclient"
 	log "github.com/veteran-software/nowlive-logging"
-)
-
-//goland:noinspection SpellCheckingInspection
-var (
-	timeout = 2000 * time.Millisecond
-
-	httpClient = httpclient.NewClient(httpclient.WithHTTPTimeout(timeout))
 )
 
 var (
@@ -111,7 +103,8 @@ func (r *RateLimiter) lockedRequest(method, route, contentType string,
 
 	req.Header.Set("User-Agent", UserAgent)
 
-	resp, err := httpClient.Do(req)
+	client := http.Client{}
+	resp, err := client.Do(req)
 
 	if err != nil {
 		_ = bucket.release(nil)
@@ -175,7 +168,8 @@ func fireGetRequest(u *url.URL, data any, reason *string) ([]byte, error) {
 func firePostRequest(u *url.URL, data any, reason *string) ([]byte, error) {
 	resp, err := Rest.Request(http.MethodPost, u.String(), data, reason)
 	if err != nil {
-		log.Errorln(log.FuncName(), err)
+		// Allow this log to bubble up to the method call
+		log.Debugln(log.Discord, log.FuncName(), err)
 		return nil, err
 	}
 	defer func(Body io.ReadCloser) {

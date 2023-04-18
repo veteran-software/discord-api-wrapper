@@ -284,7 +284,7 @@ func (c *Channel) CreateMessage(payload CreateMessageJSON) (*Message, error) {
 	var message *Message
 	responseBytes, err := firePostRequest(u, payload, nil)
 	if err != nil {
-		log.Errorln(log.Discord, log.FuncName(), err)
+		log.Debugln(log.Discord, log.FuncName(), err)
 		return nil, err
 	}
 

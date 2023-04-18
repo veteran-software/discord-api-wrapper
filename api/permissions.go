@@ -565,7 +565,7 @@ func CanManageWebhooks(member *GuildMember, channel *Channel) bool {
 	return false
 }
 
-// CanManageEmojisAndStickers - Allows management and editing of emojis and stickers
+// CanManageGuildExpressions - Allows management and editing of emojis and stickers
 //
 //goland:noinspection GoUnusedExportedFunction
 func CanManageGuildExpressions(member *GuildMember, channel *Channel) bool {
