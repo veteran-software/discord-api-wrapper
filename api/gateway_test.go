@@ -17,11 +17,34 @@
 package api
 
 import (
+	"bytes"
+	"encoding/json"
+	"net/http"
+	"net/http/httptest"
 	"reflect"
 	"testing"
 )
 
 func TestGetGateway(t *testing.T) {
+	want := &GetGatewayResponse{
+		Url: "wss://gateway.discord.gg",
+	}
+
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(200)
+
+		var b bytes.Buffer
+		err := json.NewEncoder(&b).Encode(want)
+		if err != nil {
+			return
+		}
+		_, _ = w.Write(b.Bytes())
+	}))
+	defer srv.Close()
+
+	api = srv.URL
+	testClient = srv.Client()
+
 	tests := []struct {
 		name    string
 		want    *GetGatewayResponse
@@ -29,10 +52,11 @@ func TestGetGateway(t *testing.T) {
 	}{
 		{
 			name:    "No Error",
-			want:    &GetGatewayResponse{Url: "wss://gateway.discord.gg"},
+			want:    want,
 			wantErr: false,
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := GetGateway()

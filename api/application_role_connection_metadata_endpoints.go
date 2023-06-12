@@ -27,10 +27,12 @@ import (
 //
 //goland:noinspection GoUnusedExportedFunction
 func GetApplicationRoleConnectionMetadataRecords(appID string) ([]*ApplicationRoleConnectionMetadata, error) {
-	u := parseRoute(fmt.Sprintf(getApplicationRoleConnectionMetadataRecords, api, appID))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getApplicationRoleConnectionMetadataRecords, api, appID)),
+	}
 
 	var m []*ApplicationRoleConnectionMetadata
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -45,10 +47,12 @@ func GetApplicationRoleConnectionMetadataRecords(appID string) ([]*ApplicationRo
 //
 //goland:noinspection GoUnusedExportedFunction
 func UpdateApplicationRoleConnectionMetadataRecords(appID string) ([]*ApplicationRoleConnectionMetadata, error) {
-	u := parseRoute(fmt.Sprintf(updateApplicationRoleConnectionMetadataRecords, api, appID))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(updateApplicationRoleConnectionMetadataRecords, api, appID)),
+	}
 
 	var m []*ApplicationRoleConnectionMetadata
-	responseBytes, err := firePutRequest(u, nil, nil)
+	responseBytes, err := firePutRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err

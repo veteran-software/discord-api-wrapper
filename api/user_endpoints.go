@@ -30,10 +30,10 @@ import (
 //
 //goland:noinspection GoUnusedExportedFunction
 func GetCurrentUser() (*User, error) {
-	u := parseRoute(fmt.Sprintf(getCurrentUser, api))
-
 	var user *User
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(getCurrentUser, api)),
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -48,10 +48,10 @@ func GetCurrentUser() (*User, error) {
 //
 //goland:noinspection GoUnusedExportedFunction
 func (u *User) GetUser() (*User, error) {
-	route := parseRoute(fmt.Sprintf(getUser, api, u.ID.String()))
-
 	var user *User
-	responseBytes, err := fireGetRequest(route, nil, nil)
+	responseBytes, err := fireGetRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(getUser, api, u.ID.String())),
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -68,10 +68,11 @@ func (u *User) GetUser() (*User, error) {
 //
 //goland:noinspection GoUnusedExportedFunction
 func ModifyCurrentUser(payload *ModifyCurrentUserJSON) (*User, error) {
-	u := parseRoute(fmt.Sprintf(modifyCurrentUser, api))
-
 	var user *User
-	responseBytes, err := firePatchRequest(u, payload, nil)
+	responseBytes, err := firePatchRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(modifyCurrentUser, api)),
+		data:  payload,
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -109,7 +110,9 @@ func GetCurrentUserGuilds(before *Snowflake, after *Snowflake, limit *uint64) ([
 	}
 
 	var guilds []*Guild
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(&httpData{
+		route: u,
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -122,10 +125,10 @@ func GetCurrentUserGuilds(before *Snowflake, after *Snowflake, limit *uint64) ([
 
 // GetCurrentUserGuildMember - Returns a GuildMember object for the current user. Requires the `guilds.members.read` OAuth2 scope.
 func (g *Guild) GetCurrentUserGuildMember() (*GuildMember, error) {
-	u := parseRoute(fmt.Sprintf(getCurrentUserGuildMember, api, g.ID.String()))
-
 	var guildMember *GuildMember
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(getCurrentUserGuildMember, api, g.ID.String())),
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -138,9 +141,9 @@ func (g *Guild) GetCurrentUserGuildMember() (*GuildMember, error) {
 
 // LeaveGuild - Leave a guild. Returns a 204 empty response on success.
 func (g *Guild) LeaveGuild() error {
-	u := parseRoute(fmt.Sprintf(leaveGuild, api, g.ID.String()))
-
-	return fireDeleteRequest(u, nil)
+	return fireDeleteRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(leaveGuild, api, g.ID.String())),
+	})
 }
 
 // CreateDM - Create a new DM Channel with a User. Returns a DM Channel object.
@@ -153,10 +156,11 @@ func (g *Guild) LeaveGuild() error {
 //
 //goland:noinspection GoUnusedExportedFunction
 func CreateDM(payload *CreateDmJSON) (*Channel, error) {
-	u := parseRoute(fmt.Sprintf(createDM, api))
-
 	var channel *Channel
-	responseBytes, err := firePostRequest(u, payload, nil)
+	responseBytes, err := firePostRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(createDM, api)),
+		data:  payload,
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -182,10 +186,11 @@ type CreateDmJSON struct {
 //
 //goland:noinspection GoUnusedExportedFunction
 func CreateGroupDM(payload *CreateDmJSON) (*Channel, error) {
-	u := parseRoute(fmt.Sprintf(createGroupDM, api))
-
 	var channel *Channel
-	responseBytes, err := firePostRequest(u, payload, nil)
+	responseBytes, err := firePostRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(createGroupDM, api)),
+		data:  payload,
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -206,10 +211,10 @@ type CreateGroupDmJSON struct {
 //
 //goland:noinspection GoUnusedExportedFunction
 func GetUserConnections() ([]*Connection, error) {
-	u := parseRoute(fmt.Sprintf(getUserConnections, api))
-
 	var connections []*Connection
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(getUserConnections, api)),
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -233,12 +238,25 @@ func (u *User) GetAvatarUrl() string {
 
 // GetDefaultUserAvatarUrl - returns the default Discord avatar
 func (u *User) GetDefaultUserAvatarUrl() string {
-	discriminator, err := strconv.Atoi(u.Discriminator)
-	if err != nil {
-		return ""
+	var index int
+
+	if u.Discriminator == "0" {
+		// legacy username system
+		temp, err := strconv.Atoi(u.Discriminator)
+		if err != nil {
+			return ""
+		}
+		index = temp % 5
+	} else {
+		// new username system
+		temp, err := strconv.Atoi(u.ID.String())
+		if err != nil {
+			return ""
+		}
+		index = (temp >> 22) % 6
 	}
 
-	return ImageBaseURL + fmt.Sprintf(getDefaultUserAvatarUrl, strconv.Itoa(discriminator%5))
+	return ImageBaseURL + fmt.Sprintf(getDefaultUserAvatarUrl, strconv.Itoa(index))
 }
 
 // GetUserApplicationRoleConnection - Returns the application role connection for the user.
@@ -247,10 +265,10 @@ func (u *User) GetDefaultUserAvatarUrl() string {
 //
 //goland:noinspection GoUnusedExportedFunction
 func GetUserApplicationRoleConnection(applicationID *Snowflake) (*ApplicationRoleConnection, error) {
-	u := parseRoute(fmt.Sprintf(getUserApplicationRoleConnection, api, applicationID.String()))
-
 	var connection *ApplicationRoleConnection
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(getUserApplicationRoleConnection, api, applicationID.String())),
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -268,10 +286,11 @@ func GetUserApplicationRoleConnection(applicationID *Snowflake) (*ApplicationRol
 //goland:noinspection GoUnusedExportedFunction
 func UpdateUserApplicationRoleConnection(applicationID *Snowflake,
 	payload *ApplicationRoleConnection) (*ApplicationRoleConnection, error) {
-	u := parseRoute(fmt.Sprintf(modifyUserApplicationRoleConnection, api, applicationID.String()))
-
 	var connection *ApplicationRoleConnection
-	responseBytes, err := firePutRequest(u, payload, nil)
+	responseBytes, err := firePutRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(modifyUserApplicationRoleConnection, api, applicationID.String())),
+		data:  payload,
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err

@@ -25,8 +25,7 @@ import (
 )
 
 // GetInvite - Returns an Invite object for the given code.
-func (i *Invite) GetInvite(withCounts *bool, withExpiration *bool, guildScheduledEventID *Snowflake) (*Invite,
-	error) {
+func (i *Invite) GetInvite(withCounts *bool, withExpiration *bool, guildScheduledEventID *Snowflake) (*Invite, error) {
 	u := parseRoute(fmt.Sprintf(getInvite, api, *i.Code))
 
 	q := u.Query()
@@ -44,7 +43,9 @@ func (i *Invite) GetInvite(withCounts *bool, withExpiration *bool, guildSchedule
 	}
 
 	var invite *Invite
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(&httpData{
+		route: u,
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -65,7 +66,8 @@ func (i *Invite) GetInvite(withCounts *bool, withExpiration *bool, guildSchedule
 //
 //	This endpoint supports the `X-Audit-Log-Reason` header.
 func (i *Invite) DeleteInvite(reason *string) error {
-	u := parseRoute(fmt.Sprintf(deleteInvite, api, *i.Code))
-
-	return fireDeleteRequest(u, reason)
+	return fireDeleteRequest(&httpData{
+		route:  parseRoute(fmt.Sprintf(deleteInvite, api, *i.Code)),
+		reason: reason,
+	})
 }

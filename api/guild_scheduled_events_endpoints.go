@@ -39,7 +39,9 @@ func (g *Guild) ListGuildScheduledEvents(withUserCount *bool) ([]*GuildScheduled
 	}
 
 	var guildScheduledEvents []*GuildScheduledEvent
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(&httpData{
+		route: u,
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -62,7 +64,11 @@ func (g *Guild) CreateGuildScheduledEvent(payload *CreateGuildScheduledEventJSON
 	u := parseRoute(fmt.Sprintf(createGuildScheduledEvent, api, g.ID.String()))
 
 	var guildScheduledEvent *GuildScheduledEvent
-	responseBytes, err := firePostRequest(u, payload, reason)
+	responseBytes, err := firePostRequest(&httpData{
+		route:  u,
+		data:   payload,
+		reason: reason,
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -102,7 +108,9 @@ func (g *Guild) GetGuildScheduledEvent(guildScheduledEventID *Snowflake, withUse
 	}
 
 	var guildScheduledEvent *GuildScheduledEvent
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(&httpData{
+		route: u,
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -134,7 +142,11 @@ func (g *Guild) ModifyGuildScheduledEvent(
 	u := parseRoute(fmt.Sprintf(modifyGuildScheduledEvent, api, g.ID.String(), guildScheduledEventID.String()))
 
 	var guildScheduledEvent *GuildScheduledEvent
-	responseBytes, err := firePatchRequest(u, payload, reason)
+	responseBytes, err := firePatchRequest(&httpData{
+		route:  u,
+		data:   payload,
+		reason: reason,
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -163,7 +175,9 @@ type ModifyGuildScheduledEventJSON struct {
 func (g *Guild) DeleteGuildScheduledEvent(guildScheduledEventID *Snowflake) error {
 	u := parseRoute(fmt.Sprintf(deleteGuildScheduledEvent, api, g.ID.String(), guildScheduledEventID.String()))
 
-	return fireDeleteRequest(u, nil)
+	return fireDeleteRequest(&httpData{
+		route: u,
+	})
 }
 
 // GetGuildScheduledEventUsers - Get a list of guild scheduled event users subscribed to a guild scheduled event.
@@ -201,7 +215,9 @@ func (g *Guild) GetGuildScheduledEventUsers(
 	}
 
 	var guildScheduledEvent *GuildScheduledEventUser
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(&httpData{
+		route: u,
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err

@@ -25,10 +25,10 @@ import (
 
 // GetSticker - Returns a sticker object for the given sticker ID.
 func (s *Sticker) GetSticker() (*Sticker, error) {
-	u := parseRoute(fmt.Sprintf(getSticker, api, s.ID.String()))
-
 	var sticker *Sticker
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(getSticker, api, s.ID.String())),
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -43,10 +43,10 @@ func (s *Sticker) GetSticker() (*Sticker, error) {
 //
 //goland:noinspection GoUnusedExportedFunction
 func ListNitroStickerPacks() (*ListNitroStickerPacksResponse, error) {
-	u := parseRoute(fmt.Sprintf(listNitroStickerPacks, api))
-
 	var listNitroStickerPacksResponse *ListNitroStickerPacksResponse
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(listNitroStickerPacks, api)),
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -66,10 +66,10 @@ type ListNitroStickerPacksResponse struct {
 //
 // Includes user fields if the bot has the ManageEmojisAndStickers permission.
 func (g *Guild) ListGuildStickers() ([]*Sticker, error) {
-	u := parseRoute(fmt.Sprintf(listGuildStickers, api, g.ID.String()))
-
 	var stickers []*Sticker
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(listGuildStickers, api, g.ID.String())),
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -84,10 +84,10 @@ func (g *Guild) ListGuildStickers() ([]*Sticker, error) {
 //
 // Includes the `user` field if the bot has the ManageEmojisAndStickers permission.
 func (g *Guild) GetGuildSticker(stickerID Snowflake) (*Sticker, error) {
-	u := parseRoute(fmt.Sprintf(getGuildSticker, api, g.ID.String(), stickerID.String()))
-
 	var sticker *Sticker
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(getGuildSticker, api, g.ID.String(), stickerID.String())),
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -107,10 +107,10 @@ func (g *Guild) GetGuildSticker(stickerID Snowflake) (*Sticker, error) {
 // Returns the new sticker object on success.
 // TODO: FormData fields
 func (g *Guild) CreateGuildSticker() (*Sticker, error) {
-	u := parseRoute(fmt.Sprintf(createGuildSticker, api, g.ID.String()))
-
 	var sticker *Sticker
-	responseBytes, err := firePostRequest(u, nil, nil)
+	responseBytes, err := firePostRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(createGuildSticker, api, g.ID.String())),
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -130,14 +130,14 @@ func (g *Guild) CreateGuildSticker() (*Sticker, error) {
 // All parameters to this endpoint are optional.
 //
 // This endpoint supports the `X-Audit-Log-Reason` header.
-func (g *Guild) ModifyGuildSticker(stickerID Snowflake,
-	payload ModifyGuildStickerJSON,
-	reason *string) (*Sticker,
+func (g *Guild) ModifyGuildSticker(stickerID Snowflake, payload ModifyGuildStickerJSON, reason *string) (*Sticker,
 	error) {
-	u := parseRoute(fmt.Sprintf(modifyGuildSticker, api, g.ID.String(), stickerID.String()))
-
 	var sticker *Sticker
-	responseBytes, err := firePatchRequest(u, payload, reason)
+	responseBytes, err := firePatchRequest(&httpData{
+		route:  parseRoute(fmt.Sprintf(modifyGuildSticker, api, g.ID.String(), stickerID.String())),
+		data:   payload,
+		reason: reason,
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -163,7 +163,8 @@ type ModifyGuildStickerJSON struct {
 //
 // This endpoint supports the `X-Audit-Log-Reason` header.
 func (g *Guild) DeleteGuildSticker(stickerID Snowflake, reason *string) error {
-	u := parseRoute(fmt.Sprintf(deleteGuildSticker, api, g.ID.String(), stickerID.String()))
-
-	return fireDeleteRequest(u, reason)
+	return fireDeleteRequest(&httpData{
+		route:  parseRoute(fmt.Sprintf(deleteGuildSticker, api, g.ID.String(), stickerID.String())),
+		reason: reason,
+	})
 }

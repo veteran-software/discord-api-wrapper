@@ -26,10 +26,12 @@ import (
 
 // ListGuildEmojis - Returns a list of emoji objects for the given guild.
 func (g *Guild) ListGuildEmojis() ([]*Emoji, error) {
-	u := parseRoute(fmt.Sprintf(listGuildEmojis, api, g.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(listGuildEmojis, api, g.ID.String())),
+	}
 
 	var emojis []*Emoji
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -42,10 +44,12 @@ func (g *Guild) ListGuildEmojis() ([]*Emoji, error) {
 
 // GetGuildEmoji - Returns an emoji object for the given guild and emoji IDs.
 func (g *Guild) GetGuildEmoji(emoji *Emoji) (*Emoji, error) {
-	u := parseRoute(fmt.Sprintf(getGuildEmoji, api, g.ID.String(), emoji.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getGuildEmoji, api, g.ID.String(), emoji.ID.String())),
+	}
 
 	var e *Emoji
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -70,10 +74,14 @@ func (g *Guild) GetGuildEmoji(emoji *Emoji) (*Emoji, error) {
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
 func (g *Guild) CreateGuildEmoji(payload *CreateEmojiJSON, reason *string) (*Emoji, error) {
-	u := parseRoute(fmt.Sprintf(createGuildEmoji, api, g.ID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(createGuildEmoji, api, g.ID.String())),
+		data:   payload,
+		reason: reason,
+	}
 
 	var emoji *Emoji
-	responseBytes, err := firePostRequest(u, payload, reason)
+	responseBytes, err := firePostRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -105,10 +113,14 @@ type CreateEmojiJSON struct {
 //
 // This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) ModifyGuildEmoji(emoji *Emoji, payload *ModifyGuildEmojiJSON, reason *string) (*Emoji, error) {
-	u := parseRoute(fmt.Sprintf(modifyGuildEmoji, api, g.ID.String(), emoji.ID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(modifyGuildEmoji, api, g.ID.String(), emoji.ID.String())),
+		data:   payload,
+		reason: reason,
+	}
 
 	var e *Emoji
-	responseBytes, err := firePatchRequest(u, payload, reason)
+	responseBytes, err := firePatchRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -135,7 +147,10 @@ type ModifyGuildEmojiJSON struct {
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
 func (g *Guild) DeleteGuildEmoji(emoji *Emoji, reason *string) error {
-	u := parseRoute(fmt.Sprintf(deleteGuildEmoji, api, g.ID.String(), emoji.ID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(deleteGuildEmoji, api, g.ID.String(), emoji.ID.String())),
+		reason: reason,
+	}
 
-	return fireDeleteRequest(u, reason)
+	return fireDeleteRequest(rest)
 }

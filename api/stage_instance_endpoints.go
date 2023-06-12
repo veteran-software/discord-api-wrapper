@@ -31,10 +31,12 @@ import (
 //
 //goland:noinspection GoUnusedExportedFunction
 func CreateStageInstance(payload CreateStageInstanceJSON, reason *string) (*StageInstance, error) {
-	u := parseRoute(fmt.Sprintf(createStageInstance, api))
-
 	var stageInstance *StageInstance
-	responseBytes, err := firePostRequest(u, payload, reason)
+	responseBytes, err := firePostRequest(&httpData{
+		route:  parseRoute(fmt.Sprintf(createStageInstance, api)),
+		data:   payload,
+		reason: reason,
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -55,10 +57,10 @@ type CreateStageInstanceJSON struct {
 
 // GetStageInstance - Gets the stage instance associated with the Stage channel, if it exists.
 func (s *StageInstance) GetStageInstance() (*StageInstance, error) {
-	u := parseRoute(fmt.Sprintf(getStageInstance, api, s.ChannelID.String()))
-
 	var stageInstance *StageInstance
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(getStageInstance, api, s.ChannelID.String())),
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -75,10 +77,12 @@ func (s *StageInstance) GetStageInstance() (*StageInstance, error) {
 //
 //	  This endpoint supports the `X-Audit-Log-Reason` header.
 func (s *StageInstance) ModifyStageInstance(payload ModifyStageInstanceJSON, reason *string) (*StageInstance, error) {
-	u := parseRoute(fmt.Sprintf(modifyStageInstance, api, s.ChannelID.String()))
-
 	var stageInstance *StageInstance
-	responseBytes, err := firePatchRequest(u, payload, reason)
+	responseBytes, err := firePatchRequest(&httpData{
+		route:  parseRoute(fmt.Sprintf(modifyStageInstance, api, s.ChannelID.String())),
+		data:   payload,
+		reason: reason,
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -101,7 +105,8 @@ type ModifyStageInstanceJSON struct {
 //
 //	This endpoint supports the `X-Audit-Log-Reason` header.
 func (s *StageInstance) DeleteStageInstance(reason *string) error {
-	u := parseRoute(fmt.Sprintf(deleteStageInstance, api, s.ChannelID.String()))
-
-	return fireDeleteRequest(u, reason)
+	return fireDeleteRequest(&httpData{
+		route:  parseRoute(fmt.Sprintf(deleteStageInstance, api, s.ChannelID.String())),
+		reason: reason,
+	})
 }

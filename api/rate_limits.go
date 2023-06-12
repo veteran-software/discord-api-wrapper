@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Veteran Software
+ * Copyright (c) 2022-2023. Veteran Software
  *
  * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
@@ -111,7 +111,7 @@ func (r *RateLimiter) getWaitTime(b *bucket, minRemaining int) time.Duration {
 	}
 
 	// Check global rate limits
-	sleepTo := time.Unix(0, atomic.LoadInt64(r.global))
+	sleepTo := time.Unix(atomic.LoadInt64(r.global), 0)
 	if now := time.Now(); now.Before(sleepTo) {
 		return sleepTo.Sub(now)
 	}
@@ -208,7 +208,8 @@ func (b *bucket) checkReset(headers http.Header, reset string) error {
 	}
 
 	whole, frac := math.Modf(unix)
-	delta := time.Unix(int64(whole), 0).Add(time.Duration(frac*1000)*time.Millisecond).Sub(discordTime) + (250 * time.Millisecond)
+	delta := time.Unix(int64(whole),
+		0).Add(time.Duration(frac*1000)*time.Millisecond).Sub(discordTime) + (250 * time.Millisecond)
 	b.reset = time.Now().Add(delta)
 	return nil
 }

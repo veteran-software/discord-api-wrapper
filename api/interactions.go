@@ -19,8 +19,6 @@ package api
 import (
 	"fmt"
 	"net/http"
-
-	log "github.com/veteran-software/nowlive-logging"
 )
 
 // An Interaction is the message that your application receives when a user uses an ApplicationCommand or a Message Component.
@@ -230,27 +228,29 @@ func (i *Interaction) BuildResponse(embeds []*Embed) *InteractionResponseMessage
 //
 // This endpoint also supports file attachments similar to the webhook endpoints.
 // Refer to Uploading Files for details on uploading files and `multipart/form-data` requests.
-func (i *Interaction) CreateInteractionResponse(payload any) error {
-	// verify that we only accept the payload that we want
-	// maybe future language version will make this easier/cleaner
-	switch payload.(type) {
-	case **InteractionResponseMessages:
-	case **InteractionResponseAutocomplete:
-	case **InteractionResponseModal:
-	default:
-		return nil
-	}
+//func (i *Interaction) CreateInteractionResponse(payload any) error {
+//	// verify that we only accept the payload that we want
+//	// maybe future language version will make this easier/cleaner
+//	switch payload.(type) {
+//	case **InteractionResponseMessages:
+//	case **InteractionResponseAutocomplete:
+//	case **InteractionResponseModal:
+//	default:
+//		return nil
+//	}
+//
+//	u := parseRoute(fmt.Sprintf(createInteractionResponse, api, i.ID.String(), i.Token))
+//
+//	_, err := firePostRequest(u, payload, nil)
+//	if err != nil {
+//		log.Errorln(log.Discord, log.FuncName(), err)
+//		return err
+//	}
+//
+//	return nil
+//}
 
-	u := parseRoute(fmt.Sprintf(createInteractionResponse, api, i.ID.String(), i.Token))
-
-	_, err := firePostRequest(u, payload, nil)
-	if err != nil {
-		log.Errorln(log.Discord, log.FuncName(), err)
-		return err
-	}
-
-	return nil
-}
+// TODO: How did I miss updating these??
 
 // GetOriginalInteractionResponse Returns the initial Interaction response.
 func (i *Interaction) GetOriginalInteractionResponse() (method string, route string) {

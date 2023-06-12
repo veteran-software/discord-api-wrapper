@@ -31,10 +31,12 @@ import (
 //
 //goland:noinspection GoUnusedExportedFunction
 func GetChannel(channelID *Snowflake) (*Channel, error) {
-	u := parseRoute(fmt.Sprintf(getChannel, api, channelID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getChannel, api, channelID.String())),
+	}
 
 	var channel *Channel
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -51,10 +53,12 @@ func GetChannel(channelID *Snowflake) (*Channel, error) {
 //
 // If the channel is a thread, a thread member object is included in the returned result.
 func (c *Channel) GetChannel() (*Channel, error) {
-	u := parseRoute(fmt.Sprintf(getChannel, api, c.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getChannel, api, c.ID.String())),
+	}
 
 	var channel *Channel
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -127,10 +131,14 @@ type ModifyGuildVoiceChannelJSON struct {
 // modifyChannel - Update a channel's settings. Returns a channel on success, and a 400 BAD REQUEST on invalid parameters. All JSON parameters are optional.
 func (c *Channel) modifyChannel(payload any, reason *string) (*Channel, error) {
 	// TODO: verify types on payload
-	u := parseRoute(fmt.Sprintf(modifyChannel, api, c.ID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(modifyChannel, api, c.ID.String())),
+		data:   payload,
+		reason: reason,
+	}
 
 	var channel *Channel
-	responseBytes, err := firePatchRequest(u, payload, reason)
+	responseBytes, err := firePatchRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -170,9 +178,12 @@ type ModifyThreadJSON struct {
 //
 //	This endpoint supports the `X-Audit-Log-Reason` header.
 func (c *Channel) DeleteChannel(reason *string) error {
-	u := parseRoute(fmt.Sprintf(deleteChannel, api, c.ID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(deleteChannel, api, c.ID.String())),
+		reason: reason,
+	}
 
-	return fireDeleteRequest(u, reason)
+	return fireDeleteRequest(rest)
 }
 
 // GetChannelMessages - Returns the messages for a channel.
@@ -195,9 +206,11 @@ func (c *Channel) GetChannelMessages(around *Snowflake,
 	[]*Message,
 	error,
 ) {
-	u := parseRoute(fmt.Sprintf(getChannelMessages, api, c.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getChannelMessages, api, c.ID.String())),
+	}
 
-	q := u.Query()
+	q := rest.route.Query()
 	if around != nil {
 		q.Set("around", around.String())
 	}
@@ -211,11 +224,11 @@ func (c *Channel) GetChannelMessages(around *Snowflake,
 		q.Set("limit", strconv.Itoa(*limit))
 	}
 	if len(q) > 0 {
-		u.RawQuery = q.Encode()
+		rest.route.RawQuery = q.Encode()
 	}
 
 	var messages []*Message
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -232,10 +245,12 @@ func (c *Channel) GetChannelMessages(around *Snowflake,
 //
 // Returns a message object on success
 func (c *Channel) GetChannelMessage(messageID string) (*Message, error) {
-	u := parseRoute(fmt.Sprintf(getChannelMessage, api, c.ID.String(), messageID))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getChannelMessage, api, c.ID.String(), messageID)),
+	}
 
 	var message *Message
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -279,10 +294,13 @@ func (c *Channel) GetChannelMessage(messageID string) (*Message, error) {
 //
 // If you supply a payload_json form value, all fields except for file fields will be ignored in the form data.
 func (c *Channel) CreateMessage(payload CreateMessageJSON) (*Message, error) {
-	u := parseRoute(fmt.Sprintf(createMessage, api, c.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(createMessage, api, c.ID.String())),
+		data:  payload,
+	}
 
 	var message *Message
-	responseBytes, err := firePostRequest(u, payload, nil)
+	responseBytes, err := firePostRequest(rest)
 	if err != nil {
 		log.Debugln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -316,10 +334,12 @@ type CreateMessageJSON struct {
 //
 //goland:noinspection SpellCheckingInspection
 func (c *Channel) CrosspostMessage(messageID string) (*Message, error) {
-	u := parseRoute(fmt.Sprintf(crosspostMessage, api, c.ID.String(), messageID))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(crosspostMessage, api, c.ID.String(), messageID)),
+	}
 
 	var message *Message
-	responseBytes, err := firePostRequest(u, nil, nil)
+	responseBytes, err := firePostRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -342,9 +362,11 @@ func (c *Channel) CrosspostMessage(messageID string) (*Message, error) {
 //
 // To use custom emoji, you must encode it in the format name:id with the emoji name and emoji id.
 func (c *Channel) CreateReaction(messageID Snowflake, emoji string) error {
-	u := parseRoute(fmt.Sprintf(createReaction, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji)))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(createReaction, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji))),
+	}
 
-	_, err := firePutRequest(u, nil, nil)
+	_, err := firePutRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return err
@@ -361,9 +383,15 @@ func (c *Channel) CreateReaction(messageID Snowflake, emoji string) error {
 //
 // To use custom emoji, you must encode it in the format name:id with the emoji name and emoji id.
 func (c *Channel) DeleteOwnReaction(messageID Snowflake, emoji string) error {
-	u := parseRoute(fmt.Sprintf(deleteOwnReaction, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji)))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(deleteOwnReaction,
+			api,
+			c.ID.String(),
+			messageID.String(),
+			url.QueryEscape(emoji))),
+	}
 
-	return fireDeleteRequest(u, nil)
+	return fireDeleteRequest(rest)
 }
 
 // DeleteUserReaction - Deletes another user's reaction.
@@ -374,18 +402,20 @@ func (c *Channel) DeleteOwnReaction(messageID Snowflake, emoji string) error {
 //
 // To use custom emoji, you must encode it in the format name:id with the emoji name and emoji id.
 func (c *Channel) DeleteUserReaction(messageID Snowflake, emoji string, userID Snowflake) error {
-	u := parseRoute(
-		fmt.Sprintf(
-			deleteUserReaction,
-			api,
-			c.ID.String(),
-			messageID.String(),
-			url.QueryEscape(emoji),
-			userID.String(),
+	rest := &httpData{
+		route: parseRoute(
+			fmt.Sprintf(
+				deleteUserReaction,
+				api,
+				c.ID.String(),
+				messageID.String(),
+				url.QueryEscape(emoji),
+				userID.String(),
+			),
 		),
-	)
+	}
 
-	return fireDeleteRequest(u, nil)
+	return fireDeleteRequest(rest)
 }
 
 // GetReactions - Get a list of users that reacted with this emoji.
@@ -401,9 +431,11 @@ func (c *Channel) GetReactions(messageID Snowflake,
 	emoji string,
 	after *Snowflake,
 	limit *int) ([]*User, error) {
-	u := parseRoute(fmt.Sprintf(getReactions, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji)))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getReactions, api, c.ID.String(), messageID.String(), url.QueryEscape(emoji))),
+	}
 
-	q := u.Query()
+	q := rest.route.Query()
 	if after != nil {
 		q.Set("after", after.String())
 	}
@@ -411,11 +443,11 @@ func (c *Channel) GetReactions(messageID Snowflake,
 		q.Set("limit", strconv.Itoa(*limit))
 	}
 	if len(q) > 0 {
-		u.RawQuery = q.Encode()
+		rest.route.RawQuery = q.Encode()
 	}
 
 	var users []*User
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -432,9 +464,11 @@ func (c *Channel) GetReactions(messageID Snowflake,
 //
 // Fires a Message Reaction Remove All Gateway event.
 func (c *Channel) DeleteAllReactions(messageID Snowflake) error {
-	u := parseRoute(fmt.Sprintf(deleteAllReactions, api, c.ID.String(), messageID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(deleteAllReactions, api, c.ID.String(), messageID.String())),
+	}
 
-	return fireDeleteRequest(u, nil)
+	return fireDeleteRequest(rest)
 }
 
 // DeleteAllReactionsForEmoji - Deletes all the reactions for a given emoji on a message.
@@ -447,17 +481,19 @@ func (c *Channel) DeleteAllReactions(messageID Snowflake) error {
 //
 // To use custom emoji, you must encode it in the format name:id with the emoji name and emoji id.
 func (c *Channel) DeleteAllReactionsForEmoji(messageID Snowflake, emoji string) error {
-	u := parseRoute(
-		fmt.Sprintf(
-			deleteAllReactionsForEmoji,
-			api,
-			c.ID.String(),
-			messageID.String(),
-			url.QueryEscape(emoji),
+	rest := &httpData{
+		route: parseRoute(
+			fmt.Sprintf(
+				deleteAllReactionsForEmoji,
+				api,
+				c.ID.String(),
+				messageID.String(),
+				url.QueryEscape(emoji),
+			),
 		),
-	)
+	}
 
-	return fireDeleteRequest(u, nil)
+	return fireDeleteRequest(rest)
 }
 
 // EditMessage - Edit a previously sent message.
@@ -475,10 +511,13 @@ func (c *Channel) DeleteAllReactionsForEmoji(messageID Snowflake, emoji string) 
 //
 // Fires a Message Update Gateway event.
 func (c *Channel) EditMessage(messageID string, payload EditMessageJSON) (*Message, error) {
-	u := parseRoute(fmt.Sprintf(editMessage, api, c.ID.String(), messageID))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(editMessage, api, c.ID.String(), messageID)),
+		data:  payload,
+	}
 
 	var message *Message
-	responseBytes, err := firePatchRequest(u, payload, nil)
+	responseBytes, err := firePatchRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -514,9 +553,12 @@ type EditMessageJSON struct {
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
 func (c *Channel) DeleteMessage(messageID string, reason *string) error {
-	u := parseRoute(fmt.Sprintf(deleteMessage, api, c.ID.String(), messageID))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(deleteMessage, api, c.ID.String(), messageID)),
+		reason: reason,
+	}
 
-	return fireDeleteRequest(u, reason)
+	return fireDeleteRequest(rest)
 }
 
 // BulkDeleteMessages - Delete multiple messages in a single request.
@@ -541,9 +583,14 @@ func (c *Channel) BulkDeleteMessages(payload BulkDeleteJSON, reason *string) err
 			return errors.New("cannot bulk delete message older than 2 weeks")
 		}
 	}
-	u := parseRoute(fmt.Sprintf(bulkDeleteMessages, api, c.ID.String()))
 
-	_, err := firePostRequest(u, payload, reason)
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(bulkDeleteMessages, api, c.ID.String())),
+		data:   payload,
+		reason: reason,
+	}
+
+	_, err := firePostRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return err
@@ -573,9 +620,13 @@ type BulkDeleteJSON struct {
 func (c *Channel) EditChannelPermissions(overwriteID Snowflake,
 	payload EditChannelPermissionsJSON,
 	reason *string) error {
-	u := parseRoute(fmt.Sprintf(editChannelPermissions, api, c.ID.String(), overwriteID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(editChannelPermissions, api, c.ID.String(), overwriteID.String())),
+		data:   payload,
+		reason: reason,
+	}
 
-	_, err := firePutRequest(u, payload, reason)
+	_, err := firePutRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return err
@@ -597,10 +648,12 @@ type EditChannelPermissionsJSON struct {
 //
 // Requires the ManageChannels permission.
 func (c *Channel) GetChannelInvites() ([]*Invite, error) {
-	u := parseRoute(fmt.Sprintf(getChannelInvites, api, c.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getChannelInvites, api, c.ID.String())),
+	}
 
 	var invites []*Invite
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -625,10 +678,14 @@ func (c *Channel) GetChannelInvites() ([]*Invite, error) {
 //
 // This endpoint supports the X-Audit-Log-Reason header.
 func (c *Channel) CreateChannelInvite(payload CreateChannelInviteJSON, reason *string) (*Invite, error) {
-	u := parseRoute(fmt.Sprintf(getChannelInvites, api, c.ID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(getChannelInvites, api, c.ID.String())),
+		data:   payload,
+		reason: reason,
+	}
 
 	var invite *Invite
-	responseBytes, err := firePostRequest(u, payload, reason)
+	responseBytes, err := firePostRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -662,9 +719,12 @@ type CreateChannelInviteJSON struct {
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
 func (c *Channel) DeleteChannelPermission(overwriteID Snowflake, reason *string) error {
-	u := parseRoute(fmt.Sprintf(deleteChannelPermission, api, c.ID.String(), overwriteID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(deleteChannelPermission, api, c.ID.String(), overwriteID.String())),
+		reason: reason,
+	}
 
-	return fireDeleteRequest(u, reason)
+	return fireDeleteRequest(rest)
 }
 
 // FollowAnnouncementChannel - Follow an Announcement Channel to send messages to a target channel.
@@ -673,10 +733,13 @@ func (c *Channel) DeleteChannelPermission(overwriteID Snowflake, reason *string)
 //
 // Returns a followed channel object.
 func (c *Channel) FollowAnnouncementChannel(payload FollowAnnouncementChannelJSON) (*FollowedChannel, error) {
-	u := parseRoute(fmt.Sprintf(followAnnouncementChannel, api, c.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(followAnnouncementChannel, api, c.ID.String())),
+		data:  payload,
+	}
 
 	var followedChannel *FollowedChannel
-	responseBytes, err := firePostRequest(u, payload, nil)
+	responseBytes, err := firePostRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -701,9 +764,11 @@ type FollowAnnouncementChannelJSON struct {
 //
 // Fires a Typing Start Gateway event.
 func (c *Channel) TriggerTypingIndicator() error {
-	u := parseRoute(fmt.Sprintf(triggerTypingIndicator, api, c.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(triggerTypingIndicator, api, c.ID.String())),
+	}
 
-	_, err := firePostRequest(u, nil, nil)
+	_, err := firePostRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return err
@@ -714,10 +779,12 @@ func (c *Channel) TriggerTypingIndicator() error {
 
 // GetPinnedMessages - Returns all pinned messages in the channel as an array of message objects.
 func (c *Channel) GetPinnedMessages() ([]*Message, error) {
-	u := parseRoute(fmt.Sprintf(getPinnedMessages, api, c.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getPinnedMessages, api, c.ID.String())),
+	}
 
 	var messages []*Message
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -748,9 +815,12 @@ func (c *Channel) PinMessage(messageID Snowflake, reason *string) error {
 		return errors.New("cannot pin more than 50 messages per channel")
 	}
 
-	u := parseRoute(fmt.Sprintf(pinMessage, api, c.ID.String(), messageID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(pinMessage, api, c.ID.String(), messageID.String())),
+		reason: reason,
+	}
 
-	_, err = firePutRequest(u, nil, reason)
+	_, err = firePutRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return err
@@ -767,18 +837,24 @@ func (c *Channel) PinMessage(messageID Snowflake, reason *string) error {
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
 func (c *Channel) UnpinMessage(messageID Snowflake, reason *string) error {
-	u := parseRoute(fmt.Sprintf(unpinMessage, api, c.ID.String(), messageID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(unpinMessage, api, c.ID.String(), messageID.String())),
+		reason: reason,
+	}
 
-	return fireDeleteRequest(u, reason)
+	return fireDeleteRequest(rest)
 }
 
 // GroupDmAddRecipient - Adds a recipient to a Group DM using their access token.
 //
 // REQUIRES: gdm.join SCOPE
 func (c *Channel) GroupDmAddRecipient(userID Snowflake, payload GroupDmAddRecipientJSON) error {
-	u := parseRoute(fmt.Sprintf(groupDmAddRecipient, api, c.ID.String(), userID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(groupDmAddRecipient, api, c.ID.String(), userID.String())),
+		data:  payload,
+	}
 
-	_, err := firePutRequest(u, payload, nil)
+	_, err := firePutRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return err
@@ -797,9 +873,11 @@ type GroupDmAddRecipientJSON struct {
 
 // GroupDmRemoveRecipient - Removes a recipient from a Group DM.
 func (c *Channel) GroupDmRemoveRecipient(userID Snowflake) error {
-	u := parseRoute(fmt.Sprintf(groupDmRemoveRecipient, api, c.ID.String(), userID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(groupDmRemoveRecipient, api, c.ID.String(), userID.String())),
+	}
 
-	return fireDeleteRequest(u, nil)
+	return fireDeleteRequest(rest)
 }
 
 // StartThreadWithMessage - Creates a new thread from an existing message.
@@ -820,10 +898,14 @@ func (c *Channel) StartThreadWithMessage(
 	payload StartThreadWithMessageJSON,
 	reason *string,
 ) (*Channel, error) {
-	u := parseRoute(fmt.Sprintf(startThreadWithMessage, api, c.ID.String(), messageID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(startThreadWithMessage, api, c.ID.String(), messageID.String())),
+		data:   payload,
+		reason: reason,
+	}
 
 	var channel *Channel
-	responseBytes, err := firePostRequest(u, payload, reason)
+	responseBytes, err := firePostRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -853,10 +935,14 @@ type StartThreadWithMessageJSON struct {
 //
 // * Creating a GuildPrivateThread requires the server to be boosted. The GuildFeatures will indicate if that is possible for the guild.
 func (c *Channel) StartThreadWithoutMessage(payload StartThreadWithoutMessageJSON, reason *string) (*Channel, error) {
-	u := parseRoute(fmt.Sprintf(startThreadWithoutMessage, api, c.ID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(startThreadWithoutMessage, api, c.ID.String())),
+		data:   payload,
+		reason: reason,
+	}
 
 	var channel *Channel
-	responseBytes, err := firePostRequest(u, payload, reason)
+	responseBytes, err := firePostRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -893,10 +979,14 @@ type StartThreadWithoutMessageJSON struct {
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
 func (c *Channel) StartThreadInForumChannel(payload StartThreadWithoutMessageJSON, reason *string) (*Channel, error) {
-	u := parseRoute(fmt.Sprintf(startThreadInForumChannel, api, c.ID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(startThreadInForumChannel, api, c.ID.String())),
+		data:   payload,
+		reason: reason,
+	}
 
 	var channel *Channel
-	responseBytes, err := firePostRequest(u, payload, reason)
+	responseBytes, err := firePostRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -937,9 +1027,11 @@ type ForumThreadMessageParams struct {
 //
 // Fires a ThreadMembersUpdate Gateway event.
 func (c *Channel) JoinThread() error {
-	u := parseRoute(fmt.Sprintf(joinThread, api, c.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(joinThread, api, c.ID.String())),
+	}
 
-	_, err := firePutRequest(u, nil, nil)
+	_, err := firePutRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return err
@@ -958,9 +1050,11 @@ func (c *Channel) JoinThread() error {
 //
 // Fires a Thread Members Update Gateway event.
 func (c *Channel) AddThreadMember(userID Snowflake) error {
-	u := parseRoute(fmt.Sprintf(addThreadMember, api, c.ID.String(), userID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(addThreadMember, api, c.ID.String(), userID.String())),
+	}
 
-	_, err := firePutRequest(u, nil, nil)
+	_, err := firePutRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return err
@@ -977,9 +1071,11 @@ func (c *Channel) AddThreadMember(userID Snowflake) error {
 //
 // Fires a ThreadMembersUpdate Gateway event.
 func (c *Channel) LeaveThread() error {
-	u := parseRoute(fmt.Sprintf(leaveThread, api, c.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(leaveThread, api, c.ID.String())),
+	}
 
-	return fireDeleteRequest(u, nil)
+	return fireDeleteRequest(rest)
 }
 
 // RemoveThreadMember - Removes another member from a thread.
@@ -992,17 +1088,21 @@ func (c *Channel) LeaveThread() error {
 //
 // Fires a Thread Members Update Gateway event.
 func (c *Channel) RemoveThreadMember(userID Snowflake) error {
-	u := parseRoute(fmt.Sprintf(removeThreadMember, api, c.ID.String(), userID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(removeThreadMember, api, c.ID.String(), userID.String())),
+	}
 
-	return fireDeleteRequest(u, nil)
+	return fireDeleteRequest(rest)
 }
 
 // GetThreadMember - Returns a thread member object for the specified user if they are a member of the thread, returns a 404 response otherwise.
 func (c *Channel) GetThreadMember(userID Snowflake) (*ThreadMember, error) {
-	u := parseRoute(fmt.Sprintf(getThreadMember, api, c.ID.String(), userID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getThreadMember, api, c.ID.String(), userID.String())),
+	}
 
 	var threadMember *ThreadMember
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -1017,10 +1117,12 @@ func (c *Channel) GetThreadMember(userID Snowflake) (*ThreadMember, error) {
 //
 // This endpoint is restricted according to whether the GuildMembers Privileged Intent is enabled for your application.
 func (c *Channel) ListThreadMembers() ([]*ThreadMember, error) {
-	u := parseRoute(fmt.Sprintf(listThreadMembers, api, c.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(listThreadMembers, api, c.ID.String())),
+	}
 
 	var threadMembers []*ThreadMember
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -1041,9 +1143,11 @@ func (c *Channel) ListThreadMembers() ([]*ThreadMember, error) {
 //
 // Requires the ReadMessageHistory permission.
 func (c *Channel) ListPublicArchivedThreads(before *time.Time, limit *int) (*ThreadListResponse, error) {
-	u := parseRoute(fmt.Sprintf(listPublicArchivedThreads, api, c.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(listPublicArchivedThreads, api, c.ID.String())),
+	}
 
-	q := u.Query()
+	q := rest.route.Query()
 	if before != nil {
 		q.Set("before", before.String())
 	}
@@ -1051,11 +1155,11 @@ func (c *Channel) ListPublicArchivedThreads(before *time.Time, limit *int) (*Thr
 		q.Set("limit", strconv.Itoa(*limit))
 	}
 	if len(q) > 0 {
-		u.RawQuery = q.Encode()
+		rest.route.RawQuery = q.Encode()
 	}
 
 	var threadListResponse *ThreadListResponse
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -1078,9 +1182,11 @@ type ThreadListResponse struct {
 //
 // Requires both the READ_MESSAGE_HISTORY and MANAGE_THREADS permissions.
 func (c *Channel) ListPrivateArchivedThreads(before *time.Time, limit *int) (*ThreadListResponse, error) {
-	u := parseRoute(fmt.Sprintf(listPrivateArchivedThreads, api, c.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(listPrivateArchivedThreads, api, c.ID.String())),
+	}
 
-	q := u.Query()
+	q := rest.route.Query()
 	if before != nil {
 		q.Set("before", before.String())
 	}
@@ -1088,11 +1194,11 @@ func (c *Channel) ListPrivateArchivedThreads(before *time.Time, limit *int) (*Th
 		q.Set("limit", strconv.Itoa(*limit))
 	}
 	if len(q) > 0 {
-		u.RawQuery = q.Encode()
+		rest.route.RawQuery = q.Encode()
 	}
 
 	var threadListResponse *ThreadListResponse
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -1108,11 +1214,12 @@ func (c *Channel) ListPrivateArchivedThreads(before *time.Time, limit *int) (*Th
 // Threads are ordered by their id, in descending order.
 //
 // Requires the READ_MESSAGE_HISTORY permission.
-func (c *Channel) ListJoinedPrivateArchivedThreads(before *Snowflake, limit *int) (*ThreadListResponse,
-	error) {
-	u := parseRoute(fmt.Sprintf(listJoinedPrivateArchivedThreads, api, c.ID.String()))
+func (c *Channel) ListJoinedPrivateArchivedThreads(before *Snowflake, limit *int) (*ThreadListResponse, error) {
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(listJoinedPrivateArchivedThreads, api, c.ID.String())),
+	}
 
-	q := u.Query()
+	q := rest.route.Query()
 	if before != nil {
 		q.Set("before", before.String())
 	}
@@ -1120,11 +1227,11 @@ func (c *Channel) ListJoinedPrivateArchivedThreads(before *Snowflake, limit *int
 		q.Set("limit", strconv.Itoa(*limit))
 	}
 	if len(q) > 0 {
-		u.RawQuery = q.Encode()
+		rest.route.RawQuery = q.Encode()
 	}
 
 	var threadListResponse *ThreadListResponse
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err

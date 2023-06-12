@@ -22,6 +22,8 @@ import (
 
 // Channel - Represents a guild or DM channel within Discord.
 type Channel struct {
+	rest *httpData
+
 	ID                            Snowflake        `json:"id"`                                           // the id of this channel
 	Type                          ChannelType      `json:"type"`                                         // the ChannelType
 	GuildID                       Snowflake        `json:"guild_id,omitempty"`                           // the id of the guild (may be missing for some channel objects received over gateway guild dispatches)

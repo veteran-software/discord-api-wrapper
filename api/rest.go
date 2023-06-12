@@ -31,42 +31,57 @@ import (
 
 var (
 	// Rest - Holds the rate limit buckets
-	Rest *RateLimiter
+	Rest       *RateLimiter
+	testClient *http.Client
 )
+
+type httpData struct {
+	route *url.URL
+
+	contentType string
+	data        any
+	method      string
+	reason      *string
+
+	bucket   *bucket
+	bucketID string
+	sequence int
+}
 
 func init() {
 	Rest = NewRatelimiter()
 }
 
 // Request - send an HTTP request with rate limiting
-func (r *RateLimiter) Request(method, route string, data any, reason *string) (*http.Response, error) {
-	return r.requestWithBucketID(method, route, strings.SplitN(route, "?", 2)[0], data, reason)
+func (r *RateLimiter) Request(h *httpData) (*http.Response, error) {
+	h.bucketID = strings.SplitN(h.route.String(), "?", 2)[0]
+	return r.requestWithBucketID(h)
 }
 
-func (r *RateLimiter) requestWithBucketID(method, route, bucketID string, data any, reason *string) (*http.Response,
-	error) {
-	return r.request(method, route, "application/json", bucketID, data, 0, reason)
+func (r *RateLimiter) requestWithBucketID(h *httpData) (*http.Response, error) {
+	h.contentType = "application/json"
+	h.sequence = 0
+	return r.request(h)
 }
 
-func (r *RateLimiter) request(method, route, contentType, bucketID string,
-	b any,
-	sequence int,
-	reason *string) (*http.Response, error) {
-	if bucketID == "" {
-		bucketID = strings.SplitN(route, "?", 2)[0]
+func (r *RateLimiter) request(h *httpData) (*http.Response, error) {
+	if h.bucketID == "" {
+		h.bucketID = strings.SplitN(h.route.String(), "?", 2)[0]
 	}
 
-	return r.lockedRequest(method, route, contentType, b, r.lockBucket(bucketID), sequence, reason)
+	h.bucket = r.lockBucket(h.bucketID)
+
+	return r.lockedRequest(h)
 }
 
-func processBody(b any, bucket *bucket) (*bytes.Buffer, error) {
+func processBody(h *httpData) (*bytes.Buffer, error) {
 	var buffer bytes.Buffer
-	if b != nil {
+	if h.data != nil {
 		encoder := json.NewEncoder(&buffer)
 		encoder.SetEscapeHTML(false)
-		err := encoder.Encode(&b)
+		err := encoder.Encode(&h.data)
 		if err != nil {
-			_ = bucket.release(nil)
+			_ = h.bucket.release(nil)
 			return nil, err
 		}
 	}
@@ -74,44 +89,46 @@ func processBody(b any, bucket *bucket) (*bytes.Buffer, error) {
 	return &buffer, nil
 }
 
-func (r *RateLimiter) lockedRequest(method, route, contentType string,
-	b any,
-	bucket *bucket,
-	sequence int,
-	reason *string) (*http.Response, error) {
+func (r *RateLimiter) lockedRequest(h *httpData) (*http.Response, error) {
 
-	buffer, err := processBody(b, bucket)
+	buffer, err := processBody(h)
 	if err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest(method, route, bytes.NewReader(buffer.Bytes()))
+	req, err := http.NewRequest(h.method, h.route.String(), bytes.NewReader(buffer.Bytes()))
 	if err != nil {
-		_ = bucket.release(nil)
+		_ = h.bucket.release(nil)
 		return nil, err
 	}
 
 	req.Header.Set("Authorization", fmt.Sprintf("Bot %s", Token))
 
-	if b != nil {
-		req.Header.Set("Content-Type", contentType)
+	if h.data != nil {
+		req.Header.Set("Content-Type", h.contentType)
 	}
 
-	if reason != nil {
-		req.Header.Set("X-Audit-Log-Reason", *reason)
+	if h.reason != nil {
+		req.Header.Set("X-Audit-Log-Reason", *h.reason)
 	}
 
 	req.Header.Set("User-Agent", UserAgent)
 
-	client := http.Client{}
+	var client *http.Client
+	if testClient == nil {
+		client = &http.Client{}
+	} else {
+		client = testClient
+	}
+
 	resp, err := client.Do(req)
 
 	if err != nil {
-		_ = bucket.release(nil)
+		_ = h.bucket.release(nil)
 		return nil, err
 	}
 
-	err = bucket.release(resp.Header)
+	err = h.bucket.release(resp.Header)
 	if err != nil {
 		return nil, err
 	}
@@ -119,7 +136,7 @@ func (r *RateLimiter) lockedRequest(method, route, contentType string,
 	switch resp.StatusCode {
 	case http.StatusTooManyRequests:
 		log.Warnln(log.FuncName(), "Rate Limited!")
-		log.Infoln(log.FuncName(), route)
+		log.Infoln(log.FuncName(), h.route)
 		log.Infoln(log.FuncName(), resp.Status)
 
 		var rlr rateLimitResponse
@@ -130,7 +147,7 @@ func (r *RateLimiter) lockedRequest(method, route, contentType string,
 
 		time.Sleep(time.Duration(rlr.RetryAfter * float64(time.Second)))
 
-		return r.lockedRequest(method, route, contentType, b, r.lockBucketObject(bucket), sequence, reason)
+		return r.lockedRequest(h)
 	}
 
 	return resp, nil
@@ -146,8 +163,10 @@ func parseRoute(route string) *url.URL {
 	return u
 }
 
-func fireGetRequest(u *url.URL, data any, reason *string) ([]byte, error) {
-	resp, err := Rest.Request(http.MethodGet, u.String(), data, reason)
+func fireGetRequest(h *httpData) ([]byte, error) {
+	h.method = http.MethodGet
+
+	resp, err := Rest.Request(h)
 	if err != nil {
 		log.Errorln(log.FuncName(), err)
 		return nil, err
@@ -165,8 +184,10 @@ func fireGetRequest(u *url.URL, data any, reason *string) ([]byte, error) {
 	return b, nil
 }
 
-func firePostRequest(u *url.URL, data any, reason *string) ([]byte, error) {
-	resp, err := Rest.Request(http.MethodPost, u.String(), data, reason)
+func firePostRequest(h *httpData) ([]byte, error) {
+	h.method = http.MethodPost
+
+	resp, err := Rest.Request(h)
 	if err != nil {
 		// Allow this log to bubble up to the method call
 		log.Debugln(log.Discord, log.FuncName(), err)
@@ -186,8 +207,10 @@ func firePostRequest(u *url.URL, data any, reason *string) ([]byte, error) {
 }
 
 //goland:noinspection GoUnusedFunction
-func firePutRequest(u *url.URL, data any, reason *string) ([]byte, error) {
-	resp, err := Rest.Request(http.MethodPut, u.String(), data, reason)
+func firePutRequest(h *httpData) ([]byte, error) {
+	h.method = http.MethodPut
+
+	resp, err := Rest.Request(h)
 	if err != nil {
 		log.Errorln(log.FuncName(), err)
 		return nil, err
@@ -205,8 +228,10 @@ func firePutRequest(u *url.URL, data any, reason *string) ([]byte, error) {
 	return b, nil
 }
 
-func firePatchRequest(u *url.URL, data any, reason *string) ([]byte, error) {
-	resp, err := Rest.Request(http.MethodPatch, u.String(), data, reason)
+func firePatchRequest(h *httpData) ([]byte, error) {
+	h.method = http.MethodPatch
+
+	resp, err := Rest.Request(h)
 	if err != nil {
 		log.Errorln(log.FuncName(), err)
 		return nil, err
@@ -224,8 +249,9 @@ func firePatchRequest(u *url.URL, data any, reason *string) ([]byte, error) {
 	return b, nil
 }
 
-func fireDeleteRequest(u *url.URL, reason *string) error {
-	resp, err := Rest.Request(http.MethodDelete, u.String(), nil, reason)
+func fireDeleteRequest(h *httpData) error {
+	h.method = http.MethodDelete
+	resp, err := Rest.Request(h)
 	if err != nil {
 		log.Errorln(log.FuncName(), err)
 		return err

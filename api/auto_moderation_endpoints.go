@@ -30,9 +30,7 @@ import (
 // This endpoint requires the ManageGuild permission.
 //
 //goland:noinspection GoUnusedExportedFunction
-func ListAutoModerationRulesForGuild(guildID string,
-	channel *Channel,
-	userID *Snowflake) ([]*AutoModerationRule,
+func ListAutoModerationRulesForGuild(guildID string, channel *Channel, userID *Snowflake) ([]*AutoModerationRule,
 	error) {
 	g := &Guild{ID: *StringToSnowflake(guildID)}
 
@@ -45,10 +43,12 @@ func ListAutoModerationRulesForGuild(guildID string,
 		return nil, errors.New(utils.ManageGuildPermissionsAreRequired)
 	}
 
-	u := parseRoute(fmt.Sprintf(listAutoModerationRulesForGuild, api, guildID))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(listAutoModerationRulesForGuild, api, guildID)),
+	}
 
 	var rules []*AutoModerationRule
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -77,10 +77,12 @@ func GetAutoModerationRule(guildID string, channel *Channel, userID, ruleID *Sno
 		return nil, errors.New(utils.ManageGuildPermissionsAreRequired)
 	}
 
-	u := parseRoute(fmt.Sprintf(getAutoModerationRule, api, guildID, ruleID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getAutoModerationRule, api, guildID, ruleID.String())),
+	}
 
 	var rule *AutoModerationRule
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -113,10 +115,14 @@ func CreateAutoModerationRule(guildID string,
 		return nil, errors.New(utils.ManageGuildPermissionsAreRequired)
 	}
 
-	u := parseRoute(fmt.Sprintf(getAutoModerationRule, api, guildID, ruleID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(getAutoModerationRule, api, guildID, ruleID.String())),
+		data:   payload,
+		reason: reason,
+	}
 
 	var rule *AutoModerationRule
-	responseBytes, err := firePostRequest(u, payload, reason)
+	responseBytes, err := firePostRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -160,10 +166,14 @@ func ModifyAutoModerationRule(guildID string,
 		return nil, errors.New(utils.ManageGuildPermissionsAreRequired)
 	}
 
-	u := parseRoute(fmt.Sprintf(modifyAutoModerationRule, api, guildID, ruleID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(modifyAutoModerationRule, api, guildID, ruleID.String())),
+		data:   payload,
+		reason: reason,
+	}
 
 	var rule *AutoModerationRule
-	responseBytes, err := firePatchRequest(u, payload, reason)
+	responseBytes, err := firePatchRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -191,7 +201,10 @@ func DeleteAutoModerationRule(guildID string, channel *Channel, userID, ruleID *
 		return errors.New(utils.ManageGuildPermissionsAreRequired)
 	}
 
-	u := parseRoute(fmt.Sprintf(deleteAutoModerationRule, api, guildID, ruleID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(deleteAutoModerationRule, api, guildID, ruleID.String())),
+		reason: reason,
+	}
 
-	return fireDeleteRequest(u, reason)
+	return fireDeleteRequest(rest)
 }

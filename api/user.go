@@ -40,7 +40,7 @@ type User struct {
 	System           bool        `json:"system,omitempty"`            // whether the user is an Official Discord System user (part of the urgent message system)
 	MfaEnabled       bool        `json:"mfa_enabled,omitempty"`       // whether the user has two factor enabled on their account
 	Banner           *string     `json:"banner,omitempty"`            // the user's banner hash
-	BannerColor      string      `json:"banner_color,omitempty"`      // Undocumented as of 10/31/21
+	BannerColor      *string     `json:"banner_color,omitempty"`      // Undocumented as of 10/31/21
 	AccentColor      *uint       `json:"accent_color,omitempty"`      // the user's banner color encoded as an integer representation of hexadecimal color code
 	Locale           string      `json:"locale,omitempty"`            // the user's chosen language option
 	Flags            UserFlags   `json:"flags,omitempty"`             // the flags on a user's account

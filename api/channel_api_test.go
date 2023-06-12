@@ -17,9 +17,14 @@
 package api
 
 import (
+	"bytes"
+	"encoding/json"
+	"net/http"
+	"net/http/httptest"
 	"reflect"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/veteran-software/discord-api-wrapper/v10/utilities"
 )
@@ -268,104 +273,6 @@ func TestChannel_String(t *testing.T) {
 		})
 	}
 }
-
-// TODO: Have to dig into the httptest framework to test this
-//func TestChannel_getSelfMember(t *testing.T) {
-//	type fields struct {
-//		ID                            Snowflake
-//		Type                          ChannelType
-//		GuildID                       Snowflake
-//		Position                      int
-//		PermissionOverwrites          []*Overwrite
-//		Name                          string
-//		Topic                         *string
-//		Nsfw                          bool
-//		LastMessageID                 *Snowflake
-//		Bitrate                       int64
-//		UserLimit                     int64
-//		RateLimitPerUser              int64
-//		Recipients                    []*User
-//		Icon                          *string
-//		OwnerID                       Snowflake
-//		ApplicationID                 Snowflake
-//		Managed                       bool
-//		ParentID                      *Snowflake
-//		LastPinTimestamp              *time.Time
-//		RtcRegion                     *string
-//		VideoQualityMode              int64
-//		MessageCount                  int64
-//		MemberCount                   int64
-//		ThreadMetadata                ThreadMetadata
-//		Member                        ThreadMember
-//		DefaultAutoArchiveDuration    int
-//		Permissions                   string
-//		Flags                         ChannelFlag
-//		TotalMessagesSent             int64
-//		AvailableTags                 []*ForumTag
-//		AppliedTags                   []*Snowflake
-//		DefaultReactionEmoji          *DefaultReaction
-//		DefaultThreadRateLimitPerUser uint
-//		DefaultSortOrder              *SortOrderType
-//		DefaultForumLayout            *ForumLayoutType
-//	}
-//	tests := []struct {
-//		name    string
-//		fields  fields
-//		want    *GuildMember
-//		wantErr bool
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			c := &Channel{
-//				ID:                            tt.fields.ID,
-//				Type:                          tt.fields.Type,
-//				GuildID:                       tt.fields.GuildID,
-//				Position:                      tt.fields.Position,
-//				PermissionOverwrites:          tt.fields.PermissionOverwrites,
-//				Name:                          tt.fields.Name,
-//				Topic:                         tt.fields.Topic,
-//				Nsfw:                          tt.fields.Nsfw,
-//				LastMessageID:                 tt.fields.LastMessageID,
-//				Bitrate:                       tt.fields.Bitrate,
-//				UserLimit:                     tt.fields.UserLimit,
-//				RateLimitPerUser:              tt.fields.RateLimitPerUser,
-//				Recipients:                    tt.fields.Recipients,
-//				Icon:                          tt.fields.Icon,
-//				OwnerID:                       tt.fields.OwnerID,
-//				ApplicationID:                 tt.fields.ApplicationID,
-//				Managed:                       tt.fields.Managed,
-//				ParentID:                      tt.fields.ParentID,
-//				LastPinTimestamp:              tt.fields.LastPinTimestamp,
-//				RtcRegion:                     tt.fields.RtcRegion,
-//				VideoQualityMode:              tt.fields.VideoQualityMode,
-//				MessageCount:                  tt.fields.MessageCount,
-//				MemberCount:                   tt.fields.MemberCount,
-//				ThreadMetadata:                tt.fields.ThreadMetadata,
-//				Member:                        tt.fields.Member,
-//				DefaultAutoArchiveDuration:    tt.fields.DefaultAutoArchiveDuration,
-//				Permissions:                   tt.fields.Permissions,
-//				Flags:                         tt.fields.Flags,
-//				TotalMessagesSent:             tt.fields.TotalMessagesSent,
-//				AvailableTags:                 tt.fields.AvailableTags,
-//				AppliedTags:                   tt.fields.AppliedTags,
-//				DefaultReactionEmoji:          tt.fields.DefaultReactionEmoji,
-//				DefaultThreadRateLimitPerUser: tt.fields.DefaultThreadRateLimitPerUser,
-//				DefaultSortOrder:              tt.fields.DefaultSortOrder,
-//				DefaultForumLayout:            tt.fields.DefaultForumLayout,
-//			}
-//			got, err := c.getSelfMember()
-//			if (err != nil) != tt.wantErr {
-//				t.Errorf("getSelfMember() error = %v, wantErr %v", err, tt.wantErr)
-//				return
-//			}
-//			if !reflect.DeepEqual(got, tt.want) {
-//				t.Errorf("getSelfMember() got = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
 
 func TestEmbed_AddField(t *testing.T) {
 	type fields struct {
@@ -1068,11 +975,11 @@ func TestEmbed_SetFooter(t *testing.T) {
 			fields: fields{},
 			args: args{
 				text:    "Text Here",
-				iconURL: "https://google.com",
+				iconURL: "https://nowlivebot.com",
 			},
 			want: &Embed{Footer: &Footer{
 				Text:    "Text Here",
-				IconURL: "https://google.com",
+				IconURL: "https://nowlivebot.com",
 			}},
 		},
 		{
@@ -1080,11 +987,11 @@ func TestEmbed_SetFooter(t *testing.T) {
 			fields: fields{},
 			args: args{
 				text:    strings.Repeat("a", FooterTextLimit+1),
-				iconURL: "https://google.com",
+				iconURL: "https://nowlivebot.com",
 			},
 			want: &Embed{Footer: &Footer{
 				Text:    strings.Repeat("a", FooterTextLimit-4) + " ...",
-				IconURL: "https://google.com",
+				IconURL: "https://nowlivebot.com",
 			}},
 		},
 		{
@@ -1112,593 +1019,909 @@ func TestEmbed_SetFooter(t *testing.T) {
 	}
 }
 
-//func TestEmbed_SetImage(t *testing.T) {
-//	type fields struct {
-//		Title       string
-//		Type        EmbedType
-//		Description string
-//		URL         string
-//		Timestamp   string
-//		Color       int64
-//		Footer      *Footer
-//		Image       *Image
-//		Thumbnail   *Thumbnail
-//		Video       *video
-//		Provider    *provider
-//		Author      *Author
-//		Fields      []*Field
-//	}
-//	type args struct {
-//		imageURL string
-//	}
-//	tests := []struct {
-//		name   string
-//		fields fields
-//		args   args
-//		want   *Embed
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			e := &Embed{
-//				Title:       tt.fields.Title,
-//				Type:        tt.fields.Type,
-//				Description: tt.fields.Description,
-//				URL:         tt.fields.URL,
-//				Timestamp:   tt.fields.Timestamp,
-//				Color:       tt.fields.Color,
-//				Footer:      tt.fields.Footer,
-//				Image:       tt.fields.Image,
-//				Thumbnail:   tt.fields.Thumbnail,
-//				Video:       tt.fields.Video,
-//				Provider:    tt.fields.Provider,
-//				Author:      tt.fields.Author,
-//				Fields:      tt.fields.Fields,
-//			}
-//			if got := e.SetImage(tt.args.imageURL); !reflect.DeepEqual(got, tt.want) {
-//				t.Errorf("SetImage() = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
-//
-//func TestEmbed_SetThumbnail(t *testing.T) {
-//	type fields struct {
-//		Title       string
-//		Type        EmbedType
-//		Description string
-//		URL         string
-//		Timestamp   string
-//		Color       int64
-//		Footer      *Footer
-//		Image       *Image
-//		Thumbnail   *Thumbnail
-//		Video       *video
-//		Provider    *provider
-//		Author      *Author
-//		Fields      []*Field
-//	}
-//	type args struct {
-//		thumbnailURL string
-//	}
-//	tests := []struct {
-//		name   string
-//		fields fields
-//		args   args
-//		want   *Embed
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			e := &Embed{
-//				Title:       tt.fields.Title,
-//				Type:        tt.fields.Type,
-//				Description: tt.fields.Description,
-//				URL:         tt.fields.URL,
-//				Timestamp:   tt.fields.Timestamp,
-//				Color:       tt.fields.Color,
-//				Footer:      tt.fields.Footer,
-//				Image:       tt.fields.Image,
-//				Thumbnail:   tt.fields.Thumbnail,
-//				Video:       tt.fields.Video,
-//				Provider:    tt.fields.Provider,
-//				Author:      tt.fields.Author,
-//				Fields:      tt.fields.Fields,
-//			}
-//			if got := e.SetThumbnail(tt.args.thumbnailURL); !reflect.DeepEqual(got, tt.want) {
-//				t.Errorf("SetThumbnail() = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
-//
-//func TestEmbed_SetTimestamp(t *testing.T) {
-//	type fields struct {
-//		Title       string
-//		Type        EmbedType
-//		Description string
-//		URL         string
-//		Timestamp   string
-//		Color       int64
-//		Footer      *Footer
-//		Image       *Image
-//		Thumbnail   *Thumbnail
-//		Video       *video
-//		Provider    *provider
-//		Author      *Author
-//		Fields      []*Field
-//	}
-//	type args struct {
-//		ts time.Time
-//	}
-//	tests := []struct {
-//		name   string
-//		fields fields
-//		args   args
-//		want   *Embed
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			e := &Embed{
-//				Title:       tt.fields.Title,
-//				Type:        tt.fields.Type,
-//				Description: tt.fields.Description,
-//				URL:         tt.fields.URL,
-//				Timestamp:   tt.fields.Timestamp,
-//				Color:       tt.fields.Color,
-//				Footer:      tt.fields.Footer,
-//				Image:       tt.fields.Image,
-//				Thumbnail:   tt.fields.Thumbnail,
-//				Video:       tt.fields.Video,
-//				Provider:    tt.fields.Provider,
-//				Author:      tt.fields.Author,
-//				Fields:      tt.fields.Fields,
-//			}
-//			if got := e.SetTimestamp(tt.args.ts); !reflect.DeepEqual(got, tt.want) {
-//				t.Errorf("SetTimestamp() = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
-//
-//func TestEmbed_SetTitle(t *testing.T) {
-//	type fields struct {
-//		Title       string
-//		Type        EmbedType
-//		Description string
-//		URL         string
-//		Timestamp   string
-//		Color       int64
-//		Footer      *Footer
-//		Image       *Image
-//		Thumbnail   *Thumbnail
-//		Video       *video
-//		Provider    *provider
-//		Author      *Author
-//		Fields      []*Field
-//	}
-//	type args struct {
-//		title string
-//	}
-//	tests := []struct {
-//		name   string
-//		fields fields
-//		args   args
-//		want   *Embed
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			e := &Embed{
-//				Title:       tt.fields.Title,
-//				Type:        tt.fields.Type,
-//				Description: tt.fields.Description,
-//				URL:         tt.fields.URL,
-//				Timestamp:   tt.fields.Timestamp,
-//				Color:       tt.fields.Color,
-//				Footer:      tt.fields.Footer,
-//				Image:       tt.fields.Image,
-//				Thumbnail:   tt.fields.Thumbnail,
-//				Video:       tt.fields.Video,
-//				Provider:    tt.fields.Provider,
-//				Author:      tt.fields.Author,
-//				Fields:      tt.fields.Fields,
-//			}
-//			if got := e.SetTitle(tt.args.title); !reflect.DeepEqual(got, tt.want) {
-//				t.Errorf("SetTitle() = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
-//
-//func TestEmbed_SetURL(t *testing.T) {
-//	type fields struct {
-//		Title       string
-//		Type        EmbedType
-//		Description string
-//		URL         string
-//		Timestamp   string
-//		Color       int64
-//		Footer      *Footer
-//		Image       *Image
-//		Thumbnail   *Thumbnail
-//		Video       *video
-//		Provider    *provider
-//		Author      *Author
-//		Fields      []*Field
-//	}
-//	type args struct {
-//		u string
-//	}
-//	tests := []struct {
-//		name   string
-//		fields fields
-//		args   args
-//		want   *Embed
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			e := &Embed{
-//				Title:       tt.fields.Title,
-//				Type:        tt.fields.Type,
-//				Description: tt.fields.Description,
-//				URL:         tt.fields.URL,
-//				Timestamp:   tt.fields.Timestamp,
-//				Color:       tt.fields.Color,
-//				Footer:      tt.fields.Footer,
-//				Image:       tt.fields.Image,
-//				Thumbnail:   tt.fields.Thumbnail,
-//				Video:       tt.fields.Video,
-//				Provider:    tt.fields.Provider,
-//				Author:      tt.fields.Author,
-//				Fields:      tt.fields.Fields,
-//			}
-//			if got := e.SetURL(tt.args.u); !reflect.DeepEqual(got, tt.want) {
-//				t.Errorf("SetURL() = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
-//
-//func TestField_IsInline(t *testing.T) {
-//	type fields struct {
-//		Name   string
-//		Value  string
-//		Inline bool
-//	}
-//	tests := []struct {
-//		name   string
-//		fields fields
-//		want   bool
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			f := &Field{
-//				Name:   tt.fields.Name,
-//				Value:  tt.fields.Value,
-//				Inline: tt.fields.Inline,
-//			}
-//			if got := f.IsInline(); got != tt.want {
-//				t.Errorf("IsInline() = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
-//
-//func TestField_SetInline(t *testing.T) {
-//	type fields struct {
-//		Name   string
-//		Value  string
-//		Inline bool
-//	}
-//	type args struct {
-//		inline bool
-//	}
-//	tests := []struct {
-//		name   string
-//		fields fields
-//		args   args
-//		want   *Field
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			f := &Field{
-//				Name:   tt.fields.Name,
-//				Value:  tt.fields.Value,
-//				Inline: tt.fields.Inline,
-//			}
-//			if got := f.SetInline(tt.args.inline); !reflect.DeepEqual(got, tt.want) {
-//				t.Errorf("SetInline() = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
-//
-//func TestField_SetName(t *testing.T) {
-//	type fields struct {
-//		Name   string
-//		Value  string
-//		Inline bool
-//	}
-//	type args struct {
-//		name string
-//	}
-//	tests := []struct {
-//		name   string
-//		fields fields
-//		args   args
-//		want   *Field
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			f := &Field{
-//				Name:   tt.fields.Name,
-//				Value:  tt.fields.Value,
-//				Inline: tt.fields.Inline,
-//			}
-//			if got := f.SetName(tt.args.name); !reflect.DeepEqual(got, tt.want) {
-//				t.Errorf("SetName() = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
-//
-//func TestField_SetValue(t *testing.T) {
-//	type fields struct {
-//		Name   string
-//		Value  string
-//		Inline bool
-//	}
-//	type args struct {
-//		value string
-//	}
-//	tests := []struct {
-//		name   string
-//		fields fields
-//		args   args
-//		want   *Field
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			f := &Field{
-//				Name:   tt.fields.Name,
-//				Value:  tt.fields.Value,
-//				Inline: tt.fields.Inline,
-//			}
-//			if got := f.SetValue(tt.args.value); !reflect.DeepEqual(got, tt.want) {
-//				t.Errorf("SetValue() = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
-//
-//func TestFooter_SetIconURL(t *testing.T) {
-//	type fields struct {
-//		Text    string
-//		IconURL string
-//	}
-//	type args struct {
-//		iconURL string
-//	}
-//	tests := []struct {
-//		name   string
-//		fields fields
-//		args   args
-//		want   *Footer
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			f := &Footer{
-//				Text:    tt.fields.Text,
-//				IconURL: tt.fields.IconURL,
-//			}
-//			if got := f.SetIconURL(tt.args.iconURL); !reflect.DeepEqual(got, tt.want) {
-//				t.Errorf("SetIconURL() = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
-//
-//func TestFooter_SetText(t *testing.T) {
-//	type fields struct {
-//		Text    string
-//		IconURL string
-//	}
-//	type args struct {
-//		text string
-//	}
-//	tests := []struct {
-//		name   string
-//		fields fields
-//		args   args
-//		want   *Footer
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			f := &Footer{
-//				Text:    tt.fields.Text,
-//				IconURL: tt.fields.IconURL,
-//			}
-//			if got := f.SetText(tt.args.text); !reflect.DeepEqual(got, tt.want) {
-//				t.Errorf("SetText() = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
-//
-//func TestImage_SetURL(t *testing.T) {
-//	type fields struct {
-//		URL    string
-//		Height int
-//		Width  int
-//	}
-//	type args struct {
-//		u string
-//	}
-//	tests := []struct {
-//		name   string
-//		fields fields
-//		args   args
-//		want   *Image
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			i := &Image{
-//				URL:    tt.fields.URL,
-//				Height: tt.fields.Height,
-//				Width:  tt.fields.Width,
-//			}
-//			if got := i.SetURL(tt.args.u); !reflect.DeepEqual(got, tt.want) {
-//				t.Errorf("SetURL() = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
-//
-//func TestNewEmbed(t *testing.T) {
-//	tests := []struct {
-//		name string
-//		want *Embed
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			if got := NewEmbed(); !reflect.DeepEqual(got, tt.want) {
-//				t.Errorf("NewEmbed() = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
-//
-//func TestNewField(t *testing.T) {
-//	tests := []struct {
-//		name string
-//		want *Field
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			if got := NewField(); !reflect.DeepEqual(got, tt.want) {
-//				t.Errorf("NewField() = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
-//
-//func TestThumbnail_SetURL(t1 *testing.T) {
-//	type fields struct {
-//		URL    string
-//		Height int
-//		Width  int
-//	}
-//	type args struct {
-//		u string
-//	}
-//	tests := []struct {
-//		name   string
-//		fields fields
-//		args   args
-//		want   *Thumbnail
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t1.Run(tt.name, func(t1 *testing.T) {
-//			t := &Thumbnail{
-//				URL:    tt.fields.URL,
-//				Height: tt.fields.Height,
-//				Width:  tt.fields.Width,
-//			}
-//			if got := t.SetURL(tt.args.u); !reflect.DeepEqual(got, tt.want) {
-//				t1.Errorf("SetURL() = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
-//
-//func Test_newAuthor(t *testing.T) {
-//	tests := []struct {
-//		name string
-//		want *Author
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			if got := newAuthor(); !reflect.DeepEqual(got, tt.want) {
-//				t.Errorf("newAuthor() = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
-//
-//func Test_newFooter(t *testing.T) {
-//	tests := []struct {
-//		name string
-//		want *Footer
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			if got := newFooter(); !reflect.DeepEqual(got, tt.want) {
-//				t.Errorf("newFooter() = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
-//
-//func Test_newImage(t *testing.T) {
-//	tests := []struct {
-//		name string
-//		want *Image
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			if got := newImage(); !reflect.DeepEqual(got, tt.want) {
-//				t.Errorf("newImage() = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
-//
-//func Test_newThumbnail(t *testing.T) {
-//	tests := []struct {
-//		name string
-//		want *Thumbnail
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			if got := newThumbnail(); !reflect.DeepEqual(got, tt.want) {
-//				t.Errorf("newThumbnail() = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
+func TestEmbed_SetImage(t *testing.T) {
+	type fields struct {
+		Image *Image
+	}
+	type args struct {
+		imageURL string
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   *Embed
+	}{
+		{
+			name: "Valid URL",
+			fields: fields{
+				Image: &Image{},
+			},
+			args: args{
+				imageURL: "https://nowlivebot.com",
+			},
+			want: &Embed{
+				Image: &Image{
+					URL: "https://nowlivebot.com",
+				},
+			},
+		},
+		{
+			name: "Invalid URL",
+			fields: fields{
+				Image: &Image{},
+			},
+			args: args{
+				imageURL: "\u0009",
+			},
+			want: &Embed{
+				Image: &Image{
+					URL: "",
+				},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			e := &Embed{
+				Image: tt.fields.Image,
+			}
+			if got := e.SetImage(tt.args.imageURL); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SetImage() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestEmbed_SetThumbnail(t *testing.T) {
+	type fields struct {
+		Thumbnail *Thumbnail
+	}
+	type args struct {
+		thumbnailURL string
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   *Embed
+	}{
+		{
+			name: "Valid URL",
+			fields: fields{
+				Thumbnail: &Thumbnail{},
+			},
+			args: args{
+				thumbnailURL: "https://nowlivebot.com",
+			},
+			want: &Embed{
+				Thumbnail: &Thumbnail{
+					URL: "https://nowlivebot.com",
+				},
+			},
+		},
+		{
+			name: "Invalid URL",
+			fields: fields{
+				Thumbnail: &Thumbnail{},
+			},
+			args: args{
+				thumbnailURL: "\u0009",
+			},
+			want: &Embed{
+				Thumbnail: &Thumbnail{
+					URL: "",
+				},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			e := &Embed{
+				Thumbnail: tt.fields.Thumbnail,
+			}
+			if got := e.SetThumbnail(tt.args.thumbnailURL); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SetThumbnail() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestEmbed_SetTimestamp(t *testing.T) {
+	type fields struct {
+		Timestamp string
+	}
+	type args struct {
+		ts time.Time
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   *Embed
+	}{
+		{
+			name: "Basic",
+			fields: fields{
+				Timestamp: time.Now().UTC().Format(time.RFC3339),
+			},
+			args: args{
+				ts: time.Now(),
+			},
+			want: &Embed{
+				Timestamp: time.Now().UTC().Format(time.RFC3339),
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			e := &Embed{
+				Timestamp: tt.fields.Timestamp,
+			}
+			if got := e.SetTimestamp(tt.args.ts); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SetTimestamp() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestEmbed_SetTitle(t *testing.T) {
+	type fields struct {
+		Title string
+	}
+	type args struct {
+		title string
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   *Embed
+	}{
+		{
+			name: "Valid title",
+			fields: fields{
+				Title: "",
+			},
+			args: args{
+				title: strings.Repeat("a", TitleLimit),
+			},
+			want: &Embed{
+				Title: strings.Repeat("a", TitleLimit),
+			},
+		},
+		{
+			name: "Too Long",
+			fields: fields{
+				Title: "",
+			},
+			args: args{
+				title: strings.Repeat("a", TitleLimit+1),
+			},
+			want: &Embed{
+				Title: strings.Repeat("a", TitleLimit-4) + " ...",
+			},
+		},
+		{
+			name: "Empty String",
+			fields: fields{
+				Title: "",
+			},
+			args: args{
+				title: "",
+			},
+			want: &Embed{
+				Title: "",
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			e := &Embed{
+				Title: tt.fields.Title,
+			}
+			if got := e.SetTitle(tt.args.title); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SetTitle() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestEmbed_SetURL(t *testing.T) {
+	type fields struct {
+		URL string
+	}
+	type args struct {
+		u string
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   *Embed
+	}{
+		{
+			name: "Valid URL",
+			fields: fields{
+				URL: "",
+			},
+			args: args{
+				u: "https://nowlivebot.com",
+			},
+			want: &Embed{
+				URL: "https://nowlivebot.com",
+			},
+		},
+		{
+			name: "Invalid URL",
+			fields: fields{
+				URL: "",
+			},
+			args: args{
+				u: "\u0009",
+			},
+			want: &Embed{
+				URL: "",
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			e := &Embed{
+				URL: tt.fields.URL,
+			}
+			if got := e.SetURL(tt.args.u); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SetURL() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestField_IsInline(t *testing.T) {
+	type fields struct {
+		Name   string
+		Value  string
+		Inline bool
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   bool
+	}{
+		{
+			name: "True",
+			fields: fields{
+				Name:   "",
+				Value:  "",
+				Inline: true,
+			},
+			want: true,
+		},
+		{
+			name: "False",
+			fields: fields{
+				Name:   "",
+				Value:  "",
+				Inline: false,
+			},
+			want: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			f := &Field{
+				Name:   tt.fields.Name,
+				Value:  tt.fields.Value,
+				Inline: tt.fields.Inline,
+			}
+			if got := f.IsInline(); got != tt.want {
+				t.Errorf("IsInline() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestField_SetInline(t *testing.T) {
+	type fields struct {
+		Name   string
+		Value  string
+		Inline bool
+	}
+	type args struct {
+		inline bool
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   *Field
+	}{
+		{
+			name: "Set True",
+			fields: fields{
+				Name:   "",
+				Value:  "",
+				Inline: false,
+			},
+			args: args{
+				inline: true,
+			},
+			want: &Field{
+				Name:   "",
+				Value:  "",
+				Inline: true,
+			},
+		},
+		{
+			name: "Set False",
+			fields: fields{
+				Name:   "",
+				Value:  "",
+				Inline: true,
+			},
+			args: args{
+				inline: false,
+			},
+			want: &Field{
+				Name:   "",
+				Value:  "",
+				Inline: false,
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			f := &Field{
+				Name:   tt.fields.Name,
+				Value:  tt.fields.Value,
+				Inline: tt.fields.Inline,
+			}
+			if got := f.SetInline(tt.args.inline); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SetInline() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestField_SetName(t *testing.T) {
+	type fields struct {
+		Name   string
+		Value  string
+		Inline bool
+	}
+	type args struct {
+		name string
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   *Field
+	}{
+		{
+			name: "Valid String",
+			fields: fields{
+				Name:   "",
+				Value:  "",
+				Inline: false,
+			},
+			args: args{
+				name: strings.Repeat("a", FieldNameLimit),
+			},
+			want: &Field{
+				Name:   strings.Repeat("a", FieldNameLimit),
+				Value:  "",
+				Inline: false,
+			},
+		},
+		{
+			name: "Too Long",
+			fields: fields{
+				Name:   "",
+				Value:  "",
+				Inline: false,
+			},
+			args: args{
+				name: strings.Repeat("a", FieldNameLimit+1),
+			},
+			want: &Field{
+				Name:   strings.Repeat("a", FieldNameLimit-4) + " ...",
+				Value:  "",
+				Inline: false,
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			f := &Field{
+				Name:   tt.fields.Name,
+				Value:  tt.fields.Value,
+				Inline: tt.fields.Inline,
+			}
+			if got := f.SetName(tt.args.name); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SetName() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestField_SetValue(t *testing.T) {
+	type fields struct {
+		Name   string
+		Value  string
+		Inline bool
+	}
+	type args struct {
+		value string
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   *Field
+	}{
+		{
+			name: "Valid String",
+			fields: fields{
+				Name:   "",
+				Value:  "",
+				Inline: false,
+			},
+			args: args{
+				value: strings.Repeat("a", FieldValueLimit),
+			},
+			want: &Field{
+				Name:   "",
+				Value:  strings.Repeat("a", FieldValueLimit),
+				Inline: false,
+			},
+		},
+		{
+			name: "Too Long",
+			fields: fields{
+				Name:   "",
+				Value:  "",
+				Inline: false,
+			},
+			args: args{
+				value: strings.Repeat("a", FieldValueLimit+1),
+			},
+			want: &Field{
+				Name:   "",
+				Value:  strings.Repeat("a", FieldValueLimit-4) + " ...",
+				Inline: false,
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			f := &Field{
+				Name:   tt.fields.Name,
+				Value:  tt.fields.Value,
+				Inline: tt.fields.Inline,
+			}
+			if got := f.SetValue(tt.args.value); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SetValue() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestFooter_SetIconURL(t *testing.T) {
+	type fields struct {
+		Text    string
+		IconURL string
+	}
+	type args struct {
+		iconURL string
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   *Footer
+	}{
+		{
+			name: "Valid URL",
+			fields: fields{
+				Text:    "",
+				IconURL: "",
+			},
+			args: args{
+				iconURL: "https://nowlivebot.com",
+			},
+			want: &Footer{
+				Text:    "",
+				IconURL: "https://nowlivebot.com",
+			},
+		},
+		{
+			name: "Invalid URL",
+			fields: fields{
+				Text:    "",
+				IconURL: "",
+			},
+			args: args{
+				iconURL: "\u0009",
+			},
+			want: &Footer{
+				Text:    "",
+				IconURL: "",
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			f := &Footer{
+				Text:    tt.fields.Text,
+				IconURL: tt.fields.IconURL,
+			}
+			if got := f.SetIconURL(tt.args.iconURL); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SetIconURL() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestFooter_SetText(t *testing.T) {
+	type fields struct {
+		Text    string
+		IconURL string
+	}
+	type args struct {
+		text string
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   *Footer
+	}{
+		{
+			name: "Valid String",
+			fields: fields{
+				Text:    "",
+				IconURL: "",
+			},
+			args: args{
+				text: strings.Repeat("a", FooterTextLimit),
+			},
+			want: &Footer{
+				Text:    strings.Repeat("a", FooterTextLimit),
+				IconURL: "",
+			},
+		},
+		{
+			name: "Too Long",
+			fields: fields{
+				Text:    "",
+				IconURL: "",
+			},
+			args: args{
+				text: strings.Repeat("a", FooterTextLimit+1),
+			},
+			want: &Footer{
+				Text:    strings.Repeat("a", FooterTextLimit-4) + " ...",
+				IconURL: "",
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			f := &Footer{
+				Text:    tt.fields.Text,
+				IconURL: tt.fields.IconURL,
+			}
+			if got := f.SetText(tt.args.text); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SetText() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestImage_SetURL(t *testing.T) {
+	type fields struct {
+		URL    string
+		Height int
+		Width  int
+	}
+	type args struct {
+		u string
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   *Image
+	}{
+		{
+			name: "Valid URL",
+			fields: fields{
+				URL: "",
+			},
+			args: args{
+				u: "https://nowlivebot.com",
+			},
+			want: &Image{
+				URL: "https://nowlivebot.com",
+			},
+		},
+		{
+			name: "Invalid URL",
+			fields: fields{
+				URL: "",
+			},
+			args: args{
+				u: "\u0009",
+			},
+			want: &Image{
+				URL: "",
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			i := &Image{
+				URL:    tt.fields.URL,
+				Height: tt.fields.Height,
+				Width:  tt.fields.Width,
+			}
+			if got := i.SetURL(tt.args.u); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SetURL() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestNewEmbed(t *testing.T) {
+	tests := []struct {
+		name string
+		want *Embed
+	}{
+		{
+			name: "Basic",
+			want: &Embed{
+				Type:      RichEmbed,
+				Timestamp: time.Now().Format(time.RFC3339),
+				Color:     16711680,
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := NewEmbed(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NewEmbed() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestNewField(t *testing.T) {
+	tests := []struct {
+		name string
+		want *Field
+	}{
+		{
+			name: "Basic",
+			want: &Field{},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := NewField(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NewField() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestThumbnail_SetURL(t *testing.T) {
+	type fields struct {
+		URL string
+	}
+	type args struct {
+		u string
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   *Thumbnail
+	}{
+		{
+			name: "Valid URL",
+			fields: fields{
+				URL: "",
+			},
+			args: args{
+				u: "https://nowlivebot.com",
+			},
+			want: &Thumbnail{
+				URL: "https://nowlivebot.com",
+			},
+		},
+		{
+			name: "Invalid URL",
+			fields: fields{
+				URL: "",
+			},
+			args: args{
+				u: "\u0009",
+			},
+			want: &Thumbnail{
+				URL: "",
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t1 *testing.T) {
+			t := &Thumbnail{
+				URL: tt.fields.URL,
+			}
+			if got := t.SetURL(tt.args.u); !reflect.DeepEqual(got, tt.want) {
+				t1.Errorf("SetURL() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_newAuthor(t *testing.T) {
+	tests := []struct {
+		name string
+		want *Author
+	}{
+		{
+			name: "Basic",
+			want: &Author{},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := newAuthor(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("newAuthor() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_newFooter(t *testing.T) {
+	tests := []struct {
+		name string
+		want *Footer
+	}{
+		{
+			name: "Basic",
+			want: &Footer{},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := newFooter(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("newFooter() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_newImage(t *testing.T) {
+	tests := []struct {
+		name string
+		want *Image
+	}{
+		{
+			name: "Basic",
+			want: &Image{},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := newImage(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("newImage() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_newThumbnail(t *testing.T) {
+	tests := []struct {
+		name string
+		want *Thumbnail
+	}{
+		{
+			name: "Basic",
+			want: &Thumbnail{},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := newThumbnail(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("newThumbnail() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+//goland:noinspection SpellCheckingInspection
+func TestChannel_getSelfMember(t *testing.T) {
+	type fields struct {
+		GuildID Snowflake
+	}
+
+	want := &GuildMember{
+		Avatar:                     nil,
+		CommunicationDisabledUntil: nil,
+		Flags:                      0,
+		JoinedAt:                   time.Now().UTC(),
+		Nick:                       nil,
+		Pending:                    false,
+		PremiumSince:               nil,
+		Roles:                      nil,
+		User: User{
+			ID:               "240729664035880961",
+			Username:         "Now Live",
+			Avatar:           utilities.ToPtr("fc1d3b807261f224bb566beff75c2327"),
+			Discriminator:    "0483",
+			PublicFlags:      589824,
+			Flags:            589824,
+			Bot:              true,
+			Banner:           nil,
+			AccentColor:      nil,
+			GlobalName:       nil,
+			AvatarDecoration: nil,
+			DisplayName:      nil,
+			System:           false,
+			MfaEnabled:       false,
+			BannerColor:      nil,
+		},
+		Deaf: false,
+		Mute: false,
+	}
+
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(200)
+
+		var b bytes.Buffer
+		err := json.NewEncoder(&b).Encode(want)
+		if err != nil {
+			return
+		}
+		_, _ = w.Write(b.Bytes())
+	}))
+	defer srv.Close()
+
+	api = srv.URL
+	testClient = srv.Client()
+
+	tests := []struct {
+		name    string
+		fields  fields
+		want    *GuildMember
+		wantErr bool
+	}{
+		{
+			name: "Valid Existing Member",
+			fields: fields{
+				GuildID: Snowflake("12345678900000"),
+			},
+			want:    want,
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			c := &Channel{
+				GuildID: tt.fields.GuildID,
+			}
+			got, err := c.getSelfMember()
+			if (err != nil) != tt.wantErr {
+				t.Errorf("getSelfMember() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("getSelfMember() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
+
+	testClient = nil
+}

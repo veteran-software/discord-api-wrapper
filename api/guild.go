@@ -22,6 +22,8 @@ import (
 
 // Guild - Guilds in Discord represent an isolated collection of users and channels, and are often referred to as "servers" in the UI.
 type Guild struct {
+	rest *httpData
+
 	ID                          Snowflake                       `json:"id"`                                      // guild id
 	Name                        string                          `json:"name"`                                    // guild name (2-100 characters, excluding trailing and leading whitespace)
 	Icon                        *string                         `json:"icon"`                                    // icon hash

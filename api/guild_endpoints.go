@@ -42,10 +42,13 @@ import (
 //
 //goland:noinspection GoUnusedExportedFunction
 func CreateGuild(payload *CreateGuildJSON) (*Guild, error) {
-	u := parseRoute(fmt.Sprintf(createGuild, api))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(createGuild, api)),
+		data:  payload,
+	}
 
 	var guild *Guild
-	responseBytes, err := firePostRequest(u, payload, nil)
+	responseBytes, err := firePostRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -74,14 +77,16 @@ type CreateGuildJSON struct {
 //
 // If with_counts is set to true, this endpoint will also return approximate_member_count and approximate_presence_count for the guild.
 func (g *Guild) GetGuild(withCounts *bool) (*Guild, error) {
-	u := parseRoute(fmt.Sprintf(getGuild, api, g.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getGuild, api, g.ID.String())),
+	}
 
-	q := u.Query()
+	q := rest.route.Query()
 	if withCounts != nil {
 		q.Set("with_counts", strconv.FormatBool(*withCounts))
 	}
 	if len(q) > 0 {
-		u.RawQuery = q.Encode()
+		rest.route.RawQuery = q.Encode()
 	}
 
 	// Some testing script for moving to a channel based request system
@@ -93,7 +98,7 @@ func (g *Guild) GetGuild(withCounts *bool) (*Guild, error) {
 	//by := <-ch
 
 	var guild *Guild
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -106,10 +111,12 @@ func (g *Guild) GetGuild(withCounts *bool) (*Guild, error) {
 
 // GetGuildPreview - Returns the guild preview object for the given id. If the user is not in the guild, then the guild must be lurkable.
 func (g *Guild) GetGuildPreview() (*GuildPreview, error) {
-	u := parseRoute(fmt.Sprintf(getGuildPreview, api, g.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getGuildPreview, api, g.ID.String())),
+	}
 
 	var guildPreview *GuildPreview
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -134,10 +141,14 @@ func (g *Guild) GetGuildPreview() (*GuildPreview, error) {
 //
 //	Attempting to add or remove the Community guild feature requires the Administrator permission.
 func (g *Guild) ModifyGuild(payload ModifyGuildJSON, reason *string) (*Guild, error) {
-	u := parseRoute(fmt.Sprintf(modifyGuild, api, g.ID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(modifyGuild, api, g.ID.String())),
+		data:   payload,
+		reason: reason,
+	}
 
 	var guild *Guild
-	responseBytes, err := firePatchRequest(u, payload, reason)
+	responseBytes, err := firePatchRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -178,17 +189,21 @@ type ModifyGuildJSON struct {
 
 // DeleteGuild - Delete a guild permanently. User must be Owner. Returns `204 No Content` on success. Fires a GuildDelete Gateway event.
 func (g *Guild) DeleteGuild() error {
-	u := parseRoute(fmt.Sprintf(deleteGuild, api, g.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(deleteGuild, api, g.ID.String())),
+	}
 
-	return fireDeleteRequest(u, nil)
+	return fireDeleteRequest(rest)
 }
 
 // GetGuildChannels - Returns a list of guild Channel objects. Does not include threads.
 func (g *Guild) GetGuildChannels() ([]*Channel, error) {
-	u := parseRoute(fmt.Sprintf(getGuildChannels, api, g.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getGuildChannels, api, g.ID.String())),
+	}
 
 	var channels []*Channel
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -213,10 +228,14 @@ func (g *Guild) GetGuildChannels() ([]*Channel, error) {
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) CreateGuildChannel(payload CreateGuildChannelJSON, reason *string) (*Channel, error) {
-	u := parseRoute(fmt.Sprintf(createGuildChannel, api, g.ID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(createGuildChannel, api, g.ID.String())),
+		data:   payload,
+		reason: reason,
+	}
 
 	var channel *Channel
-	responseBytes, err := firePostRequest(u, payload, reason)
+	responseBytes, err := firePostRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -254,8 +273,13 @@ type CreateGuildChannelJSON struct {
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) ModifyGuildChannelPositions(payload *ModifyGuildChannelPositionsJSON, reason *string) error {
-	u := parseRoute(fmt.Sprintf(modifyGuildChannelPositions, api, g.ID.String()))
-	_, err := firePatchRequest(u, payload, reason)
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(modifyGuildChannelPositions, api, g.ID.String())),
+		data:   payload,
+		reason: reason,
+	}
+
+	_, err := firePatchRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return err
@@ -274,10 +298,12 @@ type ModifyGuildChannelPositionsJSON struct {
 
 // ListActiveThreads - Returns all active threads in the guild, including public and private threads. Threads are ordered by their id, in descending order.
 func (g *Guild) ListActiveThreads() (*ThreadListResponse, error) {
-	u := parseRoute(fmt.Sprintf(listActiveThreads, api, g.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(listActiveThreads, api, g.ID.String())),
+	}
 
 	var threadListResponse *ThreadListResponse
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -290,10 +316,12 @@ func (g *Guild) ListActiveThreads() (*ThreadListResponse, error) {
 
 // GetGuildMember - Returns a GuildMember object for the specified User.
 func (g *Guild) GetGuildMember(userID *Snowflake) (*GuildMember, error) {
-	u := parseRoute(fmt.Sprintf(getGuildMember, api, g.ID.String(), userID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getGuildMember, api, g.ID.String(), userID.String())),
+	}
 
 	var guildMember *GuildMember
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -308,9 +336,11 @@ func (g *Guild) GetGuildMember(userID *Snowflake) (*GuildMember, error) {
 //
 // This endpoint is restricted according to whether the GuildMembers Privileged Intent is enabled for your application.
 func (g *Guild) ListGuildMembers(limit *uint64, after *Snowflake) ([]*GuildMember, error) {
-	u := parseRoute(fmt.Sprintf(listGuildMembers, api, g.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(listGuildMembers, api, g.ID.String())),
+	}
 
-	q := u.Query()
+	q := rest.route.Query()
 	if after != nil {
 		q.Set("after", after.String())
 	}
@@ -318,11 +348,11 @@ func (g *Guild) ListGuildMembers(limit *uint64, after *Snowflake) ([]*GuildMembe
 		q.Set("limit", strconv.FormatUint(*limit, 10))
 	}
 	if len(q) > 0 {
-		u.RawQuery = q.Encode()
+		rest.route.RawQuery = q.Encode()
 	}
 
 	var guildMembers []*GuildMember
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -337,17 +367,19 @@ func (g *Guild) ListGuildMembers(limit *uint64, after *Snowflake) ([]*GuildMembe
 //
 //	All parameters to this endpoint except for `query` are optional
 func (g *Guild) SearchGuildMembers(query string, limit *uint64) ([]*GuildMember, error) {
-	u := parseRoute(fmt.Sprintf(searchGuildMembers, api, g.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(searchGuildMembers, api, g.ID.String())),
+	}
 
-	q := u.Query()
+	q := rest.route.Query()
 	q.Set("query", query)
 	if limit != nil {
 		q.Set("limit", strconv.FormatUint(*limit, 10))
 	}
-	u.RawQuery = q.Encode()
+	rest.route.RawQuery = q.Encode()
 
 	var guildMembers []*GuildMember
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -378,10 +410,13 @@ func (g *Guild) SearchGuildMembers(query string, limit *uint64) ([]*GuildMember,
 //
 // Therefore, instead of assigning a role when the member joins, it is recommended to grant roles only after the user completes screening.
 func (g *Guild) AddGuildMember(userID *Snowflake, payload *AddGuildMemberJSON) (*GuildMember, error) {
-	u := parseRoute(fmt.Sprintf(addGuildMember, api, g.ID.String(), userID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(addGuildMember, api, g.ID.String(), userID.String())),
+		data:  payload,
+	}
 
 	var guildMember *GuildMember
-	responseBytes, err := firePutRequest(u, payload, nil)
+	responseBytes, err := firePutRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -414,10 +449,14 @@ func (g *Guild) ModifyGuildMember(userID *Snowflake, payload *ModifyGuildMemberJ
 	*GuildMember,
 	error,
 ) {
-	u := parseRoute(fmt.Sprintf(modifyGuildMember, api, g.ID.String(), userID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(modifyGuildMember, api, g.ID.String(), userID.String())),
+		data:   payload,
+		reason: reason,
+	}
 
 	var guildMember *GuildMember
-	responseBytes, err := firePatchRequest(u, payload, reason)
+	responseBytes, err := firePatchRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -443,16 +482,18 @@ type ModifyGuildMemberJSON struct {
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) ModifyCurrentMember(nick *string, reason *string) (*GuildMember, error) {
-	u := parseRoute(fmt.Sprintf(modifyCurrentMember, api, g.ID.String()))
-
-	payload := struct {
-		Nick *string
-	}{
-		nick,
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(modifyCurrentMember, api, g.ID.String())),
+		reason: reason,
+		data: struct {
+			Nick *string
+		}{
+			Nick: nick,
+		},
 	}
 
 	var guildMember *GuildMember
-	responseBytes, err := firePatchRequest(u, payload, reason)
+	responseBytes, err := firePatchRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -473,9 +514,12 @@ func (g *Guild) ModifyCurrentMember(nick *string, reason *string) (*GuildMember,
 //
 // This endpoint supports the "X-Audit-Log-Reason" header.
 func (g *Guild) AddGuildMemberRole(user *User, roleID *Snowflake, reason *string) error {
-	u := parseRoute(fmt.Sprintf(addGuildMemberRole, api, g.ID.String(), user.ID.String(), roleID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(addGuildMemberRole, api, g.ID.String(), user.ID.String(), roleID.String())),
+		reason: reason,
+	}
 
-	_, err := firePutRequest(u, nil, reason)
+	_, err := firePutRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return err
@@ -494,9 +538,12 @@ func (g *Guild) AddGuildMemberRole(user *User, roleID *Snowflake, reason *string
 //
 // This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) RemoveGuildMemberRole(user *User, role *Snowflake, reason *string) error {
-	u := parseRoute(fmt.Sprintf(removeGuildMemberRole, api, g.ID.String(), user.ID.String(), role.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(removeGuildMemberRole, api, g.ID.String(), user.ID.String(), role.String())),
+		reason: reason,
+	}
 
-	return fireDeleteRequest(u, reason)
+	return fireDeleteRequest(rest)
 }
 
 // RemoveGuildMember - Remove a member from a guild.
@@ -509,16 +556,21 @@ func (g *Guild) RemoveGuildMemberRole(user *User, role *Snowflake, reason *strin
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) RemoveGuildMember(user *User, reason *string) error {
-	u := parseRoute(fmt.Sprintf(removeGuildMember, api, g.ID.String(), user.ID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(removeGuildMember, api, g.ID.String(), user.ID.String())),
+		reason: reason,
+	}
 
-	return fireDeleteRequest(u, reason)
+	return fireDeleteRequest(rest)
 }
 
 // GetGuildBans - Returns a list of Ban objects for the users banned from this guild. Requires the BanMembers permission.
 func (g *Guild) GetGuildBans(limit *uint64, before *Snowflake, after *Snowflake) ([]*Ban, error) {
-	u := parseRoute(fmt.Sprintf(getGuildBans, api, g.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getGuildBans, api, g.ID.String())),
+	}
 
-	q := u.Query()
+	q := rest.route.Query()
 	if before != nil {
 		q.Set("before", before.String())
 	}
@@ -529,11 +581,11 @@ func (g *Guild) GetGuildBans(limit *uint64, before *Snowflake, after *Snowflake)
 		q.Set("limit", strconv.FormatUint(*limit, 10))
 	}
 	if len(q) > 0 {
-		u.RawQuery = q.Encode()
+		rest.route.RawQuery = q.Encode()
 	}
 
 	var bans []*Ban
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -546,10 +598,12 @@ func (g *Guild) GetGuildBans(limit *uint64, before *Snowflake, after *Snowflake)
 
 // GetGuildBan - Returns a ban object for the given user or a 404 not found if the ban cannot be found. Requires the BanMembers permission.
 func (g *Guild) GetGuildBan(userID Snowflake) (*Ban, error) {
-	u := parseRoute(fmt.Sprintf(getGuildBan, api, g.ID.String(), userID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getGuildBan, api, g.ID.String(), userID.String())),
+	}
 
 	var ban *Ban
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -564,15 +618,17 @@ func (g *Guild) GetGuildBan(userID Snowflake) (*Ban, error) {
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) CreateGuildBan(userID *Snowflake, deleteMessageSeconds *uint64, reason *string) error {
-	u := parseRoute(fmt.Sprintf(createGuildBan, api, g.ID.String(), userID.String()))
-
-	payload := struct {
-		DeleteMessageSeconds *uint64 `json:"delete_message_seconds"`
-	}{
-		deleteMessageSeconds,
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(createGuildBan, api, g.ID.String(), userID.String())),
+		reason: reason,
+		data: struct {
+			DeleteMessageSeconds *uint64 `json:"delete_message_seconds"`
+		}{
+			DeleteMessageSeconds: deleteMessageSeconds,
+		},
 	}
 
-	_, err := firePutRequest(u, payload, reason)
+	_, err := firePutRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return err
@@ -585,17 +641,22 @@ func (g *Guild) CreateGuildBan(userID *Snowflake, deleteMessageSeconds *uint64, 
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) RemoveGuildBan(userID *Snowflake, reason *string) error {
-	u := parseRoute(fmt.Sprintf(removeGuildBan, api, g.ID.String(), userID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(removeGuildBan, api, g.ID.String(), userID.String())),
+		reason: reason,
+	}
 
-	return fireDeleteRequest(u, reason)
+	return fireDeleteRequest(rest)
 }
 
 // GetGuildRoles - Returns a list of role objects for the guild.
 func (g *Guild) GetGuildRoles() ([]*Role, error) {
-	u := parseRoute(fmt.Sprintf(getGuildRoles, api, g.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getGuildRoles, api, g.ID.String())),
+	}
 
 	var roles []*Role
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -607,10 +668,14 @@ func (g *Guild) GetGuildRoles() ([]*Role, error) {
 }
 
 func (g *Guild) CreateGuildRole(payload *CreateGuildRoleJSON, reason *string) ([]*Role, error) {
-	u := parseRoute(fmt.Sprintf(createGuildRole, api, g.ID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(createGuildRole, api, g.ID.String())),
+		data:   payload,
+		reason: reason,
+	}
 
 	var roles []*Role
-	responseBytes, err := firePostRequest(u, payload, reason)
+	responseBytes, err := firePostRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -642,10 +707,14 @@ type CreateGuildRoleJSON struct {
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) ModifyGuildRolePositions(payload []*ModifyGuildRolePositionsJSON, reason *string) ([]*Role, error) {
-	u := parseRoute(fmt.Sprintf(modifyGuildRolePositions, api, g.ID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(modifyGuildRolePositions, api, g.ID.String())),
+		data:   payload,
+		reason: reason,
+	}
 
 	var roles []*Role
-	responseBytes, err := firePatchRequest(u, payload, reason)
+	responseBytes, err := firePatchRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -673,12 +742,15 @@ type ModifyGuildRolePositionsJSON struct {
 //	All parameters to this endpoint are optional and nullable.
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
-func (g *Guild) ModifyGuildRole(roleID *Snowflake, payload *ModifyGuildRoleJSON, reason *string) (*Role,
-	error) {
-	u := parseRoute(fmt.Sprintf(modifyGuildRole, api, g.ID.String(), roleID.String()))
+func (g *Guild) ModifyGuildRole(roleID *Snowflake, payload *ModifyGuildRoleJSON, reason *string) (*Role, error) {
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(modifyGuildRole, api, g.ID.String(), roleID.String())),
+		data:   payload,
+		reason: reason,
+	}
 
 	var roles *Role
-	responseBytes, err := firePatchRequest(u, payload, reason)
+	responseBytes, err := firePatchRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -708,16 +780,18 @@ type ModifyGuildRoleJSON struct {
 //
 // Fires a GuildUpdate Gateway event.
 func (g *Guild) ModifyGuildMfaLevel(level MfaLevel, reason *string) (*MfaLevel, error) {
-	u := parseRoute(fmt.Sprintf(modifyGuildMfaLevel, api, g.ID.String()))
-
-	payload := struct {
-		Level MfaLevel `json:"level"`
-	}{
-		level,
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(modifyGuildMfaLevel, api, g.ID.String())),
+		reason: reason,
+		data: struct {
+			Level MfaLevel `json:"level"`
+		}{
+			Level: level,
+		},
 	}
 
 	var mfaLevel *MfaLevel
-	responseBytes, err := firePatchRequest(u, payload, reason)
+	responseBytes, err := firePatchRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -738,9 +812,12 @@ func (g *Guild) ModifyGuildMfaLevel(level MfaLevel, reason *string) (*MfaLevel, 
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) DeleteGuildRole(roleID *Snowflake, reason *string) error {
-	u := parseRoute(fmt.Sprintf(deleteGuildRole, api, g.ID.String(), roleID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(deleteGuildRole, api, g.ID.String(), roleID.String())),
+		reason: reason,
+	}
 
-	return fireDeleteRequest(u, reason)
+	return fireDeleteRequest(rest)
 }
 
 // GetGuildPruneCount - Returns an object with one pruned key indicating the number of members that would be removed in a prune operation.
@@ -757,19 +834,21 @@ func (g *Guild) GetGuildPruneCount(days uint, includeRoles *string) (*GetGuildPr
 		return nil, errors.New("the number of days to prune must be >= 1 && <= 30")
 	}
 
-	u := parseRoute(fmt.Sprintf(getGuildPruneCount, api, g.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getGuildPruneCount, api, g.ID.String())),
+	}
 
-	q := u.Query()
+	q := rest.route.Query()
 	q.Set("days", strconv.Itoa(int(days)))
 	if includeRoles != nil {
 		q.Set("include_Roles", *includeRoles)
 	}
 	if len(q) > 0 {
-		u.RawQuery = q.Encode()
+		rest.route.RawQuery = q.Encode()
 	}
 
 	var pruneCountResponse *GetGuildPruneCountResponse
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -806,10 +885,14 @@ func (g *Guild) BeginGuildPrune(payload *BeginGuildPruneJSON, reason *string) (*
 		return nil, errors.New("the number of days to prune must be >= 1 && <= 30")
 	}
 
-	u := parseRoute(fmt.Sprintf(beginGuildPrune, api, g.ID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(beginGuildPrune, api, g.ID.String())),
+		data:   payload,
+		reason: reason,
+	}
 
 	var response *GetGuildPruneCountResponse
-	responseBytes, err := firePostRequest(u, payload, reason)
+	responseBytes, err := firePostRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -831,10 +914,12 @@ type BeginGuildPruneJSON struct {
 //
 // Unlike the similar `/voice` route, this returns VIP servers when the guild is VIP-enabled.
 func (g *Guild) GetGuildVoiceRegions() ([]*VoiceRegion, error) {
-	u := parseRoute(fmt.Sprintf(getGuildVoiceRegions, api, g.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getGuildVoiceRegions, api, g.ID.String())),
+	}
 
 	var voiceRegions []*VoiceRegion
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -849,10 +934,12 @@ func (g *Guild) GetGuildVoiceRegions() ([]*VoiceRegion, error) {
 //
 // Requires the ManageGuild permission.
 func (g *Guild) GetGuildInvites() ([]*Invite, error) {
-	u := parseRoute(fmt.Sprintf(getGuildInvites, api, g.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getGuildInvites, api, g.ID.String())),
+	}
 
 	var invites []*Invite
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -867,10 +954,12 @@ func (g *Guild) GetGuildInvites() ([]*Invite, error) {
 //
 // Requires the ManageGuild permission.
 func (g *Guild) GetGuildIntegrations() ([]*Integration, error) {
-	u := parseRoute(fmt.Sprintf(getGuildIntegrations, api, g.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getGuildIntegrations, api, g.ID.String())),
+	}
 
 	var integrations []*Integration
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -893,19 +982,24 @@ func (g *Guild) GetGuildIntegrations() ([]*Integration, error) {
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) DeleteGuildIntegration(integrationID *Snowflake, reason *string) error {
-	u := parseRoute(fmt.Sprintf(deleteGuildIntegration, api, g.ID.String(), integrationID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(deleteGuildIntegration, api, g.ID.String(), integrationID.String())),
+		reason: reason,
+	}
 
-	return fireDeleteRequest(u, reason)
+	return fireDeleteRequest(rest)
 }
 
 // GetGuildWidgetSettings - Returns a guild widget settings object.
 //
 // Requires the ManageGuild permission.
 func (g *Guild) GetGuildWidgetSettings() (*GuildWidgetSettings, error) {
-	u := parseRoute(fmt.Sprintf(getGuildWidgetSettings, api, g.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getGuildWidgetSettings, api, g.ID.String())),
+	}
 
 	var guildWidgetSettings *GuildWidgetSettings
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -926,10 +1020,14 @@ func (g *Guild) GetGuildWidgetSettings() (*GuildWidgetSettings, error) {
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
 func (g *Guild) ModifyGuildWidget(payload *GuildWidgetSettings, reason *string) (*GuildWidgetSettings, error) {
-	u := parseRoute(fmt.Sprintf(modifyGuildWidget, api, g.ID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(modifyGuildWidget, api, g.ID.String())),
+		data:   payload,
+		reason: reason,
+	}
 
 	var guildWidgetSettings *GuildWidgetSettings
-	responseBytes, err := firePatchRequest(u, payload, reason)
+	responseBytes, err := firePatchRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -942,10 +1040,12 @@ func (g *Guild) ModifyGuildWidget(payload *GuildWidgetSettings, reason *string) 
 
 // GetGuildWidget - Returns the widget for the guild.
 func (g *Guild) GetGuildWidget() (*GetGuildWidget, error) {
-	u := parseRoute(fmt.Sprintf(getGuildWidget, api, g.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getGuildWidget, api, g.ID.String())),
+	}
 
 	var guildWidget *GetGuildWidget
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -962,10 +1062,12 @@ func (g *Guild) GetGuildWidget() (*GetGuildWidget, error) {
 //
 // `code` will be null if a vanity url for the Guild is not set.
 func (g *Guild) GetGuildVanityURL() (*Invite, error) {
-	u := parseRoute(fmt.Sprintf(getGuildVanityURL, api, g.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getGuildVanityURL, api, g.ID.String())),
+	}
 
 	var invite *Invite
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -980,10 +1082,12 @@ func (g *Guild) GetGuildVanityURL() (*Invite, error) {
 //
 // If the welcome screen is not enabled, the ManageGuild permission is required.
 func (g *Guild) GetGuildWelcomeScreen() (*WelcomeScreen, error) {
-	u := parseRoute(fmt.Sprintf(getGuildWelcomeScreen, api, g.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getGuildWelcomeScreen, api, g.ID.String())),
+	}
 
 	var welcomeScreen *WelcomeScreen
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -1003,10 +1107,14 @@ func (g *Guild) ModifyGuildWelcomeScreen(payload *ModifyGuildWelcomeScreenJSON, 
 	*WelcomeScreen,
 	error,
 ) {
-	u := parseRoute(fmt.Sprintf(modifyGuildWelcomeScreen, api, g.ID.String()))
+	rest := &httpData{
+		route:  parseRoute(fmt.Sprintf(modifyGuildWelcomeScreen, api, g.ID.String())),
+		data:   payload,
+		reason: reason,
+	}
 
 	var welcomeScreen *WelcomeScreen
-	responseBytes, err := firePatchRequest(u, payload, reason)
+	responseBytes, err := firePatchRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -1025,10 +1133,12 @@ type ModifyGuildWelcomeScreenJSON struct {
 }
 
 func (g *Guild) GetGuildOnboarding() (*GuildOnboarding, error) {
-	u := parseRoute(fmt.Sprintf(getGuildOnboarding, api, g.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getGuildOnboarding, api, g.ID.String())),
+	}
 
 	var onboarding *GuildOnboarding
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -1049,9 +1159,12 @@ func (g *Guild) GetGuildOnboarding() (*GuildOnboarding, error) {
 //   - You must have the RequestToSpeak permission to request to speak. You can always clear your own request to speak.
 //   - You are able to set `request_to_speak_timestamp` to any present or future time.
 func (g *Guild) ModifyCurrentUserVoiceState(payload *ModifyCurrentUserVoiceStateJSON) error {
-	u := parseRoute(fmt.Sprintf(modifyCurrentUserVoiceState, api, g.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(modifyCurrentUserVoiceState, api, g.ID.String())),
+		data:  payload,
+	}
 
-	_, err := firePatchRequest(u, payload, nil)
+	_, err := firePatchRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return err
@@ -1077,9 +1190,12 @@ type ModifyCurrentUserVoiceStateJSON struct {
 //	When unsuppressed, non-bot users will have their `request_to_speak_timestamp` set to the current time. Bot users will not.
 //	When suppressed, the user will have their `request_to_speak_timestamp` removed.
 func (g *Guild) ModifyUserVoiceState(userID *Snowflake, payload *ModifyUserVoiceStateJSON) error {
-	u := parseRoute(fmt.Sprintf(modifyUserVoiceState, api, g.ID.String(), userID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(modifyUserVoiceState, api, g.ID.String(), userID.String())),
+		data:  payload,
+	}
 
-	_, err := firePatchRequest(u, payload, nil)
+	_, err := firePatchRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return err
@@ -1094,14 +1210,17 @@ type ModifyUserVoiceStateJSON struct {
 	Suppress  bool      `json:"suppress,omitempty"` // toggles the user's suppress state
 }
 
+// TODO: Update this to match the route in Postman
 func (g *Guild) getSelfMember() (*GuildMember, error) {
 	return g.GetGuildMember(&ApplicationID)
 }
 
 func (g *Guild) GetGuildWidgetImage() ([]byte, error) {
-	u := parseRoute(fmt.Sprintf("%s/guilds/%s/widget.png", api, g.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf("%s/guilds/%s/widget.png", api, g.ID.String())),
+	}
 
-	b, err := fireGetRequest(u, nil, nil)
+	b, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err

@@ -39,10 +39,12 @@ func (g *Guild) GetGuildAuditLog(userID *Snowflake,
 	before, after *Snowflake,
 	limit *uint64) (*AuditLog,
 	error) {
-	u := parseRoute(fmt.Sprintf(getGuildAuditLog, api, g.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getGuildAuditLog, api, g.ID.String())),
+	}
 
 	// Set the optional qsp
-	q := u.Query()
+	q := rest.route.Query()
 	if userID != nil {
 		q.Set("user_id", userID.String())
 	}
@@ -64,11 +66,11 @@ func (g *Guild) GetGuildAuditLog(userID *Snowflake,
 	}
 	// If there's any of the optional qsp present, encode and add to the URL
 	if len(q) != 0 {
-		u.RawQuery = q.Encode()
+		rest.route.RawQuery = q.Encode()
 	}
 
 	var auditLog *AuditLog
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err

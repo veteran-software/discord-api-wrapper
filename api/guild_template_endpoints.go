@@ -27,10 +27,10 @@ import (
 //
 //goland:noinspection GoUnusedExportedFunction
 func GetGuildTemplate(templateCode string) (*GuildTemplate, error) {
-	u := parseRoute(fmt.Sprintf(getGuildTemplate, api, templateCode))
-
 	var guildTemplate *GuildTemplate
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(getGuildTemplate, api, templateCode)),
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -47,10 +47,11 @@ func GetGuildTemplate(templateCode string) (*GuildTemplate, error) {
 //
 //goland:noinspection GoUnusedExportedFunction
 func CreateGuildFromGuildTemplate(templateCode string, payload *CreateGuildFromGuildTemplateJSON) (*Guild, error) {
-	u := parseRoute(fmt.Sprintf(createGuildFromGuildTemplate, api, templateCode))
-
 	var guild *Guild
-	responseBytes, err := firePostRequest(u, payload, nil)
+	responseBytes, err := firePostRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(createGuildFromGuildTemplate, api, templateCode)),
+		data:  payload,
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -69,10 +70,10 @@ type CreateGuildFromGuildTemplateJSON struct {
 
 // GetGuildTemplates - Returns an array of GuildTemplate objects. Requires the ManageGuild permission.
 func (g *Guild) GetGuildTemplates() ([]*GuildTemplate, error) {
-	u := parseRoute(fmt.Sprintf(getGuildTemplates, api, g.ID.String()))
-
 	var guildTemplates []*GuildTemplate
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(getGuildTemplates, api, g.ID.String())),
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -84,10 +85,11 @@ func (g *Guild) GetGuildTemplates() ([]*GuildTemplate, error) {
 }
 
 func (g *Guild) CreateGuildTemplate(payload *CreateGuildTemplateJSON) (*GuildTemplate, error) {
-	u := parseRoute(fmt.Sprintf(createGuildTemplate, api, g.ID.String()))
-
 	var guildTemplate *GuildTemplate
-	responseBytes, err := firePostRequest(u, payload, nil)
+	responseBytes, err := firePostRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(createGuildTemplate, api, g.ID.String())),
+		data:  payload,
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -108,10 +110,10 @@ type CreateGuildTemplateJSON struct {
 //
 // Requires the ManageGuild permission. Returns the GuildTemplate object on success.
 func (g *Guild) SyncGuildTemplate(templateCode string) (*GuildTemplate, error) {
-	u := parseRoute(fmt.Sprintf(syncGuildTemplate, api, g.ID.String(), templateCode))
-
 	var guildTemplate *GuildTemplate
-	responseBytes, err := firePutRequest(u, nil, nil)
+	responseBytes, err := firePutRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(syncGuildTemplate, api, g.ID.String(), templateCode)),
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -128,10 +130,11 @@ func (g *Guild) SyncGuildTemplate(templateCode string) (*GuildTemplate, error) {
 //
 // Returns the GuildTemplate object on success.
 func (g *Guild) ModifyGuildTemplate(templateCode string, payload *ModifyGuildTemplateJSON) (*GuildTemplate, error) {
-	u := parseRoute(fmt.Sprintf(modifyGuildTemplate, api, g.ID.String(), templateCode))
-
 	var guildTemplate *GuildTemplate
-	responseBytes, err := firePatchRequest(u, payload, nil)
+	responseBytes, err := firePatchRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(modifyGuildTemplate, api, g.ID.String(), templateCode)),
+		data:  payload,
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -151,7 +154,7 @@ type ModifyGuildTemplateJSON struct {
 // Requires the ManageGuild permission. Returns the deleted GuildTemplate object on success.
 // TODO: This DELETE endpoint returns a payload; update the delete request and all other methods that use it accordingly
 func (g *Guild) DeleteGuildTemplate(templateCode string) error {
-	u := parseRoute(fmt.Sprintf(deleteGuildTemplate, api, g.ID.String(), templateCode))
-
-	return fireDeleteRequest(u, nil)
+	return fireDeleteRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(deleteGuildTemplate, api, g.ID.String(), templateCode)),
+	})
 }

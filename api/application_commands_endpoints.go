@@ -29,16 +29,17 @@ import (
 // Returns an array of application command objects.
 //
 //goland:noinspection GoUnusedExportedFunction
-func GetGlobalApplicationCommands(applicationID Snowflake, withLocalizations bool) ([]*ApplicationCommand,
-	error) {
-	u := parseRoute(fmt.Sprintf(getGlobalApplicationCommands, api, applicationID.String()))
+func GetGlobalApplicationCommands(applicationID Snowflake, withLocalizations bool) ([]*ApplicationCommand, error) {
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getGlobalApplicationCommands, api, applicationID.String())),
+	}
 
-	q := u.Query()
+	q := rest.route.Query()
 	q.Set("with_localizations", strconv.FormatBool(withLocalizations))
-	u.RawQuery = q.Encode()
+	rest.route.RawQuery = q.Encode()
 
 	var commands []*ApplicationCommand
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -60,10 +61,13 @@ func CreateGlobalApplicationCommand(applicationID Snowflake, payload CreateAppli
 	*ApplicationCommand,
 	error,
 ) {
-	u := parseRoute(fmt.Sprintf(createGlobalApplicationCommand, api, applicationID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(createGlobalApplicationCommand, api, applicationID.String())),
+		data:  payload,
+	}
 
 	var command *ApplicationCommand
-	responseBytes, err := firePostRequest(u, payload, nil)
+	responseBytes, err := firePostRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -93,10 +97,12 @@ type CreateApplicationCommandJSON struct {
 //
 // Includes localizations by default
 func (i *Interaction) GetGlobalApplicationCommand() (*ApplicationCommand, error) {
-	u := parseRoute(fmt.Sprintf(getGlobalApplicationCommand, api, i.ApplicationID.String(), i.Data.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getGlobalApplicationCommand, api, i.ApplicationID.String(), i.Data.ID.String())),
+	}
 
 	var commands *ApplicationCommand
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -113,10 +119,13 @@ func (i *Interaction) GetGlobalApplicationCommand() (*ApplicationCommand, error)
 //
 //	All JSON parameters for this endpoint are optional.
 func (i *Interaction) EditGlobalApplicationCommand(payload EditApplicationCommandJSON) (*ApplicationCommand, error) {
-	u := parseRoute(fmt.Sprintf(editGlobalApplicationCommand, api, i.ApplicationID.String(), i.Data.ID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(editGlobalApplicationCommand, api, i.ApplicationID.String(), i.Data.ID.String())),
+		data:  payload,
+	}
 
 	var commands *ApplicationCommand
-	responseBytes, err := firePatchRequest(u, payload, nil)
+	responseBytes, err := firePatchRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -143,9 +152,11 @@ type EditApplicationCommandJSON struct {
 //
 //goland:noinspection GoUnusedExportedFunction
 func DeleteGlobalApplicationCommand(applicationID *Snowflake, commandID string) error {
-	u := parseRoute(fmt.Sprintf(deleteGlobalApplicationCommand, api, applicationID.String(), commandID))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(deleteGlobalApplicationCommand, api, applicationID.String(), commandID)),
+	}
 
-	return fireDeleteRequest(u, nil)
+	return fireDeleteRequest(rest)
 }
 
 // BulkOverwriteGlobalApplicationCommands - Takes a list of application commands, overwriting the existing global command list for this application.
@@ -157,14 +168,15 @@ func DeleteGlobalApplicationCommand(applicationID *Snowflake, commandID string) 
 // Commands that do not already exist will count toward daily application command create limits.
 //
 //goland:noinspection GoUnusedExportedFunction
-func BulkOverwriteGlobalApplicationCommands(
-	applicationID *Snowflake,
-	payload []*ApplicationCommand,
-) ([]*ApplicationCommand, error) {
-	u := parseRoute(fmt.Sprintf(bulkOverwriteGlobalApplicationCommands, api, applicationID.String()))
+func BulkOverwriteGlobalApplicationCommands(applicationID *Snowflake,
+	payload []*ApplicationCommand) ([]*ApplicationCommand, error) {
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(bulkOverwriteGlobalApplicationCommands, api, applicationID.String())),
+		data:  payload,
+	}
 
 	var commands []*ApplicationCommand
-	responseBytes, err := firePutRequest(u, payload, nil)
+	responseBytes, err := firePutRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -179,14 +191,16 @@ func BulkOverwriteGlobalApplicationCommands(
 //
 // Returns an array of application command objects.
 func (i *Interaction) GetGuildApplicationCommands(withLocalizations bool) ([]*ApplicationCommand, error) {
-	u := parseRoute(fmt.Sprintf(getGuildApplicationCommands, api, i.ApplicationID.String(), i.GuildID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getGuildApplicationCommands, api, i.ApplicationID.String(), i.GuildID.String())),
+	}
 
-	q := u.Query()
+	q := rest.route.Query()
 	q.Set("with_localizations", strconv.FormatBool(withLocalizations))
-	u.RawQuery = q.Encode()
+	rest.route.RawQuery = q.Encode()
 
 	var commands []*ApplicationCommand
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -207,14 +221,16 @@ func GetGuildApplicationCommands(
 	guildID *Snowflake,
 	withLocalizations bool,
 ) ([]*ApplicationCommand, error) {
-	u := parseRoute(fmt.Sprintf(getGuildApplicationCommands, api, applicationID.String(), guildID.String()))
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getGuildApplicationCommands, api, applicationID.String(), guildID.String())),
+	}
 
-	q := u.Query()
+	q := rest.route.Query()
 	q.Set("with_localizations", strconv.FormatBool(withLocalizations))
-	u.RawQuery = q.Encode()
+	rest.route.RawQuery = q.Encode()
 
 	var commands []*ApplicationCommand
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -234,15 +250,16 @@ func GetGuildApplicationCommands(
 // If the command did not already exist, it will count toward daily application command create limits.
 //
 //goland:noinspection GoUnusedExportedFunction
-func CreateGuildApplicationCommand(
-	applicationID *Snowflake,
+func CreateGuildApplicationCommand(applicationID *Snowflake,
 	guildID *Snowflake,
-	payload *CreateApplicationCommandJSON,
-) (*ApplicationCommand, error) {
-	u := parseRoute(fmt.Sprintf(createGuildApplicationCommand, api, applicationID.String(), guildID.String()))
+	payload *CreateApplicationCommandJSON) (*ApplicationCommand, error) {
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(createGuildApplicationCommand, api, applicationID.String(), guildID.String())),
+		data:  payload,
+	}
 
 	var command *ApplicationCommand
-	responseBytes, err := firePostRequest(u, payload, nil)
+	responseBytes, err := firePostRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -255,18 +272,16 @@ func CreateGuildApplicationCommand(
 
 // GetGuildApplicationCommand - Fetch a guild command for your application. Returns an application command object.
 func (i *Interaction) GetGuildApplicationCommand() (*ApplicationCommand, error) {
-	u := parseRoute(
-		fmt.Sprintf(
-			getGuildApplicationCommand,
+	rest := &httpData{
+		route: parseRoute(fmt.Sprintf(getGuildApplicationCommand,
 			api,
 			i.ApplicationID.String(),
 			i.GuildID.String(),
-			i.Data.ID.String(),
-		),
-	)
+			i.Data.ID.String())),
+	}
 
 	var command *ApplicationCommand
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -283,18 +298,21 @@ func (i *Interaction) GetGuildApplicationCommand() (*ApplicationCommand, error) 
 //
 //	All parameters for this endpoint are optional.
 func (i *Interaction) EditGuildApplicationCommand(payload *EditApplicationCommandJSON) (*ApplicationCommand, error) {
-	u := parseRoute(
-		fmt.Sprintf(
-			editGuildApplicationCommand,
-			api,
-			i.ApplicationID.String(),
-			i.GuildID.String(),
-			i.Data.ID.String(),
+	rest := &httpData{
+		route: parseRoute(
+			fmt.Sprintf(
+				editGuildApplicationCommand,
+				api,
+				i.ApplicationID.String(),
+				i.GuildID.String(),
+				i.Data.ID.String(),
+			),
 		),
-	)
+		data: payload,
+	}
 
 	var command *ApplicationCommand
-	responseBytes, err := firePatchRequest(u, payload, nil)
+	responseBytes, err := firePatchRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -308,40 +326,41 @@ func (i *Interaction) EditGuildApplicationCommand(payload *EditApplicationComman
 // DeleteGuildApplicationCommand - Delete a guild command. Returns 204 No Content on success.
 //
 //goland:noinspection GoUnusedExportedFunction
-func DeleteGuildApplicationCommand(applicationID *Snowflake,
-	guildID *Snowflake,
-	commandID string) error {
-	u := parseRoute(
-		fmt.Sprintf(
-			deleteGuildApplicationCommand,
-			api,
-			applicationID.String(),
-			guildID.String(),
-			commandID,
+func DeleteGuildApplicationCommand(applicationID *Snowflake, guildID *Snowflake, commandID string) error {
+	rest := &httpData{
+		route: parseRoute(
+			fmt.Sprintf(
+				deleteGuildApplicationCommand,
+				api,
+				applicationID.String(),
+				guildID.String(),
+				commandID,
+			),
 		),
-	)
+	}
 
-	return fireDeleteRequest(u, nil)
+	return fireDeleteRequest(rest)
 }
 
 // BulkOverwriteGuildApplicationCommands - Takes a list of application commands, overwriting the existing command list for this application for the targeted guild.
 //
 // Returns 200 and a list of application command objects.
-func (i *Interaction) BulkOverwriteGuildApplicationCommands(payload []*ApplicationCommand) (
-	[]*ApplicationCommand,
-	error,
-) {
-	u := parseRoute(
-		fmt.Sprintf(
-			bulkOverwriteGuildApplicationCommands,
-			api,
-			i.ApplicationID.String(),
-			i.GuildID.String(),
+func (i *Interaction) BulkOverwriteGuildApplicationCommands(payload []*ApplicationCommand) ([]*ApplicationCommand,
+	error) {
+	rest := &httpData{
+		route: parseRoute(
+			fmt.Sprintf(
+				bulkOverwriteGuildApplicationCommands,
+				api,
+				i.ApplicationID.String(),
+				i.GuildID.String(),
+			),
 		),
-	)
+		data: payload,
+	}
 
 	var commands []*ApplicationCommand
-	responseBytes, err := firePutRequest(u, payload, nil)
+	responseBytes, err := firePutRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -356,17 +375,19 @@ func (i *Interaction) BulkOverwriteGuildApplicationCommands(payload []*Applicati
 //
 // Returns an array of guild application command permissions objects.
 func (i *Interaction) GetGuildApplicationCommandPermissions() ([]*GuildApplicationCommandPermissions, error) {
-	u := parseRoute(
-		fmt.Sprintf(
-			getGuildApplicationCommandPermissions,
-			api,
-			i.ApplicationID.String(),
-			i.GuildID.String(),
+	rest := &httpData{
+		route: parseRoute(
+			fmt.Sprintf(
+				getGuildApplicationCommandPermissions,
+				api,
+				i.ApplicationID.String(),
+				i.GuildID.String(),
+			),
 		),
-	)
+	}
 
 	var commandPerms []*GuildApplicationCommandPermissions
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -381,18 +402,20 @@ func (i *Interaction) GetGuildApplicationCommandPermissions() ([]*GuildApplicati
 //
 // Returns a guild application command permissions object.
 func (i *Interaction) GetApplicationCommandPermissions() (*GuildApplicationCommandPermissions, error) {
-	u := parseRoute(
-		fmt.Sprintf(
-			getApplicationCommandPermissions,
-			api,
-			i.ApplicationID.String(),
-			i.GuildID.String(),
-			i.Data.ID.String(),
+	rest := &httpData{
+		route: parseRoute(
+			fmt.Sprintf(
+				getApplicationCommandPermissions,
+				api,
+				i.ApplicationID.String(),
+				i.GuildID.String(),
+				i.Data.ID.String(),
+			),
 		),
-	)
+	}
 
 	var commandPerms *GuildApplicationCommandPermissions
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -420,18 +443,21 @@ func (i *Interaction) EditApplicationCommandPermissions(payload *EditApplication
 	*GuildApplicationCommandPermissions,
 	error,
 ) {
-	u := parseRoute(
-		fmt.Sprintf(
-			editApplicationCommandPermissions,
-			api,
-			i.ApplicationID.String(),
-			i.GuildID.String(),
-			i.Data.ID.String(),
+	rest := &httpData{
+		route: parseRoute(
+			fmt.Sprintf(
+				editApplicationCommandPermissions,
+				api,
+				i.ApplicationID.String(),
+				i.GuildID.String(),
+				i.Data.ID.String(),
+			),
 		),
-	)
+		data: payload,
+	}
 
 	var commandPerms *GuildApplicationCommandPermissions
-	responseBytes, err := firePutRequest(u, payload, nil)
+	responseBytes, err := firePutRequest(rest)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err

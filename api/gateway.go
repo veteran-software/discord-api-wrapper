@@ -32,10 +32,10 @@ type GetGatewayResponse struct {
 
 //goland:noinspection GoUnusedExportedFunction
 func GetGateway() (*GetGatewayResponse, error) {
-	u := parseRoute(api + "/gateway")
-
 	var gatewayResponseBytes *GetGatewayResponse
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(&httpData{
+		route: parseRoute(api + "/gateway"),
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -59,10 +59,10 @@ type GetGatewayBotResponse struct {
 
 //goland:noinspection GoUnusedExportedFunction
 func GetGatewayBot() (*GetGatewayBotResponse, error) {
-	u := parseRoute(api + "/gateway/bot")
-
 	var gatewayResponseBytes *GetGatewayBotResponse
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(&httpData{
+		route: parseRoute(api + "/gateway/bot"),
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err

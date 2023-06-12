@@ -27,10 +27,10 @@ import (
 //
 //goland:noinspection GoUnusedExportedFunction
 func ListVoiceRegions() ([]*VoiceRegion, error) {
-	u := parseRoute(fmt.Sprintf(listVoiceRegions, api))
-
 	var voiceRegions []*VoiceRegion
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(listVoiceRegions, api)),
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err

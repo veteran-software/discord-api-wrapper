@@ -63,10 +63,12 @@ func (c *Channel) CreateWebhook(name string, avatar *dataurl.DataURL, reason *st
 		return nil, errors.New("manage webhooks permission is required to create a new webhook")
 	}
 
-	u := parseRoute(fmt.Sprintf(createWebhook, api, c.ID.String()))
-
 	var webhook *Webhook
-	responseBytes, err := firePostRequest(u, params, reason)
+	responseBytes, err := firePostRequest(&httpData{
+		route:  parseRoute(fmt.Sprintf(createWebhook, api, c.ID.String())),
+		data:   params,
+		reason: reason,
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -88,10 +90,10 @@ func (c *Channel) GetChannelWebhooks() ([]*Webhook, error) {
 		return nil, errors.New("manage webhooks permission is required to get channel webhooks")
 	}
 
-	u := parseRoute(fmt.Sprintf(getChannelWebhooks, api, c.ID.String()))
-
 	var webhooks []*Webhook
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(getChannelWebhooks, api, c.ID.String())),
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -113,10 +115,10 @@ func (g *Guild) GetGuildWebhooks(c *Channel) ([]*Webhook, error) {
 		return nil, errors.New("manage webhooks permission is required to get guild webhooks")
 	}
 
-	u := parseRoute(fmt.Sprintf(getGuildWebhooks, api, g.ID.String()))
-
 	var webhooks []*Webhook
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(getGuildWebhooks, api, g.ID.String())),
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -129,10 +131,10 @@ func (g *Guild) GetGuildWebhooks(c *Channel) ([]*Webhook, error) {
 
 // GetWebhook - Returns the new webhook object for the given id.
 func (w *Webhook) GetWebhook() (*Webhook, error) {
-	u := parseRoute(fmt.Sprintf(getWebhook, api, w.ID.String()))
-
 	var webhook *Webhook
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(getWebhook, api, w.ID.String())),
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -145,10 +147,10 @@ func (w *Webhook) GetWebhook() (*Webhook, error) {
 
 // GetWebhookWithToken - Same as above, except this call does not require authentication and returns no user in the webhook object.
 func (w *Webhook) GetWebhookWithToken() (*Webhook, error) {
-	u := parseRoute(fmt.Sprintf(getWebhookWithToken, api, w.ID.String(), w.Token))
-
 	var webhook *Webhook
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(&httpData{
+		route: parseRoute(fmt.Sprintf(getWebhookWithToken, api, w.ID.String(), w.Token)),
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -194,10 +196,12 @@ func (w *Webhook) ModifyWebhook(name *string, avatar *dataurl.DataURL, channel *
 		return nil, errors.New("manage webhooks permission is required to modify webhooks")
 	}
 
-	u := parseRoute(fmt.Sprintf(modifyWebhook, api, w.ID.String()))
-
 	var webhook *Webhook
-	responseBytes, err := firePatchRequest(u, payload, reason)
+	responseBytes, err := firePatchRequest(&httpData{
+		route:  parseRoute(fmt.Sprintf(modifyWebhook, api, w.ID.String())),
+		data:   payload,
+		reason: reason,
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -222,10 +226,12 @@ func (w *Webhook) ModifyWebhookWithToken(name *string, avatar *dataurl.DataURL, 
 		payload.Avatar = avatar.String()
 	}
 
-	u := parseRoute(fmt.Sprintf(modifyWebhookWithToken, api, w.ID.String(), w.Token))
-
 	var webhook *Webhook
-	responseBytes, err := firePatchRequest(u, payload, reason)
+	responseBytes, err := firePatchRequest(&httpData{
+		route:  parseRoute(fmt.Sprintf(modifyWebhookWithToken, api, w.ID.String(), w.Token)),
+		data:   payload,
+		reason: reason,
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -250,16 +256,18 @@ func (w *Webhook) DeleteWebhook(channel *Channel, reason *string) error {
 		return errors.New("manage webhooks permission is required to delete webhooks")
 	}
 
-	u := parseRoute(fmt.Sprintf(deleteWebhook, api, w.ID.String()))
-
-	return fireDeleteRequest(u, reason)
+	return fireDeleteRequest(&httpData{
+		route:  parseRoute(fmt.Sprintf(deleteWebhook, api, w.ID.String())),
+		reason: reason,
+	})
 }
 
 // DeleteWebhookWithToken - Same as above, except this call does not require authentication.
 func (w *Webhook) DeleteWebhookWithToken(reason *string) error {
-	u := parseRoute(fmt.Sprintf(deleteWebhookWithToken, api, w.ID.String(), w.Token))
-
-	return fireDeleteRequest(u, reason)
+	return fireDeleteRequest(&httpData{
+		route:  parseRoute(fmt.Sprintf(deleteWebhookWithToken, api, w.ID.String(), w.Token)),
+		reason: reason,
+	})
 }
 
 // ExecuteWebhook - Refer to Uploading Files for details on attachments and multipart/form-data requests.
@@ -281,7 +289,10 @@ func (w *Webhook) ExecuteWebhook(wait bool, threadID *Snowflake, payload *Execut
 	}
 
 	var message *Message
-	messageBytes, err := firePostRequest(u, payload, nil)
+	messageBytes, err := firePostRequest(&httpData{
+		route: u,
+		data:  payload,
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -322,7 +333,9 @@ func (w *Webhook) GetWebhookMessage(msgID *Snowflake, threadID *Snowflake) (*Mes
 	}
 
 	var message *Message
-	responseBytes, err := fireGetRequest(u, nil, nil)
+	responseBytes, err := fireGetRequest(&httpData{
+		route: u,
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -348,12 +361,8 @@ func (w *Webhook) GetWebhookMessage(msgID *Snowflake, threadID *Snowflake) (*Mes
 // All JSON parameters to this endpoint are optional and nullable.
 //
 // threadID is optional; pass nil if not needed
-func (w *Webhook) EditWebhookMessage(msgID *Snowflake,
-	threadID *Snowflake,
-	payload *EditWebhookMessageJSON) (
-	*Message,
-	error,
-) {
+func (w *Webhook) EditWebhookMessage(msgID *Snowflake, threadID *Snowflake, payload *EditWebhookMessageJSON) (*Message,
+	error) {
 	u := parseRoute(fmt.Sprintf(editWebhookMessage, api, w.ID.String(), w.Token, msgID.String()))
 
 	q := u.Query()
@@ -365,7 +374,10 @@ func (w *Webhook) EditWebhookMessage(msgID *Snowflake,
 	}
 
 	var message *Message
-	responseBytes, err := firePatchRequest(u, payload, nil)
+	responseBytes, err := firePatchRequest(&httpData{
+		route: u,
+		data:  payload,
+	})
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
@@ -400,5 +412,7 @@ func (w *Webhook) DeleteWebhookMessage(msgID *Snowflake, threadID *Snowflake) er
 		u.RawQuery = q.Encode()
 	}
 
-	return fireDeleteRequest(u, nil)
+	return fireDeleteRequest(&httpData{
+		route: u,
+	})
 }
