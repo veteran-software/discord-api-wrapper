@@ -19,10 +19,12 @@ package api
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 	"time"
 
@@ -148,6 +150,29 @@ func (r *RateLimiter) lockedRequest(h *httpData) (*http.Response, error) {
 		time.Sleep(time.Duration(rlr.RetryAfter * float64(time.Second)))
 
 		return r.lockedRequest(h)
+	case http.StatusBadRequest: // 400
+		fallthrough
+	case http.StatusUnauthorized: // 401
+		fallthrough
+	case http.StatusForbidden: // 403
+		fallthrough
+	case http.StatusNotFound: // 404
+		fallthrough
+	case http.StatusMethodNotAllowed: // 405
+		fallthrough
+	case http.StatusBadGateway: // 502
+		fallthrough
+	case http.StatusServiceUnavailable: // 503
+		fallthrough
+	case http.StatusGatewayTimeout: // 504
+		fallthrough
+	case http.StatusInternalServerError: // 500
+		b, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return nil, err
+		}
+
+		return nil, errors.New("HTTP Request Error : " + strconv.Itoa(resp.StatusCode) + " : " + resp.Status + " : " + string(b))
 	}
 
 	return resp, nil

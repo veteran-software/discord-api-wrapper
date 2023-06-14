@@ -191,7 +191,7 @@ func (g *Guild) GetGuildScheduledEventUsers(
 	withMember *bool,
 	before *Snowflake,
 	after *Snowflake,
-) (*GuildScheduledEventUser, error) {
+) ([]*GuildScheduledEventUser, error) {
 	u := parseRoute(fmt.Sprintf(getGuildScheduledEventUsers, api, g.ID.String(), guildScheduledEventID.String()))
 
 	q := u.Query()
@@ -214,7 +214,7 @@ func (g *Guild) GetGuildScheduledEventUsers(
 		u.RawQuery = q.Encode()
 	}
 
-	var guildScheduledEvent *GuildScheduledEventUser
+	var guildScheduledEvent []*GuildScheduledEventUser
 	responseBytes, err := fireGetRequest(&httpData{
 		route: u,
 	})

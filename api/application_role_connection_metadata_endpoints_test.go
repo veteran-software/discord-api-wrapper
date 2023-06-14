@@ -25,28 +25,40 @@ import (
 	"testing"
 )
 
-func TestGetGateway(t *testing.T) {
-	want := &GetGatewayResponse{
-		Url: "wss://gateway.discord.gg",
+func TestGetApplicationRoleConnectionMetadataRecords(t *testing.T) {
+	want := []*ApplicationRoleConnectionMetadata{
+		{
+			Type:                      IntegerLessThanOrEqual,
+			Key:                       "abc123",
+			Name:                      "Potato",
+			NameLocalizations:         LocalizationDict{},
+			Description:               "Kappatato",
+			DescriptionsLocalizations: LocalizationDict{},
+		},
 	}
 
+	type args struct {
+		appID string
+	}
 	tests := []struct {
 		name    string
-		want    *GetGatewayResponse
+		args    args
+		want    []*ApplicationRoleConnectionMetadata
 		wantErr bool
 	}{
 		{
 			name:    "No Error",
+			args:    args{appID: "1234567890"},
 			want:    want,
 			wantErr: false,
 		},
 		{
 			name:    "Error",
+			args:    args{appID: "1234567890"},
 			want:    nil,
 			wantErr: true,
 		},
 	}
-
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			switch tt.name {
@@ -76,48 +88,48 @@ func TestGetGateway(t *testing.T) {
 				defer srv.Close()
 			}
 
-			got, err := GetGateway()
+			got, err := GetApplicationRoleConnectionMetadataRecords(tt.args.appID)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("GetGateway() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("GetApplicationRoleConnectionMetadataRecords() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetGateway() got = %v, want %v", got, tt.want)
+				t.Errorf("GetApplicationRoleConnectionMetadataRecords() got = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestGetGatewayBot(t *testing.T) {
-	want := &GetGatewayBotResponse{
-		Url: "wss://gateway.discord.gg",
-		SessionStartLimit: struct {
-			Total          int `json:"total"`
-			Remaining      int `json:"remaining"`
-			ResetAfter     int `json:"reset_after"`
-			MaxConcurrency int `json:"max_concurrency"`
-		}(struct {
-			Total          int
-			Remaining      int
-			ResetAfter     int
-			MaxConcurrency int
-		}{
-			Total: 1000, Remaining: 1000, ResetAfter: 0, MaxConcurrency: 1}),
-		Shards: 12,
+func TestUpdateApplicationRoleConnectionMetadataRecords(t *testing.T) {
+	want := []*ApplicationRoleConnectionMetadata{
+		{
+			Type:                      IntegerLessThanOrEqual,
+			Key:                       "abc123",
+			Name:                      "Potato",
+			NameLocalizations:         LocalizationDict{},
+			Description:               "Kappatato",
+			DescriptionsLocalizations: LocalizationDict{},
+		},
 	}
 
+	type args struct {
+		appID string
+	}
 	tests := []struct {
 		name    string
-		want    *GetGatewayBotResponse
+		args    args
+		want    []*ApplicationRoleConnectionMetadata
 		wantErr bool
 	}{
 		{
 			name:    "No Error",
+			args:    args{appID: "1234567890"},
 			want:    want,
 			wantErr: false,
 		},
 		{
 			name:    "Error",
+			args:    args{appID: "1234567890"},
 			want:    nil,
 			wantErr: true,
 		},
@@ -151,13 +163,13 @@ func TestGetGatewayBot(t *testing.T) {
 				defer srv.Close()
 			}
 
-			got, err := GetGatewayBot()
+			got, err := UpdateApplicationRoleConnectionMetadataRecords(tt.args.appID)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("GetGatewayBot() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("UpdateApplicationRoleConnectionMetadataRecords() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetGatewayBot() got = %v, want %v", got, tt.want)
+				t.Errorf("UpdateApplicationRoleConnectionMetadataRecords() got = %v, want %v", got, tt.want)
 			}
 		})
 	}

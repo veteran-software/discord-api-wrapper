@@ -398,7 +398,6 @@ func Test_bucket_checkReset(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
 			b := &bucket{
 				reset: tt.fields.reset,
 			}
@@ -456,7 +455,6 @@ func Test_bucket_checkResetAfter(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
 			b := &bucket{
 				reset:  tt.fields.reset,
 				global: tt.fields.global,
@@ -468,40 +466,135 @@ func Test_bucket_checkResetAfter(t *testing.T) {
 	}
 }
 
-//func Test_bucket_release(t *testing.T) {
-//	type fields struct {
-//		Mutex           *sync.Mutex
-//		Key             string
-//		Remaining       int
-//		reset           time.Time
-//		global          *int64
-//		lastReset       time.Time
-//		customRateLimit *customRateLimit
-//	}
-//	type args struct {
-//		headers http.Header
-//	}
-//	tests := []struct {
-//		name    string
-//		fields  fields
-//		args    args
-//		wantErr bool
-//	}{
-//		{},
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			b := &bucket{
-//				Key:             tt.fields.Key,
-//				Remaining:       tt.fields.Remaining,
-//				reset:           tt.fields.reset,
-//				global:          tt.fields.global,
-//				lastReset:       tt.fields.lastReset,
-//				customRateLimit: tt.fields.customRateLimit,
-//			}
-//			if err := b.release(tt.args.headers); (err != nil) != tt.wantErr {
-//				t.Errorf("release() error = %v, wantErr %v", err, tt.wantErr)
-//			}
-//		})
-//	}
-//}
+func Test_bucket_release(t *testing.T) {
+	type fields struct {
+		Mutex           *sync.Mutex
+		Key             string
+		Remaining       int
+		reset           time.Time
+		global          *int64
+		lastReset       time.Time
+		customRateLimit *customRateLimit
+	}
+	type args struct {
+		headers http.Header
+	}
+
+	headersThree := http.Header{}
+	headersThree.Add("X-RateLimit-Reset-After", "Potato")
+	headersThree.Add("X-RateLimit-Global", "")
+
+	headersFour := http.Header{}
+	headersFour.Add("X-RateLimit-Reset-After", "500")
+	headersFour.Add("X-RateLimit-Global", "")
+
+	headersFive := http.Header{}
+	headersFive.Add("X-RateLimit-Reset", "500")
+	headersFive.Add("X-RateLimit-Global", "")
+	headersFive.Add("Date", "Potato")
+
+	headersSix := http.Header{}
+	headersSix.Add("X-RateLimit-Reset", "500")
+	headersSix.Add("X-RateLimit-Global", "")
+	headersSix.Add("Date", "Mon, 12 Jun 2023 03:33:35 GMT")
+	headersSix.Add("X-RateLimit-Remaining", "Potato")
+
+	headersSeven := http.Header{}
+	headersSeven.Add("X-RateLimit-Reset", "500")
+	headersSeven.Add("X-RateLimit-Global", "")
+	headersSeven.Add("Date", "Mon, 12 Jun 2023 03:33:35 GMT")
+	headersSeven.Add("X-RateLimit-Remaining", "4")
+
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "Custom Rate Limit set",
+			fields: fields{
+				Mutex:           new(sync.Mutex),
+				customRateLimit: &customRateLimit{},
+			},
+			args:    args{headers: map[string][]string{}},
+			wantErr: false,
+		},
+		{
+			name: "nil Headers",
+			fields: fields{
+				Mutex: new(sync.Mutex),
+			},
+			args:    args{headers: nil},
+			wantErr: false,
+		},
+		{
+			name: "3) 'resetAfter' not empty with error",
+			fields: fields{
+				Mutex: new(sync.Mutex),
+			},
+			args: args{
+				headers: headersThree,
+			},
+			wantErr: true,
+		},
+		{
+			name: "4) 'resetAfter' not empty no error",
+			fields: fields{
+				Mutex: new(sync.Mutex),
+			},
+			args: args{
+				headers: headersFour,
+			},
+			wantErr: false,
+		},
+		{
+			name: "5) 'reset' not empty with error",
+			fields: fields{
+				Mutex: new(sync.Mutex),
+			},
+			args: args{
+				headers: headersFive,
+			},
+			wantErr: true,
+		},
+		{
+			name: "7) 'remaining' not empty with error",
+			fields: fields{
+				Mutex: new(sync.Mutex),
+			},
+			args: args{
+				headers: headersSix,
+			},
+			wantErr: true,
+		},
+		{
+			name: "7) 'remaining' not empty no error",
+			fields: fields{
+				Mutex: new(sync.Mutex),
+			},
+			args: args{
+				headers: headersSeven,
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			b := &bucket{
+				Key:             tt.fields.Key,
+				Remaining:       tt.fields.Remaining,
+				reset:           tt.fields.reset,
+				global:          tt.fields.global,
+				lastReset:       tt.fields.lastReset,
+				customRateLimit: tt.fields.customRateLimit,
+			}
+
+			b.Lock()
+
+			if err := b.release(tt.args.headers); (err != nil) != tt.wantErr {
+				t.Errorf("release() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
