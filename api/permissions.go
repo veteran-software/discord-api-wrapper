@@ -715,7 +715,7 @@ type Role struct {
 	Icon         *string    `json:"icon,omitempty"`          // role icon hash
 	UnicodeEmoji *string    `json:"unicode_emoji,omitempty"` // role unicode emoji
 	Position     int        `json:"position"`                // position of this role
-	Permissions  Permission `json:"permissions"`             // permission bit set
+	Permissions  Permission `json:"permissions,string"`      // permission bit set
 	Managed      bool       `json:"managed"`                 // whether this role is managed by an integration
 	Mentionable  bool       `json:"mentionable"`             // whether this role is mentionable
 	Tags         RoleTags   `json:"tags,omitempty"`          // the tags this role has
