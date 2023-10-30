@@ -1,7 +1,7 @@
 # Discord API Wrapper
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/veteran-software/discord-api-wrapper.svg)](https://pkg.go.dev/github.com/veteran-software/discord-api-wrapper)
-[![Go](https://img.shields.io/github/go-mod/go-version/veteran-software/discord-api-wrapper)](https://go.dev/doc/devel/release#go1.17)
+[![Go](https://img.shields.io/github/go-mod/go-version/veteran-software/discord-api-wrapper)](https://go.dev/doc/devel/release#go1.21)
 [![Go Report Card](https://goreportcard.com/badge/github.com/veteran-software/discord-api-wrapper)](https://goreportcard.com/report/github.com/veteran-software/discord-api-wrapper)
 
 ![GitHub Release Date](https://img.shields.io/github/release-date/veteran-software/discord-api-wrapper)
