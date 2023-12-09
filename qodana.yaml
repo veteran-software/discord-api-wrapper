@@ -1,4 +1,4 @@
 version: "1.0"
-linter: jetbrains/qodana-go:2022.3-eap
+linter: jetbrains/qodana-go:2023.2
 include:
   - name: GoUnnecessarilyExportedIdentifiers
