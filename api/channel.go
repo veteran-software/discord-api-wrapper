@@ -216,6 +216,7 @@ const (
 	GuildStageVoice                                // a voice channel for hosting events with an audience
 	GuildDirectory                                 // the channel in a hub containing the listed servers
 	GuildForum                                     // Channel that can only contain threads
+	GuildMedia                                     // Channel that can only contain threads, similar to GuildForum channels
 )
 
 func isTextChannel(channel *Channel) bool {

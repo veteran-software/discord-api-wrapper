@@ -337,13 +337,17 @@ type OnboardingPrompt struct {
 }
 
 // PromptOption - Options available within the prompt
+// When creating or updating a prompt option, the emoji_id, emoji_name, and emoji_animated fields must be used instead of the emoji object.
 type PromptOption struct {
-	ID          Snowflake   `json:"id"`          // ID of the prompt option
-	ChannelIds  []Snowflake `json:"channel_ids"` // IDs for channels a member is added to when the option is selected
-	RoleIds     []Snowflake `json:"role_ids"`    // IDs for roles assigned to a member when the option is selected
-	Emoji       Emoji       `json:"emoji"`       // Emoji of the option
-	Title       string      `json:"title"`       // Title of the option
-	Description *string     `json:"description"` // Description of the option
+	ID            Snowflake   `json:"id"`                       // ID of the prompt option
+	ChannelIds    []Snowflake `json:"channel_ids"`              // IDs for channels a member is added to when the option is selected
+	RoleIds       []Snowflake `json:"role_ids"`                 // IDs for roles assigned to a member when the option is selected
+	Emoji         Emoji       `json:"emoji,omitempty"`          // Emoji of the option
+	EmojiID       Snowflake   `json:"emoji_id,omitempty"`       // EmojiID of the option
+	EmojiName     string      `json:"emoji_name,omitempty"`     // EmojiName of the option
+	EmojiAnimated bool        `json:"emoji_animated,omitempty"` // Whether the emoji is animated
+	Title         string      `json:"title"`                    // Title of the option
+	Description   *string     `json:"description"`              // Description of the option
 }
 
 // PromptType - Type of prompt

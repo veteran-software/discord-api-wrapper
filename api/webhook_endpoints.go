@@ -305,6 +305,7 @@ type ExecuteWebhookJSON struct {
 	Attachments     []*Attachment    `json:"attachments,omitempty"`      // Attachment objects with filename and description; Required - false
 	Flags           MessageFlags     `json:"flags,omitempty"`            // MessageFlags combined as a bitfield (only SuppressEmbeds can be set)
 	ThreadName      string           `json:"thread_name"`                // name of thread to create (requires the webhook channel to be a forum channel)
+	AppliedTags     []Snowflake      `json:"applied_tags"`               // array of tag ids to apply to the thread (requires the webhook channel to be a forum or media channel)
 }
 
 // GetWebhookMessage - Returns a previously-sent webhook message from the same token. Returns a message object on success.

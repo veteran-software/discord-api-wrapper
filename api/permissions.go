@@ -66,10 +66,10 @@ const (
 	ManageNicknames                  Permission = 1 << 27 // Allows for modification of other users nicknames
 	ManageRoles                      Permission = 1 << 28 // Allows management and editing of roles
 	ManageWebhooks                   Permission = 1 << 29 // Allows management and editing of webhooks
-	ManageGuildExpressions           Permission = 1 << 30 // Allows management and editing of emojis, stickers, and soundboard sounds
+	ManageGuildExpressions           Permission = 1 << 30 // Allows for editing and deleting emojis, stickers, and soundboard sounds created by all users
 	UseApplicationCommands           Permission = 1 << 31 // Allows members to use application commands, including slash commands and context menu commands.
 	RequestToSpeak                   Permission = 1 << 32 // Allows for requesting to speak in stage channels. (This permission is under active development and may be changed or removed.)
-	ManageEvents                     Permission = 1 << 33 // Allows for creating, editing, and deleting scheduled events
+	ManageEvents                     Permission = 1 << 33 // Allows for editing and deleting scheduled events created by all users
 	ManageThreads                    Permission = 1 << 34 // Allows for deleting and archiving threads, and viewing all private threads
 	CreatePublicThreads              Permission = 1 << 35 // Allows for creating public and announcement threads
 	CreatePrivateThreads             Permission = 1 << 36 // Allows for creating private threads
@@ -79,6 +79,10 @@ const (
 	ModerateMembers                  Permission = 1 << 40 // Allows for timing out users to prevent them from sending or reacting to messages in chat and threads, and from speaking in voice and stage channels
 	ViewCreatorMonetizationAnalytics Permission = 1 << 41 // Allows for viewing role subscription insights
 	UseSoundboard                    Permission = 1 << 42 // Allows for using soundboard in a voice channel
+	CreateGuildExpressions           Permission = 1 << 43 // Allows for creating emojis, stickers, and soundboard sounds, and editing and deleting those created by the current user
+	CreateEvents                     Permission = 1 << 44 // Allows for creating scheduled events, and editing and deleting those created by the current user
+	UseExternalSounds                Permission = 1 << 45 // Allows the usage of custom soundboard sounds from other servers
+	SendVoiceMessages                Permission = 1 << 46 // Allows sending voice messages
 )
 
 /*

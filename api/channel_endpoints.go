@@ -876,7 +876,7 @@ type StartThreadWithoutMessageJSON struct {
 	RateLimitPerUser    *uint64     `json:"rate_limit_per_user,omitempty"` // amount of seconds a user has to wait before sending another message (0-21600)
 }
 
-// StartThreadInForumChannel
+// StartThreadInForumOrMediaChannel
 //
 // Creates a new thread in a forum channel, and sends a message within the created thread. Returns a Channel, with a nested Message object, on success, and a 400 BAD REQUEST on invalid parameters. Fires a ThreadCreate and Message Create Gateway event.
 //
@@ -887,12 +887,12 @@ type StartThreadWithoutMessageJSON struct {
 //	For the embed object, you can set every field except type (it will be rich regardless of if you try to set it), provider, video, and any height, width, or proxy_url values for images.
 //	Examples for file uploads are available in Uploading Files.
 //	Files must be attached using a multipart/form-data body as described in Uploading Files.
-//	Note that when sending a message, you must provide a value for at least one of content, embeds, or files[n].
+//	Note that when sending a message, you must provide a value for at least one of content, embeds, sticker_ids, components, or files[n].
 //
 //	Discord may strip certain characters from message content, like invalid unicode characters or characters which cause unexpected message formatting. If you are passing user-generated strings into message content, consider sanitizing the data to prevent unexpected behavior and utilizing allowed_mentions to prevent unexpected mentions.
 //
 //	This endpoint supports the X-Audit-Log-Reason header.
-func (c *Channel) StartThreadInForumChannel(payload StartThreadWithoutMessageJSON, reason *string) (*Channel, error) {
+func (c *Channel) StartThreadInForumOrMediaChannel(payload StartThreadWithoutMessageJSON, reason *string) (*Channel, error) {
 	u := parseRoute(fmt.Sprintf(startThreadInForumChannel, api, c.ID.String()))
 
 	var channel *Channel
@@ -909,24 +909,26 @@ func (c *Channel) StartThreadInForumChannel(payload StartThreadWithoutMessageJSO
 
 // StartThreadInForumJSON - JSON payload structure
 type StartThreadInForumJSON struct {
-	Name                string                   `json:"name"`                          // 1-100 character channel name
-	AutoArchiveDuration uint64                   `json:"auto_archive_duration"`         // duration in minutes to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080
-	RateLimitPerUser    *uint64                  `json:"rate_limit_per_user,omitempty"` // amount of seconds a user has to wait before sending another message (0-21600)
-	Message             ForumThreadMessageParams `json:"message"`                       // contents of the first message in the forum thread
+	Name                string                          `json:"name"`                          // 1-100 character channel name
+	AutoArchiveDuration uint64                          `json:"auto_archive_duration"`         // duration in minutes to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080
+	RateLimitPerUser    *uint64                         `json:"rate_limit_per_user,omitempty"` // amount of seconds a user has to wait before sending another message (0-21600)
+	Message             ForumOrMediaThreadMessageParams `json:"message"`                       // contents of the first message in the forum thread
+	AppliedTags         []Snowflake                     `json:"applied_tags"`                  // the IDs of the set of tags that have been applied to a thread in a GuildForum or a GuildMedia channel
+	Files               []string                        `json:"files"`                         // Contents of the file being sent. See Uploading Files
+	PayloadJson         string                          `json:"payload_json"`                  // JSON-encoded body of non-file params, only for multipart/form-data requests. See Uploading Files
 }
 
-// ForumThreadMessageParams - JSON for starting a new forum thread
+// ForumOrMediaThreadMessageParams - JSON for starting a new forum thread
 //
 // TODO: files[n]
-type ForumThreadMessageParams struct {
-	Content         string          `json:"content"`          // the message contents (up to 2000 characters)
-	Embeds          []*Embed        `json:"embeds"`           // embedded rich content (up to 6000 characters)
-	AllowedMentions AllowedMentions `json:"allowed_mentions"` // allowed mentions for the message
-	Components      []*Component    `json:"components"`       // the components to include with the message
+type ForumOrMediaThreadMessageParams struct {
+	Content         string          `json:"content"`          // Message contents (up to 2000 characters)
+	Embeds          []*Embed        `json:"embeds"`           // Up to 10 rich embeds (up to 6000 characters)
+	AllowedMentions AllowedMentions `json:"allowed_mentions"` // Allowed mentions for the message
+	Components      []*Component    `json:"components"`       // Components to include with the message
 	StickerIDs      []*Snowflake    `json:"sticker_ids"`      // IDs of up to 3 stickers in the server to send in the message
-	PayloadJson     string          `json:"payload_json"`     // JSON encoded body of non-file params
 	Attachments     []*Attachment   `json:"attachments"`      // attachment objects with filename and description
-	Flags           MessageFlags    `json:"flags"`            // message flags combined as a bitfield (only SUPPRESS_EMBEDS can be set)
+	Flags           MessageFlags    `json:"flags"`            // Message flags combined as a bitfield (only SuppressEmbeds and SuppressNotifications can be set)
 }
 
 // JoinThread - Adds the current user to a thread.

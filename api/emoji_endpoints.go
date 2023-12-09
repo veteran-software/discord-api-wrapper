@@ -24,7 +24,7 @@ import (
 	log "github.com/veteran-software/nowlive-logging"
 )
 
-// ListGuildEmojis - Returns a list of emoji objects for the given guild.
+// ListGuildEmojis - Returns a list of emoji objects for the given guild. Includes User fields if the bot has the CreateGuildExpressions or ManageGuildExpressions permission.
 func (g *Guild) ListGuildEmojis() ([]*Emoji, error) {
 	u := parseRoute(fmt.Sprintf(listGuildEmojis, api, g.ID.String()))
 
@@ -40,7 +40,7 @@ func (g *Guild) ListGuildEmojis() ([]*Emoji, error) {
 	return emojis, err
 }
 
-// GetGuildEmoji - Returns an emoji object for the given guild and emoji IDs.
+// GetGuildEmoji - Returns an emoji object for the given guild and emoji IDs. Includes the user field if the bot has the ManageGuildExpressions permission, or if the bot created the emoji and has the CreateGuildExpressions permission.
 func (g *Guild) GetGuildEmoji(emoji *Emoji) (*Emoji, error) {
 	u := parseRoute(fmt.Sprintf(getGuildEmoji, api, g.ID.String(), emoji.ID.String()))
 
@@ -58,11 +58,11 @@ func (g *Guild) GetGuildEmoji(emoji *Emoji) (*Emoji, error) {
 
 // CreateGuildEmoji - Create a new emoji for the guild.
 //
-// Requires the ManageEmojisAndStickers permission.
+// Requires the CreateGuildExpressions permission.
 //
 // Returns the new Emoji object on success.
 //
-// Fires a Guild Emojis Update Gateway event.
+// Fires a GuildEmojisUpdate Gateway event.
 //
 // Emojis and animated emojis have a maximum file size of 256kb.
 //
@@ -97,13 +97,17 @@ type CreateEmojiJSON struct {
 //
 // Requires the ManageEmojisAndStickers permission.
 //
-// Returns the updated emoji object on success.
+// For Emoji created by the current user, requires either the CreateGuildExpressions or ManageGuildExpressions permission.
 //
-// Fires a Guild Emojis Update Gateway event.
+// For other emojis, requires the ManageGuildExpressions permission.
 //
-// All JSON parameters to this endpoint are optional.
+// Returns the updated Emoji object on success.
 //
-// This endpoint supports the X-Audit-Log-Reason header.
+// Fires a GuildEmojisUpdateGateway event.
+//
+// All parameters to this endpoint are optional.
+//
+// This endpoint supports the "X-Audit-Log-Reason" header.
 func (g *Guild) ModifyGuildEmoji(emoji *Emoji, payload *ModifyGuildEmojiJSON, reason *string) (*Emoji, error) {
 	u := parseRoute(fmt.Sprintf(modifyGuildEmoji, api, g.ID.String(), emoji.ID.String()))
 
@@ -127,7 +131,9 @@ type ModifyGuildEmojiJSON struct {
 
 // DeleteGuildEmoji - Delete the given emoji.
 //
-// Requires the ManageEmojisAndStickers permission.
+// For emojis created by the current user, requires either the CreateGuildExpressions or ManageGuildExpressions permission.
+//
+// For other emojis, requires the ManageGuildExpressions permission.
 //
 // Returns "204 No Content" on success.
 //

@@ -39,32 +39,32 @@ func (s *Sticker) GetSticker() (*Sticker, error) {
 	return sticker, err
 }
 
-// ListNitroStickerPacks - Returns the list of sticker packs available to Nitro subscribers.
+// ListStickerPacks - Returns the list of sticker packs available to Nitro subscribers.
 //
 //goland:noinspection GoUnusedExportedFunction
-func ListNitroStickerPacks() (*ListNitroStickerPacksResponse, error) {
+func ListStickerPacks() (*ListStickerPacksResponse, error) {
 	u := parseRoute(fmt.Sprintf(listNitroStickerPacks, api))
 
-	var listNitroStickerPacksResponse *ListNitroStickerPacksResponse
+	var listStickerPacksResponse *ListStickerPacksResponse
 	responseBytes, err := fireGetRequest(u, nil, nil)
 	if err != nil {
 		log.Errorln(log.Discord, log.FuncName(), err)
 		return nil, err
 	}
 
-	err = json.Unmarshal(responseBytes, &listNitroStickerPacksResponse)
+	err = json.Unmarshal(responseBytes, &listStickerPacksResponse)
 
-	return listNitroStickerPacksResponse, err
+	return listStickerPacksResponse, err
 }
 
-// ListNitroStickerPacksResponse - JSON response
-type ListNitroStickerPacksResponse struct {
+// ListStickerPacksResponse - JSON response
+type ListStickerPacksResponse struct {
 	StickerPacks []*StickerPack `json:"sticker_packs"`
 }
 
 // ListGuildStickers - Returns an array of sticker objects for the given guild.
 //
-// Includes user fields if the bot has the ManageEmojisAndStickers permission.
+// Includes user fields if the bot has the CreateGuildExpressions or CreateGuildExpressions permission.
 func (g *Guild) ListGuildStickers() ([]*Sticker, error) {
 	u := parseRoute(fmt.Sprintf(listGuildStickers, api, g.ID.String()))
 
@@ -82,7 +82,7 @@ func (g *Guild) ListGuildStickers() ([]*Sticker, error) {
 
 // GetGuildSticker - Returns a sticker object for the given guild and sticker IDs.
 //
-// Includes the `user` field if the bot has the ManageEmojisAndStickers permission.
+// Includes the user field if the bot has the CreateGuildExpressions or CreateGuildExpressions permission.
 func (g *Guild) GetGuildSticker(stickerID Snowflake) (*Sticker, error) {
 	u := parseRoute(fmt.Sprintf(getGuildSticker, api, g.ID.String(), stickerID.String()))
 
@@ -102,9 +102,17 @@ func (g *Guild) GetGuildSticker(stickerID Snowflake) (*Sticker, error) {
 //
 // Send a multipart/form-data body.
 //
-// Requires the ManageEmojisAndStickers permission.
+// Requires the CreateGuildExpressions permission.
 //
 // Returns the new sticker object on success.
+//
+// Fires a GuildStickersUpdateGateway event.
+//
+// This endpoint supports the "X-Audit-Log-Reason" header.
+//
+// Lottie stickers can only be uploaded on guilds that have either the Verified and/or the Partnered guild feature.
+//
+// Uploaded stickers are constrained to 5 seconds in length for animated stickers, and 320 x 320 pixels.
 // TODO: FormData fields
 func (g *Guild) CreateGuildSticker() (*Sticker, error) {
 	u := parseRoute(fmt.Sprintf(createGuildSticker, api, g.ID.String()))
@@ -123,9 +131,13 @@ func (g *Guild) CreateGuildSticker() (*Sticker, error) {
 
 // ModifyGuildSticker - Modify the given sticker.
 //
-// Requires the ManageEmojisAndStickers permission.
+// For stickers created by the current user, requires either the CreateGuildExpressions or ManageGuildExpressions permission.
+//
+// For other stickers, requires the ManageGuildExpressions permission.
 //
 // Returns the updated Sticker object on success.
+//
+// Fires a Guild Stickers Update Gateway event.
 //
 // All parameters to this endpoint are optional.
 //
@@ -157,7 +169,9 @@ type ModifyGuildStickerJSON struct {
 
 // DeleteGuildSticker - Delete the given sticker.
 //
-// Requires the ManageEmojisAndStickers permission.
+// For stickers created by the current user, requires either the CreateGuildExpressions or ManageGuildExpressions permission.
+//
+// For other stickers, requires the ManageGuildExpressions permission.
 //
 // Returns "204 No Content" on success.
 //
