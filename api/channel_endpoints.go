@@ -296,16 +296,16 @@ func (c *Channel) CreateMessage(payload CreateMessageJSON) (*Message, error) {
 // CreateMessageJSON - JSON payload structure
 // TODO: files[n]
 type CreateMessageJSON struct {
-	Content          string           `json:"content,omitempty"`           // the message contents (up to 2000 characters)
-	TTS              bool             `json:"tts,omitempty"`               // true if this is a TTS message
-	Embeds           []*Embed         `json:"embeds,omitempty"`            // embedded rich content (up to 6000 characters)
-	AllowedMentions  AllowedMentions  `json:"allowed_mentions,omitempty"`  // allowed mentions for the message
-	MessageReference MessageReference `json:"message_reference,omitempty"` // include to make your message a reply
-	Components       []*Component     `json:"components,omitempty"`        // the components to include with the message
-	StickerIDs       []*Snowflake     `json:"sticker_ids,omitempty"`       // IDs of up to 3 stickers in the server to send in the message
-	PayloadJson      string           `json:"payload_json,omitempty"`      // JSON encoded body of non-file params
-	Attachments      []*Attachment    `json:"attachments,omitempty"`       // attachment objects with filename and description
-	Flags            MessageFlags     `json:"flags,omitempty"`             // message flags combined as a bitfield (only SUPPRESS_EMBEDS can be set)
+	Content          string            `json:"content,omitempty"`           // the message contents (up to 2000 characters)
+	TTS              bool              `json:"tts,omitempty"`               // true if this is a TTS message
+	Embeds           []*Embed          `json:"embeds,omitempty"`            // embedded rich content (up to 6000 characters)
+	AllowedMentions  AllowedMentions   `json:"allowed_mentions,omitempty"`  // allowed mentions for the message
+	MessageReference *MessageReference `json:"message_reference,omitempty"` // include to make your message a reply
+	Components       []*Component      `json:"components,omitempty"`        // the components to include with the message
+	StickerIDs       []*Snowflake      `json:"sticker_ids,omitempty"`       // IDs of up to 3 stickers in the server to send in the message
+	PayloadJson      string            `json:"payload_json,omitempty"`      // JSON encoded body of non-file params
+	Attachments      []*Attachment     `json:"attachments,omitempty"`       // attachment objects with filename and description
+	Flags            MessageFlags      `json:"flags,omitempty"`             // message flags combined as a bitfield (only SUPPRESS_EMBEDS can be set)
 }
 
 // CrosspostMessage - Crosspost a message in an GuildAnnouncement Channel to following channels.
