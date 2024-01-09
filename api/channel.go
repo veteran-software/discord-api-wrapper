@@ -1,17 +1,15 @@
 /*
- * Copyright (c) 2022-2023. Veteran Software
+ * Copyright (c) 2022-2024. Veteran Software
  *
- * Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
+ *  Discord API Wrapper - A custom wrapper for the Discord REST API developed for a proprietary project.
  *
- * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- * version.
+ *  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ *  License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with this program.
- * If not, see <http://www.gnu.org/licenses/>.
+ *  You should have received a copy of the GNU General Public License along with this program.
+ *  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package api
@@ -67,7 +65,7 @@ type GuildTextChannel struct {
 	Flags                ChannelFlag  `json:"flags,omitempty"`                 // channel flags combined as a bitfield
 	ParentID             *Snowflake   `json:"parent_id,omitempty"`             // for guild channels: id of the parent category for a channel (each parent category can contain up to 50 channels), for threads: id of the text channel this thread was created
 	Topic                *string      `json:"topic,omitempty"`                 // the channel topic (0-1024 characters)
-	GuildID              Snowflake    `json:"guild_id,omitempty"`              // the id of the guild (may be missing for some channel objects received over gateway guild dispatches)
+	GuildID              Snowflake    `json:"guild_id,omitempty"`              // the id of the guild (maybe missing for some channel objects received over gateway guild dispatches)
 	PermissionOverwrites []*Overwrite `json:"permission_overwrites,omitempty"` // explicit permission overwrites for members and roles
 	LastPinTimestamp     *time.Time   `json:"last_pin_timestamp,omitempty"`    // when the last pinned message was pinned. This may be null in events such as GUILD_CREATE when a message is not pinned.
 	RateLimitPerUser     int64        `json:"rate_limit_per_user,omitempty"`   // amount of seconds a user has to wait before sending another Message (0-21600); bots, as well as users with the permission ManageMessages or ManageChannels, are unaffected
