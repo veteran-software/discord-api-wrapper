@@ -16,6 +16,8 @@ package api
 
 //goland:noinspection SpellCheckingInspection,GoUnusedConst
 const (
+	getCurrentApplication                          = "%s/applications/@me"
+	editCurrentApplication                         = "%s/applications/@me"
 	getGlobalApplicationCommands                   = "%s/applications/%s/commands"
 	createGlobalApplicationCommand                 = getGlobalApplicationCommands
 	bulkOverwriteGlobalApplicationCommands         = getGlobalApplicationCommands
